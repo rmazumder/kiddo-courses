@@ -572,3 +572,11 @@ After building the lighthouse, have the kid answer these:
 - The lighthouse makes an excellent **show-and-tell** piece. Encourage the child to explain how the circuit works to family members.
 - Take a photo or video of the finished lighthouse for their portfolio!
 - **Celebrate completion of Module 2!** This is a major milestone. Consider a small reward, certificate, or special outing.
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Lesson 15: Power Sources -- Batteries, Volts, and Energy](lesson-15-power-sources.md) | [Module Overview →](README.md) |

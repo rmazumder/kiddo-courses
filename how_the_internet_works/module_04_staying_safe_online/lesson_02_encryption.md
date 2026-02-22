@@ -469,3 +469,11 @@ You now have the knowledge to:
 This is it — the ULTIMATE challenge! You'll use everything you've learned PLUS real terminal commands (ping, nslookup, traceroute, curl) to investigate how a website works from end to end! Are you ready? 🚀
 
 👉 [Final Project](../module_05_final_project/final_project.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← 🛡️ Module 4, Lesson 1: Cybersecurity Basics — Defend Your Digital Life!](lesson_01_cybersecurity_basics.md) | [Module Overview →](README.md) |

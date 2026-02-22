@@ -436,3 +436,11 @@ Private IP addresses use specific ranges that are reserved for local networks. H
 IP addresses like `142.250.80.46` are great for computers, but humans can't remember those numbers! That's where DNS comes in — it translates friendly names like `google.com` into IP addresses. You'll even learn how to do a DNS lookup yourself! 🔍
 
 👉 [Next Lesson: DNS Explained](lesson_02_dns_explained.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module Overview](README.md) | [📞 Module 2, Lesson 2: DNS Explained — The Internet's Phone Book! →](lesson_02_dns_explained.md) |

@@ -87,3 +87,11 @@ then complete `exercise_variables.py`!
 ## +10 XP -- Lesson Complete!
 
 **Next up:** Lesson 2 -- Numbers and Math!
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module Overview](../README.md) | [Module 2, Lesson 2: Numbers and Math →](../lesson_02_numbers/README.md) |

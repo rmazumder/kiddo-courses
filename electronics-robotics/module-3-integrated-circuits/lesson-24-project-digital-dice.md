@@ -446,3 +446,11 @@ After building the dice, have the kid answer these (no looking at notes!):
 | Button does nothing | Test button with Wand continuity; check Pin 4 pull-down resistor |
 | All LEDs are on at once | Diodes may be backwards -- check diode polarity (stripe = cathode = negative) |
 | Circuit stops working after a while | Battery dying -- measure with Wand (should be above 7V) |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Lesson 23: Building a Simple Counter](lesson-23-building-a-simple-counter.md) | [Module Overview →](README.md) |

@@ -82,3 +82,11 @@ then complete `exercise_lists.py`!
 
 ## +10 XP -- Lesson Complete!
 **Next up:** Lesson 2 -- List Operations!
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module Overview](../README.md) | [Module 6, Lesson 2: List Operations →](../lesson_02_list_operations/README.md) |

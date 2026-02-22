@@ -584,3 +584,11 @@ In **Lesson 47**, your robot gets a PERSONALITY! You will add LEDs for eyes and 
 | Robot crashes into obstacles | Increase dangerDistance or reduce driveSpeed |
 | Robot gets stuck in corners | Increase backup time in the "TRAPPED" section of code |
 | Wand reads 3.5V on HC-SR04 VCC | Power supply weak -- check batteries |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Lesson 45: Line-Following Robot](lesson-45-line-following-robot.md) | [Lesson 47: Adding a Buzzer and LEDs -- Robot Personality →](lesson-47-buzzer-and-leds-robot-personality.md) |

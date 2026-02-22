@@ -303,3 +303,11 @@ In **Lesson 27**, you will learn about **variables** and the **Serial Monitor** 
 | Code does not upload | Check that Board and Port are set correctly in Tools menu |
 | LED stays on all the time | Make sure you have both HIGH and LOW in your loop() with delays |
 | Wand reads 0V on pin 7 | Check your wire connection from pin 7 to the breadboard; make sure it is firmly inserted |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Lesson 25: What is a Microcontroller? -- The Brain of Every Gadget](lesson-25-what-is-a-microcontroller.md) | [Lesson 27: Variables and the Serial Monitor -- Give Your Arduino a Voice →](lesson-27-variables-and-serial-monitor.md) |

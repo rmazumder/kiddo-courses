@@ -359,3 +359,11 @@ In **Lesson 32**, you are going to make some NOISE! You will connect a **piezo b
 | Code does not compile | Check for missing semicolons or curly braces; array syntax must have commas between values |
 | Only some LEDs scan | Make sure all 6 pins are listed in the array AND that numLeds equals 6 |
 | Knight Rider effect looks odd at the ends | The basic code pauses briefly at each end -- this is normal; you can adjust the pattern |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Lesson 30: PWM -- Dimming LEDs and Controlling Speed](lesson-30-pwm-dimming-leds.md) | [Lesson 32: Piezo Buzzer and Tones -- Give Your Arduino a Musical Voice →](lesson-32-piezo-buzzer-and-tones.md) |

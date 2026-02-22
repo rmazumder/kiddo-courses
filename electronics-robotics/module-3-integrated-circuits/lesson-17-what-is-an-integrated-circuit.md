@@ -332,3 +332,11 @@ In **Lesson 18**, you will use the 555 timer to build a **Blinker Circuit**! The
 | Cannot find Pin 1 | Look for the notch (U shape) -- Pin 1 is bottom-left when notch is on top |
 | IC pins are bent | Gently straighten them by pressing against a flat table |
 | Wand reads odd voltage on Pin 5 | Should be about 2/3 of battery voltage -- if battery is low, charge/replace it |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module Overview](README.md) | [Lesson 18: The 555 Timer -- Blinker Mode (Astable) →](lesson-18-555-timer-blinker-mode.md) |

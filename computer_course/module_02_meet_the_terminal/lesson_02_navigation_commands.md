@@ -412,3 +412,11 @@ These three commands will be used in almost EVERY terminal session for the rest 
 In **Lesson 3: File Commands**, you'll learn how to CREATE, COPY, MOVE, and DELETE files and folders using the terminal. You're going to become a file management wizard! 📁✨
 
 **[Next Lesson: File Commands →](lesson_03_file_commands.md)**
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← 🧙‍♂️ Command Quest — Module 2, Lesson 1: What Is the Terminal?](lesson_01_what_is_terminal.md) | [📁 Command Quest — Module 2, Lesson 3: File Commands →](lesson_03_file_commands.md) |

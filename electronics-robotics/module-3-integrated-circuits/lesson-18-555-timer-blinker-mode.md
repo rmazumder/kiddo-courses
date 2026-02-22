@@ -296,3 +296,11 @@ In **Lesson 19**, you will put the 555 into **One-Shot Mode** (Monostable). Pres
 | Blinks too slow | Use a smaller capacitor (10uF) or smaller R2 |
 | IC gets warm | Check wiring -- something may be short-circuited |
 | Wand voltage jumps around on Pin 3 | That is normal! The output is switching rapidly |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Lesson 17: What is an Integrated Circuit?](lesson-17-what-is-an-integrated-circuit.md) | [Lesson 19: The 555 Timer -- One-Shot Mode (Monostable) →](lesson-19-555-timer-one-shot-mode.md) |

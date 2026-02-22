@@ -61,7 +61,7 @@ Let them experiment. They might:
 
 ### Step 2: The Water Analogy (8 min)
 
-![Understanding Electricity](understanding-electricity.png)
+![Understanding Electricity](images/understanding-electricity.png)
 
 Draw this on paper or a whiteboard together:
 
@@ -81,7 +81,7 @@ Draw this on paper or a whiteboard together:
   Full loop   = Circuit
 ```
 
-![Water Pump Circuit Analogy](water-pump.png)
+![Water Pump Circuit Analogy](images/water-pump.png)
 
 **Ask the kids:**
 - "What happens if we cut the pipe?" (Water stops. Circuit is broken. LED goes off.)
@@ -97,7 +97,7 @@ Draw this on paper or a whiteboard together:
 | **Resistance (ohms)** | Something that slows the electricity down |
 | **Circuit** | A complete loop -- electricity must go in a circle |
 
-![Voltage, Current & Resistance Explained](voltage-current-resistor-explain.png)
+![Voltage, Current & Resistance Explained](images/voltage-current-resistor-explain.png)
 
 **Award: +20 XP for answering at least 2 of the 3 questions!**
 
@@ -107,7 +107,7 @@ Draw this on paper or a whiteboard together:
 
 **First, explain the breadboard:**
 
-![Breadboard Overview](breadboard_overview.jpg)
+![Breadboard Overview](images/breadboard_overview.jpg)
 
 ```
   Breadboard top view:
@@ -139,7 +139,7 @@ Circuit diagram:
   4. Wire: row 7 to - rail
 ```
 
-![Breadboard Circuit Diagram](lesson-01-breadboard-circuit.png)
+![Breadboard Circuit Diagram](images/lesson-01-breadboard-circuit.png)
 
 **Go slowly.** Have the kid place each component themselves. Describe what you are doing as you go:
 > "This resistor is like the narrow pipe -- it protects the LED from getting too much electricity."
@@ -277,3 +277,11 @@ In **Lesson 2**, you will meet your **Magic Measurement Wand** -- the multimeter
 - For ages 9--12: Encourage them to explain WHY the LED goes off when they flip it (polarity concept).
 - The "Sneak Peek" of the multimeter at the end builds anticipation for Lesson 2 and sets up the "Magic Measurement Wand" framing.
 - Track XP on paper or a whiteboard. Kids respond incredibly well to seeing their score go up. Consider making a poster-sized XP tracker for the wall.
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module Overview](README.md) | [Lesson 2: Meet the Magic Measurement Wand →](lesson-02-meet-the-multimeter.md) |

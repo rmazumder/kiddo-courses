@@ -354,3 +354,11 @@ In **Lesson 14**, you become a true **Multimeter Master**! This is the BIG lesso
 - **Loading effect:** When you connect an LED (or any load) to Vout, it draws current and can change the output voltage. This is called "loading" the voltage divider. For this lesson, measure Vout WITHOUT a load first (just the Wand probes), then observe the change when adding the LED. This is a subtle but important concept for advanced learners.
 - The potentiometer experiment from Lesson 7 (Module 1) is revisited here with deeper understanding. Now the child knows WHY the voltage changes -- it is a variable voltage divider.
 - Voltage dividers are the gateway to understanding sensor circuits in Module 3. Make sure this concept clicks before moving on.
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Lesson 12: Parallel Circuits -- Multiple Paths, Shared Voltage](lesson-12-parallel-circuits.md) | [Lesson 14: Using a Multimeter -- The Deep Dive →](lesson-14-using-a-multimeter.md) |

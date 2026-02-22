@@ -565,3 +565,11 @@ FULL projects: a weather station, burglar alarm, and reaction game! 🌤️🚨�
 ---
 
 *Your Pi can now see, feel, AND speak! It's becoming a real invention machine!* 🤖
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← 🎮 Raspberry Pi Explorer — Module 3, Lesson 2: Sensors! 🌡️📏](lesson_02_sensors.md) | [Module Overview →](README.md) |

@@ -351,3 +351,11 @@ In **Lesson 24** -- the **Module 3 Grand Finale** -- you will build a **Digital 
 | Chase is too fast to see | Use bigger R2 and/or bigger C1 in the 555 circuit |
 | Only some LEDs light up | Check each LED polarity and that each has its own 330-ohm resistor |
 | One LED lights but is dim | That LED might be inserted backwards -- check polarity (long leg = +) |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Lesson 22: IC 7-Segment Display](lesson-22-seven-segment-display.md) | [Lesson 24: Module 3 Project -- Digital Dice →](lesson-24-project-digital-dice.md) |

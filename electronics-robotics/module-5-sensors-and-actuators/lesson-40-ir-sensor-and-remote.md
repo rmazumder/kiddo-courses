@@ -350,3 +350,11 @@ In **Lesson 41**, you will learn about the **PIR motion sensor** -- a sensor tha
 | LEDs do not respond to remote | Double-check that the codes in #define match YOUR decoded values exactly |
 | Works only from very close | Replace the remote batteries. Also check for bright sunlight shining on the receiver -- sunlight contains IR and can interfere |
 | Library install fails | Make sure you have the latest Arduino IDE. Try "IRremote" by shirriff/ArminJo |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Lesson 39: DC Motors and Motor Driver -- Spin Those Wheels! (L298N)](lesson-39-dc-motors-and-motor-driver.md) | [Lesson 41: PIR Motion Sensor -- Your Arduino's Security Guard →](lesson-41-pir-motion-sensor.md) |

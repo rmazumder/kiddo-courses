@@ -317,3 +317,11 @@ In **Lesson 31**, you will learn about **for loops** and **arrays** -- powerful 
 | Potentiometer dimmer does not work | Check that the pot is wired to A0 and the LED is on a PWM pin |
 | Wand shows jumping numbers | This is normal with fast PWM -- try reading slowly and let the Wand settle |
 | analogWrite value seems wrong | Remember: analogRead returns 0-1023, but analogWrite needs 0-255; divide by 4 to convert |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Lesson 29: Analog Inputs -- Reading the In-Between](lesson-29-analog-inputs.md) | [Lesson 31: For Loops and Arrays -- Control an LED Army →](lesson-31-for-loops-and-arrays.md) |

@@ -47,3 +47,11 @@ then complete `exercise_params.py`!
 
 ## +10 XP -- Lesson Complete!
 **Next up:** Lesson 3 -- Return Values!
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 5, Lesson 1: What Are Functions?](../lesson_01_what_are_functions/README.md) | [Module 5, Lesson 3: Return Values →](../lesson_03_return_values/README.md) |

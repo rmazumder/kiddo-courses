@@ -476,3 +476,11 @@ List 5 online accounts you have (or might have when you're older). For each one,
 How does HTTPS actually SCRAMBLE your data? What are secret codes? Next lesson, you'll learn about encryption and even create your own secret code using the famous **Caesar Cipher!** 🏛️🔑
 
 👉 [Next Lesson: Encryption](lesson_02_encryption.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module Overview](README.md) | [🔐 Module 4, Lesson 2: Encryption — Secret Codes and Digital Locks! →](lesson_02_encryption.md) |

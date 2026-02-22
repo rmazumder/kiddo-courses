@@ -36,3 +36,11 @@ or modifying the starter!
 
 ## +10 XP -- Lesson Complete!
 **Next up:** Lesson 3 -- Polish and Extras!
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 7, Lesson 1: Game Design](../lesson_01_game_design/README.md) | [Module 7, Lesson 3: Polish and Extras →](../lesson_03_polish_and_extras/README.md) |

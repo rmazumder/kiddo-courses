@@ -407,3 +407,11 @@ In **Lesson 36**, you will meet the **Light Dependent Resistor (LDR)** -- a comp
 | Temperature seems wrong | DHT11 is +/- 2 degrees C accuracy -- it is an estimate, not lab precision |
 | Wand reads 0V on VCC | Wire is disconnected -- trace the 5V path from Arduino to sensor |
 | Readings update very slowly | DHT11 can only read once per second -- the 2-second delay is fine |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module Overview](README.md) | [Lesson 36: Light Sensor -- The Eye of Your Arduino (LDR) →](lesson-36-light-sensor.md) |

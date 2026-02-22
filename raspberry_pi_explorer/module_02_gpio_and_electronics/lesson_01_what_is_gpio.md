@@ -525,3 +525,11 @@ first circuit! Get your components ready — things are about to LIGHT UP! ✨
 ---
 
 *You just learned the language of electronics! Those 40 pins are YOUR superpowers now!* ⚡
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module Overview](README.md) | [🎮 Raspberry Pi Explorer — Module 2, Lesson 2: LEDs and Circuits! 💡 →](lesson_02_leds_and_circuits.md) |

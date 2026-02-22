@@ -48,3 +48,11 @@ final version!
 
 ## +10 XP -- Lesson Complete!
 **Next up:** Your Final Project!
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 7, Lesson 2: Building the Game](../lesson_02_building_the_game/README.md) | [Module Overview →](../README.md) |

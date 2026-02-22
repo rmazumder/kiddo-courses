@@ -291,3 +291,11 @@ In **Lesson 29**, you move beyond just ON/OFF. You will connect a **potentiomete
 | Serial Monitor shows random HIGH/LOW | Make sure you used INPUT_PULLUP, not just INPUT |
 | Toggle mode misses presses | The delay(200) debounce may need adjusting; try 150 or 250 |
 | Wand reads weird voltage | Make sure probes are firmly touching the pin and GND |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Lesson 27: Variables and the Serial Monitor -- Give Your Arduino a Voice](lesson-27-variables-and-serial-monitor.md) | [Lesson 29: Analog Inputs -- Reading the In-Between →](lesson-29-analog-inputs.md) |

@@ -409,3 +409,11 @@ very first time! Get your SD card ready — it's about to get REAL! 🚀
 ---
 
 *Remember: Every expert was once a beginner. You're doing AMAZING!* ⭐
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module Overview](README.md) | [🎮 Raspberry Pi Explorer — Module 1, Lesson 2: Setting Up Your Pi! 💻 →](lesson_02_setting_up.md) |

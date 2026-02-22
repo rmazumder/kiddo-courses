@@ -85,3 +85,11 @@ of instructions.
 You now know what programming is. That is a huge first step!
 
 **Next up:** Lesson 2 -- Setting Up Python on your computer.
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module Overview](../README.md) | [Module 1, Lesson 2: Setting Up Python →](../lesson_02_setup_python/README.md) |

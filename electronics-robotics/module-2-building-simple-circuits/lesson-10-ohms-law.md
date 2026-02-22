@@ -95,6 +95,8 @@ Draw this picture together:
   V = I x R
 ```
 
+![Ohm's Law Water Analogy](../module-1-electronic-components-basics/images/lesson-04-ohms-law-water.png)
+
 **Break it down simply:**
 
 > "V is **Voltage** -- how hard the battery pushes. We measure it in Volts."
@@ -125,6 +127,8 @@ Draw this picture together:
   - Cover I: you see V / R  --> I = V / R
   - Cover R: you see V / I  --> R = V / I
 ```
+
+![Ohm's Law Triangle](../module-1-electronic-components-basics/images/lesson-04-ohms-law-triangle.png)
 
 > "Draw this triangle on a sticky note and keep it next to your breadboard. It is your cheat code!"
 
@@ -214,6 +218,8 @@ Swap again.
 | 1k ohm   |                     |             |            | Bright / Dim  |
 | 10k ohm  |                     |             |            | Bright / Dim  |
 ```
+
+![Ohm's Law Experiments](../module-1-electronic-components-basics/images/lesson-04-ohms-law-experiments.png)
 
 > "Did your predictions match the Wand? They should be close! If they are a little off, that is because real components are not perfect -- remember tolerance from the resistor lesson?"
 
@@ -373,3 +379,11 @@ In **Lesson 11**, we explore **series circuits** -- where components line up one
 - Common mistake: kids forget that the LED also "uses" voltage. When they calculate current, they need to subtract the LED's forward voltage (about 2V) from the battery voltage first: I = (V_battery - V_LED) / R.
 - The bonus question introduces the concept of choosing a resistor for a specific current -- this is the core design skill for LED circuits.
 - Keep the Wand Journal going! Every measurement should be recorded with the prediction next to it.
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Lesson 9: The Breadboard -- Your Circuit Building Playground](lesson-09-the-breadboard.md) | [Lesson 11: Series Circuits -- The Single-Track Train →](lesson-11-series-circuits.md) |

@@ -68,3 +68,11 @@ then complete `exercise_functions.py`!
 
 ## +10 XP -- Lesson Complete!
 **Next up:** Lesson 2 -- Parameters and Arguments!
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module Overview](../README.md) | [Module 5, Lesson 2: Parameters and Arguments →](../lesson_02_parameters_and_arguments/README.md) |

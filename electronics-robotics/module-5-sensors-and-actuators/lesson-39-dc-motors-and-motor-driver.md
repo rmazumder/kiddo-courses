@@ -341,3 +341,11 @@ In **Lesson 40**, you will learn about **IR sensors and remote controls**. You w
 | Motor gets very hot | Do not stall the motor (hold it so it cannot spin). Reduce voltage or add breaks |
 | L298N gets hot | Normal for high-current loads. If too hot, reduce motor duty cycle or add a small heatsink |
 | Wand reads 0V on motor outputs | Check battery connection to L298N +12V terminal. Is the battery dead? |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Lesson 38: Servo Motors -- Precision Arm Muscles](lesson-38-servo-motors.md) | [Lesson 40: IR Sensor and Remote Control -- Decoding Invisible Light →](lesson-40-ir-sensor-and-remote.md) |

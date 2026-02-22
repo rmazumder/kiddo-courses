@@ -497,3 +497,11 @@ void loop() {
 - Encourage the child to perform a mini concert for family members and explain how each part works.
 - The Digital Piano is a fantastic project to photograph or video for a portfolio.
 - Consider having the child teach a younger sibling how to play a simple song on their piano.
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Lesson 33: LCD Display (16x2) -- Give Your Arduino a Screen](lesson-33-lcd-display.md) | [Module Overview →](README.md) |

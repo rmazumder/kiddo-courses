@@ -318,3 +318,11 @@ In **Lesson 33**, you will add a **screen** to your Arduino! The **16x2 LCD disp
 | Wrong notes playing | Double-check the frequency values in your melody array |
 | tone() gives a compile error | Make sure you are passing 2 or 3 arguments: pin, frequency, and optionally duration |
 | Buzzer keeps buzzing after sketch ends | Add `noTone(buzzerPin);` at the end of your melody to stop it |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Lesson 31: For Loops and Arrays -- Control an LED Army](lesson-31-for-loops-and-arrays.md) | [Lesson 33: LCD Display (16x2) -- Give Your Arduino a Screen →](lesson-33-lcd-display.md) |

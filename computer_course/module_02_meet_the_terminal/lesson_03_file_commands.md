@@ -491,3 +491,11 @@ You can now:
 Test your skills with the **[Module 2 Quiz!](quiz_02.md)** Then in Module 3, you'll learn to LOOK INSIDE files and SEARCH for things — the real detective work begins! 🔍
 
 **[Next: Module 2 Quiz →](quiz_02.md)**
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← 🗺️ Command Quest — Module 2, Lesson 2: Navigation Commands](lesson_02_navigation_commands.md) | [Module Overview →](README.md) |

@@ -381,3 +381,11 @@ In **Lesson 45**, your robot gets EYES! You will add **IR line sensors** to the 
 | Code does not compile | Check for missing semicolons and matching curly braces |
 | Serial Monitor shows garbled text | Make sure baud rate matches -- Serial.begin(9600) and set Monitor to 9600 |
 | Wand shows negative voltage | Probe polarity is reversed -- this is normal when measuring backward direction |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Lesson 43: Robot Basics -- Chassis, Motors, Power](lesson-43-robot-basics.md) | [Lesson 45: Line-Following Robot →](lesson-45-line-following-robot.md) |

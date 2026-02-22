@@ -691,3 +691,11 @@ you'll make LEDs light up with code! 💡⚡
 ---
 
 *You're becoming a real computer wizard! Keep going, future inventor!* ⭐
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← 🎮 Raspberry Pi Explorer — Module 1, Lesson 2: Setting Up Your Pi! 💻](lesson_02_setting_up.md) | [Module Overview →](README.md) |

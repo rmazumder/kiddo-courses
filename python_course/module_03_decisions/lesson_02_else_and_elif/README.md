@@ -75,3 +75,11 @@ then complete `exercise_elif.py`!
 
 ## +10 XP -- Lesson Complete!
 **Next up:** Lesson 3 -- Comparisons and Logic!
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 3, Lesson 1: If Statements](../lesson_01_if_statements/README.md) | [Module 3, Lesson 3: Comparisons and Logic →](../lesson_03_comparisons_and_logic/README.md) |

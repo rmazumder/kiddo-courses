@@ -55,3 +55,11 @@ then complete `exercise_math.py`!
 ## +10 XP -- Lesson Complete!
 
 **Next up:** Lesson 3 -- Strings (Text)!
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 2, Lesson 1: What Are Variables?](../lesson_01_what_are_variables/README.md) | [Module 2, Lesson 3: Strings (Text) →](../lesson_03_strings/README.md) |

@@ -367,3 +367,11 @@ In **Lesson 38**, you will learn to control **servo motors** -- small motors tha
 | Serial Monitor shows no output | Make sure baud rate is 9600 in Serial Monitor |
 | Readings jump around | Ultrasonic waves can bounce oddly off soft or angled surfaces -- try a flat, hard surface |
 | Sensor does not detect small objects | The object must be at least a few cm wide -- thin wires will not reflect sound well |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Lesson 36: Light Sensor -- The Eye of Your Arduino (LDR)](lesson-36-light-sensor.md) | [Lesson 38: Servo Motors -- Precision Arm Muscles →](lesson-38-servo-motors.md) |

@@ -347,3 +347,11 @@ In **Lesson 12**, we explore **parallel circuits** -- where electricity gets CHO
 - The series resistance verification (Step 7) is quick but powerful. Measuring two resistors in series and seeing the number is their sum is very satisfying.
 - Kirchhoff's Voltage Law is introduced by name, but the "All Adds Up" nickname makes it memorable for younger kids.
 - Common confusion: kids may think voltage is "used up" and disappears. Clarify that it is converted to other forms of energy (light in LEDs, heat in resistors). The total energy is always conserved.
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Lesson 10: Ohm's Law -- The Superpower Formula](lesson-10-ohms-law.md) | [Lesson 12: Parallel Circuits -- Multiple Paths, Shared Voltage →](lesson-12-parallel-circuits.md) |

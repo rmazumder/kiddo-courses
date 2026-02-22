@@ -289,3 +289,11 @@ In **Lesson 20**, we leave the 555 timer and enter the world of **Logic Gates**!
 | Timer is way off from calculated time | Battery voltage affects timing -- measure battery with Wand |
 | Button press does nothing | Test the button with Wand continuity mode -- does it beep when pressed? |
 | IC gets hot | Check wiring carefully -- something is likely shorted |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Lesson 18: The 555 Timer -- Blinker Mode (Astable)](lesson-18-555-timer-blinker-mode.md) | [Lesson 20: Logic Gates -- AND, OR, NOT →](lesson-20-logic-gates-and-or-not.md) |

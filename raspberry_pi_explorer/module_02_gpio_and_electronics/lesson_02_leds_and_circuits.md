@@ -553,3 +553,11 @@ stage — now it's time for the show! 🎭
 ---
 
 *You just built something REAL with your own hands! That's engineering!* ⚡
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← 🎮 Raspberry Pi Explorer — Module 2, Lesson 1: What is GPIO? 🔌](lesson_01_what_is_gpio.md) | [🎮 Raspberry Pi Explorer — Module 2, Lesson 3: Python + GPIO = Magic! 🐍⚡ →](lesson_03_python_gpio.md) |

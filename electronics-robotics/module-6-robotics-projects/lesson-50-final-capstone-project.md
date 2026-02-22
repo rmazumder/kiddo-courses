@@ -1268,3 +1268,11 @@ The course is complete, but the journey never ends! Here are ideas for continuin
 | Servo/motor draws too much power | Use external battery pack for motors/servos |
 | Code too complex to debug | Add Serial.println() statements to trace the problem |
 | Lost motivation | Look back at Lesson 1 -- see how far you have come! |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Lesson 49: Robot Arm Introduction (Servo-Based)](lesson-49-robot-arm-introduction.md) | [Module Overview →](README.md) |

@@ -397,3 +397,11 @@ In **Lesson 16**, it is the **Grand Finale of Module 2** -- you are going to bui
 - **Parallel battery safety** is important. Emphasize that parallel batteries must be the same type and similar charge level. In practice, for this course, series connections are more useful and safer.
 - The Battery Lab activity is a great excuse to go around the house and test every battery. Kids love finding dead batteries and reporting their findings.
 - This lesson sets up the project lesson (Lesson 16) by ensuring kids understand how to choose and configure power sources.
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Lesson 14: Using a Multimeter -- The Deep Dive](lesson-14-using-a-multimeter.md) | [Lesson 16: Project -- The Lighthouse Circuit →](lesson-16-project-lighthouse-circuit.md) |

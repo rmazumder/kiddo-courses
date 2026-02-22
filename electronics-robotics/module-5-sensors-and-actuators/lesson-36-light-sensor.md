@@ -323,3 +323,11 @@ In **Lesson 37**, you will discover the **ultrasonic distance sensor** (HC-SR04)
 | Wand reads "OL" on LDR in darkness | Switch to a higher resistance range -- LDR can be very high resistance in dark |
 | Night light turns on/off randomly | Adjust the threshold value in code to match your room's light level |
 | LDR seems to not react | Make sure the squiggly side faces the light source -- the back is less sensitive |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Lesson 35: Temperature Sensor -- Your Arduino's Thermometer (DHT11/DHT22)](lesson-35-temperature-sensor.md) | [Lesson 37: Ultrasonic Distance Sensor -- Your Arduino's Echolocation (HC-SR04) →](lesson-37-ultrasonic-distance-sensor.md) |

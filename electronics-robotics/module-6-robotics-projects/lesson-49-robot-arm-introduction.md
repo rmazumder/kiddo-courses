@@ -505,3 +505,11 @@ If your Wand has a DC Amps mode, measure the total current draw:
 | Servo does not go to correct angle | servo.write() expects 0-180 -- check your map() range |
 | Arm drops when servos de-energize | Normal -- servos only hold position when powered |
 | Hot glue joints break | Re-glue with more glue surface area -- roughen surfaces first |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Lesson 48: Remote-Controlled Robot (Bluetooth)](lesson-48-remote-controlled-robot-bluetooth.md) | [Lesson 50: Final Capstone Project -- Your Robot Challenge →](lesson-50-final-capstone-project.md) |

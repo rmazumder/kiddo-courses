@@ -304,3 +304,11 @@ Write your explanation here (or on paper):
 Ever wonder how a YouTube video gets from a computer thousands of miles away to YOUR screen in less than a second? Next lesson, we'll follow a piece of data on its incredible journey across the Internet! Get ready to learn about **packets** — the tiny digital parcels that make everything possible!
 
 👉 [Next Lesson: How Data Travels](lesson_02_how_data_travels.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module Overview](README.md) | [📦 Module 1, Lesson 2: How Data Travels Across the Internet →](lesson_02_how_data_travels.md) |

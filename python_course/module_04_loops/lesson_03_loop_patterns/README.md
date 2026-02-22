@@ -33,3 +33,11 @@ then complete `exercise_patterns.py`!
 
 ## +10 XP -- Lesson Complete!
 **Next up:** Module 4 Quiz and Challenge!
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 4, Lesson 2: While Loops](../lesson_02_while_loops/README.md) | [Module Overview →](../README.md) |

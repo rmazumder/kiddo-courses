@@ -551,3 +551,11 @@ In **Lesson 48**, your robot goes WIRELESS! You will add a **Bluetooth module** 
 | Startup sequence plays but robot does not move | Motor code might be missing from sketch -- merge both programs |
 | LEDs flicker during motor start | Normal -- motors cause small power fluctuations |
 | Wand reads 0V across LED when on | Probes might be on wrong side -- measure across the LED, not the resistor |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Lesson 46: Obstacle-Avoiding Robot](lesson-46-obstacle-avoiding-robot.md) | [Lesson 48: Remote-Controlled Robot (Bluetooth) →](lesson-48-remote-controlled-robot-bluetooth.md) |

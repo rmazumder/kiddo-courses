@@ -50,3 +50,11 @@ then complete `exercise_while.py`!
 
 ## +10 XP -- Lesson Complete!
 **Next up:** Lesson 3 -- Loop Patterns!
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 4, Lesson 1: For Loops](../lesson_01_for_loops/README.md) | [Module 4, Lesson 3: Loop Patterns →](../lesson_03_loop_patterns/README.md) |

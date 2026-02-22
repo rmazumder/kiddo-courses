@@ -513,3 +513,11 @@ These skills separate beginners from power users. You're well on your way to bec
 In **Lesson 2: Text Editing**, you'll learn to edit files directly in the terminal using text editors like `nano`! No more just viewing files — now you'll change them! 📝
 
 **[Next Lesson: Text Editing →](lesson_02_text_editing.md)**
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module Overview](README.md) | [📝 Command Quest — Module 4, Lesson 2: Text Editing in the Terminal →](lesson_02_text_editing.md) |

@@ -106,3 +106,11 @@ while not game_over:
 4. Open `exercise_build_game.py` and build one of the mini-games.
 
 Finish the exercise to earn **10 XP!**
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Lesson 3: Animations](../lesson_03_animations/README.md) | [Lesson 5: Apps! →](../lesson_05_apps/README.md) |

@@ -522,3 +522,11 @@ In **Lesson 49**, you are going to build a **robot arm**! Using servo motors and
 | Cannot upload code with HC-05 connected | Disconnect HC-05 TX/RX wires during upload |
 | HC-05 LED does not blink | Check VCC and GND connections |
 | Voltage divider reads wrong voltage | Check resistor values -- 1k and 2k (or two 1k in series) |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Lesson 47: Adding a Buzzer and LEDs -- Robot Personality](lesson-47-buzzer-and-leds-robot-personality.md) | [Lesson 49: Robot Arm Introduction (Servo-Based) →](lesson-49-robot-arm-introduction.md) |

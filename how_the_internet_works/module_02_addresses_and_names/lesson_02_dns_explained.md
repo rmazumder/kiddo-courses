@@ -460,3 +460,11 @@ ping -c 4 bbc.co.uk
 You've seen domain names like `youtube.com` — but what about the FULL URL like `https://www.youtube.com/watch?v=dQw4w9WgXcQ`? What does each part mean? Next lesson, you'll learn to read URLs like a pro! 🔍
 
 👉 [Next Lesson: Domain Names](lesson_03_domain_names.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← 🏠 Module 2, Lesson 1: IP Addresses — The Internet's Home Addresses](lesson_01_ip_addresses.md) | [🔗 Module 2, Lesson 3: Domain Names — Decoding URLs! →](lesson_03_domain_names.md) |

@@ -624,3 +624,11 @@ Type commands, navigate folders, and feel like you're in a movie! 🎬
 ---
 
 *Your Pi is alive! You gave it power, an OS, and a purpose. That's incredible!* ⭐
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← 🎮 Raspberry Pi Explorer — Module 1, Lesson 1: What IS a Raspberry Pi? 🍓](lesson_01_what_is_raspberry_pi.md) | [🎮 Raspberry Pi Explorer — Module 1, Lesson 3: Linux on Pi — Terminal Ninja! 🐧 →](lesson_03_linux_on_pi.md) |

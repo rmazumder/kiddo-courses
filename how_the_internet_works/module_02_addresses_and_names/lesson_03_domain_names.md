@@ -469,3 +469,11 @@ You now understand the Internet's entire addressing system:
 Now that you know how addresses work, it's time to learn what happens when you actually VISIT a website! You'll discover the **client-server model**, **HTTP/HTTPS**, and how your browser turns code into the beautiful pages you see! 🌐✨
 
 👉 [Module 3, Lesson 1: Clients & Servers](../module_03_how_websites_work/lesson_01_clients_and_servers.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← 📞 Module 2, Lesson 2: DNS Explained — The Internet's Phone Book!](lesson_02_dns_explained.md) | [Module Overview →](README.md) |

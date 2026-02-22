@@ -422,3 +422,11 @@ You now know more about how the Internet works than most adults! You understand:
 How does your computer know WHERE to send packets? Every device on the Internet has a unique address — just like every house has a street address. In Module 2, you'll learn about **IP addresses** (the Internet's phone numbers) and **DNS** (the Internet's phone book)! You'll even learn how to find YOUR device's IP address! 🏠🔍
 
 👉 [Module 2, Lesson 1: IP Addresses](../module_02_addresses_and_names/lesson_01_ip_addresses.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← 🌐 Module 1, Lesson 1: The Internet vs. The World Wide Web](lesson_01_internet_vs_web.md) | [Module Overview →](README.md) |

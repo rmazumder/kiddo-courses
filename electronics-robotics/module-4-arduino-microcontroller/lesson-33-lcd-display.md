@@ -358,3 +358,11 @@ In **Lesson 34** -- the Module 4 Grand Finale -- you will combine EVERYTHING you
 | Library not found | Re-open Library Manager and search for "LiquidCrystal I2C"; make sure it installed |
 | Only one row displays text | Make sure you use setCursor(0, 1) for the second row (row counting starts at 0) |
 | Text does not clear properly | Use lcd.clear() to clear the whole screen, or print spaces over old text |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Lesson 32: Piezo Buzzer and Tones -- Give Your Arduino a Musical Voice](lesson-32-piezo-buzzer-and-tones.md) | [Lesson 34: Module 4 Project -- Digital Piano + Display →](lesson-34-project-digital-piano.md) |

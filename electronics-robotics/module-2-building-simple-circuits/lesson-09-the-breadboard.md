@@ -357,3 +357,11 @@ In **Lesson 10**, we discover **Ohm's Law** -- the most important formula in all
 - For ages 9--12: Have them draw a complete connection diagram and predict all 7 Wand tests before measuring.
 - Some breadboards have labels printed on them (row numbers, column letters). If yours does not, consider writing numbers on the side with a fine marker. This makes communication much easier.
 - The two-LED circuit in Step 5 is a gentle preview of parallel circuits (Lesson 12). Do not explain it as parallel yet -- just let them see that two LEDs can share a power source.
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module Overview](README.md) | [Lesson 10: Ohm's Law -- The Superpower Formula →](lesson-10-ohms-law.md) |

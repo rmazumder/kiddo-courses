@@ -353,3 +353,11 @@ You've mastered the file system! You now understand:
 Before moving to Module 2, test your knowledge with the **[Module 1 Quiz!](quiz_01.md)** Then get ready to meet the most powerful tool on your computer — the **Terminal!** 🧙‍♂️
 
 **[Next: Module 1 Quiz →](quiz_01.md)**
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← 🖥️ Command Quest — Module 1, Lesson 1: Computer Basics](lesson_01_computer_basics.md) | [Module Overview →](README.md) |

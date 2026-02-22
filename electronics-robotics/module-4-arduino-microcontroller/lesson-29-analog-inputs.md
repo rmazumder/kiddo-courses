@@ -312,3 +312,11 @@ In **Lesson 30**, you will learn the coolest trick in Arduino: **PWM (Pulse Widt
 | Reading stuck at 1023 | The middle leg might be connected to 5V instead of A0 |
 | Wand and Arduino disagree a lot | Make sure both are measuring the same point (middle leg of the pot) |
 | LED blink speed does not change | Make sure you are using the potValue as the delay in the LED code |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Lesson 28: Reading Digital Inputs -- Buttons](lesson-28-reading-digital-inputs-buttons.md) | [Lesson 30: PWM -- Dimming LEDs and Controlling Speed →](lesson-30-pwm-dimming-leds.md) |

@@ -91,7 +91,7 @@ Lay the multimeter flat on the table. Point to each part:
   RED probe   = goes in V/ohm hole for voltage and resistance
 ```
 
-![Multimeter Parts Labeled](lesson-02-multimeter-labeled.png)
+![Multimeter Parts Labeled](images/lesson-02-multimeter-labeled.png)
 
 **Key vocabulary:**
 
@@ -218,7 +218,7 @@ Lay out these items on the table:
 - A glass of salt water (dip probes gently)
 - A jumper wire
 
-![Conductor Detective Game](lesson-02-continuity-detective.png)
+![Conductor Detective Game](images/lesson-02-continuity-detective.png)
 
 > "Your mission: test each item. Does the Wand beep? Write C for Conductor (beeps) or I for Insulator (no beep)."
 
@@ -342,3 +342,11 @@ In **Lesson 3**, we meet **Resistors -- The Traffic Controllers of Electronics**
 - If the multimeter does not have an auto-range feature, help the child select the right range on the dial. Explain that it is like choosing the right ruler -- you would not measure a room with a 6-inch ruler!
 - The "measure your finger" experiment is completely safe with a multimeter (it uses tiny internal current). It consistently gets big reactions from kids.
 - Consider letting the child keep a "Wand Journal" -- a small notebook where they record every measurement they make throughout the module.
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Lesson 1: What is Electricity?](lesson-01-what-is-electricity.md) | [Lesson 3: Resistors →](lesson-03-resistors.md) |

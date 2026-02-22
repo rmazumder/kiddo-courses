@@ -84,3 +84,11 @@ pen.write("Press R for red", font=("Arial", 12, "italic"))
 4. Open `exercise_build_app.py` and build one of the two apps.
 
 Finish the exercise to earn **10 XP!**
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Lesson 4: Simple Games](../lesson_04_simple_games/README.md) | [Module Overview →](../README.md) |

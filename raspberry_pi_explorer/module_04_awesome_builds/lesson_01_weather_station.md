@@ -397,3 +397,11 @@ sensor, buzzer, LEDs, and arm/disarm controls!
 ---
 
 *You just built a REAL weather monitoring system! That's professional-level stuff!* 🌤️⭐
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module Overview](README.md) | [🎮 Raspberry Pi Explorer — Module 4, Lesson 2: Burglar Alarm! 🚨 →](lesson_02_burglar_alarm.md) |

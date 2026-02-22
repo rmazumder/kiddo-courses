@@ -37,3 +37,11 @@ then complete `exercise_operations.py`!
 
 ## +10 XP -- Lesson Complete!
 **Next up:** Lesson 3 -- Loops and Lists!
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 6, Lesson 1: What Are Lists?](../lesson_01_what_are_lists/README.md) | [Module 6, Lesson 3: Loops and Lists →](../lesson_03_loops_and_lists/README.md) |

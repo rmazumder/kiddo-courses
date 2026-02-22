@@ -423,3 +423,11 @@ You've learned:
 It's time for the grand finale — the **[Final Project](final_project.md)**! You'll combine EVERYTHING you've learned to complete an epic quest that proves you're a true Command Wizard! 🧙‍♂️
 
 **[Next: Final Project →](final_project.md)**
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← ⚡ Command Quest — Module 4, Lesson 1: Pipes and Redirects](lesson_01_pipes_and_redirects.md) | [Module Overview →](README.md) |

@@ -354,3 +354,11 @@ In **Lesson 21**, you will meet three MORE logic gates: **NAND, NOR, and XOR**. 
 | IC gets hot | Wrong IC in the circuit or power/ground pins reversed -- check immediately |
 | Wand reads something between HIGH and LOW | Input might be "floating" -- add pull-down (10k to GND) or pull-up (10k to VCC) |
 | Button does not seem to work | Test button with Wand continuity mode -- make sure it beeps when pressed |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Lesson 19: The 555 Timer -- One-Shot Mode (Monostable)](lesson-19-555-timer-one-shot-mode.md) | [Lesson 21: Logic Gates -- NAND, NOR, XOR →](lesson-21-logic-gates-nand-nor-xor.md) |

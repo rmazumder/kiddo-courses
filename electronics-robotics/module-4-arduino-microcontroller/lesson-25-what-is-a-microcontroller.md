@@ -323,3 +323,11 @@ In **Lesson 26**, you will build your first circuit with an **external LED** and
 | Upload fails with error | Make sure the correct Board (Arduino Uno) and Port are selected in the Tools menu |
 | The LED on pin 13 does not blink | Check that the upload completed successfully (look for "Done uploading" message) |
 | Wand reads 0V on the 5V pin | Make sure the black probe is on a GND pin and the Wand is set to DC Voltage |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module Overview](README.md) | [Lesson 26: Your First Sketch -- Blink an External LED →](lesson-26-your-first-sketch-blink.md) |

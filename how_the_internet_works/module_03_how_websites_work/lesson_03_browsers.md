@@ -476,3 +476,11 @@ You now understand the complete picture:
 The Internet is amazing — but it can also be dangerous if you're not careful. In Module 4, you'll learn about **cybersecurity basics**, **encryption**, and how to protect yourself online. You'll even learn to create a secret cipher code! 🔐
 
 👉 [Module 4, Lesson 1: Cybersecurity Basics](../module_04_staying_safe_online/lesson_01_cybersecurity_basics.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← 🔒 Module 3, Lesson 2: HTTP & HTTPS — The Rules of the Web!](lesson_02_http_https.md) | [Module Overview →](README.md) |

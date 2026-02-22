@@ -441,3 +441,11 @@ In **Lesson 46**, your robot gets a whole new superpower -- **obstacle avoidance
 | Robot loses the line at curves | Slow down the drive speed or make curves more gradual |
 | Sensor LED does not light up | Check VCC and GND wiring -- swap if reversed |
 | Wand reads 2.5V on both surfaces | Sensor sensitivity needs adjustment -- turn the onboard potentiometer |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Lesson 44: Robot Movement Functions](lesson-44-robot-movement-functions.md) | [Lesson 46: Obstacle-Avoiding Robot →](lesson-46-obstacle-avoiding-robot.md) |

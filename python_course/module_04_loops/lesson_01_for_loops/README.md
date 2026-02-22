@@ -77,3 +77,11 @@ then complete `exercise_for_loops.py`!
 
 ## +10 XP -- Lesson Complete!
 **Next up:** Lesson 2 -- While Loops!
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module Overview](../README.md) | [Module 4, Lesson 2: While Loops →](../lesson_02_while_loops/README.md) |

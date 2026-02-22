@@ -481,3 +481,11 @@ After building the Smart Room, answer these (no looking at notes!):
 - Consider having the child demonstrate the Smart Room to another family member and explain each feature -- teaching solidifies learning.
 - The XP totals across all 8 lessons can be tallied on a poster or whiteboard. Many kids become deeply motivated by seeing their cumulative score rise.
 - This project naturally leads into Module 6 (Robotics) -- the sensors and motor skills transfer directly to building mobile robots.
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Lesson 41: PIR Motion Sensor -- Your Arduino's Security Guard](lesson-41-pir-motion-sensor.md) | [Module Overview →](README.md) |

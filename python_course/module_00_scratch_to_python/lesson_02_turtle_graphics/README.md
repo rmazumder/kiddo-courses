@@ -94,3 +94,11 @@ Turtle uses X and Y coordinates, just like Scratch!
 5. Run `colorful_spiral.py` for a bonus - try changing the colours!
 
 When you finish the exercises, you have earned **10 XP!**
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Lesson 1: Scratch vs Python](../lesson_01_scratch_vs_python/README.md) | [Lesson 3: Animations →](../lesson_03_animations/README.md) |

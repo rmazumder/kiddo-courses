@@ -438,3 +438,11 @@ These commands are used by professional developers and system administrators EVE
 Take the **[Module 3 Quiz](quiz_03.md)** to earn your Data Detective badge! Then get ready for Module 4 where you'll learn POWER USER skills — piping commands together and editing files right in the terminal! ⚡
 
 **[Next: Module 3 Quiz →](quiz_03.md)**
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← 🔍 Command Quest — Module 3, Lesson 1: Viewing Files](lesson_01_viewing_files.md) | [Module Overview →](README.md) |

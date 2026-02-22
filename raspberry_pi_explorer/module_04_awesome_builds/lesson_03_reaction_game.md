@@ -523,3 +523,11 @@ invention! This is where YOU become the designer! 🎨🔧
 ---
 
 *You just built a physical arcade game! Game designers everywhere are proud of you!* 🕹️🏆
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← 🎮 Raspberry Pi Explorer — Module 4, Lesson 2: Burglar Alarm! 🚨](lesson_02_burglar_alarm.md) | [Module Overview →](README.md) |

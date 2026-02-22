@@ -69,3 +69,11 @@ Hello, World!
 You wrote your first program! You are officially a programmer!
 
 **Next up:** Module 1 Quiz and Challenge!
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 1, Lesson 2: Setting Up Python](../lesson_02_setup_python/README.md) | [Module Overview →](../README.md) |

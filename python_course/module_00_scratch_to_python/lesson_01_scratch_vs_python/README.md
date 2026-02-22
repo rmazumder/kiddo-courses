@@ -53,3 +53,11 @@ You already know how to program. You are just learning a new language!
 2. Run `compare_scratch_python.py` and watch what happens
 3. Open `exercise_translate_blocks.py` and fill in the TODOs
 4. When all 10 exercises work, you have earned **10 XP!**
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module Overview](../README.md) | [Lesson 2: Turtle Graphics →](../lesson_02_turtle_graphics/README.md) |

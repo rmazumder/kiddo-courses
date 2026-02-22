@@ -512,3 +512,11 @@ and even the Mario theme song! 🍄
 ---
 
 *Your Pi can now feel temperature and see distance! What a superpower upgrade!* 🦸
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← 🎮 Raspberry Pi Explorer — Module 3, Lesson 1: LED Patterns! ✨](lesson_01_led_patterns.md) | [🎮 Raspberry Pi Explorer — Module 3, Lesson 3: Buzzer & Sound! 🎵 →](lesson_03_buzzer_and_sound.md) |

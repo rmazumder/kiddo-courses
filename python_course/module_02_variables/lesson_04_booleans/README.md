@@ -52,3 +52,11 @@ then complete `exercise_booleans.py`!
 ## +10 XP -- Lesson Complete!
 
 **Next up:** Module 2 Quiz and Challenge!
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 2, Lesson 3: Strings (Text)](../lesson_03_strings/README.md) | [Module Overview →](../README.md) |

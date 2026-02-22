@@ -59,3 +59,11 @@ then complete `exercise_if.py`!
 
 ## +10 XP -- Lesson Complete!
 **Next up:** Lesson 2 -- Else and Elif!
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module Overview](../README.md) | [Module 3, Lesson 2: Else and Elif →](../lesson_02_else_and_elif/README.md) |

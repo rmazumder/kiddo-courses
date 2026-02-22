@@ -342,3 +342,11 @@ You now know:
 In **Lesson 2: Navigation Commands**, you'll learn how to move around your computer's file system using the terminal — like a GPS for your files! You'll master `pwd`, `ls`, and `cd`! 🗺️
 
 **[Next Lesson: Navigation Commands →](lesson_02_navigation_commands.md)**
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module Overview](README.md) | [🗺️ Command Quest — Module 2, Lesson 2: Navigation Commands →](lesson_02_navigation_commands.md) |

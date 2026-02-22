@@ -514,3 +514,11 @@ In **Lesson 15**, we explore **power sources** -- batteries of all shapes and si
 - **Ages 9--12:** This is their chance to become truly independent with the multimeter. After this lesson, they should be able to pick up the Wand and diagnose any basic circuit issue without adult help.
 - Consider having the child teach a sibling or parent how to use the multimeter. Teaching solidifies mastery.
 - The safety rulebook should be reviewed at the start of EVERY session going forward. Make it a ritual: "Before we start -- red probe is in which jack?"
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Lesson 13: Voltage Dividers -- Splitting Voltage on Purpose](lesson-13-voltage-dividers.md) | [Lesson 15: Power Sources -- Batteries, Volts, and Energy →](lesson-15-power-sources.md) |

@@ -488,3 +488,11 @@ around it — temperature, humidity, and distance! 🔬
 ---
 
 *You're creating real light shows with code! That's AMAZING!* ✨
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module Overview](README.md) | [🎮 Raspberry Pi Explorer — Module 3, Lesson 2: Sensors! 🌡️📏 →](lesson_02_sensors.md) |

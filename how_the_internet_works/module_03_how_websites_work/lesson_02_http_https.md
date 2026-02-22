@@ -392,3 +392,11 @@ Write a short, funny story about a person visiting a website, but frame it using
 Your browser takes raw HTML code and turns it into the beautiful web pages you see. But HOW? Next lesson, you'll peek under the hood of your browser and even learn to use **Developer Tools** to see the code behind any website! 🔧
 
 👉 [Next Lesson: How Browsers Work](lesson_03_browsers.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← 💻 Module 3, Lesson 1: Clients & Servers — The Internet's Two-Way Street](lesson_01_clients_and_servers.md) | [🌍 Module 3, Lesson 3: How Browsers Work — The Magic Behind the Screen! →](lesson_03_browsers.md) |

@@ -35,3 +35,11 @@ then complete `exercise_loops_lists.py`!
 
 ## +10 XP -- Lesson Complete!
 **Next up:** Module 6 Quiz and Challenge!
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 6, Lesson 2: List Operations](../lesson_02_list_operations/README.md) | [Module Overview →](../README.md) |

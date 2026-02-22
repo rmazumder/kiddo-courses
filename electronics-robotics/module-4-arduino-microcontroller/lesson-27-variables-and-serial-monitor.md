@@ -277,3 +277,11 @@ In **Lesson 28**, you will add a **button** to your circuit and learn how to REA
 | Counter does not increase | Make sure `blinkCount = blinkCount + 1;` is inside the `loop()` function |
 | LED does not blink but Serial Monitor works | Check LED wiring -- is the LED connected to the correct pin with a resistor? |
 | Numbers look wrong in Serial Monitor | Check that you are using `int` for whole numbers and `float` for decimals |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Lesson 26: Your First Sketch -- Blink an External LED](lesson-26-your-first-sketch-blink.md) | [Lesson 28: Reading Digital Inputs -- Buttons →](lesson-28-reading-digital-inputs-buttons.md) |

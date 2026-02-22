@@ -552,3 +552,11 @@ build LED patterns, read sensors, play music with buzzers, and MORE! 🎵🌡️
 ---
 
 *You just connected CODE to the REAL WORLD. You're not just a coder now — you're an INVENTOR!* 🔧✨
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← 🎮 Raspberry Pi Explorer — Module 2, Lesson 2: LEDs and Circuits! 💡](lesson_02_leds_and_circuits.md) | [Module Overview →](README.md) |

@@ -363,3 +363,11 @@ In **Lesson 42** -- the MODULE 5 GRAND FINALE -- you will combine EVERYTHING you
 | PIR detects through walls or glass | PIR can sometimes detect through thin materials. Reposition the sensor |
 | Smart night light never activates | Check LDR threshold -- print lightLevel to Serial Monitor and adjust darkThreshold to match your room |
 | Wand reads 5V instead of 3.3V on HIGH | Some PIR modules output 5V. Either value is fine -- both read as HIGH for Arduino |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Lesson 40: IR Sensor and Remote Control -- Decoding Invisible Light](lesson-40-ir-sensor-and-remote.md) | [Lesson 42: Module 5 Project -- The Smart Room System →](lesson-42-project-smart-room.md) |

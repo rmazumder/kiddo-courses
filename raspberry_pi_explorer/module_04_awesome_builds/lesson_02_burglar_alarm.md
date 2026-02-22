@@ -492,3 +492,11 @@ LEDs, and scorekeeping! Challenge your friends! 🏆
 ---
 
 *You just built a real security system! Your room has never been safer!* 🔐
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← 🎮 Raspberry Pi Explorer — Module 4, Lesson 1: Weather Station! 🌤️](lesson_01_weather_station.md) | [🎮 Raspberry Pi Explorer — Module 4, Lesson 3: Reaction Speed Game! 🎮 →](lesson_03_reaction_game.md) |

@@ -369,3 +369,11 @@ In **Lesson 13**, we learn about **voltage dividers** -- a clever trick that use
 - **Ages 9--12:** The current measurements are the star of this lesson. Have them predict branch currents using Ohm's Law first (I = V/R = 7V/330 = 21 mA), then measure. The act of predicting and confirming builds deep understanding.
 - Alligator clip wires make ammeter measurements MUCH easier. Consider getting a set if you do not have them already.
 - The side-by-side comparison (Step 7) is very impactful if you can have both circuits powered at the same time. The brightness difference is stark and memorable.
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Lesson 11: Series Circuits -- The Single-Track Train](lesson-11-series-circuits.md) | [Lesson 13: Voltage Dividers -- Splitting Voltage on Purpose →](lesson-13-voltage-dividers.md) |

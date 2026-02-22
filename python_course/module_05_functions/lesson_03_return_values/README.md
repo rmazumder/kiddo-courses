@@ -47,3 +47,11 @@ then complete `exercise_return.py`!
 
 ## +10 XP -- Lesson Complete!
 **Next up:** Module 5 Quiz and Challenge!
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 5, Lesson 2: Parameters and Arguments](../lesson_02_parameters_and_arguments/README.md) | [Module Overview →](../README.md) |

@@ -337,3 +337,11 @@ In **Lesson 22**, you will work with a **7-Segment Display** -- the glowing numb
 | NAND-as-NOT does not work | Verify both inputs (Pin 1 and Pin 2) are connected together with a jumper wire |
 | Multiple gates interfere with each other | Build one gate at a time; unused IC inputs should be tied to GND |
 | IC gets hot immediately | Power and ground pins are likely reversed -- remove power and check |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Lesson 20: Logic Gates -- AND, OR, NOT](lesson-20-logic-gates-and-or-not.md) | [Lesson 22: IC 7-Segment Display →](lesson-22-seven-segment-display.md) |

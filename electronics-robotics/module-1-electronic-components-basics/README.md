@@ -1,10 +1,10 @@
 # Module 1: Electronic Components Basics
 
 **Difficulty:** Star-1 Beginner
-**Total Lessons:** 9
+**Total Lessons:** 10
 **Recommended Age:** 6--12 years
 **Prerequisites:** None -- this is the very beginning!
-**Total XP Available:** 2,030 XP
+**Total XP Available:** 2,330 XP
 
 ---
 
@@ -23,12 +23,13 @@ In this module, kids will pick up real components, learn what each one does, use
 | [Lesson 1](lesson-01-what-is-electricity.md) | What is Electricity? | First LED moment! | 220 |
 | [Lesson 2](lesson-02-meet-the-multimeter.md) | Meet the Magic Measurement Wand | Conductor Detective game! | 320 |
 | [Lesson 3](lesson-03-resistors.md) | Resistors | Color code decoder + Wand verify | 250 |
-| [Lesson 4](lesson-04-capacitors.md) | Capacitors | Watch voltage drain on the Wand! | 210 |
-| [Lesson 5](lesson-05-diodes-and-leds.md) | Diodes and LEDs | Rainbow LED + Wand voltage check | 190 |
-| [Lesson 6](lesson-06-transistors.md) | Transistors | Wand proves switching! | 180 |
-| [Lesson 7](lesson-07-switches-and-potentiometers.md) | Switches and Potentiometers | Live resistance changes on Wand | 200 |
-| [Lesson 8](lesson-08-buzzers-and-sound.md) | Buzzers and Sound | Circuit Detective with continuity | 190 |
-| [Lesson 9](lesson-09-project-quiz-board.md) | Project: Quiz Board | Build a real game + Wand debugging | 270 |
+| [Lesson 4](lesson-04-ohms-law.md) | Ohm's Law -- The Magic Triangle | Predict LED brightness before building! | 300 |
+| [Lesson 5](lesson-05-capacitors.md) | Capacitors | Watch voltage drain on the Wand! | 210 |
+| [Lesson 6](lesson-06-diodes-and-leds.md) | Diodes and LEDs | Rainbow LED + Wand voltage check | 190 |
+| [Lesson 7](lesson-07-transistors.md) | Transistors | Wand proves switching! | 180 |
+| [Lesson 8](lesson-08-switches-and-potentiometers.md) | Switches and Potentiometers | Live resistance changes on Wand | 200 |
+| [Lesson 9](lesson-09-buzzers-and-sound.md) | Buzzers and Sound | Circuit Detective with continuity | 190 |
+| [Lesson 10](lesson-10-project-quiz-board.md) | Project: Quiz Board | Build a real game + Wand debugging | 270 |
 
 ---
 
@@ -43,8 +44,8 @@ Every activity, experiment, and quiz question earns XP. Track your total across 
 | Circuit Apprentice | 0--500 |
 | Circuit Explorer | 501--1,000 |
 | Circuit Builder | 1,001--1,500 |
-| Circuit Engineer | 1,501--1,800 |
-| Circuit Champion | 1,801--2,030 |
+| Circuit Engineer | 1,501--2,000 |
+| Circuit Champion | 2,001--2,330 |
 
 ### Badges
 Earn one badge per lesson:
@@ -54,12 +55,13 @@ Earn one badge per lesson:
 | Circuit Starter | 1 | |
 | Wand Wielder | 2 | |
 | Color Code Cracker | 3 | |
-| Energy Tank Explorer | 4 | |
-| Rainbow Builder | 5 | |
-| Transistor Tamer | 6 | |
-| Dial Master | 7 | |
-| Sound Engineer | 8 | |
-| Module 1 Champion | 9 | |
+| Ohm's Law Wizard | 4 | |
+| Energy Tank Explorer | 5 | |
+| Rainbow Builder | 6 | |
+| Transistor Tamer | 7 | |
+| Dial Master | 8 | |
+| Sound Engineer | 9 | |
+| Module 1 Champion | 10 | |
 
 ---
 

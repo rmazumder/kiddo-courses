@@ -248,3 +248,11 @@ You just completed your first lesson in Command Quest! You now know:
 In **Lesson 2: The File System**, you'll discover how computers organize billions of files without ever losing one — using a system that works just like a library! 📚
 
 **[Next Lesson: The File System →](lesson_02_file_system.md)**
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module Overview](README.md) | [📚 Command Quest — Module 1, Lesson 2: The File System →](lesson_02_file_system.md) |

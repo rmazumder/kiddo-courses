@@ -72,7 +72,7 @@ Draw on paper:
    = lots of current        = less current
 ```
 
-![Hallway Resistance Analogy](lesson-03-hallway-resistance.png)
+![Hallway Resistance Analogy](images/lesson-03-hallway-resistance.png)
 
 > "A resistor is like making a hallway narrower. More resistance = harder for electricity to squeeze through = less current flows."
 
@@ -109,7 +109,7 @@ This is the most fun part. Make it feel like a **spy decoder activity**.
 | Gray   | 8 | **G**ray = **8** -- 8 gray elephants |
 | White  | 9 | **W**hite = **9** -- 9 white clouds |
 
-![Resistor Color Code Chart](resistor-color-chart.png)
+![Resistor Color Code Chart](images/resistor-color-chart.png)
 
 **How to read a 4-band resistor:**
 
@@ -125,7 +125,7 @@ Example: Orange - Orange - Red - Gold
          = 3,300 ohms = 3.3k ohms
 ```
 
-![How to Read a 4-Band Resistor](read4bandresistor.png)
+![How to Read a 4-Band Resistor](images/read4bandresistor.png)
 
 **Step-by-step reading:**
 1. Band 1 = first digit
@@ -298,7 +298,7 @@ Draw resistors from a bag one by one. Kids decode the color bands and mark their
 
 ## Coming Up Next...
 
-In **Lesson 4**, we explore **capacitors** -- tiny energy tanks that charge up and then release their power in a flash. You will charge one and watch your Wand show the voltage slowly draining away. It is like watching a bathtub empty!
+In **Lesson 4**, you will unlock the **Magic Triangle** -- Ohm's Law! You will discover the formula that connects voltage, current, and resistance, and use it to PREDICT exactly how bright an LED will glow before you even build the circuit!
 
 ---
 
@@ -310,3 +310,11 @@ In **Lesson 4**, we explore **capacitors** -- tiny energy tanks that charge up a
 | Wand reads 0 ohms | Probe leads are touching each other -- separate them |
 | Wand reads "OL" or "1" | Resistance too high for current range -- switch to a higher range |
 | LED burns out | Resistor too small -- use 330 ohms minimum with 9V |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Lesson 2: Meet the Magic Measurement Wand](lesson-02-meet-the-multimeter.md) | [Lesson 4: Ohm's Law →](lesson-04-ohms-law.md) |

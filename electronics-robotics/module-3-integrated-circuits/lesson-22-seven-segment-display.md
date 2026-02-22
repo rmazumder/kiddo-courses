@@ -362,3 +362,11 @@ In **Lesson 23**, you will combine the 555 timer with a **4017 decade counter IC
 | Display is very dim | Reduce resistor values slightly (220-ohm instead of 330-ohm) |
 | Some segments never light up | Use Wand continuity to test each LED segment individually |
 | 7447 pins 3, 4, 5 not connected | These must be tied to VCC for normal operation |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Lesson 21: Logic Gates -- NAND, NOR, XOR](lesson-21-logic-gates-nand-nor-xor.md) | [Lesson 23: Building a Simple Counter →](lesson-23-building-a-simple-counter.md) |

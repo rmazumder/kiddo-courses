@@ -441,3 +441,11 @@ In **Lesson 44**, you will write **movement functions** -- clean, reusable code 
 | L298N gets very hot | Normal for heavy use, but check for short circuits if extremely hot |
 | Arduino resets when motors start | Power supplies not separated -- make sure Arduino and motors have different batteries |
 | Wand reads 0V at motor terminals | Motor driver not receiving enable signal -- check ENA/ENB wiring |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module Overview](README.md) | [Lesson 44: Robot Movement Functions →](lesson-44-robot-movement-functions.md) |

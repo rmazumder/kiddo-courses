@@ -55,3 +55,11 @@ then complete `exercise_logic.py`!
 
 ## +10 XP -- Lesson Complete!
 **Next up:** Module 3 Quiz and Challenge!
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 3, Lesson 2: Else and Elif](../lesson_02_else_and_elif/README.md) | [Module Overview →](../README.md) |

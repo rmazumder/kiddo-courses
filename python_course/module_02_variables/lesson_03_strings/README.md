@@ -39,3 +39,11 @@ then complete `exercise_strings.py`!
 ## +10 XP -- Lesson Complete!
 
 **Next up:** Lesson 4 -- Booleans (True/False)!
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 2, Lesson 2: Numbers and Math](../lesson_02_numbers/README.md) | [Module 2, Lesson 4: Booleans (True/False) →](../lesson_04_booleans/README.md) |

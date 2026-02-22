@@ -335,3 +335,11 @@ In **Lesson 39**, you will meet the **DC motor and L298N motor driver** -- the k
 | Potentiometer control jumps around | Add a small delay (15-20ms) in the loop -- servos need time to reach position |
 | Arduino resets when servo moves | Servo draws too much current. Use external 5V power for the servo |
 | Servo makes grinding noise | It is hitting its mechanical limit. Do not command angles past 0 or 180 |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Lesson 37: Ultrasonic Distance Sensor -- Your Arduino's Echolocation (HC-SR04)](lesson-37-ultrasonic-distance-sensor.md) | [Lesson 39: DC Motors and Motor Driver -- Spin Those Wheels! (L298N) →](lesson-39-dc-motors-and-motor-driver.md) |

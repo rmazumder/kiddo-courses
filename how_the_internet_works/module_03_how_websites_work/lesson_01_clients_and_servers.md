@@ -440,3 +440,11 @@ Think of a real-world example that works like a client-server system. It doesn't
 What does `200 OK` mean? Why does `404 Not Found` happen? What's the deal with that little padlock 🔒 in your browser? Next lesson, you'll learn about HTTP status codes and why HTTPS keeps you safe! 🛡️
 
 👉 [Next Lesson: HTTP & HTTPS](lesson_02_http_https.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module Overview](README.md) | [🔒 Module 3, Lesson 2: HTTP & HTTPS — The Rules of the Web! →](lesson_02_http_https.md) |

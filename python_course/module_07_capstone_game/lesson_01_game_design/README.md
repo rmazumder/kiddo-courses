@@ -58,3 +58,11 @@ then fill in `my_game_plan.py` with YOUR game ideas!
 
 ## +10 XP -- Lesson Complete!
 **Next up:** Lesson 2 -- Building the Game!
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module Overview](../README.md) | [Module 7, Lesson 2: Building the Game →](../lesson_02_building_the_game/README.md) |

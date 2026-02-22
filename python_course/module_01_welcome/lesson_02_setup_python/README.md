@@ -113,3 +113,11 @@ is working correctly!
 Your computer is ready to code. Let's write our first real program!
 
 **Next up:** Lesson 3 -- Hello, World!
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 1, Lesson 1: What Is Programming?](../lesson_01_what_is_programming/README.md) | [Module 1, Lesson 3: Hello, World! →](../lesson_03_hello_world/README.md) |

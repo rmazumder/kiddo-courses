@@ -97,3 +97,11 @@ Call this each frame before redrawing.
 4. Open `exercise_animate.py` and complete all 3 exercises
 
 Finish all exercises to earn **10 XP!**
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Lesson 2: Turtle Graphics](../lesson_02_turtle_graphics/README.md) | [Lesson 4: Simple Games →](../lesson_04_simple_games/README.md) |
