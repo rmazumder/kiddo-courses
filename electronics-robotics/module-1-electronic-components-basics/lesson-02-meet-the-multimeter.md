@@ -91,6 +91,8 @@ Lay the multimeter flat on the table. Point to each part:
   RED probe   = goes in V/ohm hole for voltage and resistance
 ```
 
+![Multimeter Parts Labeled](lesson-02-multimeter-labeled.png)
+
 **Key vocabulary:**
 
 | Word | Kid-Friendly Definition |
@@ -215,6 +217,8 @@ Lay out these items on the table:
 - A wooden popsicle stick
 - A glass of salt water (dip probes gently)
 - A jumper wire
+
+![Conductor Detective Game](lesson-02-continuity-detective.png)
 
 > "Your mission: test each item. Does the Wand beep? Write C for Conductor (beeps) or I for Insulator (no beep)."
 

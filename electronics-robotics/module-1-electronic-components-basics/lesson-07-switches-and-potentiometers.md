@@ -111,6 +111,8 @@ Walk around the house for 2 minutes and find as many switches as possible. Categ
   Between right and middle: changes from 10k ohms to 0 as you turn
 ```
 
+![Potentiometer Labeled](lesson-07-potentiometer-labeled.png)
+
 > "The middle leg is called the **WIPER**. It slides along a resistive strip. Turn the knob, wiper moves, resistance between middle and either end changes."
 
 **Award: +10 XP for identifying the wiper (middle leg)!**

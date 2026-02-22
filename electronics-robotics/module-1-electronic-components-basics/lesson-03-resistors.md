@@ -72,6 +72,8 @@ Draw on paper:
    = lots of current        = less current
 ```
 
+![Hallway Resistance Analogy](lesson-03-hallway-resistance.png)
+
 > "A resistor is like making a hallway narrower. More resistance = harder for electricity to squeeze through = less current flows."
 
 **Show them a real resistor:**

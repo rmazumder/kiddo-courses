@@ -110,6 +110,8 @@ Draw this:
   C = Collector (electricity enters here -- connects to load/LED)
 ```
 
+![Transistor 2N2222 Labeled](lesson-06-transistor-labeled.png)
+
 > "Always check the datasheet for leg order! Different transistors have different leg layouts."
 
 **Award: +10 XP for correctly identifying E, B, and C on the transistor!**

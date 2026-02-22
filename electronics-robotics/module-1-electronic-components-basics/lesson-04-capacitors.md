@@ -79,6 +79,8 @@ Draw this on paper:
                   (water balloon)
 ```
 
+![Capacitor Charge and Discharge](lesson-04-charge-discharge.png)
+
 > "A capacitor is like a water balloon. You fill it up (charge it), then it holds the water (charge) until you poke a hole in it -- then all the water squirts out (discharge) at once."
 
 **Key ideas:**
@@ -100,6 +102,8 @@ Fun comparison:
 ### Step 3: Meet the Capacitors (5 min)
 
 Show both types side by side:
+
+![Capacitor Types: Electrolytic vs Ceramic](lesson-04-capacitor-types.png)
 
 **Electrolytic Capacitor (the big one):**
 ```

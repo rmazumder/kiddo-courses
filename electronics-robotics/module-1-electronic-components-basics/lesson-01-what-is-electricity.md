@@ -107,6 +107,8 @@ Draw this on paper or a whiteboard together:
 
 **First, explain the breadboard:**
 
+![Breadboard Overview](breadboard_overview.jpg)
+
 ```
   Breadboard top view:
 
@@ -136,6 +138,8 @@ Circuit diagram:
   3. LED: long leg (anode +) in row 5, short leg (cathode -) in row 7
   4. Wire: row 7 to - rail
 ```
+
+![Breadboard Circuit Diagram](lesson-01-breadboard-circuit.png)
 
 **Go slowly.** Have the kid place each component themselves. Describe what you are doing as you go:
 > "This resistor is like the narrow pipe -- it protects the LED from getting too much electricity."
