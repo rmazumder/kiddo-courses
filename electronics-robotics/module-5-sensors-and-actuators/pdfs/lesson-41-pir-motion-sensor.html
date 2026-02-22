@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 41: PIR Motion Sensor -- Your Arduino&#x27;s Security Guard</title>
+    <style>
+
+        /* -- Reset & Base -- */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            line-height: 1.75;
+            color: #2C3E50;
+            background: #FAFAFA;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px 40px;
+        }
+
+        /* -- Header Banner -- */
+        .lesson-header {
+            background: linear-gradient(135deg, #4ECDC4 0%, #45B7D1 50%, #2E86AB 100%);
+            color: #fff;
+            border-radius: 16px;
+            padding: 32px 36px 28px;
+            margin: 24px 0 32px;
+            box-shadow: 0 6px 20px rgba(78,205,196,0.35);
+            position: relative;
+            overflow: hidden;
+        }
+        .lesson-header::before {
+            content: "";
+            position: absolute;
+            top: -40px; right: -40px;
+            width: 160px; height: 160px;
+            background: rgba(255,255,255,0.12);
+            border-radius: 50%;
+        }
+        .lesson-header::after {
+            content: "";
+            position: absolute;
+            bottom: -30px; left: -20px;
+            width: 100px; height: 100px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+        }
+        .lesson-header h1 {
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            position: relative;
+            z-index: 1;
+        }
+        .module-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.25);
+            border: 2px solid rgba(255,255,255,0.6);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 4px 14px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 1;
+        }
+        .meta-row {
+            margin-top: 12px;
+            font-size: 14px;
+            color: rgba(255,255,255,0.9);
+            position: relative;
+            z-index: 1;
+        }
+        .meta-pill {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            border-radius: 12px;
+            padding: 2px 10px;
+            margin: 2px 4px 2px 0;
+            white-space: nowrap;
+        }
+
+        /* -- Section Headings -- */
+        h2 {
+            font-size: 22px;
+            font-weight: 800;
+            margin: 36px 0 14px;
+            padding: 10px 18px;
+            border-radius: 10px;
+            color: #fff;
+        }
+        h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 28px 0 10px;
+            padding: 8px 14px;
+            border-left: 5px solid;
+            border-radius: 0 8px 8px 0;
+            background: rgba(0,0,0,0.03);
+        }
+
+        /* -- Body Text -- */
+        p { margin: 10px 0; }
+        strong { font-weight: 700; color: #1A252F; }
+        em { font-style: italic; color: #5D6D7E; }
+
+        /* -- Inline Code -- */
+        code {
+            background: #F0F3F7;
+            border: 1px solid #D5DCE8;
+            border-radius: 4px;
+            padding: 1px 6px;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 14px;
+            color: #C0392B;
+        }
+
+        /* -- Fenced Code Blocks -- */
+        pre {
+            background: #F4F6F8;
+            border: 1px solid #D0D8E4;
+            border-left: 5px solid #4ECDC4;
+            border-radius: 8px;
+            padding: 16px 18px;
+            overflow-x: auto;
+            margin: 16px 0;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #2C3E50;
+            white-space: pre;
+        }
+        pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            font-size: inherit;
+            color: inherit;
+        }
+
+        /* -- Blockquotes / Callout Boxes -- */
+        blockquote {
+            background: #FFF8E7;
+            border-left: 6px solid #4ECDC4;
+            border-radius: 0 12px 12px 0;
+            padding: 14px 20px;
+            margin: 16px 0;
+            color: #5D3A1A;
+            font-style: normal;
+            position: relative;
+        }
+        blockquote::before {
+            content: "\1F4AC";
+            position: absolute;
+            top: -10px; left: 10px;
+            font-size: 20px;
+            line-height: 1;
+        }
+        blockquote p { margin: 6px 0; }
+
+        /* -- Lists -- */
+        ul, ol {
+            margin: 10px 0 10px 24px;
+            padding-left: 8px;
+        }
+        li { margin: 5px 0; }
+        ul li::marker { color: #4ECDC4; font-size: 18px; }
+        ol li::marker { color: #45B7D1; font-weight: 700; }
+
+        /* -- Tables -- */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 16px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+        }
+        thead th {
+            background: #4ECDC4;
+            color: #fff;
+            font-weight: 700;
+            padding: 11px 14px;
+            text-align: left;
+            border-bottom: 3px solid #3BA89F;
+        }
+        thead th:first-child { border-radius: 10px 0 0 0; }
+        thead th:last-child  { border-radius: 0 10px 0 0; }
+        tbody tr:nth-child(odd)  td { background: #F0FBFA; }
+        tbody tr:nth-child(even) td { background: #E0F7F5; }
+        tbody tr:hover td { background: #C8F0EC; transition: background 0.15s; }
+        td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #C8EEEA;
+            vertical-align: top;
+        }
+        td .checkbox {
+            display: inline-block;
+            width: 18px; height: 18px;
+            border: 2px solid #4ECDC4;
+            border-radius: 4px;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+
+        /* -- XP Badges -- */
+        .xp-badge {
+            display: inline-block;
+            background: #FFEAA7;
+            border: 2px solid #F39C12;
+            color: #7D4F00;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin: 2px 4px;
+            white-space: nowrap;
+        }
+        .award-badge {
+            display: inline-block;
+            background: #D5F5E3;
+            border: 2px solid #27AE60;
+            color: #1A5E35;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin: 2px 4px;
+            white-space: nowrap;
+        }
+
+        /* -- Horizontal Rule -- */
+        hr {
+            border: none;
+            border-top: 3px dashed #A8E6CF;
+            margin: 30px 0;
+        }
+
+        /* -- Footer -- */
+        .page-footer {
+            margin-top: 48px;
+            padding-top: 16px;
+            border-top: 2px solid #D5DCE8;
+            text-align: center;
+            font-size: 13px;
+            color: #7F8C8D;
+        }
+
+        /* -- Print Styles -- */
+        @media print {
+            @page { size: A4; margin: 18mm 15mm 20mm; }
+
+            body {
+                background: #fff !important;
+                font-size: 13px;
+                max-width: 100%;
+                padding: 0;
+            }
+
+            * { -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important; }
+
+            h2 { page-break-before: auto; break-before: auto; }
+            pre, blockquote, table { page-break-inside: avoid; }
+            h2, h3 { page-break-after: avoid; break-after: avoid; }
+            tr { page-break-inside: avoid; }
+
+            p { orphans: 3; widows: 3; }
+
+            .lesson-header { box-shadow: none; }
+
+            .page-footer {
+                position: fixed;
+                bottom: 0; left: 0; right: 0;
+                background: #fff;
+                border-top: 1px solid #ccc;
+                padding: 6px 15mm;
+                display: flex;
+                justify-content: space-between;
+            }
+        }
+    
+    </style>
+</head>
+<body>
+
+    <!-- Header Banner -->
+    <header class="lesson-header">
+        <div class="module-badge">Module 5 -- Sensors and Actuators</div>
+        <h1>Lesson 41: PIR Motion Sensor -- Your Arduino&#x27;s Security Guard</h1>
+        <div class="meta-row"><span class="meta-pill">&#9733; Star-4 Advanced</span><span class="meta-pill">&#9200; 40--45 minutes</span><span class="meta-pill">&#128100; Age 6--12 years</span><span class="meta-pill xp-badge" style="background:#FFEAA7;color:#7D4F00;border:none;">&#9889; 275 XP</span></div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+<hr>
+<h2 id="your-mission-today" style="background:#FF6B35;">Your Mission Today</h2>
+<p>Circuit Explorer, imagine this: you walk into a dark hallway and the light turns on automatically. You leave, and it turns itself off. No switch, no voice command &mdash; the hallway just KNOWS you are there. How? A tiny sensor called a <strong>PIR motion sensor</strong> detects your body heat as you move through the area. Today you are building your own automatic security light system!</p>
+<hr>
+<h2 id="learning-objectives" style="background:#4ECDC4;">Learning Objectives</h2>
+<p>By the end of this lesson, you will be able to:</p>
+<ul>
+<li>Explain how PIR sensors detect motion using body heat</li>
+<li>Wire a PIR sensor to Arduino</li>
+<li>Write a sketch that reacts to motion detection</li>
+<li>Build an automatic security light with an adjustable timer</li>
+<li>Combine PIR with an LDR to make a smart night-only motion light</li>
+<li>Use your Magic Measurement Wand to measure the PIR output pin HIGH vs LOW</li>
+</ul>
+<hr>
+<h2 id="what-you-need" style="background:#45B7D1;">What You Need</h2>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Item</th>
+<th>Qty</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Arduino Uno + USB cable</td>
+<td>1</td>
+</tr>
+<tr>
+<td>HC-SR501 PIR motion sensor module</td>
+<td>1</td>
+</tr>
+<tr>
+<td>LEDs (any color)</td>
+<td>2</td>
+</tr>
+<tr>
+<td>330-ohm resistors</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Active buzzer (optional for alarm mode)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>LDR + 10k-ohm resistor (from Lesson 36)</td>
+<td>1 each</td>
+</tr>
+<tr>
+<td>Breadboard</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Jumper wires</td>
+<td>8</td>
+</tr>
+<tr>
+<td>Multimeter (your Magic Measurement Wand!)</td>
+<td>1</td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="how-to-teach-this-lesson" style="background:#96CEB4;">How to Teach This Lesson</h2>
+<h3 id="step-1-hook-the-haunted-hallway-5-min" style="border-left-color:#45B7D1; color:#45B7D1;">Step 1: Hook &mdash; The Haunted Hallway (5 min)</h3>
+<blockquote><p>"Picture this: you are sneaking through a dark hallway at night, trying not to wake anyone up. Suddenly, a bright light flips on! You freeze. Did someone see you? Nope &mdash; it was a motion sensor. It detected your body heat moving through its field of view and triggered the light."</p></blockquote>
+<blockquote><p>"PIR stands for Passive Infrared. Remember infrared from last lesson? Everything warm gives off infrared light &mdash; including YOU! A PIR sensor does not send out any signal. It just sits there PASSIVELY watching for changes in the infrared light around it. When something warm (like a person, a pet, or even a cup of hot tea) moves across its view, it says 'I detected motion!'"</p></blockquote>
+<p>Show them the PIR module:</p>
+<blockquote><p>"See that white dome on top? That is a special lens called a Fresnel lens (say 'freh-NEL'). It splits the PIR sensor's field of view into many little zones. When a warm body crosses from one zone to another, the sensor detects the change. If everything stays still, nothing happens."</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+10 XP</span> for learning about PIR sensors!</strong></p>
+<hr>
+<h3 id="step-2-how-pir-sensors-work-8-min" style="border-left-color:#96CEB4; color:#96CEB4;">Step 2: How PIR Sensors Work (8 min)</h3>
+<p><strong>The Laser Grid Analogy:</strong></p>
+<blockquote><p>"Imagine an invisible laser grid across a doorway in a spy movie. When someone walks through it, the alarm goes off because they break the beams. A PIR sensor is similar, except instead of lasers, it uses zones of infrared sensitivity. When a warm body moves from one zone to another, the sensor triggers."</p></blockquote>
+<p><strong>Key vocabulary:</strong></p>
+<ul>
+<li><strong>PIR (Passive Infrared):</strong> Detects infrared radiation from warm objects. "Passive" means it does not emit anything &mdash; it only receives.</li>
+<li><strong>Fresnel Lens:</strong> The white plastic dome that focuses infrared onto the sensor and creates detection zones.</li>
+<li><strong>Output pin:</strong> Goes HIGH (3.3V) when motion is detected, LOW (0V) when still.</li>
+<li><strong>Trigger modes:</strong> The HC-SR501 has two trigger modes &mdash; "Retriggerable" (stays HIGH as long as motion continues) and "Non-retriggerable" (goes HIGH once, then LOW, then waits).</li>
+</ul>
+<p><strong>HC-SR501 Module:</strong></p>
+<pre><code>  HC-SR501 PIR Sensor (bottom view)
+
+  +-----------------------------------+
+  |                                   |
+  |   [Sensitivity]   [Time delay]    |
+  |    adjustment       adjustment    |
+  |    (left pot)      (right pot)    |
+  |                                   |
+  |   VCC    OUT    GND               |
+  |    |      |      |                |
+  +-----------------------------------+
+       |      |      |
+      5V    signal   GND</code></pre>
+<p><strong>The two adjustment pots (on the module itself):</strong></p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Potentiometer</th>
+<th>What It Controls</th>
+<th>Range</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Sensitivity (left)</td>
+<td>How far away it detects motion</td>
+<td>~3m to ~7m</td>
+</tr>
+<tr>
+<td>Time Delay (right)</td>
+<td>How long output stays HIGH after detecting motion</td>
+<td>~3 sec to ~300 sec</td>
+</tr>
+</tbody></table></div>
+<p><strong>Award: <span class="xp-badge">+10 XP</span> for understanding PIR internals!</strong></p>
+<hr>
+<h3 id="step-3-wiring-the-pir-sensor-5-min" style="border-left-color:#FF6B35; color:#FF6B35;">Step 3: Wiring the PIR Sensor (5 min)</h3>
+<p><strong>Wiring diagram:</strong></p>
+<pre><code>  PIR Sensor         Arduino
+  -----------        --------
+  VCC  ------------&gt;  5V
+  OUT  ------------&gt;  Pin 7
+  GND  ------------&gt;  GND</code></pre>
+<blockquote><p>"Just 3 wires! The PIR sensor is one of the easiest sensors to connect. Power, ground, and one signal wire."</p></blockquote>
+<p><strong>Important warm-up period:</strong></p>
+<blockquote><p>"When you first power on the PIR, it needs about 30 to 60 seconds to 'calibrate' &mdash; it learns the background infrared level of the room. During this time, stay very still and keep away from the sensor. After the warm-up, it is ready to detect motion!"</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+10 XP</span> for wiring the PIR sensor!</strong></p>
+<hr>
+<h3 id="step-4-your-first-motion-detection-8-min" style="border-left-color:#4ECDC4; color:#4ECDC4;">Step 4: Your First Motion Detection (8 min)</h3>
+<p><strong>Basic Motion Detection Code:</strong></p>
+<pre><code>int pirPin = 7;
+int ledPin = 13;
+
+void setup() {
+  pinMode(pirPin, INPUT);
+  pinMode(ledPin, OUTPUT);
+  Serial.begin(9600);
+
+  Serial.println(&quot;PIR Sensor warming up...&quot;);
+  Serial.println(&quot;Stay still for 30 seconds!&quot;);
+  delay(30000);  // 30-second warm-up
+  Serial.println(&quot;PIR Sensor READY!&quot;);
+}
+
+void loop() {
+  int motionDetected = digitalRead(pirPin);
+
+  if (motionDetected == HIGH) {
+    digitalWrite(ledPin, HIGH);
+    Serial.println(&quot;*** MOTION DETECTED! ***&quot;);
+  } else {
+    digitalWrite(ledPin, LOW);
+    Serial.println(&quot;All clear...&quot;);
+  }
+
+  delay(200);
+}</code></pre>
+<p><strong>Test it:</strong></p>
+<ol>
+<li>Upload and open Serial Monitor</li>
+<li>Stay very still during the 30-second warm-up</li>
+<li>After "READY!" appears, wave your hand in front of the sensor</li>
+<li>The LED lights up and "MOTION DETECTED!" appears!</li>
+<li>Stop moving &mdash; after the time delay (set by the module's pot), it goes back to LOW</li>
+</ol>
+<p><strong>Try these experiments:</strong></p>
+<ul>
+<li>Walk across the room &mdash; does it detect you from far away?</li>
+<li>Try moving just one finger close to the sensor</li>
+<li>Put a warm cup of water in front of it &mdash; does it detect the heat?</li>
+<li>Try having a friend approach from different angles</li>
+</ul>
+<p><strong>Award: <span class="xp-badge">+20 XP</span> for detecting your first motion!</strong></p>
+<hr>
+<h3 id="step-5-build-the-automatic-security-light-8-min" style="border-left-color:#C678B0; color:#C678B0;">Step 5: Build the Automatic Security Light (8 min)</h3>
+<p>Add a timer and an alarm buzzer:</p>
+<pre><code>int pirPin = 7;
+int ledPin = 9;
+int buzzerPin = 8;
+unsigned long motionTime = 0;
+int lightDuration = 10000;  // Keep light on for 10 seconds
+bool alarmMode = false;
+
+void setup() {
+  pinMode(pirPin, INPUT);
+  pinMode(ledPin, OUTPUT);
+  pinMode(buzzerPin, OUTPUT);
+  Serial.begin(9600);
+
+  Serial.println(&quot;Security System warming up...&quot;);
+  delay(30000);
+  Serial.println(&quot;SECURITY SYSTEM ACTIVE!&quot;);
+}
+
+void loop() {
+  int motion = digitalRead(pirPin);
+
+  if (motion == HIGH) {
+    motionTime = millis();  // Record when motion was detected
+    digitalWrite(ledPin, HIGH);
+    Serial.println(&quot;ALERT: Motion detected!&quot;);
+
+    if (alarmMode) {
+      tone(buzzerPin, 2000, 500);  // Alarm sound!
+    }
+  }
+
+  // Turn off LED after lightDuration milliseconds of no motion
+  if (millis() - motionTime &gt; lightDuration) {
+    digitalWrite(ledPin, LOW);
+    noTone(buzzerPin);
+  }
+
+  delay(100);
+}</code></pre>
+<blockquote><p>"Now you have a real security light! Walk past the sensor and the light stays on for 10 seconds. You can change <code>lightDuration</code> to make it longer or shorter. Set <code>alarmMode = true</code> to add a buzzer alarm!"</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+25 XP</span> for building the security light!</strong></p>
+<hr>
+<h3 id="step-6-smart-night-light-pir-ldr-combo-5-min" style="border-left-color:#E8A838; color:#E8A838;">Step 6: Smart Night Light &mdash; PIR + LDR Combo (5 min)</h3>
+<p>Why waste electricity turning on a light during the day? Add the LDR from Lesson 36:</p>
+<pre><code>int pirPin = 7;
+int ldrPin = A0;
+int ledPin = 9;
+int darkThreshold = 300;  // Below this = dark enough
+
+void loop() {
+  int motion = digitalRead(pirPin);
+  int lightLevel = analogRead(ldrPin);
+
+  if (motion == HIGH &amp;&amp; lightLevel &lt; darkThreshold) {
+    // Motion detected AND it is dark!
+    digitalWrite(ledPin, HIGH);
+    Serial.println(&quot;Night motion -- light ON!&quot;);
+  } else {
+    digitalWrite(ledPin, LOW);
+  }
+
+  delay(100);
+}</code></pre>
+<blockquote><p>"Now the light only turns on if TWO conditions are true: there is motion AND it is dark. During the day, the motion sensor still detects you, but the light stays off because the LDR says 'it is bright enough already!' This is how smart home systems work."</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+25 XP</span> for building the smart night light!</strong></p>
+<hr>
+<h3 id="step-7-wand-check-pir-output-high-vs-low-5-min" style="border-left-color:#E05C5C; color:#E05C5C;">Step 7: Wand Check &mdash; PIR Output HIGH vs LOW (5 min)</h3>
+<blockquote><p>"Let us use your Wand to see the exact voltage difference between 'motion detected' and 'no motion'. This is a clean digital signal!"</p></blockquote>
+<p><strong>Wand Test &mdash; PIR Output Pin:</strong></p>
+<ol>
+<li>Set your Wand to DC Volts (20V range)</li>
+<li>Connect black probe to GND</li>
+<li>Touch red probe to the PIR OUT pin (pin 7)</li>
+</ol>
+<p><strong>Test both states:</strong></p>
+<pre><code>| Condition | Expected Voltage | Your Wand Reads | Points |
+|-----------|-----------------|----------------|--------|
+| No motion (all clear) | ~0V (LOW) | | +15 XP |
+| Motion detected | ~3.3V (HIGH) | | +15 XP |</code></pre>
+<blockquote><p>"Unlike the analog sensors (LDR, temperature) that give a range of values, the PIR is DIGITAL &mdash; it is either ON or OFF, HIGH or LOW, 3.3V or 0V. No in-between! That is why we use <code>digitalRead()</code> instead of <code>analogRead()</code> for this sensor."</p></blockquote>
+<p><strong>Bonus observation:</strong> Watch the Wand while walking past the sensor. The voltage snaps from 0V to about 3.3V instantly, stays there for the time delay period, then snaps back to 0V.</p>
+<p><strong>Award: <span class="xp-badge">+30 XP</span> for measuring PIR output with your Wand!</strong></p>
+<hr>
+<h2 id="quick-quiz-earn-bonus-xp" style="background:#E8A838;">Quick Quiz &mdash; Earn Bonus XP!</h2>
+<p><strong>Question 1:</strong> What does PIR stand for?</p>
+<ul>
+<li>A) Powered Infrared Receiver</li>
+<li>B) Passive Infrared</li>
+<li>C) Programmed Input Reader</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+15 XP</span>!)</strong></p>
+<p><strong>Question 2:</strong> How does a PIR sensor detect motion?</p>
+<ul>
+<li>A) It sends out radar waves</li>
+<li>B) It senses changes in infrared heat patterns when a warm body moves through its field of view</li>
+<li>C) It uses a camera to see movement</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+15 XP</span>!)</strong></p>
+<p><strong>Question 3:</strong> Why does the PIR need a 30-second warm-up period?</p>
+<ul>
+<li>A) The sensor needs to heat up</li>
+<li>B) It needs to learn the baseline infrared level of the room before it can detect changes</li>
+<li>C) The Arduino is loading software</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+15 XP</span>!)</strong></p>
+<p><strong>Question 4:</strong> In our smart night light, the LED only turns on when:</p>
+<ul>
+<li>A) It is dark</li>
+<li>B) There is motion</li>
+<li>C) Both &mdash; it is dark AND there is motion</li>
+</ul>
+<p><strong>(Correct: C &mdash; <span class="xp-badge">+15 XP</span>!)</strong></p>
+<hr>
+<h2 id="lesson-41-complete" style="background:#C678B0;">Lesson 41 Complete!</h2>
+<pre><code>  =============================================
+
+     MOTION GUARDIAN BADGE UNLOCKED!
+
+     Skills unlocked:
+     [check] Wire and read a PIR motion sensor
+     [check] Build an automatic security light
+     [check] Combine PIR + LDR for a smart night light
+     [check] Measured PIR HIGH vs LOW with the Wand
+
+  =============================================</code></pre>
+<p><strong>XP Breakdown:</strong></p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Activity</th>
+<th>XP</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Hook &mdash; haunted hallway</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Understanding PIR sensors</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Wiring the sensor</td>
+<td>10</td>
+</tr>
+<tr>
+<td>First motion detection</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Security light build</td>
+<td>25</td>
+</tr>
+<tr>
+<td>Smart night light (PIR + LDR)</td>
+<td>25</td>
+</tr>
+<tr>
+<td>Wand Check (HIGH vs LOW)</td>
+<td>30</td>
+</tr>
+<tr>
+<td>Quiz (4 questions)</td>
+<td>60</td>
+</tr>
+<tr>
+<td><strong>TOTAL POSSIBLE</strong></td>
+<td><strong>190</strong></td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="coming-up-next" style="background:#E05C5C;">Coming Up Next...</h2>
+<p>In <strong>Lesson 42</strong> &mdash; the MODULE 5 GRAND FINALE &mdash; you will combine EVERYTHING you have learned in this module to build a <strong>Smart Room System</strong>! Temperature monitoring, automatic lights, motion detection, distance sensing, and motor control &mdash; all working together in one epic project. Get ready for the biggest build yet!</p>
+<hr>
+<h2 id="troubleshooting" style="background:#FF6B35;">Troubleshooting</h2>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Problem</th>
+<th>Fix</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>PIR triggers randomly</td>
+<td>Wait for full warm-up (60 seconds). Keep sensor away from windows, heaters, and air vents &mdash; moving hot/cold air can trigger false alarms</td>
+</tr>
+<tr>
+<td>PIR does not detect motion at all</td>
+<td>Check wiring. Make sure the Fresnel lens dome is on top. Try adjusting the sensitivity pot on the module</td>
+</tr>
+<tr>
+<td>LED stays on forever</td>
+<td>The time delay pot on the PIR module may be turned to maximum (up to 5 minutes). Turn it counter-clockwise for shorter delay</td>
+</tr>
+<tr>
+<td>PIR detects through walls or glass</td>
+<td>PIR can sometimes detect through thin materials. Reposition the sensor</td>
+</tr>
+<tr>
+<td>Smart night light never activates</td>
+<td>Check LDR threshold &mdash; print lightLevel to Serial Monitor and adjust darkThreshold to match your room</td>
+</tr>
+<tr>
+<td>Wand reads 5V instead of 3.3V on HIGH</td>
+<td>Some PIR modules output 5V. Either value is fine &mdash; both read as HIGH for Arduino</td>
+</tr>
+</tbody></table></div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="page-footer">
+        <span>Lesson 41: PIR Motion Sensor -- Your Arduino&#x27;s Security Guard</span>
+        <span>Module 5: Sensors and Actuators</span>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 46: Obstacle-Avoiding Robot</title>
+    <style>
+
+        /* -- Reset & Base -- */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            line-height: 1.75;
+            color: #2C3E50;
+            background: #FAFAFA;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px 40px;
+        }
+
+        /* -- Header Banner (Robotics Theme - deep blue/purple gradient) -- */
+        .lesson-header {
+            background: linear-gradient(135deg, #2C3E50 0%, #3498DB 50%, #1ABC9C 100%);
+            color: #fff;
+            border-radius: 16px;
+            padding: 32px 36px 28px;
+            margin: 24px 0 32px;
+            box-shadow: 0 6px 20px rgba(44,62,80,0.35);
+            position: relative;
+            overflow: hidden;
+        }
+        .lesson-header::before {
+            content: "";
+            position: absolute;
+            top: -40px; right: -40px;
+            width: 160px; height: 160px;
+            background: rgba(255,255,255,0.12);
+            border-radius: 50%;
+        }
+        .lesson-header::after {
+            content: "";
+            position: absolute;
+            bottom: -30px; left: -20px;
+            width: 100px; height: 100px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+        }
+        .lesson-header h1 {
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            position: relative;
+            z-index: 1;
+        }
+        .module-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.25);
+            border: 2px solid rgba(255,255,255,0.6);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 4px 14px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 1;
+        }
+        .meta-row {
+            margin-top: 12px;
+            font-size: 14px;
+            color: rgba(255,255,255,0.9);
+            position: relative;
+            z-index: 1;
+        }
+        .meta-pill {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            border-radius: 12px;
+            padding: 2px 10px;
+            margin: 2px 4px 2px 0;
+            white-space: nowrap;
+        }
+
+        /* -- Section Headings -- */
+        h2 {
+            font-size: 22px;
+            font-weight: 800;
+            margin: 36px 0 14px;
+            padding: 10px 18px;
+            border-radius: 10px;
+            color: #fff;
+        }
+        h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 28px 0 10px;
+            padding: 8px 14px;
+            border-left: 5px solid;
+            border-radius: 0 8px 8px 0;
+            background: rgba(0,0,0,0.03);
+        }
+
+        /* -- Body Text -- */
+        p { margin: 10px 0; }
+        strong { font-weight: 700; color: #1A252F; }
+        em { font-style: italic; color: #5D6D7E; }
+
+        /* -- Inline Code -- */
+        code {
+            background: #F0F3F7;
+            border: 1px solid #D5DCE8;
+            border-radius: 4px;
+            padding: 1px 6px;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 14px;
+            color: #C0392B;
+        }
+
+        /* -- Fenced Code Blocks -- */
+        pre {
+            background: #F4F6F8;
+            border: 1px solid #D0D8E4;
+            border-left: 5px solid #3498DB;
+            border-radius: 8px;
+            padding: 16px 18px;
+            overflow-x: auto;
+            margin: 16px 0;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #2C3E50;
+            white-space: pre;
+        }
+        pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            font-size: inherit;
+            color: inherit;
+        }
+
+        /* -- Blockquotes / Callout Boxes -- */
+        blockquote {
+            background: #FFF8E7;
+            border-left: 6px solid #3498DB;
+            border-radius: 0 12px 12px 0;
+            padding: 14px 20px;
+            margin: 16px 0;
+            color: #5D3A1A;
+            font-style: normal;
+            position: relative;
+        }
+        blockquote::before {
+            content: "\1F4AC";
+            position: absolute;
+            top: -10px; left: 10px;
+            font-size: 20px;
+            line-height: 1;
+        }
+        blockquote p { margin: 6px 0; }
+
+        /* -- Lists -- */
+        ul, ol {
+            margin: 10px 0 10px 24px;
+            padding-left: 8px;
+        }
+        li { margin: 5px 0; }
+        ul li::marker { color: #3498DB; font-size: 18px; }
+        ol li::marker { color: #1ABC9C; font-weight: 700; }
+
+        /* -- Tables -- */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 16px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+        }
+        thead th {
+            background: #2C3E50;
+            color: #fff;
+            font-weight: 700;
+            padding: 11px 14px;
+            text-align: left;
+            border-bottom: 3px solid #1A252F;
+        }
+        thead th:first-child { border-radius: 10px 0 0 0; }
+        thead th:last-child  { border-radius: 0 10px 0 0; }
+        tbody tr:nth-child(odd)  td { background: #F8FBFF; }
+        tbody tr:nth-child(even) td { background: #EAF6FB; }
+        tbody tr:hover td { background: #D6F0F8; transition: background 0.15s; }
+        td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #D9EEF6;
+            vertical-align: top;
+        }
+        td .checkbox {
+            display: inline-block;
+            width: 18px; height: 18px;
+            border: 2px solid #3498DB;
+            border-radius: 4px;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+
+        /* -- XP Badges -- */
+        .xp-badge {
+            display: inline-block;
+            background: #FFEAA7;
+            border: 2px solid #F39C12;
+            color: #7D4F00;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin: 2px 4px;
+            white-space: nowrap;
+        }
+        .award-badge {
+            display: inline-block;
+            background: #D5F5E3;
+            border: 2px solid #27AE60;
+            color: #1A5E35;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin: 2px 4px;
+            white-space: nowrap;
+        }
+
+        /* -- Horizontal Rule -- */
+        hr {
+            border: none;
+            border-top: 3px dashed #B2D8E8;
+            margin: 30px 0;
+        }
+
+        /* -- Footer -- */
+        .page-footer {
+            margin-top: 48px;
+            padding-top: 16px;
+            border-top: 2px solid #D5DCE8;
+            text-align: center;
+            font-size: 13px;
+            color: #7F8C8D;
+        }
+
+        /* -- Print Styles -- */
+        @media print {
+            @page { size: A4; margin: 18mm 15mm 20mm; }
+
+            body {
+                background: #fff !important;
+                font-size: 13px;
+                max-width: 100%;
+                padding: 0;
+            }
+
+            * { -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important; }
+
+            h2 { page-break-before: auto; break-before: auto; }
+            pre, blockquote, table { page-break-inside: avoid; }
+            h2, h3 { page-break-after: avoid; break-after: avoid; }
+            tr { page-break-inside: avoid; }
+
+            p { orphans: 3; widows: 3; }
+
+            .lesson-header { box-shadow: none; }
+
+            .page-footer {
+                position: fixed;
+                bottom: 0; left: 0; right: 0;
+                background: #fff;
+                border-top: 1px solid #ccc;
+                padding: 6px 15mm;
+                display: flex;
+                justify-content: space-between;
+            }
+        }
+    
+    </style>
+</head>
+<body>
+
+    <!-- Header Banner -->
+    <header class="lesson-header">
+        <div class="module-badge">Module 6 -- Robotics Projects</div>
+        <h1>Lesson 46: Obstacle-Avoiding Robot</h1>
+        <div class="meta-row"><span class="meta-pill">&#9733; Star-5 Expert</span><span class="meta-pill">&#9200; 50--60 minutes</span><span class="meta-pill">&#128100; Age 6--12 years</span><span class="meta-pill xp-badge" style="background:#FFEAA7;color:#7D4F00;border:none;">&#9889; 350 XP</span></div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+<hr>
+<h2 id="your-mission-today" style="background:#FF6B35;">Your Mission Today</h2>
+<p>Robot Navigator, your robot can follow a line &mdash; but what happens when something is in the way? Today you are going to give your robot the power of <strong>echolocation</strong> &mdash; just like a bat! You will mount an ultrasonic distance sensor on the front and use a servo to scan left and right. When the robot sees an obstacle, it will stop, look around, and choose the best path &mdash; all by itself. This is <strong>autonomous obstacle avoidance</strong>, and it is one of the most important skills in all of robotics!</p>
+<hr>
+<h2 id="learning-objectives" style="background:#4ECDC4;">Learning Objectives</h2>
+<p>By the end of this lesson, you will be able to:</p>
+<ul>
+<li>Explain how ultrasonic distance sensors measure distance</li>
+<li>Mount the HC-SR04 sensor and scanning servo on the robot</li>
+<li>Write an obstacle-avoidance algorithm</li>
+<li>Build an obstacle course and test your robot</li>
+<li>Use your Magic Measurement Wand to measure ultrasonic sensor VCC and trigger pin voltages</li>
+</ul>
+<hr>
+<h2 id="what-you-need" style="background:#45B7D1;">What You Need</h2>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Item</th>
+<th>Qty</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Your assembled robot from Lessons 43-44</td>
+<td>1</td>
+</tr>
+<tr>
+<td>HC-SR04 ultrasonic distance sensor</td>
+<td>1</td>
+</tr>
+<tr>
+<td>SG90 servo motor</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Servo sensor mounting bracket (or cardboard + hot glue)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Jumper wires</td>
+<td>8</td>
+</tr>
+<tr>
+<td>Cardboard boxes or books (for obstacles)</td>
+<td>5+</td>
+</tr>
+<tr>
+<td>Multimeter (your Magic Measurement Wand!)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>USB cable (for programming)</td>
+<td>1</td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="how-to-teach-this-lesson" style="background:#96CEB4;">How to Teach This Lesson</h2>
+<h3 id="step-1-hook-the-bat-robot-5-min" style="border-left-color:#45B7D1; color:#45B7D1;">Step 1: Hook &mdash; The Bat Robot (5 min)</h3>
+<blockquote><p>"Close your eyes and try to walk across the room without bumping into anything."</p></blockquote>
+<p>(Let the kid try &mdash; gently guide them away from real danger.)</p>
+<blockquote><p>"Hard, right? Now imagine doing that using SOUND. Bats do this every night! They send out a high-pitched squeak, and when the sound bounces back from a wall or a tree, the bat knows how far away it is. This is called ECHOLOCATION."</p></blockquote>
+<p>Hold up the HC-SR04 sensor:</p>
+<blockquote><p>"This sensor does the EXACT same thing! It sends out an ultrasonic pulse &mdash; a sound so high that humans cannot hear it &mdash; and listens for the echo. The longer it takes for the echo to come back, the farther away the object is. Your robot is about to become a bat!"</p></blockquote>
+<pre><code>  How Ultrasonic Sensing Works:
+
+  SENSOR ))))))))  ---------&gt; WALL
+                               |
+  SENSOR ((((((((  &lt;--------- ECHO
+
+  Time between send and receive = distance!
+  Distance = (time x speed of sound) / 2</code></pre>
+<p><strong>Award: <span class="xp-badge">+10 XP</span> for understanding echolocation!</strong></p>
+<hr>
+<h3 id="step-2-mounting-the-sensor-and-servo-10-min" style="border-left-color:#96CEB4; color:#96CEB4;">Step 2: Mounting the Sensor and Servo (10 min)</h3>
+<p><strong>The scanning system:</strong></p>
+<p>The HC-SR04 sensor is mounted on top of the servo motor. The servo can rotate the sensor left and right to scan for obstacles in different directions.</p>
+<pre><code>  Scanning System (Side View):
+
+       [HC-SR04]         &lt;-- ultrasonic sensor (eyes)
+          |
+       [Servo]           &lt;-- rotates the sensor
+          |
+   =================     &lt;-- robot chassis
+   O               O     &lt;-- wheels</code></pre>
+<p><strong>Assembly:</strong></p>
+<ol>
+<li>Attach the servo horn (arm) to the servo motor</li>
+<li>Mount the HC-SR04 on the servo horn using a bracket, or make one from cardboard:</li>
+</ol>
+<pre><code>  DIY Sensor Mount:
+
+  +-------[HC-SR04]-------+
+  |                        |
+  +---+              +---+
+      |              |
+      +---[HORN]---+
+           |
+        [SERVO]</code></pre>
+<ol>
+<li>Mount the servo on the FRONT of the robot chassis (centered)</li>
+<li>Make sure the sensor faces forward when the servo is at 90 degrees</li>
+</ol>
+<p><strong>Wiring:</strong></p>
+<pre><code>  HC-SR04:                    Servo:
+  VCC ---&gt; Arduino 5V         Red   ---&gt; Arduino 5V
+  GND ---&gt; Arduino GND        Brown ---&gt; Arduino GND
+  Trig --&gt; Arduino Pin 11     Signal --&gt; Arduino Pin 6
+  Echo --&gt; Arduino Pin 12</code></pre>
+<p><strong>Award: <span class="xp-badge">+20 XP</span> for mounting the scanning system!</strong></p>
+<hr>
+<h3 id="step-3-testing-the-distance-sensor-5-min" style="border-left-color:#FF6B35; color:#FF6B35;">Step 3: Testing the Distance Sensor (5 min)</h3>
+<p>First, let us make sure the sensor works:</p>
+<pre><code>// Lesson 46: Distance Sensor Test
+int trigPin = 11;
+int echoPin = 12;
+
+void setup() {
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  Serial.begin(9600);
+  Serial.println(&quot;Distance Sensor Test&quot;);
+}
+
+void loop() {
+  // Send ultrasonic pulse
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  // Read echo
+  long duration = pulseIn(echoPin, HIGH);
+  int distance = duration * 0.034 / 2;
+
+  Serial.print(&quot;Distance: &quot;);
+  Serial.print(distance);
+  Serial.println(&quot; cm&quot;);
+
+  delay(200);
+}</code></pre>
+<p><strong>Test it:</strong></p>
+<ul>
+<li>Hold your hand in front of the sensor and move it closer/farther</li>
+<li>Check that the Serial Monitor readings match the actual distance (roughly)</li>
+<li>Try measuring a wall, a book, your hand</li>
+</ul>
+<blockquote><p>"If the readings jump around wildly, make sure nothing is blocking the sensor's path and that the two 'eyes' (transmitter and receiver) are clean."</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+20 XP</span> for getting accurate distance readings!</strong></p>
+<hr>
+<h3 id="step-4-testing-the-servo-scan-5-min" style="border-left-color:#4ECDC4; color:#4ECDC4;">Step 4: Testing the Servo Scan (5 min)</h3>
+<pre><code>// Servo scan test
+#include &lt;Servo.h&gt;
+Servo scanServo;
+
+void setup() {
+  scanServo.attach(6);
+  Serial.begin(9600);
+}
+
+void loop() {
+  Serial.println(&quot;Looking LEFT&quot;);
+  scanServo.write(0);     // Look left
+  delay(1000);
+
+  Serial.println(&quot;Looking CENTER&quot;);
+  scanServo.write(90);    // Look center
+  delay(1000);
+
+  Serial.println(&quot;Looking RIGHT&quot;);
+  scanServo.write(180);   // Look right
+  delay(1000);
+
+  Serial.println(&quot;Looking CENTER&quot;);
+  scanServo.write(90);    // Back to center
+  delay(1000);
+}</code></pre>
+<blockquote><p>"Watch your sensor head turn left, center, right, center. Like a robot looking around the room! This is exactly what the robot will do when it finds an obstacle."</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+10 XP</span> for testing the servo scan!</strong></p>
+<hr>
+<h3 id="step-5-the-obstacle-avoidance-algorithm-12-min" style="border-left-color:#C678B0; color:#C678B0;">Step 5: The Obstacle-Avoidance Algorithm (12 min)</h3>
+<p>Here is the FULL autonomous obstacle-avoidance code:</p>
+<pre><code>// Lesson 46: Obstacle-Avoiding Robot
+#include &lt;Servo.h&gt;
+
+// Motor pins
+int leftENA = 9;
+int leftIN1 = 2;
+int leftIN2 = 3;
+int rightENB = 10;
+int rightIN3 = 4;
+int rightIN4 = 5;
+
+// Ultrasonic sensor pins
+int trigPin = 11;
+int echoPin = 12;
+
+// Servo
+Servo scanServo;
+int servoPin = 6;
+
+// Settings
+int driveSpeed = 170;
+int turnSpeed = 180;
+int dangerDistance = 25;  // cm -- stop if closer than this
+
+void setup() {
+  // Motor pins
+  pinMode(leftENA, OUTPUT);
+  pinMode(leftIN1, OUTPUT);
+  pinMode(leftIN2, OUTPUT);
+  pinMode(rightENB, OUTPUT);
+  pinMode(rightIN3, OUTPUT);
+  pinMode(rightIN4, OUTPUT);
+
+  // Sensor pins
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+
+  // Servo
+  scanServo.attach(servoPin);
+  scanServo.write(90);  // Start looking forward
+
+  Serial.begin(9600);
+  Serial.println(&quot;Obstacle Avoider Ready!&quot;);
+  delay(2000);
+}
+
+void loop() {
+  int distance = getDistance();
+
+  Serial.print(&quot;Distance: &quot;);
+  Serial.print(distance);
+  Serial.println(&quot; cm&quot;);
+
+  if (distance &gt; dangerDistance) {
+    // Path is clear -- drive forward!
+    forward(driveSpeed);
+  } else {
+    // OBSTACLE DETECTED! Stop and scan.
+    Serial.println(&quot;OBSTACLE! Scanning...&quot;);
+    stopRobot();
+    delay(300);
+
+    // Look LEFT
+    scanServo.write(10);
+    delay(500);
+    int leftDist = getDistance();
+    Serial.print(&quot;Left distance: &quot;);
+    Serial.println(leftDist);
+
+    // Look RIGHT
+    scanServo.write(170);
+    delay(500);
+    int rightDist = getDistance();
+    Serial.print(&quot;Right distance: &quot;);
+    Serial.println(rightDist);
+
+    // Look back to CENTER
+    scanServo.write(90);
+    delay(300);
+
+    // Choose the direction with MORE space
+    if (leftDist &gt; rightDist &amp;&amp; leftDist &gt; dangerDistance) {
+      Serial.println(&quot;Turning LEFT -- more space&quot;);
+      turnLeft(turnSpeed);
+      delay(500);
+    } else if (rightDist &gt; dangerDistance) {
+      Serial.println(&quot;Turning RIGHT -- more space&quot;);
+      turnRight(turnSpeed);
+      delay(500);
+    } else {
+      // Both sides blocked! Back up and try again
+      Serial.println(&quot;TRAPPED! Backing up...&quot;);
+      backward(driveSpeed);
+      delay(800);
+      turnRight(turnSpeed);  // Turn around
+      delay(700);
+    }
+    stopRobot();
+    delay(200);
+  }
+
+  delay(50);
+}
+
+// === DISTANCE FUNCTION ===
+int getDistance() {
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  long duration = pulseIn(echoPin, HIGH, 30000);  // 30ms timeout
+  if (duration == 0) return 999;  // No echo = very far
+  return duration * 0.034 / 2;
+}
+
+// === MOVEMENT FUNCTIONS ===
+void forward(int speed) {
+  digitalWrite(leftIN1, HIGH);
+  digitalWrite(leftIN2, LOW);
+  digitalWrite(rightIN3, HIGH);
+  digitalWrite(rightIN4, LOW);
+  analogWrite(leftENA, speed);
+  analogWrite(rightENB, speed);
+}
+
+void backward(int speed) {
+  digitalWrite(leftIN1, LOW);
+  digitalWrite(leftIN2, HIGH);
+  digitalWrite(rightIN3, LOW);
+  digitalWrite(rightIN4, HIGH);
+  analogWrite(leftENA, speed);
+  analogWrite(rightENB, speed);
+}
+
+void turnLeft(int speed) {
+  digitalWrite(leftIN1, LOW);
+  digitalWrite(leftIN2, HIGH);
+  digitalWrite(rightIN3, HIGH);
+  digitalWrite(rightIN4, LOW);
+  analogWrite(leftENA, speed);
+  analogWrite(rightENB, speed);
+}
+
+void turnRight(int speed) {
+  digitalWrite(leftIN1, HIGH);
+  digitalWrite(leftIN2, LOW);
+  digitalWrite(rightIN3, LOW);
+  digitalWrite(rightIN4, HIGH);
+  analogWrite(leftENA, speed);
+  analogWrite(rightENB, speed);
+}
+
+void stopRobot() {
+  digitalWrite(leftIN1, LOW);
+  digitalWrite(leftIN2, LOW);
+  digitalWrite(rightIN3, LOW);
+  digitalWrite(rightIN4, LOW);
+}</code></pre>
+<p><strong>Walk through the logic:</strong></p>
+<pre><code>  Obstacle Avoidance Flowchart:
+
+  START
+    |
+    v
+  Measure distance ahead
+    |
+    v
+  Distance &gt; 25cm? ---YES---&gt; Drive Forward
+    |                              |
+    NO                             |
+    |                              |
+    v                              |
+  STOP!                            |
+    |                              |
+    v                              |
+  Scan LEFT -- record distance     |
+  Scan RIGHT -- record distance    |
+    |                              |
+    v                              |
+  Left &gt; Right?                    |
+    YES --&gt; Turn LEFT              |
+    NO ---&gt; Turn RIGHT             |
+    |                              |
+    v                              |
+  Both blocked?                    |
+    YES --&gt; Back up + turn around  |
+    |                              |
+    +------------------------------+</code></pre>
+<p><strong>Award: <span class="xp-badge">+40 XP</span> for uploading the obstacle-avoidance code!</strong></p>
+<hr>
+<h3 id="step-6-build-the-obstacle-course-5-min" style="border-left-color:#E8A838; color:#E8A838;">Step 6: Build the Obstacle Course (5 min)</h3>
+<p>Set up an obstacle course using cardboard boxes, books, or other objects:</p>
+<pre><code>  Example Obstacle Course:
+
+  START
+    |
+    v
+  +---+        +---+
+  |BOX|        |BOX|
+  +---+   +    +---+
+          |
+       +--+---+
+       | BOOK  |
+       +-------+
+                     +---+
+            +---+    |BOX|
+            |BOX|    +---+
+            +---+
+                        ^
+                        |
+                      FINISH</code></pre>
+<p><strong>Tips:</strong></p>
+<ul>
+<li>Leave enough space between obstacles for the robot to fit through</li>
+<li>Start with wide gaps and make them tighter as the robot improves</li>
+<li>Use objects that the ultrasonic sensor can detect (solid surfaces, not fabric)</li>
+</ul>
+<p><strong>Award: <span class="xp-badge">+20 XP</span> for building an obstacle course!</strong></p>
+<hr>
+<h3 id="step-7-tuning-and-testing-5-min" style="border-left-color:#E05C5C; color:#E05C5C;">Step 7: Tuning and Testing (5 min)</h3>
+<p>Let the robot run through the course! Adjust these values:</p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Parameter</th>
+<th>Effect</th>
+<th>Try This</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>dangerDistance</td>
+<td>How close before stopping</td>
+<td>15&mdash;30 cm</td>
+</tr>
+<tr>
+<td>driveSpeed</td>
+<td>How fast it drives</td>
+<td>140&mdash;200</td>
+</tr>
+<tr>
+<td>Turn delay</td>
+<td>How much it turns</td>
+<td>300&mdash;700 ms</td>
+</tr>
+<tr>
+<td>Backup delay</td>
+<td>How far it reverses</td>
+<td>500&mdash;1000 ms</td>
+</tr>
+</tbody></table></div>
+<blockquote><p>"Your robot is making DECISIONS. It sees an obstacle, thinks about which way has more space, and chooses the best path. This is the beginning of artificial intelligence!"</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+20 XP</span> for a successful obstacle-course run!</strong></p>
+<hr>
+<h3 id="step-8-wand-check-ultrasonic-sensor-voltages-8-min" style="border-left-color:#45B7D1; color:#45B7D1;">Step 8: Wand Check &mdash; Ultrasonic Sensor Voltages (8 min)</h3>
+<blockquote><p>"Time for your Magic Measurement Wand to check the sensor signals!"</p></blockquote>
+<p>Set the Wand to <strong>DC Volts</strong>.</p>
+<p><strong>Measurement 1: Sensor Power</strong></p>
+<pre><code>| Measurement             | Expected | Your Reading |
+|-------------------------|---------|-------------|
+| HC-SR04 VCC pin         | 5.0V     |             |
+| HC-SR04 GND pin         | 0V       |             |
+| Servo VCC (red wire)    | 5.0V     |             |</code></pre>
+<p><strong>Measurement 2: Trigger Pin Voltage</strong></p>
+<p>The Trig pin sends a quick pulse. With the robot running, measure the Trig pin. You might see a fluctuating reading since the pulse is very fast:</p>
+<pre><code>| Measurement                | Expected    | Your Reading |
+|----------------------------|------------|-------------|
+| Trig pin (idle)            | ~0V         |             |
+| Trig pin (while measuring) | Flickers 0-5V |           |</code></pre>
+<blockquote><p>"The trigger pulse is only 10 microseconds long &mdash; that is 10 MILLIONTHS of a second! Your Wand might not catch it perfectly because it is SO fast, but you should see it flicker. This is one of the fastest signals you have measured!"</p></blockquote>
+<p><strong>Measurement 3: Servo Signal Wire</strong></p>
+<p>Measure the voltage on the servo signal wire while it moves:</p>
+<pre><code>| Servo Position | Signal Voltage (approx) |
+|----------------|------------------------|
+| 0 degrees      |                        |
+| 90 degrees     |                        |
+| 180 degrees    |                        |</code></pre>
+<blockquote><p>"The servo signal is also a PWM pulse &mdash; your Wand will show an average voltage that changes with the position. Pretty cool!"</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+50 XP</span> for all Wand measurements!</strong></p>
+<hr>
+<h2 id="quick-quiz-earn-bonus-xp" style="background:#E8A838;">Quick Quiz &mdash; Earn Bonus XP!</h2>
+<p><strong>Question 1:</strong> How does the HC-SR04 ultrasonic sensor measure distance?</p>
+<ul>
+<li>A) It uses a camera to see objects</li>
+<li>B) It sends a sound pulse and measures how long the echo takes to return</li>
+<li>C) It measures temperature changes</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<p><strong>Question 2:</strong> Why does the robot use a servo to rotate the ultrasonic sensor?</p>
+<ul>
+<li>A) To make the sensor spin faster</li>
+<li>B) To scan left and right and find which direction has more open space</li>
+<li>C) To make the robot look cool</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<p><strong>Question 3:</strong> The robot detects an obstacle 15cm ahead. Left scan reads 50cm. Right scan reads 10cm. Which way should it turn?</p>
+<ul>
+<li>A) Left &mdash; because 50cm is more space</li>
+<li>B) Right &mdash; because 10cm is closer</li>
+<li>C) Straight ahead</li>
+</ul>
+<p><strong>(Correct: A &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<hr>
+<h2 id="lesson-46-complete" style="background:#C678B0;">Lesson 46 Complete!</h2>
+<pre><code>  =============================================
+
+     OBSTACLE NAVIGATOR BADGE UNLOCKED!
+
+     Skills unlocked:
+     [check] Mounted ultrasonic sensor + servo
+     [check] Wrote distance measurement function
+     [check] Programmed obstacle-avoidance logic
+     [check] Built and tested obstacle course
+     [check] Measured sensor voltages with Wand
+
+  =============================================</code></pre>
+<p><strong>XP Breakdown:</strong></p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Activity</th>
+<th>XP</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Hook (echolocation)</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Mounting scanning system</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Distance sensor test</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Servo scan test</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Obstacle-avoidance code</td>
+<td>40</td>
+</tr>
+<tr>
+<td>Build obstacle course</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Successful course run</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Wand Check (all measurements)</td>
+<td>50</td>
+</tr>
+<tr>
+<td>Quiz (3 questions)</td>
+<td>60</td>
+</tr>
+<tr>
+<td><strong>TOTAL POSSIBLE</strong></td>
+<td><strong>250</strong></td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="coming-up-next" style="background:#E05C5C;">Coming Up Next...</h2>
+<p>In <strong>Lesson 47</strong>, your robot gets a PERSONALITY! You will add LEDs for eyes and a buzzer for a voice. Your robot will flash its lights when turning, beep when it spots an obstacle, and play a startup melody when it powers on. Get ready to make your robot come alive!</p>
+<hr>
+<h2 id="troubleshooting" style="background:#FF6B35;">Troubleshooting</h2>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Problem</th>
+<th>Fix</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Distance readings are 0 or 999</td>
+<td>Check Trig and Echo pin connections</td>
+</tr>
+<tr>
+<td>Sensor always reads very short distances</td>
+<td>Something blocking sensor face &mdash; check mounting</td>
+</tr>
+<tr>
+<td>Servo jitters or does not move</td>
+<td>Check 5V power &mdash; servo might need more current</td>
+</tr>
+<tr>
+<td>Robot crashes into obstacles</td>
+<td>Increase dangerDistance or reduce driveSpeed</td>
+</tr>
+<tr>
+<td>Robot gets stuck in corners</td>
+<td>Increase backup time in the "TRAPPED" section of code</td>
+</tr>
+<tr>
+<td>Wand reads 3.5V on HC-SR04 VCC</td>
+<td>Power supply weak &mdash; check batteries</td>
+</tr>
+</tbody></table></div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="page-footer">
+        <span>Lesson 46: Obstacle-Avoiding Robot</span>
+        <span>Module 6: Robotics Projects</span>
+    </footer>
+
+</body>
+</html>

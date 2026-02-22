@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 21: Logic Gates -- NAND, NOR, XOR</title>
+    <style>
+
+        /* ── Reset & Base ─────────────────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            line-height: 1.75;
+            color: #2C3E50;
+            background: #FAFAFA;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px 40px;
+        }
+
+        /* ── Header Banner ─────────────────────────────────────────── */
+        .lesson-header {
+            background: linear-gradient(135deg, #6C5CE7 0%, #A29BFE 50%, #74B9FF 100%);
+            color: #fff;
+            border-radius: 16px;
+            padding: 32px 36px 28px;
+            margin: 24px 0 32px;
+            box-shadow: 0 6px 20px rgba(108,92,231,0.35);
+            position: relative;
+            overflow: hidden;
+        }
+        .lesson-header::before {
+            content: "";
+            position: absolute;
+            top: -40px; right: -40px;
+            width: 160px; height: 160px;
+            background: rgba(255,255,255,0.12);
+            border-radius: 50%;
+        }
+        .lesson-header::after {
+            content: "";
+            position: absolute;
+            bottom: -30px; left: -20px;
+            width: 100px; height: 100px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+        }
+        .lesson-header h1 {
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            position: relative;
+            z-index: 1;
+        }
+        .module-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.25);
+            border: 2px solid rgba(255,255,255,0.6);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 4px 14px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 1;
+        }
+        .meta-row {
+            margin-top: 12px;
+            font-size: 14px;
+            color: rgba(255,255,255,0.9);
+            position: relative;
+            z-index: 1;
+        }
+        .meta-pill {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            border-radius: 12px;
+            padding: 2px 10px;
+            margin: 2px 4px 2px 0;
+            white-space: nowrap;
+        }
+
+        /* ── Section Headings ──────────────────────────────────────── */
+        h2 {
+            font-size: 22px;
+            font-weight: 800;
+            margin: 36px 0 14px;
+            padding: 10px 18px;
+            border-radius: 10px;
+            color: #fff;
+            /* colour applied inline via data-color */
+        }
+        h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 28px 0 10px;
+            padding: 8px 14px;
+            border-left: 5px solid;
+            border-radius: 0 8px 8px 0;
+            background: rgba(0,0,0,0.03);
+            /* border-left colour applied inline */
+        }
+
+        /* ── Body Text ─────────────────────────────────────────────── */
+        p { margin: 10px 0; }
+        strong { font-weight: 700; color: #1A252F; }
+        em { font-style: italic; color: #5D6D7E; }
+
+        /* ── Inline Code ───────────────────────────────────────────── */
+        code {
+            background: #F0F3F7;
+            border: 1px solid #D5DCE8;
+            border-radius: 4px;
+            padding: 1px 6px;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 14px;
+            color: #6C5CE7;
+        }
+
+        /* ── Fenced Code Blocks ────────────────────────────────────── */
+        pre {
+            background: #F4F6F8;
+            border: 1px solid #D0D8E4;
+            border-left: 5px solid #6C5CE7;
+            border-radius: 8px;
+            padding: 16px 18px;
+            overflow-x: auto;
+            margin: 16px 0;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #2C3E50;
+            white-space: pre;
+        }
+        pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            font-size: inherit;
+            color: inherit;
+        }
+
+        /* ── Blockquotes / Callout Boxes ───────────────────────────── */
+        blockquote {
+            background: #F3F0FF;
+            border-left: 6px solid #6C5CE7;
+            border-radius: 0 12px 12px 0;
+            padding: 14px 20px;
+            margin: 16px 0;
+            color: #3D2D6B;
+            font-style: normal;
+            position: relative;
+        }
+        blockquote::before {
+            content: "\1F4AC";  /* speech bubble emoji */
+            position: absolute;
+            top: -10px; left: 10px;
+            font-size: 20px;
+            line-height: 1;
+        }
+        blockquote p { margin: 6px 0; }
+
+        /* ── Lists ─────────────────────────────────────────────────── */
+        ul, ol {
+            margin: 10px 0 10px 24px;
+            padding-left: 8px;
+        }
+        li { margin: 5px 0; }
+        ul li::marker { color: #6C5CE7; font-size: 18px; }
+        ol li::marker { color: #45B7D1; font-weight: 700; }
+
+        /* ── Tables ────────────────────────────────────────────────── */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 16px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+        }
+        thead th {
+            background: #6C5CE7;
+            color: #fff;
+            font-weight: 700;
+            padding: 11px 14px;
+            text-align: left;
+            border-bottom: 3px solid #5A4BD1;
+        }
+        thead th:first-child { border-radius: 10px 0 0 0; }
+        thead th:last-child  { border-radius: 0 10px 0 0; }
+        tbody tr:nth-child(odd)  td { background: #F8F6FF; }
+        tbody tr:nth-child(even) td { background: #EDEBFF; }
+        tbody tr:hover td { background: #DDD8FF; transition: background 0.15s; }
+        td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #D5D0F0;
+            vertical-align: top;
+        }
+        /* Checkbox column: replace [ ] with styled checkbox */
+        td .checkbox {
+            display: inline-block;
+            width: 18px; height: 18px;
+            border: 2px solid #6C5CE7;
+            border-radius: 4px;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+
+        /* ── XP Badges ─────────────────────────────────────────────── */
+        .xp-badge {
+            display: inline-block;
+            background: #FFEAA7;
+            border: 2px solid #F39C12;
+            color: #7D4F00;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin: 2px 4px;
+            white-space: nowrap;
+        }
+        .award-badge {
+            display: inline-block;
+            background: #D5F5E3;
+            border: 2px solid #27AE60;
+            color: #1A5E35;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin: 2px 4px;
+            white-space: nowrap;
+        }
+
+        /* ── Horizontal Rule ───────────────────────────────────────── */
+        hr {
+            border: none;
+            border-top: 3px dashed #C8C0F0;
+            margin: 30px 0;
+        }
+
+        /* ── Footer ────────────────────────────────────────────────── */
+        .page-footer {
+            margin-top: 48px;
+            padding-top: 16px;
+            border-top: 2px solid #D5D0F0;
+            text-align: center;
+            font-size: 13px;
+            color: #7F8C8D;
+        }
+
+        /* ── Print Styles ──────────────────────────────────────────── */
+        @media print {
+            @page { size: A4; margin: 18mm 15mm 20mm; }
+
+            body {
+                background: #fff !important;
+                font-size: 13px;
+                max-width: 100%;
+                padding: 0;
+            }
+
+            /* Force colour printing */
+            * { -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important; }
+
+            /* Page breaks */
+            h2 { page-break-before: auto; break-before: auto; }
+            pre, blockquote, table { page-break-inside: avoid; }
+            h2, h3 { page-break-after: avoid; break-after: avoid; }
+            tr { page-break-inside: avoid; }
+
+            /* No orphaned paragraphs */
+            p { orphans: 3; widows: 3; }
+
+            .lesson-header { box-shadow: none; }
+
+            .page-footer {
+                position: fixed;
+                bottom: 0; left: 0; right: 0;
+                background: #fff;
+                border-top: 1px solid #ccc;
+                padding: 6px 15mm;
+                display: flex;
+                justify-content: space-between;
+            }
+        }
+    
+    </style>
+</head>
+<body>
+
+    <!-- Header Banner -->
+    <header class="lesson-header">
+        <div class="module-badge">Module 3 -- Integrated Circuits (ICs)</div>
+        <h1>Lesson 21: Logic Gates -- NAND, NOR, XOR</h1>
+        <div class="meta-row"><span class="meta-pill">&#9733; Star-3 Intermediate</span><span class="meta-pill">&#9200; 45--50 minutes</span><span class="meta-pill">&#128100; Age 6--12 years</span><span class="meta-pill xp-badge" style="background:#FFEAA7;color:#7D4F00;border:none;">&#9889; 300 XP</span></div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+<hr>
+<h2 id="your-mission-today" style="background:#FF6B35;">Your Mission Today</h2>
+<p>You already know AND, OR, and NOT. Now it is time to meet their clever cousins: <strong>NAND, NOR, and XOR</strong>. These three gates have some amazing tricks. NAND is so powerful it can pretend to be ANY other gate &mdash; it is the Swiss Army knife of logic. And XOR has a special talent for telling you when things are different. Let us explore!</p>
+<hr>
+<h2 id="learning-objectives" style="background:#4ECDC4;">Learning Objectives</h2>
+<p>By the end of this lesson, you will be able to:</p>
+<ul>
+<li>Explain how NAND, NOR, and XOR gates work using truth tables</li>
+<li>Build each gate on a breadboard using IC chips</li>
+<li>Prove that a NAND gate can act as a NOT gate</li>
+<li>Use your Magic Measurement Wand to verify gate outputs</li>
+</ul>
+<hr>
+<h2 id="what-you-need" style="background:#45B7D1;">What You Need</h2>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Item</th>
+<th>Qty</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>7400 NAND gate IC</td>
+<td>1</td>
+</tr>
+<tr>
+<td>7402 NOR gate IC</td>
+<td>1</td>
+</tr>
+<tr>
+<td>7486 XOR gate IC</td>
+<td>1</td>
+</tr>
+<tr>
+<td>LEDs (any color)</td>
+<td>3</td>
+</tr>
+<tr>
+<td>330-ohm resistors</td>
+<td>3</td>
+</tr>
+<tr>
+<td>10k-ohm resistors (pull-down)</td>
+<td>4</td>
+</tr>
+<tr>
+<td>Push buttons (tactile switch)</td>
+<td>2</td>
+</tr>
+<tr>
+<td>9V battery + clip (or 5V power)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Breadboard</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Jumper wires</td>
+<td>15</td>
+</tr>
+<tr>
+<td>Multimeter (Magic Measurement Wand!)</td>
+<td>1</td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="how-to-teach-this-lesson" style="background:#96CEB4;">How to Teach This Lesson</h2>
+<h3 id="step-1-hook-the-gate-family-reunion-5-min" style="border-left-color:#45B7D1; color:#45B7D1;">Step 1: Hook &mdash; The Gate Family Reunion (5 min)</h3>
+<blockquote><p>"Last lesson you met the original three gates: AND, OR, and NOT. Think of them as the founding members of the Gate family. Today we meet three more relatives who each have their own personality."</p></blockquote>
+<blockquote><p>"NAND is the rebel &mdash; it does the OPPOSITE of AND. NOR is the contrarian &mdash; it does the OPPOSITE of OR. And XOR is the detective &mdash; it only cares when things are DIFFERENT."</p></blockquote>
+<p><strong>Quick review:</strong></p>
+<ul>
+<li>AND: output is 1 only when ALL inputs are 1</li>
+<li>OR: output is 1 when ANY input is 1</li>
+<li>NOT: flips the input to the opposite</li>
+</ul>
+<blockquote><p>"Ready to expand the family? Let us go!"</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+10 XP</span> for reviewing the first three gates!</strong></p>
+<hr>
+<h3 id="step-2-the-nand-gate-ands-opposite-8-min" style="border-left-color:#96CEB4; color:#96CEB4;">Step 2: The NAND Gate &mdash; AND's Opposite (8 min)</h3>
+<p><strong>What is NAND?</strong></p>
+<blockquote><p>"NAND stands for NOT-AND. It does an AND operation, then flips the answer with a NOT. It gives you the OPPOSITE of what AND would give."</p></blockquote>
+<p><strong>Truth Table for NAND:</strong></p>
+<pre><code>  NAND Gate: Output is the OPPOSITE of AND
+
+  +-----+-----+-----+--------+
+  |  A  |  B  | AND | NAND   |
+  +-----+-----+-----+--------+
+  |  0  |  0  |  0  |   1    |  &lt;-- Flipped!
+  |  0  |  1  |  0  |   1    |  &lt;-- Flipped!
+  |  1  |  0  |  0  |   1    |  &lt;-- Flipped!
+  |  1  |  1  |  1  |   0    |  &lt;-- Flipped!
+  +-----+-----+-----+--------+
+
+  The only time NAND gives 0 is when BOTH inputs are 1.</code></pre>
+<p><strong>The Rule:</strong> NAND outputs 0 ONLY when both inputs are 1. Every other combination gives 1.</p>
+<p><strong>The 7400 NAND IC has four NAND gates inside.</strong> Pin layout is the same as the 7408 (AND):</p>
+<ul>
+<li>Gate 1: Inputs Pin 1, Pin 2 &mdash;&gt; Output Pin 3</li>
+<li>VCC = Pin 14, GND = Pin 7</li>
+</ul>
+<p><strong>Build and test the NAND gate</strong> using the same wiring as the AND gate (Lesson 20, Step 2), but with the 7400 IC instead.</p>
+<p><strong>Test all 4 combinations:</strong></p>
+<ul>
+<li>Both buttons off: LED ON (opposite of AND!)</li>
+<li>Button A only: LED ON</li>
+<li>Button B only: LED ON</li>
+<li>Both buttons on: LED OFF</li>
+</ul>
+<p><strong>Award: <span class="xp-badge">+20 XP</span> for building and testing the NAND gate!</strong></p>
+<hr>
+<h3 id="step-3-nands-superpower-the-universal-gate-8-min" style="border-left-color:#FF6B35; color:#FF6B35;">Step 3: NAND's Superpower &mdash; The Universal Gate (8 min)</h3>
+<blockquote><p>"Here is something amazing: if you have enough NAND gates, you can build ANY other logic gate. AND, OR, NOT &mdash; all of them! That is why NAND is called the UNIVERSAL gate. Computer engineers love it because they only need ONE type of gate to build an entire computer."</p></blockquote>
+<p><strong>Demo: Build a NOT gate using a NAND gate</strong></p>
+<p>Take one NAND gate and connect BOTH inputs together:</p>
+<pre><code>  Input A ----+---- Pin 1
+              |
+              +---- Pin 2
+                     |
+                    Pin 3 = Output
+
+  If Input = 0: both inputs are 0, NAND gives 1 (it IS a NOT!)
+  If Input = 1: both inputs are 1, NAND gives 0 (it IS a NOT!)</code></pre>
+<p><strong>Wire it up:</strong></p>
+<ol>
+<li>On the 7400, connect Pin 1 and Pin 2 together with a jumper wire</li>
+<li>Connect a button with pull-down to the joined pins</li>
+<li>Connect Pin 3 (Output) to 330-ohm resistor to LED to GND</li>
+</ol>
+<p><strong>Test it:</strong></p>
+<ul>
+<li>Button not pressed: LED ON (input 0, output 1)</li>
+<li>Button pressed: LED OFF (input 1, output 0)</li>
+</ul>
+<blockquote><p>"You just built a NOT gate using a NAND gate! The NAND is so versatile it can pretend to be other gates. That is its superpower!"</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+30 XP</span> for proving NAND can act as NOT!</strong></p>
+<hr>
+<h3 id="step-4-the-nor-gate-ors-opposite-6-min" style="border-left-color:#4ECDC4; color:#4ECDC4;">Step 4: The NOR Gate &mdash; OR's Opposite (6 min)</h3>
+<p><strong>What is NOR?</strong></p>
+<blockquote><p>"NOR stands for NOT-OR. It does an OR, then flips it. The output is 1 ONLY when both inputs are 0."</p></blockquote>
+<p><strong>Truth Table for NOR:</strong></p>
+<pre><code>  NOR Gate: Output is the OPPOSITE of OR
+
+  +-----+-----+----+--------+
+  |  A  |  B  | OR | NOR    |
+  +-----+-----+----+--------+
+  |  0  |  0  |  0 |   1    |  &lt;-- Only this one!
+  |  0  |  1  |  1 |   0    |
+  |  1  |  0  |  1 |   0    |
+  |  1  |  1  |  1 |   0    |
+  +-----+-----+----+--------+</code></pre>
+<p><strong>The Rule:</strong> NOR outputs 1 ONLY when both inputs are 0. Any other combination gives 0.</p>
+<p><strong>Real-world NOR example:</strong></p>
+<blockquote><p>"Think of a security system. The alarm is ON (safe mode) only when there are NO intruders at door A AND NO intruders at door B. If EITHER door is breached, the alarm output turns OFF and the siren kicks in."</p></blockquote>
+<p><strong>Build the NOR gate using the 7402 IC.</strong> Note: The 7402 has a slightly different pin layout!</p>
+<pre><code>  7402 Quad NOR Gate -- Top View
+
+  Gate 1: Output = Pin 1, Inputs = Pin 2, Pin 3
+  (Output comes FIRST on the 7402!)
+  VCC = Pin 14, GND = Pin 7</code></pre>
+<p><strong>Award: <span class="xp-badge">+20 XP</span> for building and testing the NOR gate!</strong></p>
+<hr>
+<h3 id="step-5-the-xor-gate-the-difference-detector-8-min" style="border-left-color:#C678B0; color:#C678B0;">Step 5: The XOR Gate &mdash; The Difference Detector (8 min)</h3>
+<p><strong>What is XOR?</strong></p>
+<blockquote><p>"XOR stands for Exclusive OR. It outputs 1 only when the inputs are DIFFERENT. Same inputs = 0. Different inputs = 1. Think of it as the 'disagree detector.'"</p></blockquote>
+<p><strong>Truth Table for XOR:</strong></p>
+<pre><code>  XOR Gate: Output is 1 when inputs are DIFFERENT
+
+  +-----+-----+--------+
+  |  A  |  B  | Output |
+  +-----+-----+--------+
+  |  0  |  0  |   0    |  Same = 0
+  |  0  |  1  |   1    |  Different = 1!
+  |  1  |  0  |   1    |  Different = 1!
+  |  1  |  1  |   0    |  Same = 0
+  +-----+-----+--------+</code></pre>
+<p><strong>The Light Switch Analogy:</strong></p>
+<blockquote><p>"Think about a hallway with a light switch at each end. If both switches are in the same position (both up or both down), the light is OFF. If they are in DIFFERENT positions, the light is ON. That is exactly XOR!"</p></blockquote>
+<p><strong>Real-world XOR uses:</strong></p>
+<ul>
+<li>Adding binary numbers (the basis of all computer math!)</li>
+<li>Comparing two signals to see if they match</li>
+<li>Error detection in data transmission</li>
+</ul>
+<p><strong>Build the XOR gate using the 7486 IC.</strong> Pin layout is the same as the 7408:</p>
+<ul>
+<li>Gate 1: Inputs Pin 1, Pin 2 &mdash;&gt; Output Pin 3</li>
+<li>VCC = Pin 14, GND = Pin 7</li>
+</ul>
+<p><strong>Test all 4 combinations:</strong></p>
+<ul>
+<li>Both buttons off: LED OFF (same)</li>
+<li>Button A only: LED ON (different!)</li>
+<li>Button B only: LED ON (different!)</li>
+<li>Both buttons on: LED OFF (same)</li>
+</ul>
+<p><strong>Award: <span class="xp-badge">+30 XP</span> for building and testing the XOR gate!</strong></p>
+<hr>
+<h3 id="step-6-wand-check-verify-all-gate-outputs-6-min" style="border-left-color:#E8A838; color:#E8A838;">Step 6: Wand Check &mdash; Verify All Gate Outputs! (6 min)</h3>
+<blockquote><p>"Let us do a full Wand scan of all three new gates. For each gate, measure the output voltage for at least two input combinations."</p></blockquote>
+<p><strong>Set the Wand to DC Voltage. Black probe on GND.</strong></p>
+<pre><code>| Gate | Inputs | LED State | Wand Output (V) | Expected |
+|------|--------|-----------|-----------------|----------|
+| NAND | 0, 0   | On        |                 | HIGH     |
+| NAND | 1, 1   | Off       |                 | LOW      |
+| NOR  | 0, 0   | On        |                 | HIGH     |
+| NOR  | 1, 0   | Off       |                 | LOW      |
+| XOR  | 0, 1   | On        |                 | HIGH     |
+| XOR  | 1, 1   | Off       |                 | LOW      |</code></pre>
+<blockquote><p>"Every gate follows the same rule: HIGH means close to VCC, LOW means close to 0V. The Wand confirms what the truth tables predicted!"</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+40 XP</span> for verifying all three gates with the Wand!</strong></p>
+<hr>
+<h2 id="fun-game-gate-master-challenge-optional-extension" style="background:#E8A838;">Fun Game: Gate Master Challenge (Optional Extension)</h2>
+<p>Draw these truth tables with the OUTPUT column blank. See if the kid can fill in the correct outputs WITHOUT looking at the notes:</p>
+<pre><code>GATE MASTER CHALLENGE
+
+Gate: _____ (mystery gate!)
+| A | B | Output |
+|---|---|--------|
+| 0 | 0 |        |
+| 0 | 1 |        |
+| 1 | 0 |        |
+| 1 | 1 |        |
+
+Output: 1, 1, 1, 0
+What gate is this? _____</code></pre>
+<hr>
+<h2 id="quick-quiz-earn-bonus-xp" style="background:#C678B0;">Quick Quiz &mdash; Earn Bonus XP!</h2>
+<p><strong>Question 1:</strong> NAND gives an output of 0 when:</p>
+<ul>
+<li>A) Both inputs are 0</li>
+<li>B) Both inputs are 1</li>
+<li>C) One input is 0</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<p><strong>Question 2:</strong> Why is NAND called the "universal gate"?</p>
+<ul>
+<li>A) It is used in every country</li>
+<li>B) You can build any other logic gate using only NAND gates</li>
+<li>C) It is the biggest gate</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<p><strong>Question 3:</strong> XOR outputs 1 when:</p>
+<ul>
+<li>A) Both inputs are the same</li>
+<li>B) Both inputs are 0</li>
+<li>C) The inputs are different</li>
+</ul>
+<p><strong>(Correct: C &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<hr>
+<h2 id="lesson-21-complete" style="background:#E05C5C;">Lesson 21 Complete!</h2>
+<pre><code>  =============================================
+
+     GATE MASTER BADGE UNLOCKED!
+
+     Skills unlocked:
+     [check] Understand NAND, NOR, and XOR gates
+     [check] Built all three gates on a breadboard
+     [check] Proved NAND can act as NOT
+     [check] Verified outputs with the Wand
+     [check] Know all six fundamental logic gates
+
+  =============================================</code></pre>
+<p><strong>XP Breakdown:</strong></p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Activity</th>
+<th>XP</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Review of AND/OR/NOT</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Build NAND gate</td>
+<td>20</td>
+</tr>
+<tr>
+<td>NAND-as-NOT proof</td>
+<td>30</td>
+</tr>
+<tr>
+<td>Build NOR gate</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Build XOR gate</td>
+<td>30</td>
+</tr>
+<tr>
+<td>Wand Check (6 measurements)</td>
+<td>40</td>
+</tr>
+<tr>
+<td>Quiz (3 questions)</td>
+<td>60</td>
+</tr>
+<tr>
+<td><strong>TOTAL POSSIBLE</strong></td>
+<td><strong>210</strong></td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="coming-up-next" style="background:#FF6B35;">Coming Up Next...</h2>
+<p>In <strong>Lesson 22</strong>, you will work with a <strong>7-Segment Display</strong> &mdash; the glowing number displays you see on digital clocks and scoreboards! You will learn how to light up each segment individually, then use a decoder IC to display any digit from 0 to 9 just by flipping switches.</p>
+<hr>
+<h2 id="troubleshooting" style="background:#4ECDC4;">Troubleshooting</h2>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Problem</th>
+<th>Fix</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>NAND output seems same as AND</td>
+<td>Double-check you are using the 7400 (NAND), not the 7408 (AND)</td>
+</tr>
+<tr>
+<td>NOR output is always LOW</td>
+<td>The 7402 has a different pin layout &mdash; output is Pin 1, inputs are Pin 2 and Pin 3</td>
+</tr>
+<tr>
+<td>XOR LED never turns on</td>
+<td>Make sure both inputs have pull-down resistors to GND</td>
+</tr>
+<tr>
+<td>NAND-as-NOT does not work</td>
+<td>Verify both inputs (Pin 1 and Pin 2) are connected together with a jumper wire</td>
+</tr>
+<tr>
+<td>Multiple gates interfere with each other</td>
+<td>Build one gate at a time; unused IC inputs should be tied to GND</td>
+</tr>
+<tr>
+<td>IC gets hot immediately</td>
+<td>Power and ground pins are likely reversed &mdash; remove power and check</td>
+</tr>
+</tbody></table></div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="page-footer">
+        <span>Lesson 21: Logic Gates -- NAND, NOR, XOR</span>
+        <span>Module 3: Integrated Circuits (ICs)</span>
+    </footer>
+
+</body>
+</html>

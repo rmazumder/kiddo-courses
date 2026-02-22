@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 39: DC Motors and Motor Driver -- Spin Those Wheels! (L298N)</title>
+    <style>
+
+        /* -- Reset & Base -- */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            line-height: 1.75;
+            color: #2C3E50;
+            background: #FAFAFA;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px 40px;
+        }
+
+        /* -- Header Banner -- */
+        .lesson-header {
+            background: linear-gradient(135deg, #4ECDC4 0%, #45B7D1 50%, #2E86AB 100%);
+            color: #fff;
+            border-radius: 16px;
+            padding: 32px 36px 28px;
+            margin: 24px 0 32px;
+            box-shadow: 0 6px 20px rgba(78,205,196,0.35);
+            position: relative;
+            overflow: hidden;
+        }
+        .lesson-header::before {
+            content: "";
+            position: absolute;
+            top: -40px; right: -40px;
+            width: 160px; height: 160px;
+            background: rgba(255,255,255,0.12);
+            border-radius: 50%;
+        }
+        .lesson-header::after {
+            content: "";
+            position: absolute;
+            bottom: -30px; left: -20px;
+            width: 100px; height: 100px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+        }
+        .lesson-header h1 {
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            position: relative;
+            z-index: 1;
+        }
+        .module-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.25);
+            border: 2px solid rgba(255,255,255,0.6);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 4px 14px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 1;
+        }
+        .meta-row {
+            margin-top: 12px;
+            font-size: 14px;
+            color: rgba(255,255,255,0.9);
+            position: relative;
+            z-index: 1;
+        }
+        .meta-pill {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            border-radius: 12px;
+            padding: 2px 10px;
+            margin: 2px 4px 2px 0;
+            white-space: nowrap;
+        }
+
+        /* -- Section Headings -- */
+        h2 {
+            font-size: 22px;
+            font-weight: 800;
+            margin: 36px 0 14px;
+            padding: 10px 18px;
+            border-radius: 10px;
+            color: #fff;
+        }
+        h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 28px 0 10px;
+            padding: 8px 14px;
+            border-left: 5px solid;
+            border-radius: 0 8px 8px 0;
+            background: rgba(0,0,0,0.03);
+        }
+
+        /* -- Body Text -- */
+        p { margin: 10px 0; }
+        strong { font-weight: 700; color: #1A252F; }
+        em { font-style: italic; color: #5D6D7E; }
+
+        /* -- Inline Code -- */
+        code {
+            background: #F0F3F7;
+            border: 1px solid #D5DCE8;
+            border-radius: 4px;
+            padding: 1px 6px;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 14px;
+            color: #C0392B;
+        }
+
+        /* -- Fenced Code Blocks -- */
+        pre {
+            background: #F4F6F8;
+            border: 1px solid #D0D8E4;
+            border-left: 5px solid #4ECDC4;
+            border-radius: 8px;
+            padding: 16px 18px;
+            overflow-x: auto;
+            margin: 16px 0;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #2C3E50;
+            white-space: pre;
+        }
+        pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            font-size: inherit;
+            color: inherit;
+        }
+
+        /* -- Blockquotes / Callout Boxes -- */
+        blockquote {
+            background: #FFF8E7;
+            border-left: 6px solid #4ECDC4;
+            border-radius: 0 12px 12px 0;
+            padding: 14px 20px;
+            margin: 16px 0;
+            color: #5D3A1A;
+            font-style: normal;
+            position: relative;
+        }
+        blockquote::before {
+            content: "\1F4AC";
+            position: absolute;
+            top: -10px; left: 10px;
+            font-size: 20px;
+            line-height: 1;
+        }
+        blockquote p { margin: 6px 0; }
+
+        /* -- Lists -- */
+        ul, ol {
+            margin: 10px 0 10px 24px;
+            padding-left: 8px;
+        }
+        li { margin: 5px 0; }
+        ul li::marker { color: #4ECDC4; font-size: 18px; }
+        ol li::marker { color: #45B7D1; font-weight: 700; }
+
+        /* -- Tables -- */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 16px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+        }
+        thead th {
+            background: #4ECDC4;
+            color: #fff;
+            font-weight: 700;
+            padding: 11px 14px;
+            text-align: left;
+            border-bottom: 3px solid #3BA89F;
+        }
+        thead th:first-child { border-radius: 10px 0 0 0; }
+        thead th:last-child  { border-radius: 0 10px 0 0; }
+        tbody tr:nth-child(odd)  td { background: #F0FBFA; }
+        tbody tr:nth-child(even) td { background: #E0F7F5; }
+        tbody tr:hover td { background: #C8F0EC; transition: background 0.15s; }
+        td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #C8EEEA;
+            vertical-align: top;
+        }
+        td .checkbox {
+            display: inline-block;
+            width: 18px; height: 18px;
+            border: 2px solid #4ECDC4;
+            border-radius: 4px;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+
+        /* -- XP Badges -- */
+        .xp-badge {
+            display: inline-block;
+            background: #FFEAA7;
+            border: 2px solid #F39C12;
+            color: #7D4F00;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin: 2px 4px;
+            white-space: nowrap;
+        }
+        .award-badge {
+            display: inline-block;
+            background: #D5F5E3;
+            border: 2px solid #27AE60;
+            color: #1A5E35;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin: 2px 4px;
+            white-space: nowrap;
+        }
+
+        /* -- Horizontal Rule -- */
+        hr {
+            border: none;
+            border-top: 3px dashed #A8E6CF;
+            margin: 30px 0;
+        }
+
+        /* -- Footer -- */
+        .page-footer {
+            margin-top: 48px;
+            padding-top: 16px;
+            border-top: 2px solid #D5DCE8;
+            text-align: center;
+            font-size: 13px;
+            color: #7F8C8D;
+        }
+
+        /* -- Print Styles -- */
+        @media print {
+            @page { size: A4; margin: 18mm 15mm 20mm; }
+
+            body {
+                background: #fff !important;
+                font-size: 13px;
+                max-width: 100%;
+                padding: 0;
+            }
+
+            * { -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important; }
+
+            h2 { page-break-before: auto; break-before: auto; }
+            pre, blockquote, table { page-break-inside: avoid; }
+            h2, h3 { page-break-after: avoid; break-after: avoid; }
+            tr { page-break-inside: avoid; }
+
+            p { orphans: 3; widows: 3; }
+
+            .lesson-header { box-shadow: none; }
+
+            .page-footer {
+                position: fixed;
+                bottom: 0; left: 0; right: 0;
+                background: #fff;
+                border-top: 1px solid #ccc;
+                padding: 6px 15mm;
+                display: flex;
+                justify-content: space-between;
+            }
+        }
+    
+    </style>
+</head>
+<body>
+
+    <!-- Header Banner -->
+    <header class="lesson-header">
+        <div class="module-badge">Module 5 -- Sensors and Actuators</div>
+        <h1>Lesson 39: DC Motors and Motor Driver -- Spin Those Wheels! (L298N)</h1>
+        <div class="meta-row"><span class="meta-pill">&#9733; Star-4 Advanced</span><span class="meta-pill">&#9200; 45--50 minutes</span><span class="meta-pill">&#128100; Age 6--12 years</span><span class="meta-pill xp-badge" style="background:#FFEAA7;color:#7D4F00;border:none;">&#9889; 300 XP</span></div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+<hr>
+<h2 id="your-mission-today" style="background:#FF6B35;">Your Mission Today</h2>
+<p>Circuit Explorer, last lesson you learned to move a servo to precise angles. But servos do not spin wheels &mdash; they just wiggle back and forth. To build a robot that actually DRIVES, you need <strong>DC motors</strong> &mdash; the kind that spin continuously and can power wheels, fans, and propellers. There is just one catch: DC motors are power-hungry beasts that need more current than your Arduino can safely provide. Enter the <strong>L298N motor driver</strong> &mdash; a powerful sidekick that lets Arduino boss around big motors without breaking a sweat!</p>
+<hr>
+<h2 id="learning-objectives" style="background:#4ECDC4;">Learning Objectives</h2>
+<p>By the end of this lesson, you will be able to:</p>
+<ul>
+<li>Explain why Arduino cannot drive a DC motor directly</li>
+<li>Identify the L298N motor driver and its key connections</li>
+<li>Wire a DC motor through the L298N</li>
+<li>Control motor direction (forward and backward)</li>
+<li>Control motor speed using PWM</li>
+<li>Use your Magic Measurement Wand to measure motor driver output voltage at different speeds</li>
+</ul>
+<hr>
+<h2 id="what-you-need" style="background:#45B7D1;">What You Need</h2>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Item</th>
+<th>Qty</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Arduino Uno + USB cable</td>
+<td>1</td>
+</tr>
+<tr>
+<td>L298N motor driver module</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Small DC motor (3-6V hobby motor)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>9V battery + clip (for motor power)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>10k-ohm potentiometer</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Push button</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Breadboard</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Jumper wires</td>
+<td>12</td>
+</tr>
+<tr>
+<td>Multimeter (your Magic Measurement Wand!)</td>
+<td>1</td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="how-to-teach-this-lesson" style="background:#96CEB4;">How to Teach This Lesson</h2>
+<h3 id="step-1-hook-why-not-just-connect-the-motor-to-arduino-5-min" style="border-left-color:#45B7D1; color:#45B7D1;">Step 1: Hook &mdash; Why Not Just Connect the Motor to Arduino? (5 min)</h3>
+<blockquote><p>"Let me tell you a story about what happens if you try to spin a DC motor directly from an Arduino pin."</p></blockquote>
+<p><strong>The fire hose vs garden hose analogy:</strong></p>
+<blockquote><p>"An Arduino pin can only push out about 40 milliamps of current &mdash; that is like a garden hose trickle. A DC motor wants 200 to 800 milliamps or MORE &mdash; that is like a fire hose. If you connect a motor directly to an Arduino pin, the motor will barely twitch, and the Arduino might get damaged from trying too hard."</p></blockquote>
+<blockquote><p>"So we need a MIDDLEMAN &mdash; a strong helper that takes Arduino's tiny instructions and uses them to control a big, powerful flow of electricity to the motor. That middleman is the L298N motor driver."</p></blockquote>
+<p><strong>Show them the L298N module:</strong></p>
+<blockquote><p>"This board is like a translator between Arduino's gentle whispers and the motor's need for POWER. Arduino says 'go forward at half speed' and the L298N delivers the beefy current the motor needs."</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+10 XP</span> for understanding why we need a motor driver!</strong></p>
+<hr>
+<h3 id="step-2-meet-the-l298n-motor-driver-8-min" style="border-left-color:#96CEB4; color:#96CEB4;">Step 2: Meet the L298N Motor Driver (8 min)</h3>
+<p><strong>Key vocabulary:</strong></p>
+<ul>
+<li><strong>DC Motor:</strong> A motor that spins when you give it voltage. Reverse the voltage polarity and it spins the other way!</li>
+<li><strong>Motor Driver:</strong> A circuit that can switch high-current paths on and off, controlled by low-current signals from Arduino.</li>
+<li><strong>H-Bridge:</strong> The circuit pattern inside the L298N that allows current to flow through the motor in either direction. Called an H-Bridge because the circuit diagram looks like the letter H.</li>
+<li><strong>ENA/ENB:</strong> Enable pins &mdash; these control the SPEED using PWM.</li>
+<li><strong>IN1/IN2 (and IN3/IN4):</strong> Direction control pins &mdash; these control which way the motor spins.</li>
+</ul>
+<p><strong>L298N Module Layout:</strong></p>
+<pre><code>       Motor A         Motor B
+       OUT1 OUT2       OUT3 OUT4
+        |    |          |    |
+  +-----|----|---------|----|-----+
+  |     L298N Motor Driver Module  |
+  |                                |
+  |  +12V   GND   +5V             |
+  |   (motor    (shared  (5V out  |
+  |   power)    ground)  or input)|
+  |                                |
+  |  ENA  IN1  IN2  IN3  IN4  ENB |
+  +--------------------------------+
+    |    |    |    |    |    |
+   PWM  dir  dir  dir  dir  PWM
+   speed      Motor A     speed
+              direction</code></pre>
+<p><strong>Direction control truth table for Motor A:</strong></p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>IN1</th>
+<th>IN2</th>
+<th>Motor A Action</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>HIGH</td>
+<td>LOW</td>
+<td>Forward (spins one way)</td>
+</tr>
+<tr>
+<td>LOW</td>
+<td>HIGH</td>
+<td>Backward (spins the other way)</td>
+</tr>
+<tr>
+<td>LOW</td>
+<td>LOW</td>
+<td>Stop (coast)</td>
+</tr>
+<tr>
+<td>HIGH</td>
+<td>HIGH</td>
+<td>Brake (locked stop)</td>
+</tr>
+</tbody></table></div>
+<p><strong>Award: <span class="xp-badge">+15 XP</span> for understanding the L298N!</strong></p>
+<hr>
+<h3 id="step-3-wiring-everything-10-min" style="border-left-color:#FF6B35; color:#FF6B35;">Step 3: Wiring Everything (10 min)</h3>
+<p><strong>Wiring diagram:</strong></p>
+<pre><code>  9V Battery (+) ---------&gt; L298N +12V terminal
+  9V Battery (-) ---------&gt; L298N GND terminal
+  Arduino GND    ---------&gt; L298N GND terminal  (SHARED GROUND!)
+
+  L298N ENA  ---------&gt; Arduino Pin 9  (PWM for speed)
+  L298N IN1  ---------&gt; Arduino Pin 2  (direction)
+  L298N IN2  ---------&gt; Arduino Pin 3  (direction)
+
+  DC Motor wire A ---------&gt; L298N OUT1
+  DC Motor wire B ---------&gt; L298N OUT2
+
+  Note: Remove the ENA jumper cap on the L298N board
+  so you can control speed with PWM.</code></pre>
+<p><strong>Very important: shared ground!</strong></p>
+<blockquote><p>"The Arduino GND and the motor battery GND MUST be connected together. This is called a shared or common ground. Without it, Arduino and the L298N cannot understand each other &mdash; it is like trying to have a phone call with no connection!"</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+20 XP</span> for wiring the motor driver!</strong></p>
+<hr>
+<h3 id="step-4-forward-backward-stop-8-min" style="border-left-color:#4ECDC4; color:#4ECDC4;">Step 4: Forward, Backward, Stop! (8 min)</h3>
+<p><strong>Basic Motor Control Code:</strong></p>
+<pre><code>int ENA = 9;   // Speed control (PWM)
+int IN1 = 2;   // Direction
+int IN2 = 3;   // Direction
+
+void setup() {
+  pinMode(ENA, OUTPUT);
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+  Serial.begin(9600);
+  Serial.println(&quot;Motor Driver Ready!&quot;);
+}
+
+void motorForward(int speed) {
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN2, LOW);
+  analogWrite(ENA, speed);  // 0-255
+}
+
+void motorBackward(int speed) {
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, HIGH);
+  analogWrite(ENA, speed);
+}
+
+void motorStop() {
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, LOW);
+  analogWrite(ENA, 0);
+}
+
+void loop() {
+  Serial.println(&quot;Forward at half speed...&quot;);
+  motorForward(128);      // 50% speed
+  delay(3000);
+
+  Serial.println(&quot;Stopping...&quot;);
+  motorStop();
+  delay(1000);
+
+  Serial.println(&quot;Backward at full speed...&quot;);
+  motorBackward(255);     // 100% speed
+  delay(3000);
+
+  Serial.println(&quot;Stopping...&quot;);
+  motorStop();
+  delay(1000);
+
+  Serial.println(&quot;Forward slow...&quot;);
+  motorForward(80);       // ~30% speed
+  delay(3000);
+
+  motorStop();
+  delay(2000);
+}</code></pre>
+<p><strong>Watch the motor:</strong></p>
+<ul>
+<li>It runs forward at half speed for 3 seconds</li>
+<li>Stops for 1 second</li>
+<li>Runs backward at full speed for 3 seconds</li>
+<li>Stops again</li>
+<li>Then forward slowly</li>
+</ul>
+<blockquote><p>"See how changing the number in <code>analogWrite()</code> changes the speed? 255 is full blast, 128 is half speed, and anything below about 60-80 might not be enough to overcome the motor's friction."</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+25 XP</span> for controlling motor direction and speed!</strong></p>
+<hr>
+<h3 id="step-5-speed-control-with-potentiometer-5-min" style="border-left-color:#C678B0; color:#C678B0;">Step 5: Speed Control with Potentiometer (5 min)</h3>
+<p>Add a potentiometer to control speed in real time:</p>
+<pre><code>int potPin = A0;
+
+void loop() {
+  int potValue = analogRead(potPin);
+  int speed = map(potValue, 0, 1023, 0, 255);
+
+  motorForward(speed);
+
+  Serial.print(&quot;Pot: &quot;);
+  Serial.print(potValue);
+  Serial.print(&quot;  Speed: &quot;);
+  Serial.println(speed);
+
+  delay(50);
+}</code></pre>
+<blockquote><p>"Turn the knob slowly and watch the motor speed up. You are adjusting the PWM duty cycle &mdash; the percentage of time the motor gets power. It is like tapping the gas pedal in a car!"</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+20 XP</span> for speed control with the potentiometer!</strong></p>
+<hr>
+<h3 id="step-6-wand-check-measure-motor-output-voltage-8-min" style="border-left-color:#E8A838; color:#E8A838;">Step 6: Wand Check &mdash; Measure Motor Output Voltage (8 min)</h3>
+<blockquote><p>"Your Wand can show you exactly how much voltage the motor is receiving at different speeds. This is where you can SEE the PWM doing its job!"</p></blockquote>
+<p><strong>Wand Test &mdash; Motor Output Voltage at Different Speeds:</strong></p>
+<ol>
+<li>Set your Wand to DC Volts (20V range)</li>
+<li>Touch probes to the two motor wires (or L298N OUT1 and OUT2)</li>
+<li>Run the motor at different PWM speeds and record the average voltage</li>
+</ol>
+<pre><code>| PWM Value | Percent Speed | Expected Voltage | Your Wand Reads | Points |
+|-----------|--------------|-----------------|----------------|--------|
+| 0         | 0%           | ~0V             |                | +5 XP  |
+| 64        | 25%          | ~2-3V           |                | +10 XP |
+| 128       | 50%          | ~4-5V           |                | +10 XP |
+| 192       | 75%          | ~6-7V           |                | +10 XP |
+| 255       | 100%         | ~8-9V           |                | +10 XP |</code></pre>
+<blockquote><p>"Notice how the voltage goes up as you increase the PWM value? At 100% (255), you get nearly the full battery voltage. At 50% (128), you get about half. Your Wand is showing you the average voltage the motor feels &mdash; even though the signal is actually flipping on and off super fast!"</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+45 XP</span> for measuring output voltage at 5 different speeds!</strong></p>
+<hr>
+<h2 id="quick-quiz-earn-bonus-xp" style="background:#E8A838;">Quick Quiz &mdash; Earn Bonus XP!</h2>
+<p><strong>Question 1:</strong> Why can't you connect a DC motor directly to an Arduino pin?</p>
+<ul>
+<li>A) The motor is too small</li>
+<li>B) Arduino pins cannot provide enough current for a motor</li>
+<li>C) Motors only work with batteries</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+15 XP</span>!)</strong></p>
+<p><strong>Question 2:</strong> What does the L298N motor driver do?</p>
+<ul>
+<li>A) Measures motor speed</li>
+<li>B) Uses Arduino's control signals to switch high-current power to the motors</li>
+<li>C) Generates electricity from the motor</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+15 XP</span>!)</strong></p>
+<p><strong>Question 3:</strong> To reverse a DC motor's direction with the L298N, you:</p>
+<ul>
+<li>A) Swap the ENA and ENB pins</li>
+<li>B) Flip IN1 and IN2 (change which one is HIGH and which is LOW)</li>
+<li>C) Disconnect the GND wire</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+15 XP</span>!)</strong></p>
+<p><strong>Question 4:</strong> What does <code>analogWrite(ENA, 128)</code> do to the motor speed?</p>
+<ul>
+<li>A) Runs the motor at full speed</li>
+<li>B) Runs the motor at approximately half speed (50% PWM duty cycle)</li>
+<li>C) Stops the motor</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+15 XP</span>!)</strong></p>
+<hr>
+<h2 id="lesson-39-complete" style="background:#C678B0;">Lesson 39 Complete!</h2>
+<pre><code>  =============================================
+
+     MOTOR MASTER BADGE UNLOCKED!
+
+     Skills unlocked:
+     [check] Wire a DC motor through L298N driver
+     [check] Control motor direction (forward/backward)
+     [check] Control motor speed with PWM
+     [check] Measured motor voltage at different speeds with Wand
+
+  =============================================</code></pre>
+<p><strong>XP Breakdown:</strong></p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Activity</th>
+<th>XP</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Hook &mdash; why motor drivers</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Understanding the L298N</td>
+<td>15</td>
+</tr>
+<tr>
+<td>Wiring the motor driver</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Forward/backward/stop control</td>
+<td>25</td>
+</tr>
+<tr>
+<td>Potentiometer speed control</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Wand Check (5 speed levels)</td>
+<td>45</td>
+</tr>
+<tr>
+<td>Quiz (4 questions)</td>
+<td>60</td>
+</tr>
+<tr>
+<td><strong>TOTAL POSSIBLE</strong></td>
+<td><strong>195</strong></td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="coming-up-next" style="background:#E05C5C;">Coming Up Next...</h2>
+<p>In <strong>Lesson 40</strong>, you will learn about <strong>IR sensors and remote controls</strong>. You will decode the secret signals that TV remotes send, and then use those signals to control LEDs, a servo, or even your motor! It is like giving your Arduino a remote-controlled brain!</p>
+<hr>
+<h2 id="troubleshooting" style="background:#FF6B35;">Troubleshooting</h2>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Problem</th>
+<th>Fix</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Motor does not spin</td>
+<td>Check that the ENA jumper is removed AND that you are sending PWM to the ENA pin</td>
+</tr>
+<tr>
+<td>Motor only goes one direction</td>
+<td>Check IN1 and IN2 wiring &mdash; both must go to separate Arduino pins</td>
+</tr>
+<tr>
+<td>Motor barely moves at low speeds</td>
+<td>Some motors need a minimum PWM of 60-100 to overcome internal friction</td>
+</tr>
+<tr>
+<td>Arduino resets when motor starts</td>
+<td>Shared ground is missing &mdash; connect Arduino GND to L298N GND</td>
+</tr>
+<tr>
+<td>Motor gets very hot</td>
+<td>Do not stall the motor (hold it so it cannot spin). Reduce voltage or add breaks</td>
+</tr>
+<tr>
+<td>L298N gets hot</td>
+<td>Normal for high-current loads. If too hot, reduce motor duty cycle or add a small heatsink</td>
+</tr>
+<tr>
+<td>Wand reads 0V on motor outputs</td>
+<td>Check battery connection to L298N +12V terminal. Is the battery dead?</td>
+</tr>
+</tbody></table></div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="page-footer">
+        <span>Lesson 39: DC Motors and Motor Driver -- Spin Those Wheels! (L298N)</span>
+        <span>Module 5: Sensors and Actuators</span>
+    </footer>
+
+</body>
+</html>

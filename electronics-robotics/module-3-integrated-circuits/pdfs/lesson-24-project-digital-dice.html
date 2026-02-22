@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 24: Module 3 Project -- Digital Dice</title>
+    <style>
+
+        /* ── Reset & Base ─────────────────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            line-height: 1.75;
+            color: #2C3E50;
+            background: #FAFAFA;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px 40px;
+        }
+
+        /* ── Header Banner ─────────────────────────────────────────── */
+        .lesson-header {
+            background: linear-gradient(135deg, #6C5CE7 0%, #A29BFE 50%, #74B9FF 100%);
+            color: #fff;
+            border-radius: 16px;
+            padding: 32px 36px 28px;
+            margin: 24px 0 32px;
+            box-shadow: 0 6px 20px rgba(108,92,231,0.35);
+            position: relative;
+            overflow: hidden;
+        }
+        .lesson-header::before {
+            content: "";
+            position: absolute;
+            top: -40px; right: -40px;
+            width: 160px; height: 160px;
+            background: rgba(255,255,255,0.12);
+            border-radius: 50%;
+        }
+        .lesson-header::after {
+            content: "";
+            position: absolute;
+            bottom: -30px; left: -20px;
+            width: 100px; height: 100px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+        }
+        .lesson-header h1 {
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            position: relative;
+            z-index: 1;
+        }
+        .module-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.25);
+            border: 2px solid rgba(255,255,255,0.6);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 4px 14px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 1;
+        }
+        .meta-row {
+            margin-top: 12px;
+            font-size: 14px;
+            color: rgba(255,255,255,0.9);
+            position: relative;
+            z-index: 1;
+        }
+        .meta-pill {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            border-radius: 12px;
+            padding: 2px 10px;
+            margin: 2px 4px 2px 0;
+            white-space: nowrap;
+        }
+
+        /* ── Section Headings ──────────────────────────────────────── */
+        h2 {
+            font-size: 22px;
+            font-weight: 800;
+            margin: 36px 0 14px;
+            padding: 10px 18px;
+            border-radius: 10px;
+            color: #fff;
+            /* colour applied inline via data-color */
+        }
+        h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 28px 0 10px;
+            padding: 8px 14px;
+            border-left: 5px solid;
+            border-radius: 0 8px 8px 0;
+            background: rgba(0,0,0,0.03);
+            /* border-left colour applied inline */
+        }
+
+        /* ── Body Text ─────────────────────────────────────────────── */
+        p { margin: 10px 0; }
+        strong { font-weight: 700; color: #1A252F; }
+        em { font-style: italic; color: #5D6D7E; }
+
+        /* ── Inline Code ───────────────────────────────────────────── */
+        code {
+            background: #F0F3F7;
+            border: 1px solid #D5DCE8;
+            border-radius: 4px;
+            padding: 1px 6px;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 14px;
+            color: #6C5CE7;
+        }
+
+        /* ── Fenced Code Blocks ────────────────────────────────────── */
+        pre {
+            background: #F4F6F8;
+            border: 1px solid #D0D8E4;
+            border-left: 5px solid #6C5CE7;
+            border-radius: 8px;
+            padding: 16px 18px;
+            overflow-x: auto;
+            margin: 16px 0;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #2C3E50;
+            white-space: pre;
+        }
+        pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            font-size: inherit;
+            color: inherit;
+        }
+
+        /* ── Blockquotes / Callout Boxes ───────────────────────────── */
+        blockquote {
+            background: #F3F0FF;
+            border-left: 6px solid #6C5CE7;
+            border-radius: 0 12px 12px 0;
+            padding: 14px 20px;
+            margin: 16px 0;
+            color: #3D2D6B;
+            font-style: normal;
+            position: relative;
+        }
+        blockquote::before {
+            content: "\1F4AC";  /* speech bubble emoji */
+            position: absolute;
+            top: -10px; left: 10px;
+            font-size: 20px;
+            line-height: 1;
+        }
+        blockquote p { margin: 6px 0; }
+
+        /* ── Lists ─────────────────────────────────────────────────── */
+        ul, ol {
+            margin: 10px 0 10px 24px;
+            padding-left: 8px;
+        }
+        li { margin: 5px 0; }
+        ul li::marker { color: #6C5CE7; font-size: 18px; }
+        ol li::marker { color: #45B7D1; font-weight: 700; }
+
+        /* ── Tables ────────────────────────────────────────────────── */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 16px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+        }
+        thead th {
+            background: #6C5CE7;
+            color: #fff;
+            font-weight: 700;
+            padding: 11px 14px;
+            text-align: left;
+            border-bottom: 3px solid #5A4BD1;
+        }
+        thead th:first-child { border-radius: 10px 0 0 0; }
+        thead th:last-child  { border-radius: 0 10px 0 0; }
+        tbody tr:nth-child(odd)  td { background: #F8F6FF; }
+        tbody tr:nth-child(even) td { background: #EDEBFF; }
+        tbody tr:hover td { background: #DDD8FF; transition: background 0.15s; }
+        td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #D5D0F0;
+            vertical-align: top;
+        }
+        /* Checkbox column: replace [ ] with styled checkbox */
+        td .checkbox {
+            display: inline-block;
+            width: 18px; height: 18px;
+            border: 2px solid #6C5CE7;
+            border-radius: 4px;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+
+        /* ── XP Badges ─────────────────────────────────────────────── */
+        .xp-badge {
+            display: inline-block;
+            background: #FFEAA7;
+            border: 2px solid #F39C12;
+            color: #7D4F00;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin: 2px 4px;
+            white-space: nowrap;
+        }
+        .award-badge {
+            display: inline-block;
+            background: #D5F5E3;
+            border: 2px solid #27AE60;
+            color: #1A5E35;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin: 2px 4px;
+            white-space: nowrap;
+        }
+
+        /* ── Horizontal Rule ───────────────────────────────────────── */
+        hr {
+            border: none;
+            border-top: 3px dashed #C8C0F0;
+            margin: 30px 0;
+        }
+
+        /* ── Footer ────────────────────────────────────────────────── */
+        .page-footer {
+            margin-top: 48px;
+            padding-top: 16px;
+            border-top: 2px solid #D5D0F0;
+            text-align: center;
+            font-size: 13px;
+            color: #7F8C8D;
+        }
+
+        /* ── Print Styles ──────────────────────────────────────────── */
+        @media print {
+            @page { size: A4; margin: 18mm 15mm 20mm; }
+
+            body {
+                background: #fff !important;
+                font-size: 13px;
+                max-width: 100%;
+                padding: 0;
+            }
+
+            /* Force colour printing */
+            * { -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important; }
+
+            /* Page breaks */
+            h2 { page-break-before: auto; break-before: auto; }
+            pre, blockquote, table { page-break-inside: avoid; }
+            h2, h3 { page-break-after: avoid; break-after: avoid; }
+            tr { page-break-inside: avoid; }
+
+            /* No orphaned paragraphs */
+            p { orphans: 3; widows: 3; }
+
+            .lesson-header { box-shadow: none; }
+
+            .page-footer {
+                position: fixed;
+                bottom: 0; left: 0; right: 0;
+                background: #fff;
+                border-top: 1px solid #ccc;
+                padding: 6px 15mm;
+                display: flex;
+                justify-content: space-between;
+            }
+        }
+    
+    </style>
+</head>
+<body>
+
+    <!-- Header Banner -->
+    <header class="lesson-header">
+        <div class="module-badge">Module 3 -- Integrated Circuits (ICs) (FINAL PROJECT)</div>
+        <h1>Lesson 24: Module 3 Project -- Digital Dice</h1>
+        <div class="meta-row"><span class="meta-pill">&#9733; Star-3 Intermediate</span><span class="meta-pill">&#9200; 60--75 minutes (longer -- it is a project!)</span><span class="meta-pill">&#128100; Age 6--12 years</span><span class="meta-pill xp-badge" style="background:#FFEAA7;color:#7D4F00;border:none;">&#9889; 500 XP (the biggest XP haul of the module!)</span></div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+<hr>
+<h2 id="your-mission-today" style="background:#FF6B35;">Your Mission Today</h2>
+<p>This is it, Circuit Explorer &mdash; the <strong>GRAND FINALE of Module 3</strong>! You are going to build a real, working <strong>Electronic Dice</strong>. Press a button to "roll" and a random number from 1 to 6 will appear, shown by LEDs arranged in a dice pattern. You will use the 555 timer, the 4017 counter, logic to drive the LED patterns, and your Wand to debug it all. When you are done, you will have a game you can actually play! Let us build this!</p>
+<hr>
+<h2 id="learning-objectives" style="background:#4ECDC4;">Learning Objectives</h2>
+<p>This project brings together everything from Module 3:</p>
+<ul>
+<li>555 timer in astable mode (fast clock)</li>
+<li>4017 decade counter (counting pulses)</li>
+<li>LED wiring and patterns</li>
+<li>Push button control</li>
+<li>Multimeter skills for debugging</li>
+</ul>
+<hr>
+<h2 id="what-you-need" style="background:#45B7D1;">What You Need</h2>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Item</th>
+<th>Qty</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>555 timer IC</td>
+<td>1</td>
+</tr>
+<tr>
+<td>4017 decade counter IC</td>
+<td>1</td>
+</tr>
+<tr>
+<td>LEDs (same color, preferably)</td>
+<td>7</td>
+</tr>
+<tr>
+<td>330-ohm resistors</td>
+<td>7</td>
+</tr>
+<tr>
+<td>Resistor: 1k-ohm (R1 for 555)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Resistor: 10k-ohm (R2 for 555)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Ceramic capacitor: 0.01 microfarad (C1 for fast 555)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Ceramic capacitor: 0.01 microfarad (noise filter for Pin 5)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1N4148 diodes (for LED pattern logic)</td>
+<td>6</td>
+</tr>
+<tr>
+<td>Push button (tactile switch)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>10k-ohm resistor (pull-up for button)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>9V battery + clip</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Breadboard (830-point recommended)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Jumper wires</td>
+<td>30</td>
+</tr>
+<tr>
+<td>Multimeter (Magic Measurement Wand!)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Cardboard or foam board (for dice face)</td>
+<td>1 piece</td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="how-the-digital-dice-works" style="background:#96CEB4;">How the Digital Dice Works</h2>
+<h3 id="the-big-idea" style="border-left-color:#45B7D1; color:#45B7D1;">The Big Idea</h3>
+<blockquote><p>"When you roll a real die, it tumbles randomly and lands on a number from 1 to 6. Our electronic dice does something similar &mdash; the 555 timer runs at a VERY fast speed (thousands of times per second). The 4017 counter cycles through outputs 0, 1, 2, 3, 4, 5 so quickly that no human can tell which output is active. When you release the button, the counter stops on whichever output happens to be HIGH at that instant &mdash; essentially a random number from 1 to 6!"</p></blockquote>
+<p><strong>Block diagram:</strong></p>
+<pre><code>  Button Press
+      |
+      v
+  555 Timer ------&gt; 4017 Counter ------&gt; LED Pattern Logic ------&gt; 7 LEDs
+  (fast clock)      (cycles 1-6)          (which LEDs to             (dice face)
+                    (resets at 7)          turn on for each
+                                           number)</code></pre>
+<hr>
+<h2 id="how-to-build-it" style="background:#E8A838;">How to Build It</h2>
+<h3 id="phase-1-plan-the-dice-face-5-min" style="border-left-color:#96CEB4; color:#96CEB4;">Phase 1: Plan the Dice Face (5 min)</h3>
+<p><strong>Standard dice LED layout:</strong></p>
+<pre><code>  +---+---+---+
+  | A |   | B |
+  +---+---+---+
+  | C | G | D |
+  +---+---+---+
+  | E |   | F |
+  +---+---+---+
+
+  Number 1: G only
+  Number 2: B, E
+  Number 3: B, G, E
+  Number 4: A, B, E, F
+  Number 5: A, B, G, E, F
+  Number 6: A, B, C, D, E, F</code></pre>
+<p><strong>LED assignment table:</strong></p>
+<pre><code>| Dice Number | LEDs On          | 4017 Output Used |
+|-------------|-----------------|-----------------|
+| 1           | G               | Q0 (Pin 3)      |
+| 2           | B, E            | Q1 (Pin 2)      |
+| 3           | B, G, E         | Q2 (Pin 4)      |
+| 4           | A, B, E, F      | Q3 (Pin 7)      |
+| 5           | A, B, G, E, F   | Q4 (Pin 10)     |
+| 6           | A, B, C, D, E, F| Q5 (Pin 1)      |</code></pre>
+<p><strong>Award: <span class="xp-badge">+20 XP</span> for planning the dice face layout!</strong></p>
+<hr>
+<h3 id="phase-2-build-the-fast-555-clock-10-min" style="border-left-color:#FF6B35; color:#FF6B35;">Phase 2: Build the Fast 555 Clock (10 min)</h3>
+<blockquote><p>"We need the 555 to run very fast &mdash; so fast that the counter cycles through all 6 positions hundreds of times per second. When you release the button, it stops on a random number."</p></blockquote>
+<p><strong>555 Astable Circuit (fast mode):</strong></p>
+<pre><code>  R1 = 1k-ohm
+  R2 = 10k-ohm
+  C1 = 0.01 microfarad (very small = very fast!)
+
+  Frequency = 1.44 / ((1000 + 20000) x 0.00000001)
+            = 1.44 / 0.00021
+            = about 6,857 Hz (way too fast to see!)</code></pre>
+<p>Wire the 555 astable circuit exactly as in Lesson 18, but with C1 = 0.01 microfarad.</p>
+<p><strong>Button control:</strong> Connect the push button so that:</p>
+<ul>
+<li>When pressed: the 555 Reset (Pin 4) connects to +VCC (555 runs)</li>
+<li>When released: Pin 4 connects to GND through a 10k pull-down (555 stops)</li>
+</ul>
+<pre><code>  +VCC ---- push button ---- Pin 4 (Reset)
+                              |
+                             [10k]
+                              |
+                             GND</code></pre>
+<blockquote><p>"Press and hold the button &mdash; the 555 runs and the counter spins. Release &mdash; everything stops on a random number!"</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+30 XP</span> for building the fast 555 clock with button control!</strong></p>
+<hr>
+<h3 id="phase-3-wire-the-4017-counter-limited-to-6-10-min" style="border-left-color:#4ECDC4; color:#4ECDC4;">Phase 3: Wire the 4017 Counter (Limited to 6) (10 min)</h3>
+<p>Wire the 4017 the same way as Lesson 23, but with one important change:</p>
+<blockquote><p>"We only need numbers 1 through 6, not 0 through 9. So we connect the Q6 output (Pin 5) to the Reset pin (Pin 15). This makes the counter loop back to Q0 after reaching Q5 &mdash; six outputs only!"</p></blockquote>
+<p><strong>4017 wiring:</strong></p>
+<ol>
+<li>Pin 16 (VCC) to + rail</li>
+<li>Pin 8 (GND) to - rail</li>
+<li>Pin 14 (Clock) to 555 Pin 3 (Output)</li>
+<li>Pin 13 (Clock Enable) to - rail</li>
+<li><strong>Pin 5 (Q6) to Pin 15 (Reset)</strong> &mdash; this limits counting to 0-5 (six positions)</li>
+</ol>
+<p><strong>Award: <span class="xp-badge">+20 XP</span> for wiring the 4017 with the 6-count reset!</strong></p>
+<hr>
+<h3 id="phase-4-wire-the-led-dice-pattern-15-min" style="border-left-color:#C678B0; color:#C678B0;">Phase 4: Wire the LED Dice Pattern (15 min)</h3>
+<blockquote><p>"This is the trickiest part. Each 4017 output needs to turn on the RIGHT combination of LEDs for that dice number."</p></blockquote>
+<p><strong>The wiring trick using diodes:</strong></p>
+<p>Since multiple 4017 outputs need to control the same LED (for example, LED G turns on for numbers 1, 3, and 5), we use <strong>1N4148 signal diodes</strong> to combine signals without them interfering with each other.</p>
+<p><strong>Simplified approach (recommended for younger builders):</strong></p>
+<p>For a simpler build, you can use 6 separate groups of LEDs, each pre-wired to show the correct dice face. Each 4017 output directly drives its own set of LEDs through resistors.</p>
+<pre><code>  4017 Q0 (Pin 3)  --&gt; [330R] --&gt; LED G
+  4017 Q1 (Pin 2)  --&gt; [330R] --&gt; LED B and LED E
+  4017 Q2 (Pin 4)  --&gt; [330R] --&gt; LED B, LED G, and LED E (via diodes)
+  4017 Q3 (Pin 7)  --&gt; [330R] --&gt; LED A, LED B, LED E, LED F (via diodes)
+  4017 Q4 (Pin 10) --&gt; [330R] --&gt; LED A, LED B, LED G, LED E, LED F (via diodes)
+  4017 Q5 (Pin 1)  --&gt; [330R] --&gt; LED A, LED B, LED C, LED D, LED E, LED F (via diodes)</code></pre>
+<p><strong>For each shared LED, connect a diode from each 4017 output that should activate it:</strong></p>
+<p>Example for LED G (center dot &mdash; used in numbers 1, 3, 5):</p>
+<pre><code>  Q0 (Pin 3)  ---[diode]---&gt;+
+  Q2 (Pin 4)  ---[diode]---&gt;+--[330R]---LED G---GND
+  Q4 (Pin 10) ---[diode]---&gt;+</code></pre>
+<p>The diode prevents current from flowing backwards between outputs.</p>
+<blockquote><p>"Take your time with this step. It is like solving a puzzle &mdash; connecting the right wires to the right LEDs."</p></blockquote>
+<p><strong>Test each number:</strong> Temporarily slow down the 555 (swap C1 for 47 microfarad) so the counter steps slowly. Watch each dice pattern appear one by one.</p>
+<p><strong>Award: <span class="xp-badge">+50 XP</span> for wiring the complete LED dice pattern!</strong></p>
+<hr>
+<h3 id="phase-5-wand-check-debug-and-verify-10-min" style="border-left-color:#E8A838; color:#E8A838;">Phase 5: Wand Check &mdash; Debug and Verify! (10 min)</h3>
+<blockquote><p>"The moment of truth! If something is not quite right, your Magic Measurement Wand will find the problem."</p></blockquote>
+<p><strong>Debugging checklist:</strong></p>
+<p><strong>1. Check the 555 clock:</strong></p>
+<ul>
+<li>Set Wand to DC Voltage</li>
+<li>Touch Pin 3 of the 555 while holding the button</li>
+<li>If the 555 is running fast, the Wand will show a voltage around 4-5V (it is averaging the rapid HIGH/LOW switching)</li>
+</ul>
+<p><strong>2. Check the 4017 outputs:</strong></p>
+<ul>
+<li>Slow down the 555 (use bigger C1 temporarily)</li>
+<li>Measure each 4017 output &mdash; only one should be HIGH at a time</li>
+<li>Verify that counting stops at Q5 (not continuing to Q6-Q9)</li>
+</ul>
+<pre><code>| 4017 Output | Pin | Should be HIGH for dice # | Wand reads HIGH? |
+|-------------|-----|--------------------------|-----------------|
+| Q0          | 3   | 1                        |                 |
+| Q1          | 2   | 2                        |                 |
+| Q2          | 4   | 3                        |                 |
+| Q3          | 7   | 4                        |                 |
+| Q4          | 10  | 5                        |                 |
+| Q5          | 1   | 6                        |                 |</code></pre>
+<p><strong>3. Check each LED pattern:</strong></p>
+<ul>
+<li>For each counter position, verify the correct LEDs are on</li>
+<li>Use continuity mode to check diode connections if an LED is not lighting</li>
+</ul>
+<p><strong>4. Battery check:</strong></p>
+<ul>
+<li>Measure battery voltage &mdash; below 7V means time for a new battery</li>
+</ul>
+<p><strong>Award: <span class="xp-badge">+50 XP</span> for completing the debugging checklist!</strong></p>
+<hr>
+<h3 id="phase-6-build-the-dice-housing-10-min" style="border-left-color:#E05C5C; color:#E05C5C;">Phase 6: Build the Dice Housing (10 min)</h3>
+<blockquote><p>"Let us make it look like a real die!"</p></blockquote>
+<p><strong>Using cardboard or foam board:</strong></p>
+<ol>
+<li>Cut out a square piece (about 4 inches by 4 inches)</li>
+<li>Poke 7 holes in the dice dot pattern:</li>
+</ol>
+<pre><code>  +---+---+---+
+  | o |   | o |     A       B
+  +---+---+---+
+  | o | o | o |     C   G   D
+  +---+---+---+
+  | o |   | o |     E       F
+  +---+---+---+</code></pre>
+<ol>
+<li>Push the 7 LEDs through the holes from behind</li>
+<li>Label the back with letters (A-G) to keep track</li>
+<li>Wire the LEDs to the breadboard circuit</li>
+</ol>
+<blockquote><p>"Now when you press the button and release, the dice face lights up with your roll!"</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+30 XP</span> for building the dice housing!</strong></p>
+<hr>
+<h3 id="phase-7-play-the-dice-game-5-min" style="border-left-color:#45B7D1; color:#45B7D1;">Phase 7: Play the Dice Game! (5 min)</h3>
+<p><strong>How to play:</strong></p>
+<ol>
+<li>Press and hold the button for at least 1 second (the counter spins)</li>
+<li>Release the button &mdash; a random number appears!</li>
+<li>Take turns with a friend. Keep score!</li>
+</ol>
+<p><strong>Game ideas:</strong></p>
+<ul>
+<li>Simple: highest number wins each round</li>
+<li>Racing game: both players roll, highest number moves that many spaces on a game board</li>
+<li>Dice addition: roll twice, add the numbers. Closest to 7 wins!</li>
+</ul>
+<p><strong>Award: <span class="xp-badge">+30 XP</span> for playing at least 5 rounds of the dice game!</strong></p>
+<hr>
+<h2 id="module-3-final-assessment" style="background:#C678B0;">Module 3 Final Assessment</h2>
+<p>After building the dice, have the kid answer these (no looking at notes!):</p>
+<p><strong>Concept Check:</strong></p>
+<ol>
+<li>"What does IC stand for?"</li>
+<li>"How do you find Pin 1 on an IC?"</li>
+<li>"What is the difference between astable and monostable mode on the 555?"</li>
+<li>"Draw the truth table for an AND gate."</li>
+<li>"What does the 4017 decade counter do?"</li>
+<li>"How does the digital dice pick a random number?"</li>
+</ol>
+<p><strong>Wand Skills Check:</strong></p>
+<blockquote><p>"Measure the battery voltage for me." "Check if this LED is working using continuity mode." "Measure the voltage on Pin 8 of the 555."</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+50 XP</span> for completing the final assessment!</strong></p>
+<hr>
+<h2 id="quick-quiz-earn-bonus-xp" style="background:#E05C5C;">Quick Quiz &mdash; Earn Bonus XP!</h2>
+<p><strong>Question 1:</strong> Why does the digital dice produce a random number?</p>
+<ul>
+<li>A) The battery decides the number</li>
+<li>B) The 555 runs so fast that the counter position when you release the button is unpredictable</li>
+<li>C) The LEDs pick a random color</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<p><strong>Question 2:</strong> Why do we connect Q6 (Pin 5) of the 4017 to the Reset pin?</p>
+<ul>
+<li>A) To make it count to 10</li>
+<li>B) To limit the count to 6 positions (numbers 1&mdash;6)</li>
+<li>C) To make it count backwards</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<p><strong>Question 3:</strong> Why do we use diodes when connecting multiple 4017 outputs to the same LED?</p>
+<ul>
+<li>A) To make the LED brighter</li>
+<li>B) To prevent current from flowing backwards between outputs</li>
+<li>C) To slow down the circuit</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<hr>
+<h2 id="module-3-complete-grand-finale" style="background:#FF6B35;">Module 3 Complete &mdash; Grand Finale!</h2>
+<pre><code>  ======================================================
+
+     MODULE 3 CHAMPION BADGE UNLOCKED!
+
+     _____________________ has mastered
+        Integrated Circuits (ICs)
+
+     [check] What an IC is and how to read datasheets
+     [check] 555 Timer in Astable (Blinker) Mode
+     [check] 555 Timer in Monostable (One-Shot) Mode
+     [check] Logic Gates: AND, OR, NOT
+     [check] Logic Gates: NAND, NOR, XOR
+     [check] 7-Segment Display with Decoder
+     [check] 4017 Decade Counter (LED Chaser)
+     [check] Built the Digital Dice!
+
+  ======================================================</code></pre>
+<p><strong>Lesson 24 XP Breakdown:</strong></p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Activity</th>
+<th>XP</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Plan dice face layout</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Build fast 555 clock</td>
+<td>30</td>
+</tr>
+<tr>
+<td>Wire 4017 with 6-count reset</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Wire LED dice pattern</td>
+<td>50</td>
+</tr>
+<tr>
+<td>Wand Check debugging</td>
+<td>50</td>
+</tr>
+<tr>
+<td>Build dice housing</td>
+<td>30</td>
+</tr>
+<tr>
+<td>Play the dice game</td>
+<td>30</td>
+</tr>
+<tr>
+<td>Final assessment</td>
+<td>50</td>
+</tr>
+<tr>
+<td>Quiz (3 questions)</td>
+<td>60</td>
+</tr>
+<tr>
+<td><strong>TOTAL POSSIBLE</strong></td>
+<td><strong>340</strong></td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="module-3-total-xp-summary" style="background:#4ECDC4;">Module 3 Total XP Summary</h2>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Lesson</th>
+<th>Title</th>
+<th>Max XP</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>17</td>
+<td>What is an Integrated Circuit?</td>
+<td>220</td>
+</tr>
+<tr>
+<td>18</td>
+<td>555 Timer &mdash; Blinker Mode</td>
+<td>200</td>
+</tr>
+<tr>
+<td>19</td>
+<td>555 Timer &mdash; One-Shot Mode</td>
+<td>200</td>
+</tr>
+<tr>
+<td>20</td>
+<td>Logic Gates &mdash; AND, OR, NOT</td>
+<td>220</td>
+</tr>
+<tr>
+<td>21</td>
+<td>Logic Gates &mdash; NAND, NOR, XOR</td>
+<td>210</td>
+</tr>
+<tr>
+<td>22</td>
+<td>7-Segment Display</td>
+<td>200</td>
+</tr>
+<tr>
+<td>23</td>
+<td>Building a Simple Counter</td>
+<td>230</td>
+</tr>
+<tr>
+<td>24</td>
+<td>Digital Dice Project</td>
+<td>340</td>
+</tr>
+<tr>
+<td><strong>MODULE TOTAL</strong></td>
+<td></td>
+<td><strong>1,820</strong></td>
+</tr>
+</tbody></table></div>
+<p><strong>XP Ranks for Module 3:</strong></p>
+<ul>
+<li>0&mdash;500 XP: IC Apprentice</li>
+<li>501&mdash;900 XP: IC Explorer</li>
+<li>901&mdash;1,300 XP: IC Builder</li>
+<li>1,301&mdash;1,600 XP: IC Engineer</li>
+<li>1,601&mdash;1,820 XP: IC Champion!</li>
+</ul>
+<hr>
+<h2 id="all-badges-earned-in-module-3" style="background:#45B7D1;">All Badges Earned in Module 3</h2>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Badge</th>
+<th>Lesson</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Chip Detective</td>
+<td>17</td>
+</tr>
+<tr>
+<td>Blink Master</td>
+<td>18</td>
+</tr>
+<tr>
+<td>One-Shot Wizard</td>
+<td>19</td>
+</tr>
+<tr>
+<td>Logic Explorer</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Gate Master</td>
+<td>21</td>
+</tr>
+<tr>
+<td>Digit Decoder</td>
+<td>22</td>
+</tr>
+<tr>
+<td>Light Chaser Champion</td>
+<td>23</td>
+</tr>
+<tr>
+<td>Module 3 Champion</td>
+<td>24</td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="reflection-questions-talk-through-together" style="background:#96CEB4;">Reflection Questions (Talk Through Together)</h2>
+<blockquote><p>"What was the coolest circuit you built in this module?" "Which IC was your favorite to work with?" "Was there a moment where the Wand helped you find a problem?" "What do you think Module 4 will be about?" "If you could build anything with ICs, what would it be?"</p></blockquote>
+<hr>
+<h2 id="whats-next-module-4-preview" style="background:#E8A838;">What's Next &mdash; Module 4 Preview</h2>
+<blockquote><p>"You have mastered individual components, learned to build circuits, and now you can work with integrated circuits! In Module 4, we are moving into the world of PROGRAMMABLE electronics. You will meet the <strong>Arduino</strong> &mdash; a tiny computer you can program to do anything. Write code, upload it, and watch your circuit come alive with your own instructions. It is like giving your circuits a brain!"</p></blockquote>
+<hr>
+<h2 id="parentinstructor-notes" style="background:#C678B0;">Parent/Instructor Notes</h2>
+<ul>
+<li>This project takes longer than a regular lesson &mdash; plan for 60&mdash;75 minutes or split across two sessions.</li>
+<li>The LED pattern wiring with diodes is the most complex part. For younger kids (6&mdash;8), consider pre-wiring the diode matrix or simplifying to separate LED groups per number.</li>
+<li>The digital dice is a <strong>great keepsake</strong> and a fun game for the whole family.</li>
+<li>Debugging with the multimeter is extremely valuable here. Let the child work through problems rather than fixing them.</li>
+<li>If the dice seems to favor certain numbers, that is because the 555 frequency and the button release timing can create patterns. This is a great teachable moment about true randomness vs. pseudo-randomness!</li>
+<li>Consider having the child demonstrate the dice to friends or family and explain how it works &mdash; teaching solidifies learning.</li>
+<li>Track XP totals across all 8 lessons on a poster or whiteboard. Celebrate reaching IC Champion rank!</li>
+</ul>
+<hr>
+<h2 id="troubleshooting" style="background:#E05C5C;">Troubleshooting</h2>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Problem</th>
+<th>Fix</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Dice always shows the same number</td>
+<td>555 might not be running &mdash; check Pin 4 button connection</td>
+</tr>
+<tr>
+<td>LEDs show wrong patterns</td>
+<td>Check diode connections and make sure each LED is wired to the correct 4017 outputs</td>
+</tr>
+<tr>
+<td>Counter goes past 6</td>
+<td>Verify Q6 (Pin 5) is connected to Reset (Pin 15) on the 4017</td>
+</tr>
+<tr>
+<td>Some LEDs do not light</td>
+<td>Check LED polarity and that the 330-ohm resistor is in place</td>
+</tr>
+<tr>
+<td>Button does nothing</td>
+<td>Test button with Wand continuity; check Pin 4 pull-down resistor</td>
+</tr>
+<tr>
+<td>All LEDs are on at once</td>
+<td>Diodes may be backwards &mdash; check diode polarity (stripe = cathode = negative)</td>
+</tr>
+<tr>
+<td>Circuit stops working after a while</td>
+<td>Battery dying &mdash; measure with Wand (should be above 7V)</td>
+</tr>
+</tbody></table></div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="page-footer">
+        <span>Lesson 24: Module 3 Project -- Digital Dice</span>
+        <span>Module 3: Integrated Circuits (ICs)</span>
+    </footer>
+
+</body>
+</html>

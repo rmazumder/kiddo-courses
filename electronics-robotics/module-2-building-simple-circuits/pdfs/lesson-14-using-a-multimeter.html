@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 14: Using a Multimeter -- The Deep Dive</title>
+    <style>
+
+        /* ── Reset & Base ─────────────────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            line-height: 1.75;
+            color: #2C3E50;
+            background: #FAFAFA;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px 40px;
+        }
+
+        /* ── Header Banner ─────────────────────────────────────────── */
+        .lesson-header {
+            background: linear-gradient(135deg, #FF6B35 0%, #FF9A5C 50%, #FFB347 100%);
+            color: #fff;
+            border-radius: 16px;
+            padding: 32px 36px 28px;
+            margin: 24px 0 32px;
+            box-shadow: 0 6px 20px rgba(255,107,53,0.35);
+            position: relative;
+            overflow: hidden;
+        }
+        .lesson-header::before {
+            content: "";
+            position: absolute;
+            top: -40px; right: -40px;
+            width: 160px; height: 160px;
+            background: rgba(255,255,255,0.12);
+            border-radius: 50%;
+        }
+        .lesson-header::after {
+            content: "";
+            position: absolute;
+            bottom: -30px; left: -20px;
+            width: 100px; height: 100px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+        }
+        .lesson-header h1 {
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            position: relative;
+            z-index: 1;
+        }
+        .module-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.25);
+            border: 2px solid rgba(255,255,255,0.6);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 4px 14px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 1;
+        }
+        .meta-row {
+            margin-top: 12px;
+            font-size: 14px;
+            color: rgba(255,255,255,0.9);
+            position: relative;
+            z-index: 1;
+        }
+        .meta-pill {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            border-radius: 12px;
+            padding: 2px 10px;
+            margin: 2px 4px 2px 0;
+            white-space: nowrap;
+        }
+
+        /* ── Section Headings ──────────────────────────────────────── */
+        h2 {
+            font-size: 22px;
+            font-weight: 800;
+            margin: 36px 0 14px;
+            padding: 10px 18px;
+            border-radius: 10px;
+            color: #fff;
+            /* colour applied inline via data-color */
+        }
+        h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 28px 0 10px;
+            padding: 8px 14px;
+            border-left: 5px solid;
+            border-radius: 0 8px 8px 0;
+            background: rgba(0,0,0,0.03);
+            /* border-left colour applied inline */
+        }
+
+        /* ── Body Text ─────────────────────────────────────────────── */
+        p { margin: 10px 0; }
+        strong { font-weight: 700; color: #1A252F; }
+        em { font-style: italic; color: #5D6D7E; }
+
+        /* ── Inline Code ───────────────────────────────────────────── */
+        code {
+            background: #F0F3F7;
+            border: 1px solid #D5DCE8;
+            border-radius: 4px;
+            padding: 1px 6px;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 14px;
+            color: #C0392B;
+        }
+
+        /* ── Fenced Code Blocks ────────────────────────────────────── */
+        pre {
+            background: #F4F6F8;
+            border: 1px solid #D0D8E4;
+            border-left: 5px solid #45B7D1;
+            border-radius: 8px;
+            padding: 16px 18px;
+            overflow-x: auto;
+            margin: 16px 0;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #2C3E50;
+            white-space: pre;
+        }
+        pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            font-size: inherit;
+            color: inherit;
+        }
+
+        /* ── Blockquotes / Callout Boxes ───────────────────────────── */
+        blockquote {
+            background: #FFF8E7;
+            border-left: 6px solid #FF6B35;
+            border-radius: 0 12px 12px 0;
+            padding: 14px 20px;
+            margin: 16px 0;
+            color: #5D3A1A;
+            font-style: normal;
+            position: relative;
+        }
+        blockquote::before {
+            content: "\1F4AC";  /* speech bubble emoji */
+            position: absolute;
+            top: -10px; left: 10px;
+            font-size: 20px;
+            line-height: 1;
+        }
+        blockquote p { margin: 6px 0; }
+
+        /* ── Lists ─────────────────────────────────────────────────── */
+        ul, ol {
+            margin: 10px 0 10px 24px;
+            padding-left: 8px;
+        }
+        li { margin: 5px 0; }
+        ul li::marker { color: #FF6B35; font-size: 18px; }
+        ol li::marker { color: #45B7D1; font-weight: 700; }
+
+        /* ── Tables ────────────────────────────────────────────────── */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 16px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+        }
+        thead th {
+            background: #45B7D1;
+            color: #fff;
+            font-weight: 700;
+            padding: 11px 14px;
+            text-align: left;
+            border-bottom: 3px solid #2E9BBD;
+        }
+        thead th:first-child { border-radius: 10px 0 0 0; }
+        thead th:last-child  { border-radius: 0 10px 0 0; }
+        tbody tr:nth-child(odd)  td { background: #F8FBFF; }
+        tbody tr:nth-child(even) td { background: #EAF6FB; }
+        tbody tr:hover td { background: #D6F0F8; transition: background 0.15s; }
+        td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #D9EEF6;
+            vertical-align: top;
+        }
+        /* Checkbox column: replace [ ] with styled checkbox */
+        td .checkbox {
+            display: inline-block;
+            width: 18px; height: 18px;
+            border: 2px solid #45B7D1;
+            border-radius: 4px;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+
+        /* ── XP Badges ─────────────────────────────────────────────── */
+        .xp-badge {
+            display: inline-block;
+            background: #FFEAA7;
+            border: 2px solid #F39C12;
+            color: #7D4F00;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin: 2px 4px;
+            white-space: nowrap;
+        }
+        .award-badge {
+            display: inline-block;
+            background: #D5F5E3;
+            border: 2px solid #27AE60;
+            color: #1A5E35;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin: 2px 4px;
+            white-space: nowrap;
+        }
+
+        /* ── Horizontal Rule ───────────────────────────────────────── */
+        hr {
+            border: none;
+            border-top: 3px dashed #B2D8E8;
+            margin: 30px 0;
+        }
+
+        /* ── Footer ────────────────────────────────────────────────── */
+        .page-footer {
+            margin-top: 48px;
+            padding-top: 16px;
+            border-top: 2px solid #D5DCE8;
+            text-align: center;
+            font-size: 13px;
+            color: #7F8C8D;
+        }
+
+        /* ── Print Styles ──────────────────────────────────────────── */
+        @media print {
+            @page { size: A4; margin: 18mm 15mm 20mm; }
+
+            body {
+                background: #fff !important;
+                font-size: 13px;
+                max-width: 100%;
+                padding: 0;
+            }
+
+            /* Force colour printing */
+            * { -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important; }
+
+            /* Page breaks */
+            h2 { page-break-before: auto; break-before: auto; }
+            pre, blockquote, table { page-break-inside: avoid; }
+            h2, h3 { page-break-after: avoid; break-after: avoid; }
+            tr { page-break-inside: avoid; }
+
+            /* No orphaned paragraphs */
+            p { orphans: 3; widows: 3; }
+
+            .lesson-header { box-shadow: none; }
+
+            .page-footer {
+                position: fixed;
+                bottom: 0; left: 0; right: 0;
+                background: #fff;
+                border-top: 1px solid #ccc;
+                padding: 6px 15mm;
+                display: flex;
+                justify-content: space-between;
+            }
+        }
+    
+    </style>
+</head>
+<body>
+
+    <!-- Header Banner -->
+    <header class="lesson-header">
+        <div class="module-badge">Module 2 -- Building Simple Circuits</div>
+        <h1>Lesson 14: Using a Multimeter -- The Deep Dive</h1>
+        <div class="meta-row"><span class="meta-pill">&#9733; Star-2 Medium</span><span class="meta-pill">&#9200; 50--60 minutes</span><span class="meta-pill">&#128100; Age 6--12 years</span><span class="meta-pill xp-badge" style="background:#FFEAA7;color:#7D4F00;border:none;">&#9889; 260 XP</span></div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+<hr>
+<h2 id="your-mission-today" style="background:#FF6B35;">Your Mission Today</h2>
+<p>Circuit Explorer, you have been using your Magic Measurement Wand since Lesson 2. You have measured voltage, resistance, and tested continuity. In Lesson 12, you even measured current! But today, we go ALL IN. This is the MASTER CLASS. By the end of this lesson, you will confidently use ALL FOUR superpowers of your Wand, know every safety rule by heart, and be ready to diagnose ANY circuit problem. Get ready to earn the most powerful badge yet: <strong>Multimeter Master</strong>!</p>
+<hr>
+<h2 id="learning-objectives" style="background:#4ECDC4;">Learning Objectives</h2>
+<p>By the end of this lesson, you will be able to:</p>
+<ul>
+<li>Use all four multimeter modes: DC Voltage, DC Current, Resistance, and Continuity</li>
+<li>Know every safety rule for each mode</li>
+<li>Read the multimeter display correctly in every mode (units, decimals, OL)</li>
+<li>Diagnose common circuit problems using the right mode</li>
+<li>Choose the correct mode for any measurement situation</li>
+<li>Pass the Multimeter Master challenge</li>
+</ul>
+<hr>
+<h2 id="what-you-need" style="background:#45B7D1;">What You Need</h2>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Item</th>
+<th>Qty</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Digital multimeter (Magic Measurement Wand)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>9V battery + clip</td>
+<td>1</td>
+</tr>
+<tr>
+<td>AA battery</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Breadboard</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Resistors: 100-ohm, 330-ohm, 1k-ohm, 4.7k-ohm, 10k-ohm</td>
+<td>1 each</td>
+</tr>
+<tr>
+<td>LEDs: red, green</td>
+<td>1 each</td>
+</tr>
+<tr>
+<td>Push button</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Jumper wires</td>
+<td>8</td>
+</tr>
+<tr>
+<td>Alligator clip wires</td>
+<td>2</td>
+</tr>
+<tr>
+<td>A piece of wire (known good)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>A broken wire or cut jumper (for testing)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Paper + pencil</td>
+<td>1 set</td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="how-to-teach-this-lesson" style="background:#96CEB4;">How to Teach This Lesson</h2>
+<h3 id="step-1-hook-the-four-superpowers-poster-5-min" style="border-left-color:#45B7D1; color:#45B7D1;">Step 1: Hook &mdash; The Four Superpowers Poster (5 min)</h3>
+<blockquote><p>"You have been using your Wand for a while now. But do you really know ALL of its powers? Today, let us put them ALL on one poster and become TRUE masters."</p></blockquote>
+<p>Draw (or print) the Four Superpowers Poster together:</p>
+<pre><code>  =====================================================
+   THE FOUR SUPERPOWERS OF THE MAGIC MEASUREMENT WAND
+  =====================================================
+
+  1. DC VOLTAGE (V with straight line)
+     What: Measures electrical &quot;push&quot; in Volts
+     Probes: RED in V/ohm, BLACK in COM
+     Connect: ACROSS the component (in PARALLEL)
+     Think: &quot;How hard is the battery pushing here?&quot;
+
+  2. DC CURRENT (A with straight line)
+     What: Measures electrical &quot;flow&quot; in Amps or milliamps
+     Probes: RED in mA or A jack, BLACK in COM
+     Connect: IN SERIES -- break the circuit, insert Wand
+     Think: &quot;How much electricity is actually flowing?&quot;
+
+  3. RESISTANCE (horseshoe symbol -- ohms)
+     What: Measures how much something blocks flow, in Ohms
+     Probes: RED in V/ohm, BLACK in COM
+     Connect: ACROSS the component (power OFF!)
+     Think: &quot;How much does this block electricity?&quot;
+
+  4. CONTINUITY (speaker/sound wave symbol)
+     What: Tests if electricity can flow through -- BEEPS if yes
+     Probes: RED in V/ohm, BLACK in COM
+     Connect: ACROSS the path (power OFF!)
+     Think: &quot;Is this path connected or broken?&quot;
+
+  =====================================================</code></pre>
+<blockquote><p>"Cut this out and tape it next to your workspace. It is your Wand cheat sheet!"</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+20 XP</span> for creating the Four Superpowers Poster!</strong></p>
+<hr>
+<h3 id="step-2-superpower-1-deep-dive-dc-voltage-8-min" style="border-left-color:#96CEB4; color:#96CEB4;">Step 2: Superpower 1 Deep Dive &mdash; DC Voltage (8 min)</h3>
+<blockquote><p>"You have measured voltage before. But let us go deeper."</p></blockquote>
+<p><strong>Setup rules:</strong></p>
+<ul>
+<li>RED probe in <strong>V/ohm</strong> jack</li>
+<li>BLACK probe in <strong>COM</strong> jack</li>
+<li>Dial to <strong>DCV</strong> (DC Volts)</li>
+<li>Connect probes <strong>ACROSS</strong> (in parallel with) the component</li>
+</ul>
+<p><strong>Range selection:</strong></p>
+<pre><code>  If your Wand has manual ranges:
+  +------------------+-------------------+
+  | Range Setting     | Measures Up To    |
+  +------------------+-------------------+
+  | 200 mV           | 0.200 Volts       |
+  | 2V               | 2.000 Volts       |
+  | 20V              | 20.00 Volts       |
+  | 200V             | 200.0 Volts       |
+  +------------------+-------------------+
+
+  Rule: Always pick the SMALLEST range that is BIGGER than what you expect.
+  For a 9V battery: use 20V range.
+  For an LED voltage drop (about 2V): use 20V range.
+  If auto-range: the Wand picks for you!</code></pre>
+<p><strong>Advanced technique &mdash; Measuring voltage drops in a circuit:</strong></p>
+<p>Build a simple circuit: 9V &mdash; 330-ohm resistor &mdash; red LED &mdash; GND.</p>
+<pre><code>  Measurement A: Battery voltage
+  Red probe on + rail, black on - rail --&gt; about 9V
+
+  Measurement B: Across the resistor
+  Red probe on + side of resistor, black on - side --&gt; about 7V
+
+  Measurement C: Across the LED
+  Red probe on anode, black on cathode --&gt; about 2V
+
+  Check: 7V + 2V = 9V  (Kirchhoff&#x27;s Voltage Law!)</code></pre>
+<p><strong>What does a NEGATIVE reading mean?</strong></p>
+<blockquote><p>"If the display shows -7.2V instead of 7.2V, your probes are just backwards! Swap red and black. The Wand is not broken &mdash; it is telling you which side is more positive."</p></blockquote>
+<p><strong>What does OL mean?</strong></p>
+<blockquote><p>"OL means 'Over Limit' &mdash; the voltage is bigger than your selected range. Switch to a higher range."</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+20 XP</span> for measuring all three points and proving they add up!</strong></p>
+<hr>
+<h3 id="step-3-superpower-2-deep-dive-dc-current-10-min" style="border-left-color:#FF6B35; color:#FF6B35;">Step 3: Superpower 2 Deep Dive &mdash; DC Current (10 min)</h3>
+<blockquote><p>"Current measurement is the TRICKIEST superpower. It is the one that can blow a fuse if done wrong. Let us master it!"</p></blockquote>
+<p><strong>THE GOLDEN RULES OF CURRENT MEASUREMENT:</strong></p>
+<pre><code>  ================================================================
+   AMMETER GOLDEN RULES (memorize these!)
+  ================================================================
+
+  1. Move RED probe to the mA or A jack (NOT V/ohm!)
+  2. BREAK the circuit where you want to measure
+  3. Insert the Wand INTO the break (Wand becomes part of the circuit)
+  4. The Wand must be IN SERIES with the path
+  5. NEVER connect ammeter probes directly across a battery or power supply
+  6. Start on the HIGHEST range first (10A), then go lower for accuracy
+  7. When done, MOVE THE RED PROBE BACK to V/ohm!
+
+  ================================================================</code></pre>
+<blockquote><p>"Rule 7 is sneaky. Many people forget to move the probe back after measuring current. Then they try to measure voltage with the probe still in the A jack, and nothing works &mdash; or worse, they short something out."</p></blockquote>
+<p><strong>Practice measurement:</strong></p>
+<p>Use the same circuit (9V &mdash; 330 ohm &mdash; red LED &mdash; GND).</p>
+<pre><code>  TO MEASURE CURRENT:
+
+  Step 1: Disconnect the jumper wire between the resistor and the LED
+  Step 2: Move RED probe to mA jack
+  Step 3: Set dial to DCA (DC Amps) -- mA range
+  Step 4: Touch RED probe to the wire coming from the resistor
+  Step 5: Touch BLACK probe to the LED&#x27;s anode
+  Step 6: Read the current -- should be about 20 mA
+
+  Step 7: IMPORTANT -- move RED probe back to V/ohm when done!</code></pre>
+<blockquote><p>"You just measured 20 mA flowing through the circuit. That is 20 thousandths of an Amp. Tiny, but enough to make the LED glow!"</p></blockquote>
+<p><strong>Verify with Ohm's Law:</strong></p>
+<pre><code>  I = V_resistor / R = 7V / 330 = 21.2 mA
+  Wand reads about 20 mA -- close enough!</code></pre>
+<p><strong>What if the Wand reads 0 in current mode?</strong></p>
+<blockquote><p>"Three possible reasons:" 1. Red probe is still in the V/ohm jack (most common mistake!) 2. The circuit is broken somewhere else 3. The fuse inside the Wand is blown</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+30 XP</span> for correctly measuring current and verifying with Ohm's Law!</strong></p>
+<hr>
+<h3 id="step-4-superpower-3-deep-dive-resistance-8-min" style="border-left-color:#4ECDC4; color:#4ECDC4;">Step 4: Superpower 3 Deep Dive &mdash; Resistance (8 min)</h3>
+<blockquote><p>"You have measured resistors before. But let us learn the tricks and traps."</p></blockquote>
+<p><strong>Setup rules:</strong></p>
+<ul>
+<li>RED probe in <strong>V/ohm</strong> jack</li>
+<li>BLACK probe in <strong>COM</strong> jack</li>
+<li>Dial to <strong>ohm</strong> symbol (horseshoe)</li>
+<li><strong>POWER MUST BE OFF</strong> &mdash; disconnect the battery first!</li>
+</ul>
+<blockquote><p>"Why must power be off? Because the Wand sends its own tiny current through the component to measure resistance. If the battery is also pushing current, the reading will be wrong or you could damage the Wand."</p></blockquote>
+<p><strong>Range selection for manual-range meters:</strong></p>
+<pre><code>  +------------------+-------------------+
+  | Range Setting     | Measures Up To    |
+  +------------------+-------------------+
+  | 200 ohm          | 200 ohms          |
+  | 2k ohm           | 2,000 ohms        |
+  | 20k ohm          | 20,000 ohms       |
+  | 200k ohm         | 200,000 ohms      |
+  | 2M ohm           | 2,000,000 ohms    |
+  +------------------+-------------------+</code></pre>
+<p><strong>Advanced technique &mdash; In-circuit vs. out-of-circuit measurement:</strong></p>
+<blockquote><p>"For the most accurate reading, remove the component from the circuit before measuring. If other components are still connected, they can create parallel paths that change the reading."</p></blockquote>
+<p><strong>Activity &mdash; Measure all 5 resistors:</strong></p>
+<pre><code>| Color Code Says | Wand Reads | Difference | Within 5%? |
+|----------------|-----------|-----------|-----------|
+| 100 ohm        |           |           |           |
+| 330 ohm        |           |           |           |
+| 1k ohm         |           |           |           |
+| 4.7k ohm       |           |           |           |
+| 10k ohm        |           |           |           |</code></pre>
+<blockquote><p>"If the Wand reading is within 5% of the color code value, the resistor is perfectly fine. A 1k-ohm resistor reading 970 ohms? Totally normal!"</p></blockquote>
+<p><strong>Fun extra &mdash; Measure your body resistance:</strong></p>
+<pre><code>  Hold one probe in each hand:
+  Dry hands: _____ ohms (probably 500k--2M)
+  Slightly damp: _____ ohms (lower!)
+  Squeezing tight: _____ ohms (even lower -- more contact area!)</code></pre>
+<p><strong>Award: <span class="xp-badge">+20 XP</span> for measuring all 5 resistors and checking tolerance!</strong></p>
+<hr>
+<h3 id="step-5-superpower-4-deep-dive-continuity-8-min" style="border-left-color:#C678B0; color:#C678B0;">Step 5: Superpower 4 Deep Dive &mdash; Continuity (8 min)</h3>
+<blockquote><p>"Continuity is the detective superpower. It answers one simple question: CAN electricity flow through this path?"</p></blockquote>
+<p><strong>Setup rules:</strong></p>
+<ul>
+<li>RED probe in <strong>V/ohm</strong> jack</li>
+<li>BLACK probe in <strong>COM</strong> jack</li>
+<li>Dial to <strong>continuity</strong> symbol (speaker/sound wave)</li>
+<li><strong>POWER MUST BE OFF!</strong></li>
+</ul>
+<p><strong>How it works internally:</strong></p>
+<blockquote><p>"When you select continuity, the Wand sends a tiny test current through the probes. If the resistance between the probes is very low (usually under 50 ohms), the Wand beeps. If the resistance is high, no beep."</p></blockquote>
+<p><strong>When to use continuity:</strong></p>
+<pre><code>  USE CONTINUITY TO CHECK:
+  +-------------------------------------------------+
+  | Is this wire broken inside?                     | Touch both ends -- beep = good wire
+  | Is this solder joint connected?                 | Touch both sides of joint
+  | Did I plug into the right breadboard row?       | Touch component leg and wire
+  | Is this fuse blown?                             | Touch both ends -- no beep = blown
+  | Are these two points connected somehow?         | Touch them -- beep = connected path
+  +-------------------------------------------------+</code></pre>
+<p><strong>Activity &mdash; The Continuity Obstacle Course:</strong></p>
+<p>Lay out a circuit on the breadboard (battery DISCONNECTED):</p>
+<pre><code>  Row 3: jumper wire from + rail to row 3
+  Row 3-5: resistor from row 3 to row 5
+  Row 5-7: jumper wire from row 5 to row 7
+  Row 7: open (nothing connects further)</code></pre>
+<blockquote><p>"Use continuity to trace the path, step by step:"</p></blockquote>
+<pre><code>| Test | From | To | Beep? | Why? |
+|------|------|-----|-------|------|
+| 1 | + rail | row 3 col a | | Jumper wire connects them |
+| 2 | row 3 col a | row 3 col d | | Same row, same side |
+| 3 | row 3 col a | row 5 col a | | Resistor connects them |
+| 4 | row 5 col a | row 7 col a | | Jumper wire connects them |
+| 5 | + rail | row 7 col a | | Entire path is connected! |
+| 6 | row 7 col a | - rail | | Nothing connects -- no beep! |</code></pre>
+<blockquote><p>"You just traced an electrical path from start to finish, like following a treasure map!"</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+20 XP</span> for completing the continuity obstacle course!</strong></p>
+<hr>
+<h3 id="step-6-the-safety-rulebook-5-min" style="border-left-color:#E8A838; color:#E8A838;">Step 6: The Safety Rulebook (5 min)</h3>
+<blockquote><p>"Every Multimeter Master must know the safety rules. Let us compile the COMPLETE rulebook."</p></blockquote>
+<pre><code>  ================================================================
+   THE COMPLETE MULTIMETER SAFETY RULEBOOK
+  ================================================================
+
+  GENERAL RULES:
+  1. NEVER measure wall outlets or mains electricity (100V+)
+  2. Always check which JACK the red probe is in before measuring
+  3. Start on the HIGHEST range and work down
+  4. If the display shows OL, switch to a higher range
+
+  VOLTAGE RULES:
+  5. Red probe in V/ohm jack
+  6. Connect ACROSS the component (parallel)
+  7. It is safe to measure voltage with the circuit powered on
+
+  CURRENT RULES:
+  8. Red probe in mA or A jack (NOT V/ohm!)
+  9. Connect IN SERIES -- break the circuit, insert Wand
+  10. NEVER connect ammeter directly across battery (short circuit!)
+  11. Start on the 10A range, switch to mA for accuracy
+  12. Move red probe BACK to V/ohm when finished
+
+  RESISTANCE RULES:
+  13. Power OFF before measuring resistance
+  14. Disconnect or isolate the component for best accuracy
+  15. Red probe in V/ohm jack
+
+  CONTINUITY RULES:
+  16. Power OFF before testing continuity
+  17. Use to trace paths, check wires, and find breaks
+  18. BEEP = connected, NO BEEP = broken or insulated
+
+  ================================================================</code></pre>
+<p><strong>Safety quiz (rapid fire):</strong></p>
+<blockquote><p>"Quick &mdash; which jack for voltage?" (V/ohm!) "Which jack for current?" (mA or A!) "Can you measure resistance with the battery connected?" (NO!) "Can you measure voltage with the battery connected?" (YES!) "What does OL mean?" (Over Limit &mdash; switch to higher range!)</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+20 XP</span> for answering at least 4 out of 5 safety questions correctly!</strong></p>
+<hr>
+<h3 id="step-7-the-multimeter-master-challenge-8-min" style="border-left-color:#E05C5C; color:#E05C5C;">Step 7: The Multimeter Master Challenge (8 min)</h3>
+<blockquote><p>"Final challenge! I am going to set up a circuit with THREE problems. You must find ALL of them using your Wand. Ready?"</p></blockquote>
+<p><strong>Setup (instructor prepares in advance):</strong></p>
+<p>Build this circuit, but intentionally include these bugs:</p>
+<ol>
+<li>One LED is reversed (will not light)</li>
+<li>One wire is not fully seated in the breadboard (loose connection)</li>
+<li>A resistor has been swapped for a much larger value (LED very dim)</li>
+</ol>
+<pre><code>  Circuit: 9V -- 330 ohm -- LED 1 -- LED 2 -- GND
+  (series circuit with 2 LEDs and a resistor)
+
+  Bug 1: LED 2 is reversed
+  Bug 2: One jumper wire is barely touching (intermittent)
+  Bug 3: 330-ohm resistor replaced with 47k-ohm resistor</code></pre>
+<p><strong>Debugging steps for the child:</strong></p>
+<ol>
+<li><strong>Observation:</strong> "What do you see? Both LEDs off? One dim?"</li>
+<li><strong>Voltage mode:</strong> Measure battery (should be 9V). Measure across each component.</li>
+<li><strong>Continuity mode:</strong> Turn off power. Test each connection.</li>
+<li><strong>Resistance mode:</strong> Measure the resistor. Is it really 330 ohms?</li>
+<li><strong>Fix and retest!</strong></li>
+</ol>
+<p><strong>Debugging journal:</strong></p>
+<pre><code>| Bug Found | Wand Mode Used | How I Found It | How I Fixed It |
+|-----------|---------------|---------------|---------------|
+| 1.        |               |               |               |
+| 2.        |               |               |               |
+| 3.        |               |               |               |</code></pre>
+<blockquote><p>"You just debugged a circuit like a professional electronics engineer! Every bug was found using a different Wand superpower."</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+50 XP</span> for finding and fixing all three bugs!</strong></p>
+<hr>
+<h2 id="quick-quiz-earn-bonus-xp" style="background:#E8A838;">Quick Quiz &mdash; Earn Bonus XP!</h2>
+<p><strong>Question 1:</strong> You want to measure how much current flows through an LED. Where does the red probe go?</p>
+<ul>
+<li>A) The V/ohm jack</li>
+<li>B) The mA or A jack</li>
+<li>C) The COM jack</li>
+</ul>
+<p><strong>(Correct: B &mdash; current measurement uses the mA or A jack! &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<p><strong>Question 2:</strong> You are measuring resistance. The display shows OL. What does that mean?</p>
+<ul>
+<li>A) The resistor is broken</li>
+<li>B) The Wand is broken</li>
+<li>C) The resistance is higher than the current range setting &mdash; switch to a higher range</li>
+</ul>
+<p><strong>(Correct: C &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<p><strong>Question 3:</strong> You want to check if a wire is broken inside its insulation. Which Wand mode should you use?</p>
+<ul>
+<li>A) DC Voltage</li>
+<li>B) Continuity (the beep test)</li>
+<li>C) DC Current</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<p><strong>Question 4:</strong> What is the ONE thing you must do before measuring resistance or continuity?</p>
+<ul>
+<li>A) Turn on the circuit</li>
+<li>B) Move the red probe to the A jack</li>
+<li>C) Turn OFF the power &mdash; disconnect the battery</li>
+</ul>
+<p><strong>(Correct: C &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<hr>
+<h2 id="lesson-14-complete" style="background:#C678B0;">Lesson 14 Complete!</h2>
+<pre><code>  =============================================
+
+     MULTIMETER MASTER BADGE UNLOCKED!
+
+     This is one of the most important badges
+     in the entire course!
+
+     Skills unlocked:
+     [check] DC Voltage -- measure push, check drops
+     [check] DC Current -- measure flow in series
+     [check] Resistance -- verify components
+     [check] Continuity -- trace paths and find breaks
+     [check] Know ALL safety rules by heart
+     [check] Debugged a circuit using multiple modes
+
+  =============================================</code></pre>
+<p><strong>XP Breakdown:</strong></p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Activity</th>
+<th>XP</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Four Superpowers Poster</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Voltage deep dive (3 measurements)</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Current deep dive (measure + verify)</td>
+<td>30</td>
+</tr>
+<tr>
+<td>Resistance deep dive (5 resistors)</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Continuity obstacle course</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Safety quiz (4/5 correct)</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Master Challenge (3 bugs)</td>
+<td>50</td>
+</tr>
+<tr>
+<td>Quiz (4 questions)</td>
+<td>80</td>
+</tr>
+<tr>
+<td><strong>TOTAL POSSIBLE</strong></td>
+<td><strong>260</strong></td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="coming-up-next" style="background:#E05C5C;">Coming Up Next...</h2>
+<p>In <strong>Lesson 15</strong>, we explore <strong>power sources</strong> &mdash; batteries of all shapes and sizes! You will measure 9V, AA, AAA, and coin cells. You will discover what happens when you wire batteries in SERIES (voltage adds up!) and in PARALLEL (capacity adds up!). Your Magic Measurement Wand will test them all!</p>
+<hr>
+<h2 id="troubleshooting" style="background:#FF6B35;">Troubleshooting</h2>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Problem</th>
+<th>Likely Cause</th>
+<th>Fix</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Wand reads 0 in current mode</td>
+<td>Red probe in wrong jack</td>
+<td>Move red probe to mA or A jack</td>
+</tr>
+<tr>
+<td>Wand fuse blown (reads 0 in mA mode)</td>
+<td>Ammeter was connected across power source</td>
+<td>Open Wand back, replace fuse (usually a small glass fuse)</td>
+</tr>
+<tr>
+<td>Resistance reads OL for a known-good resistor</td>
+<td>Range too low</td>
+<td>Switch to a higher range (2k, 20k, etc.)</td>
+</tr>
+<tr>
+<td>Continuity does not beep even on a wire</td>
+<td>Probes not in right jacks, or dead Wand battery</td>
+<td>Check probe jacks; replace Wand battery if display is dim</td>
+</tr>
+<tr>
+<td>Voltage readings fluctuate wildly</td>
+<td>Loose connections or electrical noise</td>
+<td>Press probes firmly; check breadboard connections</td>
+</tr>
+<tr>
+<td>Negative voltage reading</td>
+<td>Probes are reversed</td>
+<td>Swap red and black probes</td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="parentinstructor-notes" style="background:#4ECDC4;">Parent/Instructor Notes</h2>
+<ul>
+<li>This lesson consolidates everything about the multimeter into one reference. Encourage the child to <strong>keep the Four Superpowers Poster</strong> permanently at their workspace.</li>
+<li><strong>The Master Challenge (Step 7) is the key learning moment.</strong> Setting up a buggy circuit for the child to debug is extremely powerful. Resist the urge to give hints too quickly &mdash; let them work through the modes.</li>
+<li>If your multimeter has an <strong>AC voltage</strong> mode, briefly mention it exists for measuring wall power (which grown-ups do), but it is not for us to use. Our circuits use DC (direct current) from batteries.</li>
+<li><strong>Ages 6&mdash;8:</strong> Focus on continuity (beep test) and voltage. These are the safest and most intuitive. Current measurement can be done together with close supervision.</li>
+<li><strong>Ages 9&mdash;12:</strong> This is their chance to become truly independent with the multimeter. After this lesson, they should be able to pick up the Wand and diagnose any basic circuit issue without adult help.</li>
+<li>Consider having the child teach a sibling or parent how to use the multimeter. Teaching solidifies mastery.</li>
+<li>The safety rulebook should be reviewed at the start of EVERY session going forward. Make it a ritual: "Before we start &mdash; red probe is in which jack?"</li>
+</ul>
+    </main>
+
+    <!-- Footer -->
+    <footer class="page-footer">
+        <span>Lesson 14: Using a Multimeter -- The Deep Dive</span>
+        <span>Module 2: Building Simple Circuits</span>
+    </footer>
+
+</body>
+</html>

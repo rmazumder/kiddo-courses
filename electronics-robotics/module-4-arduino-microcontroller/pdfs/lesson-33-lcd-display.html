@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 33: LCD Display (16x2) -- Give Your Arduino a Screen</title>
+    <style>
+
+        /* -- Reset & Base -- */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            line-height: 1.75;
+            color: #2C3E50;
+            background: #FAFAFA;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px 40px;
+        }
+
+        /* -- Header Banner -- */
+        .lesson-header {
+            background: linear-gradient(135deg, #2980B9 0%, #3498DB 50%, #5DADE2 100%);
+            color: #fff;
+            border-radius: 16px;
+            padding: 32px 36px 28px;
+            margin: 24px 0 32px;
+            box-shadow: 0 6px 20px rgba(41,128,185,0.35);
+            position: relative;
+            overflow: hidden;
+        }
+        .lesson-header::before {
+            content: "";
+            position: absolute;
+            top: -40px; right: -40px;
+            width: 160px; height: 160px;
+            background: rgba(255,255,255,0.12);
+            border-radius: 50%;
+        }
+        .lesson-header::after {
+            content: "";
+            position: absolute;
+            bottom: -30px; left: -20px;
+            width: 100px; height: 100px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+        }
+        .lesson-header h1 {
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            position: relative;
+            z-index: 1;
+        }
+        .module-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.25);
+            border: 2px solid rgba(255,255,255,0.6);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 4px 14px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 1;
+        }
+        .meta-row {
+            margin-top: 12px;
+            font-size: 14px;
+            color: rgba(255,255,255,0.9);
+            position: relative;
+            z-index: 1;
+        }
+        .meta-pill {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            border-radius: 12px;
+            padding: 2px 10px;
+            margin: 2px 4px 2px 0;
+            white-space: nowrap;
+        }
+
+        /* -- Section Headings -- */
+        h2 {
+            font-size: 22px;
+            font-weight: 800;
+            margin: 36px 0 14px;
+            padding: 10px 18px;
+            border-radius: 10px;
+            color: #fff;
+        }
+        h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 28px 0 10px;
+            padding: 8px 14px;
+            border-left: 5px solid;
+            border-radius: 0 8px 8px 0;
+            background: rgba(0,0,0,0.03);
+        }
+
+        /* -- Body Text -- */
+        p { margin: 10px 0; }
+        strong { font-weight: 700; color: #1A252F; }
+        em { font-style: italic; color: #5D6D7E; }
+
+        /* -- Inline Code -- */
+        code {
+            background: #F0F3F7;
+            border: 1px solid #D5DCE8;
+            border-radius: 4px;
+            padding: 1px 6px;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 14px;
+            color: #C0392B;
+        }
+
+        /* -- Fenced Code Blocks -- */
+        pre {
+            background: #F4F6F8;
+            border: 1px solid #D0D8E4;
+            border-left: 5px solid #2980B9;
+            border-radius: 8px;
+            padding: 16px 18px;
+            overflow-x: auto;
+            margin: 16px 0;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #2C3E50;
+            white-space: pre;
+        }
+        pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            font-size: inherit;
+            color: inherit;
+        }
+
+        /* -- Blockquotes / Callout Boxes -- */
+        blockquote {
+            background: #FFF8E7;
+            border-left: 6px solid #2980B9;
+            border-radius: 0 12px 12px 0;
+            padding: 14px 20px;
+            margin: 16px 0;
+            color: #5D3A1A;
+            font-style: normal;
+            position: relative;
+        }
+        blockquote::before {
+            content: "\1F4AC";
+            position: absolute;
+            top: -10px; left: 10px;
+            font-size: 20px;
+            line-height: 1;
+        }
+        blockquote p { margin: 6px 0; }
+
+        /* -- Lists -- */
+        ul, ol {
+            margin: 10px 0 10px 24px;
+            padding-left: 8px;
+        }
+        li { margin: 5px 0; }
+        ul li::marker { color: #2980B9; font-size: 18px; }
+        ol li::marker { color: #2980B9; font-weight: 700; }
+
+        /* -- Tables -- */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 16px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+        }
+        thead th {
+            background: #2980B9;
+            color: #fff;
+            font-weight: 700;
+            padding: 11px 14px;
+            text-align: left;
+            border-bottom: 3px solid #1F6DA0;
+        }
+        thead th:first-child { border-radius: 10px 0 0 0; }
+        thead th:last-child  { border-radius: 0 10px 0 0; }
+        tbody tr:nth-child(odd)  td { background: #F0F8FF; }
+        tbody tr:nth-child(even) td { background: #E1F0FA; }
+        tbody tr:hover td { background: #C8E6F8; transition: background 0.15s; }
+        td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #C8E6F8;
+            vertical-align: top;
+        }
+        td .checkbox {
+            display: inline-block;
+            width: 18px; height: 18px;
+            border: 2px solid #2980B9;
+            border-radius: 4px;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+
+        /* -- XP Badges -- */
+        .xp-badge {
+            display: inline-block;
+            background: #FFEAA7;
+            border: 2px solid #F39C12;
+            color: #7D4F00;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin: 2px 4px;
+            white-space: nowrap;
+        }
+        .award-badge {
+            display: inline-block;
+            background: #D5F5E3;
+            border: 2px solid #27AE60;
+            color: #1A5E35;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin: 2px 4px;
+            white-space: nowrap;
+        }
+
+        /* -- Horizontal Rule -- */
+        hr {
+            border: none;
+            border-top: 3px dashed #A8D8EA;
+            margin: 30px 0;
+        }
+
+        /* -- Footer -- */
+        .page-footer {
+            margin-top: 48px;
+            padding-top: 16px;
+            border-top: 2px solid #D5DCE8;
+            text-align: center;
+            font-size: 13px;
+            color: #7F8C8D;
+        }
+
+        /* -- Print Styles -- */
+        @media print {
+            @page { size: A4; margin: 18mm 15mm 20mm; }
+
+            body {
+                background: #fff !important;
+                font-size: 13px;
+                max-width: 100%;
+                padding: 0;
+            }
+
+            * { -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important; }
+
+            h2 { page-break-before: auto; break-before: auto; }
+            pre, blockquote, table { page-break-inside: avoid; }
+            h2, h3 { page-break-after: avoid; break-after: avoid; }
+            tr { page-break-inside: avoid; }
+
+            p { orphans: 3; widows: 3; }
+
+            .lesson-header { box-shadow: none; }
+
+            .page-footer {
+                position: fixed;
+                bottom: 0; left: 0; right: 0;
+                background: #fff;
+                border-top: 1px solid #ccc;
+                padding: 6px 15mm;
+                display: flex;
+                justify-content: space-between;
+            }
+        }
+    
+    </style>
+</head>
+<body>
+
+    <!-- Header Banner -->
+    <header class="lesson-header">
+        <div class="module-badge">Module 4 -- Arduino Microcontroller</div>
+        <h1>Lesson 33: LCD Display (16x2) -- Give Your Arduino a Screen</h1>
+        <div class="meta-row"><span class="meta-pill">&#9733; Star-3 Intermediate</span><span class="meta-pill">&#9200; 45--50 minutes</span><span class="meta-pill">&#128100; Age 6--12 years</span><span class="meta-pill xp-badge" style="background:#FFEAA7;color:#7D4F00;border:none;">&#9889; 250 XP</span></div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+<hr>
+<h2 id="your-mission-today" style="background:#FF6B35;">Your Mission Today</h2>
+<p>Circuit Explorer, your Arduino has been talking to you through the Serial Monitor on your computer. But what if the Arduino is not plugged into a computer? It needs its OWN screen! Today you will connect a <strong>16x2 LCD display</strong> &mdash; a tiny screen that can show 2 rows of 16 characters each. By the end, your Arduino will display messages, show sensor readings, and even run a countdown timer. This is how real gadgets display information!</p>
+<hr>
+<h2 id="learning-objectives" style="background:#4ECDC4;">Learning Objectives</h2>
+<p>By the end of this lesson, you will be able to:</p>
+<ul>
+<li>Understand what an LCD is and how the I2C adapter simplifies wiring</li>
+<li>Wire a 16x2 LCD to the Arduino using I2C (just 4 wires!)</li>
+<li>Install and use the LiquidCrystal_I2C library</li>
+<li>Display text, numbers, and variables on the LCD</li>
+<li>Build a live countdown timer on the display</li>
+</ul>
+<hr>
+<h2 id="what-you-need" style="background:#45B7D1;">What You Need</h2>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Item</th>
+<th>Qty</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Arduino Uno + USB cable</td>
+<td>1</td>
+</tr>
+<tr>
+<td>16x2 LCD display with I2C backpack</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Jumper wires (female-to-male)</td>
+<td>4</td>
+</tr>
+<tr>
+<td>10k-ohm potentiometer (optional, for non-I2C)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Multimeter (Magic Measurement Wand!)</td>
+<td>1</td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="how-to-teach-this-lesson" style="background:#96CEB4;">How to Teach This Lesson</h2>
+<h3 id="step-1-hook-screens-are-everywhere-3-min" style="border-left-color:#45B7D1; color:#45B7D1;">Step 1: Hook &mdash; Screens Are Everywhere (3 min)</h3>
+<blockquote><p>"Look around you. How many screens can you see? TV, phone, tablet, microwave clock, car dashboard... Screens are EVERYWHERE in electronics. Today your Arduino gets one too!"</p></blockquote>
+<p><strong>LCD stands for Liquid Crystal Display.</strong> These are the simplest screens:</p>
+<ul>
+<li><strong>16x2</strong> means 16 characters wide, 2 rows tall</li>
+<li>That is 32 characters total &mdash; enough for short messages, numbers, and readings</li>
+<li>They use very little power and are easy to read</li>
+</ul>
+<blockquote><p>"It is not a fancy touchscreen, but it is powerful enough to show temperature, time, scores, menus, and more!"</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+10 XP</span> for understanding what an LCD is!</strong></p>
+<hr>
+<h3 id="step-2-the-i2c-shortcut-5-min" style="border-left-color:#96CEB4; color:#96CEB4;">Step 2: The I2C Shortcut (5 min)</h3>
+<p><strong>The Problem:</strong></p>
+<blockquote><p>"A raw LCD needs 12+ wires to connect to Arduino. That is a LOT of wiring and uses up many pins."</p></blockquote>
+<p><strong>The Solution &mdash; I2C Adapter:</strong></p>
+<blockquote><p>"The I2C backpack is a tiny board soldered to the back of the LCD. It converts those 12+ connections into just 4 wires. I2C is a communication protocol &mdash; a language that lets devices talk over just 2 data wires."</p></blockquote>
+<p><strong>The 4 Wires:</strong></p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>LCD I2C Pin</th>
+<th>Arduino Pin</th>
+<th>What It Does</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>VCC</td>
+<td>5V</td>
+<td>Power</td>
+</tr>
+<tr>
+<td>GND</td>
+<td>GND</td>
+<td>Ground</td>
+</tr>
+<tr>
+<td>SDA</td>
+<td>A4</td>
+<td>Data line</td>
+</tr>
+<tr>
+<td>SCL</td>
+<td>A5</td>
+<td>Clock line</td>
+</tr>
+</tbody></table></div>
+<blockquote><p>"SDA carries the data. SCL is the clock that keeps everything synchronized. Together they let the Arduino send instructions to the LCD."</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+10 XP</span> for understanding I2C!</strong></p>
+<hr>
+<h3 id="step-3-wire-the-lcd-5-min" style="border-left-color:#FF6B35; color:#FF6B35;">Step 3: Wire the LCD (5 min)</h3>
+<p><strong>Wiring Diagram:</strong></p>
+<pre><code>  Arduino Uno                    LCD (I2C backpack)
+  +---------+                    +----------+
+  | 5V      |----[wire]--------&gt;| VCC      |
+  | GND     |----[wire]--------&gt;| GND      |
+  | A4 (SDA)|----[wire]--------&gt;| SDA      |
+  | A5 (SCL)|----[wire]--------&gt;| SCL      |
+  +---------+                    +----------+
+
+  Just 4 wires! That is the beauty of I2C.</code></pre>
+<p><strong>Steps:</strong></p>
+<ol>
+<li>Connect <strong>LCD VCC</strong> to <strong>Arduino 5V</strong></li>
+<li>Connect <strong>LCD GND</strong> to <strong>Arduino GND</strong></li>
+<li>Connect <strong>LCD SDA</strong> to <strong>Arduino A4</strong></li>
+<li>Connect <strong>LCD SCL</strong> to <strong>Arduino A5</strong></li>
+</ol>
+<blockquote><p>"That is it! Four wires. Compare that to 12+ wires without the I2C backpack. This is why engineers love I2C."</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+20 XP</span> for wiring the LCD!</strong></p>
+<hr>
+<h3 id="step-4-install-the-library-5-min" style="border-left-color:#4ECDC4; color:#4ECDC4;">Step 4: Install the Library (5 min)</h3>
+<p>The Arduino IDE needs a special <strong>library</strong> to talk to the I2C LCD.</p>
+<blockquote><p>"A library is like a recipe book for the Arduino. Instead of writing hundreds of lines of code to control the LCD, someone already wrote it and packaged it as a library. We just install it and use it!"</p></blockquote>
+<p><strong>Installation Steps:</strong></p>
+<ol>
+<li>In the Arduino IDE, go to <strong>Sketch &gt; Include Library &gt; Manage Libraries</strong></li>
+<li>In the search box, type <strong>LiquidCrystal I2C</strong></li>
+<li>Find <strong>LiquidCrystal I2C</strong> by Frank de Brabander (or similar)</li>
+<li>Click <strong>Install</strong></li>
+<li>Close the Library Manager</li>
+</ol>
+<p><strong>Award: <span class="xp-badge">+10 XP</span> for installing the library!</strong></p>
+<hr>
+<h3 id="step-5-hello-world-on-the-lcd-8-min" style="border-left-color:#C678B0; color:#C678B0;">Step 5: Hello World on the LCD (8 min)</h3>
+<p><strong>The Code:</strong></p>
+<pre><code>// Lesson 33: LCD Hello World
+
+#include &lt;LiquidCrystal_I2C.h&gt;
+
+// Create LCD object: address 0x27, 16 columns, 2 rows
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+
+void setup() {
+  lcd.init();         // Start up the LCD
+  lcd.backlight();    // Turn on the backlight
+
+  lcd.setCursor(0, 0);         // Column 0, Row 0 (top left)
+  lcd.print(&quot;Hello World!&quot;);
+
+  lcd.setCursor(0, 1);         // Column 0, Row 1 (bottom left)
+  lcd.print(&quot;Arduino Rocks!&quot;);
+}
+
+void loop() {
+  // Nothing here -- message stays on screen
+}</code></pre>
+<p><strong>Upload and look at the LCD!</strong></p>
+<pre><code>+------------------+
+| Hello World!     |  &lt;-- Row 0
+| Arduino Rocks!   |  &lt;-- Row 1
++------------------+</code></pre>
+<blockquote><p>"You just gave your Arduino its own screen! setCursor(column, row) tells the LCD WHERE to start writing. (0,0) is the top-left corner."</p></blockquote>
+<p><strong>If the screen is blank but backlit:</strong> Try address <code>0x3F</code> instead of <code>0x27</code>. Some LCDs use a different address.</p>
+<p><strong>Award: <span class="xp-badge">+20 XP</span> for displaying Hello World on the LCD!</strong></p>
+<hr>
+<h3 id="step-6-display-dynamic-data-8-min" style="border-left-color:#E8A838; color:#E8A838;">Step 6: Display Dynamic Data (8 min)</h3>
+<p><strong>Show a Counter:</strong></p>
+<pre><code>#include &lt;LiquidCrystal_I2C.h&gt;
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+
+int counter = 0;
+
+void setup() {
+  lcd.init();
+  lcd.backlight();
+  lcd.setCursor(0, 0);
+  lcd.print(&quot;Counter:&quot;);
+}
+
+void loop() {
+  counter = counter + 1;
+
+  lcd.setCursor(0, 1);     // Move to row 1
+  lcd.print(&quot;                &quot;);  // Clear the row (16 spaces)
+  lcd.setCursor(0, 1);
+  lcd.print(counter);
+
+  delay(1000);  // Count once per second
+}</code></pre>
+<p><strong>Show Potentiometer Reading:</strong></p>
+<pre><code>#include &lt;LiquidCrystal_I2C.h&gt;
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+
+void setup() {
+  lcd.init();
+  lcd.backlight();
+  lcd.setCursor(0, 0);
+  lcd.print(&quot;Pot Reader:&quot;);
+}
+
+void loop() {
+  int potValue = analogRead(A0);
+  float voltage = potValue * (5.0 / 1023.0);
+
+  lcd.setCursor(0, 1);
+  lcd.print(&quot;                &quot;);  // Clear row
+  lcd.setCursor(0, 1);
+  lcd.print(&quot;V=&quot;);
+  lcd.print(voltage, 2);
+  lcd.print(&quot;  R=&quot;);
+  lcd.print(potValue);
+
+  delay(200);
+}</code></pre>
+<blockquote><p>"Now the LCD shows live sensor data! Twist the potentiometer and watch the voltage change on the screen in real time. No computer needed!"</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+30 XP</span> for displaying live data on the LCD!</strong></p>
+<hr>
+<h3 id="step-7-countdown-timer-challenge-5-min" style="border-left-color:#E05C5C; color:#E05C5C;">Step 7: Countdown Timer Challenge (5 min)</h3>
+<pre><code>#include &lt;LiquidCrystal_I2C.h&gt;
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+
+void setup() {
+  lcd.init();
+  lcd.backlight();
+
+  for (int i = 10; i &gt;= 0; i--) {
+    lcd.clear();             // Clear entire screen
+    lcd.setCursor(3, 0);
+    lcd.print(&quot;COUNTDOWN!&quot;);
+    lcd.setCursor(7, 1);
+    lcd.print(i);
+    delay(1000);
+  }
+
+  lcd.clear();
+  lcd.setCursor(2, 0);
+  lcd.print(&quot;** LIFTOFF! **&quot;);
+  lcd.setCursor(3, 1);
+  lcd.print(&quot;We have GO!&quot;);
+}
+
+void loop() {
+  // Stays on the LIFTOFF message
+}</code></pre>
+<blockquote><p>"10... 9... 8... 7... 6... 5... 4... 3... 2... 1... LIFTOFF! You just built a real countdown display!"</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+20 XP</span> for the countdown timer!</strong></p>
+<hr>
+<h3 id="step-8-wand-check-lcd-power-verification-3-min" style="border-left-color:#45B7D1; color:#45B7D1;">Step 8: Wand Check &mdash; LCD Power Verification (3 min)</h3>
+<blockquote><p>"Let us verify that the LCD is getting proper power from the Arduino."</p></blockquote>
+<ol>
+<li>Set the Wand to <strong>DC Voltage</strong></li>
+<li>Measure between <strong>LCD VCC</strong> and <strong>LCD GND</strong> &mdash; should read ~5V</li>
+<li>If you want to check I2C lines: SDA and SCL should read close to 5V when idle (pulled high)</li>
+</ol>
+<p><strong>Award: <span class="xp-badge">+20 XP</span> for verifying LCD power!</strong></p>
+<hr>
+<h2 id="quick-quiz-earn-bonus-xp" style="background:#E8A838;">Quick Quiz &mdash; Earn Bonus XP!</h2>
+<p><strong>Question 1:</strong> What does "16x2" mean for an LCD?</p>
+<ul>
+<li>A) 16 pixels by 2 pixels</li>
+<li>B) 16 characters wide, 2 rows tall</li>
+<li>C) 16 volts, 2 amps</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<p><strong>Question 2:</strong> How many wires does the I2C LCD need?</p>
+<ul>
+<li>A) 12</li>
+<li>B) 4</li>
+<li>C) 8</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<p><strong>Question 3:</strong> What does <code>lcd.setCursor(5, 1)</code> do?</p>
+<ul>
+<li>A) Sets the brightness to 5</li>
+<li>B) Moves the cursor to column 5, row 1 (second row)</li>
+<li>C) Prints the number 51</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<hr>
+<h2 id="lesson-33-complete" style="background:#C678B0;">Lesson 33 Complete!</h2>
+<pre><code>  =============================================
+
+     DISPLAY COMMANDER BADGE UNLOCKED!
+
+     Skills unlocked:
+     [check] Wire an I2C LCD to Arduino
+     [check] Install and use a library
+     [check] Display text with lcd.print()
+     [check] Show live sensor data on screen
+     [check] Build a countdown timer display
+
+  =============================================</code></pre>
+<p><strong>XP Breakdown:</strong></p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Activity</th>
+<th>XP</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Hook &mdash; LCD concepts</td>
+<td>10</td>
+</tr>
+<tr>
+<td>I2C understanding</td>
+<td>10</td>
+</tr>
+<tr>
+<td>LCD wiring</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Library installation</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Hello World display</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Dynamic data display</td>
+<td>30</td>
+</tr>
+<tr>
+<td>Countdown timer</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Wand Check</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Quiz (3 questions)</td>
+<td>60</td>
+</tr>
+<tr>
+<td><strong>TOTAL POSSIBLE</strong></td>
+<td><strong>250</strong></td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="coming-up-next" style="background:#E05C5C;">Coming Up Next...</h2>
+<p>In <strong>Lesson 34</strong> &mdash; the Module 4 Grand Finale &mdash; you will combine EVERYTHING you have learned to build a <strong>Digital Piano with Display!</strong> Buttons play musical notes, the LCD shows the note name, and LEDs light up as you play. It is the ultimate Arduino project for this module. Get all your components ready!</p>
+<hr>
+<h2 id="troubleshooting" style="background:#FF6B35;">Troubleshooting</h2>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Problem</th>
+<th>Fix</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>LCD screen is blank (no backlight)</td>
+<td>Check VCC and GND connections; make sure the I2C backpack is soldered correctly</td>
+</tr>
+<tr>
+<td>LCD has backlight but no text</td>
+<td>Try changing the address from 0x27 to 0x3F in the code</td>
+</tr>
+<tr>
+<td>Text is garbled or wrong characters</td>
+<td>Check SDA (A4) and SCL (A5) connections; make sure they are not swapped</td>
+</tr>
+<tr>
+<td>Library not found</td>
+<td>Re-open Library Manager and search for "LiquidCrystal I2C"; make sure it installed</td>
+</tr>
+<tr>
+<td>Only one row displays text</td>
+<td>Make sure you use setCursor(0, 1) for the second row (row counting starts at 0)</td>
+</tr>
+<tr>
+<td>Text does not clear properly</td>
+<td>Use lcd.clear() to clear the whole screen, or print spaces over old text</td>
+</tr>
+</tbody></table></div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="page-footer">
+        <span>Lesson 33: LCD Display (16x2) -- Give Your Arduino a Screen</span>
+        <span>Module 4: Arduino Microcontroller</span>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 38: Servo Motors -- Precision Arm Muscles</title>
+    <style>
+
+        /* -- Reset & Base -- */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            line-height: 1.75;
+            color: #2C3E50;
+            background: #FAFAFA;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px 40px;
+        }
+
+        /* -- Header Banner -- */
+        .lesson-header {
+            background: linear-gradient(135deg, #4ECDC4 0%, #45B7D1 50%, #2E86AB 100%);
+            color: #fff;
+            border-radius: 16px;
+            padding: 32px 36px 28px;
+            margin: 24px 0 32px;
+            box-shadow: 0 6px 20px rgba(78,205,196,0.35);
+            position: relative;
+            overflow: hidden;
+        }
+        .lesson-header::before {
+            content: "";
+            position: absolute;
+            top: -40px; right: -40px;
+            width: 160px; height: 160px;
+            background: rgba(255,255,255,0.12);
+            border-radius: 50%;
+        }
+        .lesson-header::after {
+            content: "";
+            position: absolute;
+            bottom: -30px; left: -20px;
+            width: 100px; height: 100px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+        }
+        .lesson-header h1 {
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            position: relative;
+            z-index: 1;
+        }
+        .module-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.25);
+            border: 2px solid rgba(255,255,255,0.6);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 4px 14px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 1;
+        }
+        .meta-row {
+            margin-top: 12px;
+            font-size: 14px;
+            color: rgba(255,255,255,0.9);
+            position: relative;
+            z-index: 1;
+        }
+        .meta-pill {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            border-radius: 12px;
+            padding: 2px 10px;
+            margin: 2px 4px 2px 0;
+            white-space: nowrap;
+        }
+
+        /* -- Section Headings -- */
+        h2 {
+            font-size: 22px;
+            font-weight: 800;
+            margin: 36px 0 14px;
+            padding: 10px 18px;
+            border-radius: 10px;
+            color: #fff;
+        }
+        h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 28px 0 10px;
+            padding: 8px 14px;
+            border-left: 5px solid;
+            border-radius: 0 8px 8px 0;
+            background: rgba(0,0,0,0.03);
+        }
+
+        /* -- Body Text -- */
+        p { margin: 10px 0; }
+        strong { font-weight: 700; color: #1A252F; }
+        em { font-style: italic; color: #5D6D7E; }
+
+        /* -- Inline Code -- */
+        code {
+            background: #F0F3F7;
+            border: 1px solid #D5DCE8;
+            border-radius: 4px;
+            padding: 1px 6px;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 14px;
+            color: #C0392B;
+        }
+
+        /* -- Fenced Code Blocks -- */
+        pre {
+            background: #F4F6F8;
+            border: 1px solid #D0D8E4;
+            border-left: 5px solid #4ECDC4;
+            border-radius: 8px;
+            padding: 16px 18px;
+            overflow-x: auto;
+            margin: 16px 0;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #2C3E50;
+            white-space: pre;
+        }
+        pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            font-size: inherit;
+            color: inherit;
+        }
+
+        /* -- Blockquotes / Callout Boxes -- */
+        blockquote {
+            background: #FFF8E7;
+            border-left: 6px solid #4ECDC4;
+            border-radius: 0 12px 12px 0;
+            padding: 14px 20px;
+            margin: 16px 0;
+            color: #5D3A1A;
+            font-style: normal;
+            position: relative;
+        }
+        blockquote::before {
+            content: "\1F4AC";
+            position: absolute;
+            top: -10px; left: 10px;
+            font-size: 20px;
+            line-height: 1;
+        }
+        blockquote p { margin: 6px 0; }
+
+        /* -- Lists -- */
+        ul, ol {
+            margin: 10px 0 10px 24px;
+            padding-left: 8px;
+        }
+        li { margin: 5px 0; }
+        ul li::marker { color: #4ECDC4; font-size: 18px; }
+        ol li::marker { color: #45B7D1; font-weight: 700; }
+
+        /* -- Tables -- */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 16px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+        }
+        thead th {
+            background: #4ECDC4;
+            color: #fff;
+            font-weight: 700;
+            padding: 11px 14px;
+            text-align: left;
+            border-bottom: 3px solid #3BA89F;
+        }
+        thead th:first-child { border-radius: 10px 0 0 0; }
+        thead th:last-child  { border-radius: 0 10px 0 0; }
+        tbody tr:nth-child(odd)  td { background: #F0FBFA; }
+        tbody tr:nth-child(even) td { background: #E0F7F5; }
+        tbody tr:hover td { background: #C8F0EC; transition: background 0.15s; }
+        td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #C8EEEA;
+            vertical-align: top;
+        }
+        td .checkbox {
+            display: inline-block;
+            width: 18px; height: 18px;
+            border: 2px solid #4ECDC4;
+            border-radius: 4px;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+
+        /* -- XP Badges -- */
+        .xp-badge {
+            display: inline-block;
+            background: #FFEAA7;
+            border: 2px solid #F39C12;
+            color: #7D4F00;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin: 2px 4px;
+            white-space: nowrap;
+        }
+        .award-badge {
+            display: inline-block;
+            background: #D5F5E3;
+            border: 2px solid #27AE60;
+            color: #1A5E35;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin: 2px 4px;
+            white-space: nowrap;
+        }
+
+        /* -- Horizontal Rule -- */
+        hr {
+            border: none;
+            border-top: 3px dashed #A8E6CF;
+            margin: 30px 0;
+        }
+
+        /* -- Footer -- */
+        .page-footer {
+            margin-top: 48px;
+            padding-top: 16px;
+            border-top: 2px solid #D5DCE8;
+            text-align: center;
+            font-size: 13px;
+            color: #7F8C8D;
+        }
+
+        /* -- Print Styles -- */
+        @media print {
+            @page { size: A4; margin: 18mm 15mm 20mm; }
+
+            body {
+                background: #fff !important;
+                font-size: 13px;
+                max-width: 100%;
+                padding: 0;
+            }
+
+            * { -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important; }
+
+            h2 { page-break-before: auto; break-before: auto; }
+            pre, blockquote, table { page-break-inside: avoid; }
+            h2, h3 { page-break-after: avoid; break-after: avoid; }
+            tr { page-break-inside: avoid; }
+
+            p { orphans: 3; widows: 3; }
+
+            .lesson-header { box-shadow: none; }
+
+            .page-footer {
+                position: fixed;
+                bottom: 0; left: 0; right: 0;
+                background: #fff;
+                border-top: 1px solid #ccc;
+                padding: 6px 15mm;
+                display: flex;
+                justify-content: space-between;
+            }
+        }
+    
+    </style>
+</head>
+<body>
+
+    <!-- Header Banner -->
+    <header class="lesson-header">
+        <div class="module-badge">Module 5 -- Sensors and Actuators</div>
+        <h1>Lesson 38: Servo Motors -- Precision Arm Muscles</h1>
+        <div class="meta-row"><span class="meta-pill">&#9733; Star-4 Advanced</span><span class="meta-pill">&#9200; 40--45 minutes</span><span class="meta-pill">&#128100; Age 6--12 years</span><span class="meta-pill xp-badge" style="background:#FFEAA7;color:#7D4F00;border:none;">&#9889; 275 XP</span></div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+<hr>
+<h2 id="your-mission-today" style="background:#FF6B35;">Your Mission Today</h2>
+<p>Circuit Explorer, so far your Arduino can sense the world &mdash; temperature, light, and distance. But it cannot DO anything about it! Today that changes. You are going to learn about <strong>servo motors</strong> &mdash; small motors that can move to an exact angle, like a robot arm joint. You will make a servo sweep back and forth, control it with a knob, and even build a scanning sonar system using your ultrasonic sensor from last lesson!</p>
+<hr>
+<h2 id="learning-objectives" style="background:#4ECDC4;">Learning Objectives</h2>
+<p>By the end of this lesson, you will be able to:</p>
+<ul>
+<li>Explain what a servo motor is and how it differs from a regular motor</li>
+<li>Wire a servo motor to Arduino</li>
+<li>Write code to move a servo to a specific angle (0 to 180 degrees)</li>
+<li>Control a servo with a potentiometer (dial)</li>
+<li>Use your Magic Measurement Wand to measure the servo signal voltage</li>
+</ul>
+<hr>
+<h2 id="what-you-need" style="background:#45B7D1;">What You Need</h2>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Item</th>
+<th>Qty</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Arduino Uno + USB cable</td>
+<td>1</td>
+</tr>
+<tr>
+<td>SG90 micro servo motor</td>
+<td>1</td>
+</tr>
+<tr>
+<td>10k-ohm potentiometer</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Breadboard</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Jumper wires</td>
+<td>8</td>
+</tr>
+<tr>
+<td>Multimeter (your Magic Measurement Wand!)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Small arrow or pointer (tape + paper) to attach to servo horn</td>
+<td>1</td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="how-to-teach-this-lesson" style="background:#96CEB4;">How to Teach This Lesson</h2>
+<h3 id="step-1-hook-the-robot-arm-dream-5-min" style="border-left-color:#45B7D1; color:#45B7D1;">Step 1: Hook &mdash; The Robot Arm Dream (5 min)</h3>
+<blockquote><p>"Close your eyes and imagine a robot arm picking up a ball, moving it across the table, and setting it down gently. How does that arm move so precisely? It does not just spin wildly &mdash; it moves to EXACT positions. The secret? Servo motors!"</p></blockquote>
+<p>Show them the SG90 servo:</p>
+<blockquote><p>"This tiny blue box has a gear system inside and a small motor. But unlike a regular motor that just spins and spins, a servo can move to a specific angle and HOLD that position. Tell it 'go to 90 degrees' and it goes exactly there. Tell it '45 degrees' and it moves there. It is like a motor that follows orders!"</p></blockquote>
+<p>Let them feel the servo horn and try to turn it manually (with no power) &mdash; they will feel the resistance of the gears.</p>
+<p><strong>Award: <span class="xp-badge">+10 XP</span> for learning about servos!</strong></p>
+<hr>
+<h3 id="step-2-how-a-servo-works-8-min" style="border-left-color:#96CEB4; color:#96CEB4;">Step 2: How a Servo Works (8 min)</h3>
+<p><strong>The Clock Hand Analogy:</strong></p>
+<blockquote><p>"Think of a clock hand. It can point to 12 o'clock, 3 o'clock, 6 o'clock &mdash; any position in a half circle. A servo does the same thing, moving from 0 degrees (all the way left) to 180 degrees (all the way right). And just like a clock hand, it STAYS where you tell it to go."</p></blockquote>
+<p><strong>Inside the servo:</strong></p>
+<pre><code>  Inside an SG90 Servo:
+  +---------------------------+
+  |   [Gear train]            |
+  |   Small DC motor          |
+  |   Position sensor (pot)   |
+  |   Control circuit board   |
+  +---------------------------+
+       |    |    |
+     Brown  Red  Orange
+     (GND) (VCC) (Signal)</code></pre>
+<p><strong>Key vocabulary:</strong></p>
+<ul>
+<li><strong>Servo motor:</strong> A motor with built-in position control. Moves to a commanded angle and holds there.</li>
+<li><strong>Horn:</strong> The plastic arm/disc on top that connects to whatever you want to move.</li>
+<li><strong>PWM signal:</strong> The signal wire receives Pulse Width Modulation &mdash; tiny electrical pulses that tell the servo what angle to go to. Short pulse = 0 degrees. Long pulse = 180 degrees.</li>
+<li><strong>SG90:</strong> A very popular, inexpensive micro servo. Moves 0 to 180 degrees.</li>
+</ul>
+<p><strong>The three wires:</strong></p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Wire Color</th>
+<th>Function</th>
+<th>Connects To</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Brown (or black)</td>
+<td>Ground (GND)</td>
+<td>Arduino GND</td>
+</tr>
+<tr>
+<td>Red</td>
+<td>Power (VCC)</td>
+<td>Arduino 5V</td>
+</tr>
+<tr>
+<td>Orange (or yellow)</td>
+<td>Signal</td>
+<td>Arduino PWM pin</td>
+</tr>
+</tbody></table></div>
+<p><strong>Award: <span class="xp-badge">+10 XP</span> for understanding servo internals!</strong></p>
+<hr>
+<h3 id="step-3-wiring-the-servo-5-min" style="border-left-color:#FF6B35; color:#FF6B35;">Step 3: Wiring the Servo (5 min)</h3>
+<p><strong>Wiring diagram:</strong></p>
+<pre><code>  Servo               Arduino
+  --------            --------
+  Brown  (GND) -----&gt; GND
+  Red    (VCC) -----&gt; 5V
+  Orange (SIG) -----&gt; Pin 9 (PWM)</code></pre>
+<blockquote><p>"Only three wires! Brown to ground, red to power, orange to a PWM pin. But here is an important warning..."</p></blockquote>
+<p><strong>Safety note:</strong></p>
+<blockquote><p>"If you are using more than one servo, do NOT power them all from Arduino's 5V pin. Servos can draw a lot of current when they move. One SG90 is fine on Arduino's 5V, but for multiple servos or larger servos, use a separate 5V power supply with a shared GND."</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+10 XP</span> for wiring the servo!</strong></p>
+<hr>
+<h3 id="step-4-your-first-servo-movement-10-min" style="border-left-color:#4ECDC4; color:#4ECDC4;">Step 4: Your First Servo Movement (10 min)</h3>
+<p><strong>Sweep Code &mdash; Back and Forth:</strong></p>
+<pre><code>#include &lt;Servo.h&gt;
+
+Servo myServo;
+
+void setup() {
+  myServo.attach(9);  // Servo on pin 9
+  Serial.begin(9600);
+  Serial.println(&quot;Servo Ready!&quot;);
+}
+
+void loop() {
+  // Sweep from 0 to 180 degrees
+  for (int angle = 0; angle &lt;= 180; angle += 5) {
+    myServo.write(angle);
+    Serial.print(&quot;Angle: &quot;);
+    Serial.println(angle);
+    delay(50);
+  }
+
+  // Sweep back from 180 to 0 degrees
+  for (int angle = 180; angle &gt;= 0; angle -= 5) {
+    myServo.write(angle);
+    Serial.print(&quot;Angle: &quot;);
+    Serial.println(angle);
+    delay(50);
+  }
+}</code></pre>
+<p><strong>Watch it go!</strong></p>
+<blockquote><p>"See how it sweeps smoothly? Each step is 5 degrees, with a 50 millisecond pause. If you make the delay shorter, it sweeps faster. Longer delay = slower sweep."</p></blockquote>
+<p><strong>Try these experiments:</strong></p>
+<ul>
+<li>Change the step from 5 to 1 &mdash; smoother but slower</li>
+<li>Change delay from 50 to 10 &mdash; much faster!</li>
+<li>Try <code>myServo.write(90)</code> alone &mdash; it goes to the center and stops</li>
+<li>Try specific angles: 0, 45, 90, 135, 180</li>
+</ul>
+<p><strong>Make a paper pointer:</strong> Tape a small paper arrow to the servo horn so you can see the angle clearly!</p>
+<p><strong>Award: <span class="xp-badge">+20 XP</span> for your first servo sweep!</strong></p>
+<hr>
+<h3 id="step-5-control-with-a-potentiometer-8-min" style="border-left-color:#C678B0; color:#C678B0;">Step 5: Control with a Potentiometer (8 min)</h3>
+<p>Now add a potentiometer to control the servo angle with a dial:</p>
+<pre><code>#include &lt;Servo.h&gt;
+
+Servo myServo;
+int potPin = A0;
+
+void setup() {
+  myServo.attach(9);
+  Serial.begin(9600);
+}
+
+void loop() {
+  int potValue = analogRead(potPin);           // 0 to 1023
+  int angle = map(potValue, 0, 1023, 0, 180);  // Map to 0-180
+
+  myServo.write(angle);
+
+  Serial.print(&quot;Pot: &quot;);
+  Serial.print(potValue);
+  Serial.print(&quot;  Angle: &quot;);
+  Serial.println(angle);
+
+  delay(20);
+}</code></pre>
+<p><strong>Potentiometer wiring:</strong></p>
+<pre><code>  Potentiometer         Arduino
+  ---------------       --------
+  Left pin   ---------&gt; GND
+  Middle pin ---------&gt; A0
+  Right pin  ---------&gt; 5V</code></pre>
+<blockquote><p>"Now you are the servo controller! Turn the knob left, servo goes to 0 degrees. Turn it right, servo goes to 180. You could use this to control a robot arm, a camera mount, or a door lock!"</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+30 XP</span> for potentiometer control!</strong></p>
+<hr>
+<h3 id="step-6-wand-check-measure-the-signal-voltage-5-min" style="border-left-color:#E8A838; color:#E8A838;">Step 6: Wand Check &mdash; Measure the Signal Voltage (5 min)</h3>
+<blockquote><p>"The servo signal wire carries a PWM signal &mdash; tiny pulses that tell the servo where to go. Let us see if your Wand can detect them!"</p></blockquote>
+<p><strong>Wand Test &mdash; Signal Pin Voltage at Different Angles:</strong></p>
+<ol>
+<li>Set your Wand to DC Volts</li>
+<li>Connect black probe to GND</li>
+<li>Touch red probe to the signal wire (orange wire, pin 9)</li>
+<li>Use the potentiometer to set different angles</li>
+<li>Record the average voltage your Wand shows</li>
+</ol>
+<pre><code>| Servo Angle | Expected Avg Voltage | Your Wand Reads | Points |
+|-------------|---------------------|----------------|--------|
+| 0 degrees   | ~0.3-0.8V           |                | +10 XP |
+| 90 degrees  | ~1.0-1.5V           |                | +10 XP |
+| 180 degrees | ~1.5-2.5V           |                | +10 XP |</code></pre>
+<blockquote><p>"Your Wand is averaging the PWM signal. At 0 degrees, the pulses are very short (about 1 millisecond), so the average voltage is low. At 180 degrees, the pulses are longer (about 2 milliseconds), so the average is higher. You are seeing the control signal as voltage!"</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+30 XP</span> for measuring the servo signal with your Wand!</strong></p>
+<hr>
+<h3 id="step-7-bonus-servo-positions-game-optional-5-min" style="border-left-color:#E05C5C; color:#E05C5C;">Step 7: Bonus &mdash; Servo Positions Game (Optional) (5 min)</h3>
+<p>Make a game: Write angle commands on cards (0, 30, 45, 60, 90, 120, 150, 180). Shuffle and draw one at a time. Try to guess where the servo will point before uploading the angle!</p>
+<pre><code>// Quick test: change the angle and upload
+void setup() {
+  Servo s;
+  s.attach(9);
+  s.write(45);  // Change this number and guess!
+}
+void loop() {}</code></pre>
+<p><strong>Award: <span class="xp-badge">+15 XP</span> for playing the angle guessing game!</strong></p>
+<hr>
+<h2 id="quick-quiz-earn-bonus-xp" style="background:#E8A838;">Quick Quiz &mdash; Earn Bonus XP!</h2>
+<p><strong>Question 1:</strong> What is the main difference between a servo motor and a regular DC motor?</p>
+<ul>
+<li>A) A servo is bigger</li>
+<li>B) A servo can move to a specific angle and hold that position</li>
+<li>C) A servo spins continuously</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+15 XP</span>!)</strong></p>
+<p><strong>Question 2:</strong> What are the three wires on an SG90 servo?</p>
+<ul>
+<li>A) Hot, Cold, Signal</li>
+<li>B) Ground (brown), Power (red), Signal (orange)</li>
+<li>C) Plus, Minus, Data</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+15 XP</span>!)</strong></p>
+<p><strong>Question 3:</strong> What range of angles can a typical hobby servo reach?</p>
+<ul>
+<li>A) 0 to 360 degrees (full circle)</li>
+<li>B) 0 to 180 degrees (half circle)</li>
+<li>C) 0 to 90 degrees (quarter circle)</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+15 XP</span>!)</strong></p>
+<p><strong>Question 4:</strong> Why should you NOT power multiple servos from Arduino's 5V pin?</p>
+<ul>
+<li>A) It will break the Arduino's screen</li>
+<li>B) Servos draw a lot of current and can overload the Arduino's voltage regulator</li>
+<li>C) Because servos need 12V</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+15 XP</span>!)</strong></p>
+<hr>
+<h2 id="lesson-38-complete" style="background:#C678B0;">Lesson 38 Complete!</h2>
+<pre><code>  =============================================
+
+     SERVO COMMANDER BADGE UNLOCKED!
+
+     Skills unlocked:
+     [check] Wire and control a servo motor
+     [check] Sweep servo through full range
+     [check] Control servo with a potentiometer
+     [check] Measured PWM signal voltage with the Wand
+
+  =============================================</code></pre>
+<p><strong>XP Breakdown:</strong></p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Activity</th>
+<th>XP</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Hook &mdash; robot arm dream</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Understanding servos</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Wiring the servo</td>
+<td>10</td>
+</tr>
+<tr>
+<td>First servo sweep</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Potentiometer control</td>
+<td>30</td>
+</tr>
+<tr>
+<td>Wand Check (3 angles)</td>
+<td>30</td>
+</tr>
+<tr>
+<td>Angle guessing game bonus</td>
+<td>15</td>
+</tr>
+<tr>
+<td>Quiz (4 questions)</td>
+<td>60</td>
+</tr>
+<tr>
+<td><strong>TOTAL POSSIBLE</strong></td>
+<td><strong>185</strong></td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="coming-up-next" style="background:#E05C5C;">Coming Up Next...</h2>
+<p>In <strong>Lesson 39</strong>, you will meet the <strong>DC motor and L298N motor driver</strong> &mdash; the kind of motor that spins wheels on a robot! Unlike the servo, a DC motor spins continuously and you will learn to control its speed AND direction using the motor driver board. Your Wand will measure the output voltage at different speeds!</p>
+<hr>
+<h2 id="troubleshooting" style="background:#FF6B35;">Troubleshooting</h2>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Problem</th>
+<th>Fix</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Servo does not move at all</td>
+<td>Check the signal wire &mdash; is it on a PWM pin (3, 5, 6, 9, 10, 11)?</td>
+</tr>
+<tr>
+<td>Servo jitters or vibrates in place</td>
+<td>This can happen with cheap servos or noisy power. Add a 100 microfarad capacitor between 5V and GND near the servo</td>
+</tr>
+<tr>
+<td>Servo only moves a small range</td>
+<td>Make sure you are using <code>Servo.h</code> library and <code>write()</code> with values 0-180</td>
+</tr>
+<tr>
+<td>Potentiometer control jumps around</td>
+<td>Add a small delay (15-20ms) in the loop &mdash; servos need time to reach position</td>
+</tr>
+<tr>
+<td>Arduino resets when servo moves</td>
+<td>Servo draws too much current. Use external 5V power for the servo</td>
+</tr>
+<tr>
+<td>Servo makes grinding noise</td>
+<td>It is hitting its mechanical limit. Do not command angles past 0 or 180</td>
+</tr>
+</tbody></table></div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="page-footer">
+        <span>Lesson 38: Servo Motors -- Precision Arm Muscles</span>
+        <span>Module 5: Sensors and Actuators</span>
+    </footer>
+
+</body>
+</html>

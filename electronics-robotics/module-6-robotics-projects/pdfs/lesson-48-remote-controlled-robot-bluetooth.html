@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 48: Remote-Controlled Robot (Bluetooth)</title>
+    <style>
+
+        /* -- Reset & Base -- */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            line-height: 1.75;
+            color: #2C3E50;
+            background: #FAFAFA;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px 40px;
+        }
+
+        /* -- Header Banner (Robotics Theme - deep blue/purple gradient) -- */
+        .lesson-header {
+            background: linear-gradient(135deg, #2C3E50 0%, #3498DB 50%, #1ABC9C 100%);
+            color: #fff;
+            border-radius: 16px;
+            padding: 32px 36px 28px;
+            margin: 24px 0 32px;
+            box-shadow: 0 6px 20px rgba(44,62,80,0.35);
+            position: relative;
+            overflow: hidden;
+        }
+        .lesson-header::before {
+            content: "";
+            position: absolute;
+            top: -40px; right: -40px;
+            width: 160px; height: 160px;
+            background: rgba(255,255,255,0.12);
+            border-radius: 50%;
+        }
+        .lesson-header::after {
+            content: "";
+            position: absolute;
+            bottom: -30px; left: -20px;
+            width: 100px; height: 100px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+        }
+        .lesson-header h1 {
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            position: relative;
+            z-index: 1;
+        }
+        .module-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.25);
+            border: 2px solid rgba(255,255,255,0.6);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 4px 14px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 1;
+        }
+        .meta-row {
+            margin-top: 12px;
+            font-size: 14px;
+            color: rgba(255,255,255,0.9);
+            position: relative;
+            z-index: 1;
+        }
+        .meta-pill {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            border-radius: 12px;
+            padding: 2px 10px;
+            margin: 2px 4px 2px 0;
+            white-space: nowrap;
+        }
+
+        /* -- Section Headings -- */
+        h2 {
+            font-size: 22px;
+            font-weight: 800;
+            margin: 36px 0 14px;
+            padding: 10px 18px;
+            border-radius: 10px;
+            color: #fff;
+        }
+        h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 28px 0 10px;
+            padding: 8px 14px;
+            border-left: 5px solid;
+            border-radius: 0 8px 8px 0;
+            background: rgba(0,0,0,0.03);
+        }
+
+        /* -- Body Text -- */
+        p { margin: 10px 0; }
+        strong { font-weight: 700; color: #1A252F; }
+        em { font-style: italic; color: #5D6D7E; }
+
+        /* -- Inline Code -- */
+        code {
+            background: #F0F3F7;
+            border: 1px solid #D5DCE8;
+            border-radius: 4px;
+            padding: 1px 6px;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 14px;
+            color: #C0392B;
+        }
+
+        /* -- Fenced Code Blocks -- */
+        pre {
+            background: #F4F6F8;
+            border: 1px solid #D0D8E4;
+            border-left: 5px solid #3498DB;
+            border-radius: 8px;
+            padding: 16px 18px;
+            overflow-x: auto;
+            margin: 16px 0;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #2C3E50;
+            white-space: pre;
+        }
+        pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            font-size: inherit;
+            color: inherit;
+        }
+
+        /* -- Blockquotes / Callout Boxes -- */
+        blockquote {
+            background: #FFF8E7;
+            border-left: 6px solid #3498DB;
+            border-radius: 0 12px 12px 0;
+            padding: 14px 20px;
+            margin: 16px 0;
+            color: #5D3A1A;
+            font-style: normal;
+            position: relative;
+        }
+        blockquote::before {
+            content: "\1F4AC";
+            position: absolute;
+            top: -10px; left: 10px;
+            font-size: 20px;
+            line-height: 1;
+        }
+        blockquote p { margin: 6px 0; }
+
+        /* -- Lists -- */
+        ul, ol {
+            margin: 10px 0 10px 24px;
+            padding-left: 8px;
+        }
+        li { margin: 5px 0; }
+        ul li::marker { color: #3498DB; font-size: 18px; }
+        ol li::marker { color: #1ABC9C; font-weight: 700; }
+
+        /* -- Tables -- */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 16px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+        }
+        thead th {
+            background: #2C3E50;
+            color: #fff;
+            font-weight: 700;
+            padding: 11px 14px;
+            text-align: left;
+            border-bottom: 3px solid #1A252F;
+        }
+        thead th:first-child { border-radius: 10px 0 0 0; }
+        thead th:last-child  { border-radius: 0 10px 0 0; }
+        tbody tr:nth-child(odd)  td { background: #F8FBFF; }
+        tbody tr:nth-child(even) td { background: #EAF6FB; }
+        tbody tr:hover td { background: #D6F0F8; transition: background 0.15s; }
+        td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #D9EEF6;
+            vertical-align: top;
+        }
+        td .checkbox {
+            display: inline-block;
+            width: 18px; height: 18px;
+            border: 2px solid #3498DB;
+            border-radius: 4px;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+
+        /* -- XP Badges -- */
+        .xp-badge {
+            display: inline-block;
+            background: #FFEAA7;
+            border: 2px solid #F39C12;
+            color: #7D4F00;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin: 2px 4px;
+            white-space: nowrap;
+        }
+        .award-badge {
+            display: inline-block;
+            background: #D5F5E3;
+            border: 2px solid #27AE60;
+            color: #1A5E35;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin: 2px 4px;
+            white-space: nowrap;
+        }
+
+        /* -- Horizontal Rule -- */
+        hr {
+            border: none;
+            border-top: 3px dashed #B2D8E8;
+            margin: 30px 0;
+        }
+
+        /* -- Footer -- */
+        .page-footer {
+            margin-top: 48px;
+            padding-top: 16px;
+            border-top: 2px solid #D5DCE8;
+            text-align: center;
+            font-size: 13px;
+            color: #7F8C8D;
+        }
+
+        /* -- Print Styles -- */
+        @media print {
+            @page { size: A4; margin: 18mm 15mm 20mm; }
+
+            body {
+                background: #fff !important;
+                font-size: 13px;
+                max-width: 100%;
+                padding: 0;
+            }
+
+            * { -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important; }
+
+            h2 { page-break-before: auto; break-before: auto; }
+            pre, blockquote, table { page-break-inside: avoid; }
+            h2, h3 { page-break-after: avoid; break-after: avoid; }
+            tr { page-break-inside: avoid; }
+
+            p { orphans: 3; widows: 3; }
+
+            .lesson-header { box-shadow: none; }
+
+            .page-footer {
+                position: fixed;
+                bottom: 0; left: 0; right: 0;
+                background: #fff;
+                border-top: 1px solid #ccc;
+                padding: 6px 15mm;
+                display: flex;
+                justify-content: space-between;
+            }
+        }
+    
+    </style>
+</head>
+<body>
+
+    <!-- Header Banner -->
+    <header class="lesson-header">
+        <div class="module-badge">Module 6 -- Robotics Projects</div>
+        <h1>Lesson 48: Remote-Controlled Robot (Bluetooth)</h1>
+        <div class="meta-row"><span class="meta-pill">&#9733; Star-5 Expert</span><span class="meta-pill">&#9200; 50--60 minutes</span><span class="meta-pill">&#128100; Age 6--12 years</span><span class="meta-pill xp-badge" style="background:#FFEAA7;color:#7D4F00;border:none;">&#9889; 350 XP</span></div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+<hr>
+<h2 id="your-mission-today" style="background:#FF6B35;">Your Mission Today</h2>
+<p>Robot Commander, up until now your robot has been running on its own &mdash; following lines and dodging obstacles. Today, YOU take the controls! You are going to add a <strong>Bluetooth module</strong> to your robot so you can drive it from your phone. Send commands wirelessly &mdash; forward, backward, left, right, stop &mdash; and watch your robot obey from across the room. This is wireless remote control, and it is incredibly cool!</p>
+<hr>
+<h2 id="learning-objectives" style="background:#4ECDC4;">Learning Objectives</h2>
+<p>By the end of this lesson, you will be able to:</p>
+<ul>
+<li>Explain how Bluetooth communication works (in simple terms)</li>
+<li>Wire the HC-05 Bluetooth module to Arduino</li>
+<li>Pair a smartphone with the HC-05</li>
+<li>Write code to receive Bluetooth commands and control the robot</li>
+<li>Switch between manual (phone) and autonomous (obstacle-avoidance) modes</li>
+<li>Use your Magic Measurement Wand to measure HC-05 TX/RX pin voltages</li>
+</ul>
+<hr>
+<h2 id="what-you-need" style="background:#45B7D1;">What You Need</h2>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Item</th>
+<th>Qty</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Your robot from Lessons 43-47</td>
+<td>1</td>
+</tr>
+<tr>
+<td>HC-05 Bluetooth module</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Jumper wires (female-to-male)</td>
+<td>4</td>
+</tr>
+<tr>
+<td>1k-ohm resistor</td>
+<td>1</td>
+</tr>
+<tr>
+<td>2k-ohm resistor (or two 1k-ohm in series)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Smartphone with Bluetooth</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Bluetooth controller app (free)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Multimeter (your Magic Measurement Wand!)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>USB cable (for programming)</td>
+<td>1</td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="how-to-teach-this-lesson" style="background:#96CEB4;">How to Teach This Lesson</h2>
+<h3 id="step-1-hook-wireless-magic-5-min" style="border-left-color:#45B7D1; color:#45B7D1;">Step 1: Hook &mdash; Wireless Magic (5 min)</h3>
+<blockquote><p>"Your robot has been amazing &mdash; following lines, dodging obstacles, flashing lights. But what if you could control it from your PHONE? Like a video game, but the character is REAL and driving around your room?"</p></blockquote>
+<blockquote><p>"Bluetooth is the same technology that connects your wireless headphones to your phone. Instead of sending music, we are going to send COMMANDS. When you press a button on your phone, it sends a letter &mdash; F for forward, B for backward, L for left, R for right, S for stop. Your Arduino reads the letter and makes the robot move. It is like sending text messages to your robot!"</p></blockquote>
+<pre><code>  How Bluetooth Control Works:
+
+  [Your Phone]                    [HC-05 Module]         [Arduino]
+      |                              |                      |
+      |--- &quot;F&quot; (forward) ---------&gt;  |--- serial data ---&gt; |
+      |                              |                      |
+      |                              |                      +--&gt; forward(200)
+      |                              |                      |
+      |--- &quot;S&quot; (stop) -----------&gt;   |--- serial data ---&gt; |
+      |                              |                      |
+      |                              |                      +--&gt; stopRobot()</code></pre>
+<p><strong>Award: <span class="xp-badge">+10 XP</span> for understanding Bluetooth communication!</strong></p>
+<hr>
+<h3 id="step-2-wiring-the-hc-05-module-10-min" style="border-left-color:#96CEB4; color:#96CEB4;">Step 2: Wiring the HC-05 Module (10 min)</h3>
+<p>The HC-05 module communicates using serial (TX/RX) just like the USB connection, but wirelessly!</p>
+<p><strong>IMPORTANT:</strong> The HC-05 runs at 3.3V logic but has a 5V tolerant VCC pin. The TX pin from Arduino is 5V, but the HC-05 RX pin needs 3.3V. We use a <strong>voltage divider</strong> to protect it!</p>
+<p><strong>Wiring Diagram:</strong></p>
+<pre><code>  HC-05 Pin    Connection
+  ---------    ----------
+  VCC    -----&gt; Arduino 5V
+  GND    -----&gt; Arduino GND
+  TXD    -----&gt; Arduino Pin 7 (SoftwareSerial RX)
+  RXD    &lt;----- Voltage Divider from Arduino Pin 8
+
+  Voltage Divider for RXD:
+
+  Arduino Pin 8 ---[1k ohm]---+---[2k ohm]--- GND
+                               |
+                          HC-05 RXD
+
+  This converts 5V down to ~3.3V to protect the HC-05!</code></pre>
+<p><strong>Why SoftwareSerial?</strong></p>
+<blockquote><p>"Arduino only has one hardware serial port (pins 0 and 1), and we need that for the USB connection to upload code. So we use a library called SoftwareSerial to create a SECOND serial port on any pins we choose. It is like adding an extra phone line to your house!"</p></blockquote>
+<blockquote><p>"IMPORTANT: Disconnect the HC-05 RXD and TXD wires when uploading code via USB! They can interfere with programming."</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+20 XP</span> for wiring the HC-05 with voltage divider!</strong></p>
+<hr>
+<h3 id="step-3-the-bluetooth-controller-app-5-min" style="border-left-color:#FF6B35; color:#FF6B35;">Step 3: The Bluetooth Controller App (5 min)</h3>
+<p><strong>On an Android phone:</strong></p>
+<ol>
+<li>Search the app store for "Arduino Bluetooth Controller" or "Bluetooth RC Controller"</li>
+<li>Install a free app that lets you send single character commands</li>
+</ol>
+<p><strong>On an iPhone:</strong></p>
+<ul>
+<li>Note: HC-05 works with Android. For iPhone, you need an HM-10 (BLE) module instead.</li>
+<li>Apps: "LightBlue" or "BLE Terminal" work with HM-10</li>
+</ul>
+<p><strong>Pairing:</strong></p>
+<ol>
+<li>Turn on the robot (power the HC-05)</li>
+<li>The HC-05 LED will blink rapidly &mdash; it is waiting to pair</li>
+<li>On your phone, go to Bluetooth settings</li>
+<li>Find "HC-05" in the list (default password: 1234 or 0000)</li>
+<li>Pair with it</li>
+<li>Open the controller app and connect to HC-05</li>
+<li>The HC-05 LED will blink slowly &mdash; it is now connected!</li>
+</ol>
+<blockquote><p>"When the LED on the HC-05 blinks FAST, it is lonely and looking for a friend. When it blinks SLOW, it found your phone and they are talking!"</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+10 XP</span> for successfully pairing your phone with the HC-05!</strong></p>
+<hr>
+<h3 id="step-4-bluetooth-control-code-12-min" style="border-left-color:#4ECDC4; color:#4ECDC4;">Step 4: Bluetooth Control Code (12 min)</h3>
+<pre><code>// Lesson 48: Bluetooth Remote-Controlled Robot
+#include &lt;SoftwareSerial.h&gt;
+
+// Bluetooth serial on pins 7 (RX) and 8 (TX)
+SoftwareSerial bluetooth(7, 8);  // RX, TX
+
+// Motor pins (same as before)
+int leftENA = 9;
+int leftIN1 = 2;
+int leftIN2 = 3;
+int rightENB = 10;
+int rightIN3 = 4;
+int rightIN4 = 5;
+
+// LED and buzzer pins
+int greenLeft = A1;
+int greenRight = A2;
+int redLeft = A3;
+int redRight = A4;
+int blueStatus = 13;
+int buzzerPin = A5;
+
+int driveSpeed = 200;
+
+void setup() {
+  // Motor pins
+  pinMode(leftENA, OUTPUT);
+  pinMode(leftIN1, OUTPUT);
+  pinMode(leftIN2, OUTPUT);
+  pinMode(rightENB, OUTPUT);
+  pinMode(rightIN3, OUTPUT);
+  pinMode(rightIN4, OUTPUT);
+
+  // LED pins
+  pinMode(greenLeft, OUTPUT);
+  pinMode(greenRight, OUTPUT);
+  pinMode(redLeft, OUTPUT);
+  pinMode(redRight, OUTPUT);
+  pinMode(blueStatus, OUTPUT);
+  pinMode(buzzerPin, OUTPUT);
+
+  // Start both serial connections
+  Serial.begin(9600);
+  bluetooth.begin(9600);  // HC-05 default baud rate
+
+  Serial.println(&quot;Bluetooth Robot Ready!&quot;);
+  Serial.println(&quot;Waiting for connection...&quot;);
+
+  // Startup blink
+  for (int i = 0; i &lt; 3; i++) {
+    digitalWrite(blueStatus, HIGH);
+    delay(200);
+    digitalWrite(blueStatus, LOW);
+    delay(200);
+  }
+}
+
+void loop() {
+  if (bluetooth.available()) {
+    char command = bluetooth.read();
+
+    // Show command on Serial Monitor too
+    Serial.print(&quot;Received: &quot;);
+    Serial.println(command);
+
+    // Process command
+    switch (command) {
+      case &#x27;F&#x27;:  // Forward
+      case &#x27;f&#x27;:
+        forward(driveSpeed);
+        digitalWrite(greenLeft, HIGH);
+        digitalWrite(greenRight, HIGH);
+        digitalWrite(redLeft, LOW);
+        digitalWrite(redRight, LOW);
+        break;
+
+      case &#x27;B&#x27;:  // Backward
+      case &#x27;b&#x27;:
+        backward(driveSpeed);
+        digitalWrite(greenLeft, LOW);
+        digitalWrite(greenRight, LOW);
+        digitalWrite(redLeft, HIGH);
+        digitalWrite(redRight, HIGH);
+        break;
+
+      case &#x27;L&#x27;:  // Turn Left
+      case &#x27;l&#x27;:
+        turnLeft(driveSpeed);
+        digitalWrite(greenLeft, HIGH);
+        digitalWrite(greenRight, LOW);
+        break;
+
+      case &#x27;R&#x27;:  // Turn Right
+      case &#x27;r&#x27;:
+        turnRight(driveSpeed);
+        digitalWrite(greenLeft, LOW);
+        digitalWrite(greenRight, HIGH);
+        break;
+
+      case &#x27;S&#x27;:  // Stop
+      case &#x27;s&#x27;:
+        stopRobot();
+        digitalWrite(greenLeft, LOW);
+        digitalWrite(greenRight, LOW);
+        digitalWrite(redLeft, LOW);
+        digitalWrite(redRight, LOW);
+        digitalWrite(blueStatus, HIGH);
+        break;
+
+      case &#x27;H&#x27;:  // Horn!
+      case &#x27;h&#x27;:
+        tone(buzzerPin, 800, 300);
+        delay(350);
+        noTone(buzzerPin);
+        break;
+
+      case &#x27;1&#x27;:  // Speed: Slow
+        driveSpeed = 120;
+        Serial.println(&quot;Speed: SLOW&quot;);
+        break;
+
+      case &#x27;2&#x27;:  // Speed: Medium
+        driveSpeed = 180;
+        Serial.println(&quot;Speed: MEDIUM&quot;);
+        break;
+
+      case &#x27;3&#x27;:  // Speed: Fast
+        driveSpeed = 240;
+        Serial.println(&quot;Speed: FAST&quot;);
+        break;
+    }
+  }
+}
+
+// === MOVEMENT FUNCTIONS ===
+void forward(int speed) {
+  digitalWrite(leftIN1, HIGH);
+  digitalWrite(leftIN2, LOW);
+  digitalWrite(rightIN3, HIGH);
+  digitalWrite(rightIN4, LOW);
+  analogWrite(leftENA, speed);
+  analogWrite(rightENB, speed);
+}
+
+void backward(int speed) {
+  digitalWrite(leftIN1, LOW);
+  digitalWrite(leftIN2, HIGH);
+  digitalWrite(rightIN3, LOW);
+  digitalWrite(rightIN4, HIGH);
+  analogWrite(leftENA, speed);
+  analogWrite(rightENB, speed);
+}
+
+void turnLeft(int speed) {
+  digitalWrite(leftIN1, LOW);
+  digitalWrite(leftIN2, HIGH);
+  digitalWrite(rightIN3, HIGH);
+  digitalWrite(rightIN4, LOW);
+  analogWrite(leftENA, speed);
+  analogWrite(rightENB, speed);
+}
+
+void turnRight(int speed) {
+  digitalWrite(leftIN1, HIGH);
+  digitalWrite(leftIN2, LOW);
+  digitalWrite(rightIN3, LOW);
+  digitalWrite(rightIN4, HIGH);
+  analogWrite(leftENA, speed);
+  analogWrite(rightENB, speed);
+}
+
+void stopRobot() {
+  digitalWrite(leftIN1, LOW);
+  digitalWrite(leftIN2, LOW);
+  digitalWrite(rightIN3, LOW);
+  digitalWrite(rightIN4, LOW);
+  analogWrite(leftENA, 0);
+  analogWrite(rightENB, 0);
+}</code></pre>
+<p><strong>Command Reference Card:</strong></p>
+<pre><code>+------+------------------+
+| Key  | Action           |
++------+------------------+
+| F    | Forward          |
+| B    | Backward         |
+| L    | Turn Left        |
+| R    | Turn Right       |
+| S    | Stop             |
+| H    | Horn (beep!)     |
+| 1    | Slow speed       |
+| 2    | Medium speed     |
+| 3    | Fast speed       |
++------+------------------+</code></pre>
+<p><strong>Award: <span class="xp-badge">+40 XP</span> for uploading and testing Bluetooth control!</strong></p>
+<hr>
+<h3 id="step-5-test-drive-5-min" style="border-left-color:#C678B0; color:#C678B0;">Step 5: Test Drive! (5 min)</h3>
+<blockquote><p>"Time to take your robot for a spin! Open the Bluetooth app on your phone, connect to HC-05, and start driving!"</p></blockquote>
+<p><strong>Test Checklist:</strong></p>
+<pre><code>| Test                     | Works? |
+|--------------------------|--------|
+| Forward command (F)      |        |
+| Backward command (B)     |        |
+| Turn Left (L)            |        |
+| Turn Right (R)           |        |
+| Stop (S)                 |        |
+| Horn (H)                 |        |
+| Speed change (1, 2, 3)   |        |
+| Green LEDs on forward    |        |
+| Red LEDs on backward     |        |</code></pre>
+<blockquote><p>"Drive it around the room! Try navigating around furniture. Can you drive it into the kitchen and back?"</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+30 XP</span> for a successful Bluetooth test drive!</strong></p>
+<hr>
+<h3 id="step-6-bonus-dual-mode-bluetooth-autonomous-5-min" style="border-left-color:#E8A838; color:#E8A838;">Step 6: Bonus &mdash; Dual Mode (Bluetooth + Autonomous) (5 min)</h3>
+<p>What if your robot could switch between phone control and autonomous mode?</p>
+<pre><code>// Add this to your code:
+bool autonomousMode = false;
+
+// In the loop(), add these commands:
+case &#x27;A&#x27;:  // Switch to Autonomous mode
+case &#x27;a&#x27;:
+  autonomousMode = true;
+  Serial.println(&quot;AUTONOMOUS MODE!&quot;);
+  tone(buzzerPin, 1000, 200);
+  break;
+
+case &#x27;M&#x27;:  // Switch to Manual mode
+case &#x27;m&#x27;:
+  autonomousMode = false;
+  stopRobot();
+  Serial.println(&quot;MANUAL MODE!&quot;);
+  tone(buzzerPin, 500, 200);
+  break;
+
+// At the top of loop():
+if (autonomousMode) {
+  // Run obstacle-avoidance code here
+  // (from Lesson 46)
+  return;  // Skip Bluetooth command reading
+}</code></pre>
+<blockquote><p>"Now press A on your phone and the robot drives itself! Press M to take back control. You just built a robot with TWO brain modes!"</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+20 XP</span> for implementing dual mode!</strong></p>
+<hr>
+<h3 id="step-7-wand-check-hc-05-voltages-8-min" style="border-left-color:#E05C5C; color:#E05C5C;">Step 7: Wand Check &mdash; HC-05 Voltages (8 min)</h3>
+<blockquote><p>"Let us use your Magic Measurement Wand to peek at the Bluetooth communication signals!"</p></blockquote>
+<p>Set the Wand to <strong>DC Volts</strong>.</p>
+<p><strong>Measurement 1: HC-05 Power</strong></p>
+<pre><code>| Measurement       | Expected | Your Reading |
+|-------------------|---------|-------------|
+| HC-05 VCC pin     | 5.0V     |             |
+| HC-05 GND pin     | 0V       |             |</code></pre>
+<p><strong>Measurement 2: TX/RX Pin Voltages</strong></p>
+<pre><code>| Measurement                 | Expected     | Your Reading |
+|-----------------------------|-------------|-------------|
+| HC-05 TXD pin (idle)       | ~3.3V        |             |
+| HC-05 RXD pin (idle)       | ~3.3V        |             |
+| Voltage divider output     | ~3.0--3.4V    |             |
+| Arduino Pin 8 (before divider) | ~5.0V    |             |</code></pre>
+<blockquote><p>"Look at that! The Arduino sends 5V, but our voltage divider drops it to 3.3V before it reaches the HC-05. Without that voltage divider, we could damage the HC-05. Your Wand just confirmed the protection is working!"</p></blockquote>
+<p><strong>Measurement 3: During Communication</strong></p>
+<p>Send a few commands from your phone and watch the Wand readings on the TXD pin:</p>
+<blockquote><p>"When data is being sent, the voltage on the TX pin flickers rapidly between 0V and 3.3V. Each flicker is a binary digit &mdash; a 1 or a 0 &mdash; that makes up the letter you sent. Your Wand is seeing digital data in real time!"</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+50 XP</span> for all Bluetooth Wand measurements!</strong></p>
+<hr>
+<h2 id="quick-quiz-earn-bonus-xp" style="background:#E8A838;">Quick Quiz &mdash; Earn Bonus XP!</h2>
+<p><strong>Question 1:</strong> Why do we need a voltage divider between Arduino TX and HC-05 RX?</p>
+<ul>
+<li>A) To make the signal louder</li>
+<li>B) To drop 5V to 3.3V so we do not damage the HC-05</li>
+<li>C) To make the robot go faster</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<p><strong>Question 2:</strong> What does the HC-05 LED blinking pattern tell you?</p>
+<ul>
+<li>A) Fast blink = connected, slow blink = searching</li>
+<li>B) Fast blink = searching for connection, slow blink = connected</li>
+<li>C) Blinking means the battery is low</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<p><strong>Question 3:</strong> What library lets us create extra serial ports on Arduino?</p>
+<ul>
+<li>A) Servo.h</li>
+<li>B) SoftwareSerial.h</li>
+<li>C) Bluetooth.h</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<p><strong>Question 4:</strong> What is the default pairing password for most HC-05 modules?</p>
+<ul>
+<li>A) password</li>
+<li>B) 1234</li>
+<li>C) bluetooth</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<hr>
+<h2 id="lesson-48-complete" style="background:#C678B0;">Lesson 48 Complete!</h2>
+<pre><code>  =============================================
+
+     WIRELESS COMMANDER BADGE UNLOCKED!
+
+     Skills unlocked:
+     [check] Wired HC-05 with voltage divider
+     [check] Paired phone with Bluetooth
+     [check] Controlled robot wirelessly
+     [check] Added speed control and horn
+     [check] Implemented dual mode (manual/auto)
+     [check] Measured Bluetooth voltages with Wand
+
+  =============================================</code></pre>
+<p><strong>XP Breakdown:</strong></p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Activity</th>
+<th>XP</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Hook (Bluetooth understanding)</td>
+<td>10</td>
+</tr>
+<tr>
+<td>HC-05 wiring with voltage divider</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Phone pairing</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Bluetooth control code</td>
+<td>40</td>
+</tr>
+<tr>
+<td>Successful test drive</td>
+<td>30</td>
+</tr>
+<tr>
+<td>Dual mode bonus</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Wand Check (all measurements)</td>
+<td>50</td>
+</tr>
+<tr>
+<td>Quiz (4 questions)</td>
+<td>80</td>
+</tr>
+<tr>
+<td><strong>TOTAL POSSIBLE</strong></td>
+<td><strong>260</strong></td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="coming-up-next" style="background:#E05C5C;">Coming Up Next...</h2>
+<p>In <strong>Lesson 49</strong>, you are going to build a <strong>robot arm</strong>! Using servo motors and popsicle sticks, you will create a 3-joint arm that can pick up and move small objects. You will control each joint with a potentiometer &mdash; like a joystick for a crane!</p>
+<hr>
+<h2 id="troubleshooting" style="background:#FF6B35;">Troubleshooting</h2>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Problem</th>
+<th>Fix</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Cannot find HC-05 in phone Bluetooth list</td>
+<td>Make sure HC-05 is powered on (LED blinking fast)</td>
+</tr>
+<tr>
+<td>Wrong password</td>
+<td>Try both 1234 and 0000</td>
+</tr>
+<tr>
+<td>Connected but no response to commands</td>
+<td>Check RX/TX wires are not swapped</td>
+</tr>
+<tr>
+<td>Robot moves erratically</td>
+<td>Check baud rate matches (9600 in both code and module)</td>
+</tr>
+<tr>
+<td>Cannot upload code with HC-05 connected</td>
+<td>Disconnect HC-05 TX/RX wires during upload</td>
+</tr>
+<tr>
+<td>HC-05 LED does not blink</td>
+<td>Check VCC and GND connections</td>
+</tr>
+<tr>
+<td>Voltage divider reads wrong voltage</td>
+<td>Check resistor values &mdash; 1k and 2k (or two 1k in series)</td>
+</tr>
+</tbody></table></div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="page-footer">
+        <span>Lesson 48: Remote-Controlled Robot (Bluetooth)</span>
+        <span>Module 6: Robotics Projects</span>
+    </footer>
+
+</body>
+</html>

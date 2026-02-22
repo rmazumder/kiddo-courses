@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 16: Project -- The Lighthouse Circuit</title>
+    <style>
+
+        /* ── Reset & Base ─────────────────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            line-height: 1.75;
+            color: #2C3E50;
+            background: #FAFAFA;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px 40px;
+        }
+
+        /* ── Header Banner ─────────────────────────────────────────── */
+        .lesson-header {
+            background: linear-gradient(135deg, #FF6B35 0%, #FF9A5C 50%, #FFB347 100%);
+            color: #fff;
+            border-radius: 16px;
+            padding: 32px 36px 28px;
+            margin: 24px 0 32px;
+            box-shadow: 0 6px 20px rgba(255,107,53,0.35);
+            position: relative;
+            overflow: hidden;
+        }
+        .lesson-header::before {
+            content: "";
+            position: absolute;
+            top: -40px; right: -40px;
+            width: 160px; height: 160px;
+            background: rgba(255,255,255,0.12);
+            border-radius: 50%;
+        }
+        .lesson-header::after {
+            content: "";
+            position: absolute;
+            bottom: -30px; left: -20px;
+            width: 100px; height: 100px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+        }
+        .lesson-header h1 {
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            position: relative;
+            z-index: 1;
+        }
+        .module-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.25);
+            border: 2px solid rgba(255,255,255,0.6);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 4px 14px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 1;
+        }
+        .meta-row {
+            margin-top: 12px;
+            font-size: 14px;
+            color: rgba(255,255,255,0.9);
+            position: relative;
+            z-index: 1;
+        }
+        .meta-pill {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            border-radius: 12px;
+            padding: 2px 10px;
+            margin: 2px 4px 2px 0;
+            white-space: nowrap;
+        }
+
+        /* ── Section Headings ──────────────────────────────────────── */
+        h2 {
+            font-size: 22px;
+            font-weight: 800;
+            margin: 36px 0 14px;
+            padding: 10px 18px;
+            border-radius: 10px;
+            color: #fff;
+            /* colour applied inline via data-color */
+        }
+        h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 28px 0 10px;
+            padding: 8px 14px;
+            border-left: 5px solid;
+            border-radius: 0 8px 8px 0;
+            background: rgba(0,0,0,0.03);
+            /* border-left colour applied inline */
+        }
+
+        /* ── Body Text ─────────────────────────────────────────────── */
+        p { margin: 10px 0; }
+        strong { font-weight: 700; color: #1A252F; }
+        em { font-style: italic; color: #5D6D7E; }
+
+        /* ── Inline Code ───────────────────────────────────────────── */
+        code {
+            background: #F0F3F7;
+            border: 1px solid #D5DCE8;
+            border-radius: 4px;
+            padding: 1px 6px;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 14px;
+            color: #C0392B;
+        }
+
+        /* ── Fenced Code Blocks ────────────────────────────────────── */
+        pre {
+            background: #F4F6F8;
+            border: 1px solid #D0D8E4;
+            border-left: 5px solid #45B7D1;
+            border-radius: 8px;
+            padding: 16px 18px;
+            overflow-x: auto;
+            margin: 16px 0;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #2C3E50;
+            white-space: pre;
+        }
+        pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            font-size: inherit;
+            color: inherit;
+        }
+
+        /* ── Blockquotes / Callout Boxes ───────────────────────────── */
+        blockquote {
+            background: #FFF8E7;
+            border-left: 6px solid #FF6B35;
+            border-radius: 0 12px 12px 0;
+            padding: 14px 20px;
+            margin: 16px 0;
+            color: #5D3A1A;
+            font-style: normal;
+            position: relative;
+        }
+        blockquote::before {
+            content: "\1F4AC";  /* speech bubble emoji */
+            position: absolute;
+            top: -10px; left: 10px;
+            font-size: 20px;
+            line-height: 1;
+        }
+        blockquote p { margin: 6px 0; }
+
+        /* ── Lists ─────────────────────────────────────────────────── */
+        ul, ol {
+            margin: 10px 0 10px 24px;
+            padding-left: 8px;
+        }
+        li { margin: 5px 0; }
+        ul li::marker { color: #FF6B35; font-size: 18px; }
+        ol li::marker { color: #45B7D1; font-weight: 700; }
+
+        /* ── Tables ────────────────────────────────────────────────── */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 16px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+        }
+        thead th {
+            background: #45B7D1;
+            color: #fff;
+            font-weight: 700;
+            padding: 11px 14px;
+            text-align: left;
+            border-bottom: 3px solid #2E9BBD;
+        }
+        thead th:first-child { border-radius: 10px 0 0 0; }
+        thead th:last-child  { border-radius: 0 10px 0 0; }
+        tbody tr:nth-child(odd)  td { background: #F8FBFF; }
+        tbody tr:nth-child(even) td { background: #EAF6FB; }
+        tbody tr:hover td { background: #D6F0F8; transition: background 0.15s; }
+        td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #D9EEF6;
+            vertical-align: top;
+        }
+        /* Checkbox column: replace [ ] with styled checkbox */
+        td .checkbox {
+            display: inline-block;
+            width: 18px; height: 18px;
+            border: 2px solid #45B7D1;
+            border-radius: 4px;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+
+        /* ── XP Badges ─────────────────────────────────────────────── */
+        .xp-badge {
+            display: inline-block;
+            background: #FFEAA7;
+            border: 2px solid #F39C12;
+            color: #7D4F00;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin: 2px 4px;
+            white-space: nowrap;
+        }
+        .award-badge {
+            display: inline-block;
+            background: #D5F5E3;
+            border: 2px solid #27AE60;
+            color: #1A5E35;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin: 2px 4px;
+            white-space: nowrap;
+        }
+
+        /* ── Horizontal Rule ───────────────────────────────────────── */
+        hr {
+            border: none;
+            border-top: 3px dashed #B2D8E8;
+            margin: 30px 0;
+        }
+
+        /* ── Footer ────────────────────────────────────────────────── */
+        .page-footer {
+            margin-top: 48px;
+            padding-top: 16px;
+            border-top: 2px solid #D5DCE8;
+            text-align: center;
+            font-size: 13px;
+            color: #7F8C8D;
+        }
+
+        /* ── Print Styles ──────────────────────────────────────────── */
+        @media print {
+            @page { size: A4; margin: 18mm 15mm 20mm; }
+
+            body {
+                background: #fff !important;
+                font-size: 13px;
+                max-width: 100%;
+                padding: 0;
+            }
+
+            /* Force colour printing */
+            * { -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important; }
+
+            /* Page breaks */
+            h2 { page-break-before: auto; break-before: auto; }
+            pre, blockquote, table { page-break-inside: avoid; }
+            h2, h3 { page-break-after: avoid; break-after: avoid; }
+            tr { page-break-inside: avoid; }
+
+            /* No orphaned paragraphs */
+            p { orphans: 3; widows: 3; }
+
+            .lesson-header { box-shadow: none; }
+
+            .page-footer {
+                position: fixed;
+                bottom: 0; left: 0; right: 0;
+                background: #fff;
+                border-top: 1px solid #ccc;
+                padding: 6px 15mm;
+                display: flex;
+                justify-content: space-between;
+            }
+        }
+    
+    </style>
+</head>
+<body>
+
+    <!-- Header Banner -->
+    <header class="lesson-header">
+        <div class="module-badge">Module 2 -- Building Simple Circuits (FINAL PROJECT)</div>
+        <h1>Lesson 16: Project -- The Lighthouse Circuit</h1>
+        <div class="meta-row"><span class="meta-pill">&#9733; Star-2-Star-3 Medium</span><span class="meta-pill">&#9200; 60--90 minutes (longer -- it is a project!)</span><span class="meta-pill">&#128100; Age 6--12 years</span><span class="meta-pill xp-badge" style="background:#FFEAA7;color:#7D4F00;border:none;">&#9889; 360 XP (the biggest XP haul of Module 2!)</span></div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+<hr>
+<h2 id="your-mission-today" style="background:#FF6B35;">Your Mission Today</h2>
+<p>This is it, Circuit Explorer &mdash; the GRAND FINALE of Module 2! You are going to build a working <strong>lighthouse</strong> with a bright blinking LED, a hand-crafted tower, and a circuit that uses resistors, capacitors, and a transistor to flash automatically. You will use EVERYTHING you have learned: breadboarding, Ohm's Law, series and parallel knowledge, power selection, and &mdash; most importantly &mdash; your Magic Measurement Wand to test, verify, and debug every step. When you are done, you will have a real lighthouse you can put on your desk. Let us build something amazing!</p>
+<hr>
+<h2 id="learning-objectives" style="background:#4ECDC4;">Learning Objectives</h2>
+<p>This project brings together everything from Module 2:</p>
+<ul>
+<li>Breadboard layout and wiring (Lesson 9)</li>
+<li>Ohm's Law for resistor selection (Lesson 10)</li>
+<li>Series circuit concepts &mdash; components in a chain (Lesson 11)</li>
+<li>Understanding of parallel paths (Lesson 12)</li>
+<li>Voltage divider principles for timing (Lesson 13)</li>
+<li>ALL four multimeter modes for debugging (Lesson 14)</li>
+<li>Power source selection (Lesson 15)</li>
+<li>Creative building and problem-solving</li>
+</ul>
+<hr>
+<h2 id="what-you-need" style="background:#45B7D1;">What You Need</h2>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Item</th>
+<th>Qty</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>9V battery + clip</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Breadboard</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Bright white or yellow LED</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Red LED (for status indicator)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>2N2222 NPN transistor</td>
+<td>1</td>
+</tr>
+<tr>
+<td>100-microfarad electrolytic capacitor</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1000-microfarad electrolytic capacitor</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Resistors: 330-ohm, 1k-ohm, 10k-ohm, 100k-ohm</td>
+<td>1 each</td>
+</tr>
+<tr>
+<td>Toggle switch</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Jumper wires</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Multimeter (Magic Measurement Wand)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Cardboard paper towel or toilet paper tube</td>
+<td>1</td>
+</tr>
+<tr>
+<td>White tissue paper or translucent plastic</td>
+<td>1 piece</td>
+</tr>
+<tr>
+<td>Tape (electrical + masking)</td>
+<td>1 roll each</td>
+</tr>
+<tr>
+<td>Scissors</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Colored markers or paint (optional)</td>
+<td>1 set</td>
+</tr>
+<tr>
+<td>Small cardboard square (for the base)</td>
+<td>1</td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="what-are-we-building" style="background:#96CEB4;">What Are We Building?</h2>
+<p>A lighthouse that:</p>
+<ul>
+<li>Blinks a bright LED on and off automatically (no manual pressing!)</li>
+<li>Has an on/off switch</li>
+<li>Is built on a breadboard and housed in a paper tube tower</li>
+<li>Uses a capacitor + resistor + transistor to create the blinking effect</li>
+</ul>
+<pre><code>  THE LIGHTHOUSE
+  ==============
+
+       (LED glows here)
+      .---.
+     /  O  \    &lt;-- translucent paper diffuser
+    |  LED  |
+    |       |
+    |  tube |   &lt;-- paper towel tube
+    |       |
+    |       |
+  +---------+
+  | BREADBOARD | &lt;-- circuit inside / on base
+  | + battery  |
+  +-----------+</code></pre>
+<hr>
+<h2 id="how-to-build-it" style="background:#E8A838;">How to Build It</h2>
+<h3 id="phase-1-understand-the-blinker-circuit-8-min" style="border-left-color:#45B7D1; color:#45B7D1;">Phase 1: Understand the Blinker Circuit (8 min)</h3>
+<blockquote><p>"The secret to blinking is a CAPACITOR. Remember from Module 1 how a capacitor charges up and then releases its energy? We are going to use that charge-discharge cycle to turn a transistor ON and OFF repeatedly &mdash; and that will blink the LED!"</p></blockquote>
+<p><strong>How the blinker works (simplified):</strong></p>
+<pre><code>  The Blinker Cycle:
+
+  Step 1: Capacitor charges through a resistor (LED OFF)
+           Voltage on capacitor rises slowly...
+
+  Step 2: When capacitor voltage reaches about 0.7V,
+           the transistor switches ON
+
+  Step 3: Transistor ON = LED ON (lighthouse beam!)
+
+  Step 4: Capacitor discharges through the transistor
+           Voltage drops below 0.7V
+
+  Step 5: Transistor switches OFF = LED OFF
+
+  Step 6: Capacitor starts charging again...
+           (back to Step 1 -- the cycle repeats!)</code></pre>
+<blockquote><p>"The resistor and capacitor together control HOW FAST the blinking happens. Bigger resistor or bigger capacitor = SLOWER blink. Smaller = FASTER blink."</p></blockquote>
+<p><strong>The time formula (for ages 9&mdash;12):</strong></p>
+<pre><code>  Blink time is roughly:  T = R x C
+
+  Example:
+  R = 100k ohm = 100,000 ohms
+  C = 100 microfarad = 0.0001 Farads
+
+  T = 100,000 x 0.0001 = 10 seconds per cycle
+
+  (In reality, the charge/discharge is not perfectly symmetric,
+   so the ON and OFF times may differ. That is OK!)</code></pre>
+<p><strong>Award: <span class="xp-badge">+20 XP</span> for understanding how the blinker circuit works!</strong></p>
+<hr>
+<h3 id="phase-2-build-the-blinker-circuit-15-min" style="border-left-color:#96CEB4; color:#96CEB4;">Phase 2: Build the Blinker Circuit (15 min)</h3>
+<p><strong>Circuit diagram:</strong></p>
+<pre><code>  9V (+) ----[toggle switch]----+----[1k-ohm]----LED (+)----LED (-)----+
+                                |                                      |
+                                +----[100k-ohm]----+                   |
+                                |                  |                   |
+                                |              Base (B)                |
+                                |                  |                   |
+                                |         [2N2222 transistor]          |
+                                |              |       |               |
+                                |         Collector  Emitter           |
+                                |              |       |               |
+                                |              +       +---- GND -----+
+                                |              |
+                                +----[100uF cap (+)]----cap (-)---- GND</code></pre>
+<p><strong>Simplified explanation:</strong></p>
+<blockquote><p>"The 100k-ohm resistor slowly charges the 100-microfarad capacitor. When the capacitor gets enough charge, the transistor turns on and the LED lights up. Then the capacitor releases its charge, the transistor turns off, and the LED goes dark. This repeats forever!"</p></blockquote>
+<p><strong>Step-by-step breadboard build:</strong></p>
+<pre><code>  BREADBOARD LAYOUT:
+
+  Row 1-2: Power
+  - Toggle switch: one terminal in + rail, other terminal in row 2
+  - When switch is ON, row 2 gets 9V
+
+  Row 5: Timing resistor
+  - 100k-ohm resistor: row 2 to row 5
+
+  Row 5: Capacitor
+  - 100-microfarad capacitor: (+) leg in row 5, (-) leg in - rail
+  - WATCH POLARITY! Stripe (negative) goes to - rail
+
+  Row 5: Transistor Base
+  - 2N2222 transistor: Base (B) in row 5
+  - Collector (C) in row 8
+  - Emitter (E) in - rail (GND)
+
+  Row 8: LED circuit
+  - 1k-ohm resistor: row 2 to row 8 (connects to Collector)
+  - LED: Collector row -- actually, let us wire it clearly:
+    - 1k-ohm resistor: one leg in row 2, other leg in row 10
+    - LED: long leg (+) in row 10, short leg (-) in row 12
+    - Jumper: row 12 to Collector row of transistor (row 8)
+
+  Battery:
+  - Red wire to + rail
+  - Black wire to - rail</code></pre>
+<blockquote><p>"Take your time wiring this. Every connection matters. If one wire is in the wrong row, the whole circuit will not work."</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+40 XP</span> for building the complete blinker circuit!</strong></p>
+<hr>
+<h3 id="phase-3-wand-check-verify-before-power-on-10-min" style="border-left-color:#FF6B35; color:#FF6B35;">Phase 3: Wand Check &mdash; Verify Before Power On! (10 min)</h3>
+<blockquote><p>"Before we flip the switch, let us make sure everything is connected correctly. Grab your Wand!"</p></blockquote>
+<p><strong>Pre-power continuity checks (battery DISCONNECTED):</strong></p>
+<p>Set Wand to continuity mode.</p>
+<pre><code>| Test | From | To | Expected | Beep? |
+|------|------|-----|----------|-------|
+| 1 | Switch terminal 1 | + rail | Direct connection | YES |
+| 2 | Switch terminal 2 | row 2 | Direct connection | YES |
+| 3 | 100k resistor (row 2 end) | row 5 | Through resistor | YES |
+| 4 | Capacitor (+) | row 5 | Direct connection | YES |
+| 5 | Capacitor (-) | - rail | Direct connection | YES |
+| 6 | Transistor Base | row 5 | Direct connection | YES |
+| 7 | Transistor Emitter | - rail | Direct connection | YES |
+| 8 | LED short leg row | Transistor Collector | Through wire | YES |</code></pre>
+<blockquote><p>"All beeps? Then the wiring is correct. No beep on any test? Check that connection &mdash; something is loose."</p></blockquote>
+<p><strong>Component verification (still no power):</strong></p>
+<ol>
+<li><strong>Measure the 100k resistor:</strong> Set Wand to ohms. Expected: about 100,000 ohms.</li>
+<li><strong>Measure the 1k resistor:</strong> Expected: about 1,000 ohms.</li>
+<li><strong>Check LED polarity:</strong> Long leg should be on the + side (closer to the resistor).</li>
+<li><strong>Check capacitor polarity:</strong> Stripe (negative) should face GND (- rail).</li>
+<li><strong>Check transistor orientation:</strong> Flat side facing you, legs should be E-B-C from left to right.</li>
+</ol>
+<p><strong>Award: <span class="xp-badge">+40 XP</span> for completing ALL pre-power verification checks!</strong></p>
+<hr>
+<h3 id="phase-4-power-on-and-test-5-min" style="border-left-color:#4ECDC4; color:#4ECDC4;">Phase 4: Power On and Test! (5 min)</h3>
+<blockquote><p>"Everything checked. Deep breath. Flip the switch!"</p></blockquote>
+<p>Connect the battery and flip the toggle switch ON.</p>
+<p><strong>What should happen:</strong></p>
+<p>The LED should start blinking! It may take a second or two for the first blink as the capacitor charges for the first time.</p>
+<blockquote><p>"IT BLINKS! Your lighthouse beam is working!"</p></blockquote>
+<p><strong>Observe:</strong></p>
+<blockquote><p>"How fast is it blinking? Count the blinks in 10 seconds."</p></blockquote>
+<p>If it does not blink (LED stays on or stays off), do not panic! We will debug in Phase 5.</p>
+<p><strong>Award: <span class="xp-badge">+30 XP</span> for a successfully blinking LED!</strong></p>
+<hr>
+<h3 id="phase-5-wand-assisted-debugging-if-needed-10-min" style="border-left-color:#C678B0; color:#C678B0;">Phase 5: Wand-Assisted Debugging (if needed) (10 min)</h3>
+<blockquote><p>"If the LED does not blink, your Wand will find the problem. Here is your debugging workflow."</p></blockquote>
+<p><strong>The Debugging Flowchart:</strong></p>
+<pre><code>  LED does not light at all:
+  |
+  +-- Measure battery: is it above 8V?
+  |   NO --&gt; Replace battery
+  |   YES --&gt; Continue
+  |
+  +-- Check switch: Wand continuity across switch (when ON)
+  |   NO BEEP --&gt; Switch is off or broken
+  |   BEEP --&gt; Continue
+  |
+  +-- Measure voltage at row 2 (after switch): should be about 9V
+  |   0V --&gt; Switch wiring issue
+  |   9V --&gt; Continue
+  |
+  +-- Check LED polarity: is long leg on + side?
+  |   NO --&gt; Flip the LED
+  |   YES --&gt; Continue
+  |
+  +-- Measure voltage across LED: should show 2-3V when lit
+  |   0V --&gt; Transistor is not turning on; check base circuit
+  |   2-3V --&gt; LED might be burned out; try a new one
+
+
+  LED stays ON (does not blink):
+  |
+  +-- Measure voltage at transistor Base (row 5) to GND
+  |   About 0.7V --&gt; Transistor is permanently ON
+  |   Check capacitor polarity and 100k resistor value
+  |
+  +-- Is the capacitor connected correctly?
+  |   (+) to row 5, (-) to GND?
+  |
+  +-- Is the 100k resistor really 100k?
+      Measure it! Maybe it is the wrong resistor.
+
+
+  LED stays OFF:
+  |
+  +-- Measure voltage at row 5 (base): does it rise over time?
+  |   YES but never reaches 0.7V --&gt; 100k might be too large; try smaller
+  |   NO change --&gt; Check capacitor and 100k resistor connections</code></pre>
+<p><strong>Debugging journal:</strong></p>
+<pre><code>| Symptom | Wand Mode | Measurement | Problem Found | Fix Applied |
+|---------|----------|------------|--------------|-------------|
+|         |          |            |              |             |
+|         |          |            |              |             |
+|         |          |            |              |             |</code></pre>
+<blockquote><p>"Debugging is the MOST important skill in electronics. You just used EVERY Wand mode &mdash; voltage, continuity, resistance &mdash; to systematically find and fix a problem. This is EXACTLY what professional engineers do every day."</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+40 XP</span> for successfully debugging (or confirming everything works)!</strong></p>
+<hr>
+<h3 id="phase-6-experiment-with-blink-speed-5-min" style="border-left-color:#E8A838; color:#E8A838;">Phase 6: Experiment with Blink Speed (5 min)</h3>
+<blockquote><p>"Now let us play with the blink speed!"</p></blockquote>
+<p><strong>Experiment 1 &mdash; Faster blink:</strong></p>
+<p>Replace the 100-microfarad capacitor with a smaller value, or replace the 100k-ohm resistor with a smaller value (like 47k or 10k).</p>
+<blockquote><p>"What happened? It blinks faster! Smaller R or C = faster charging = faster blinking."</p></blockquote>
+<p><strong>Experiment 2 &mdash; Slower blink:</strong></p>
+<p>Replace the 100-microfarad capacitor with the 1000-microfarad capacitor.</p>
+<blockquote><p>"Now it blinks much slower &mdash; like a real lighthouse! The bigger capacitor takes longer to charge."</p></blockquote>
+<p><strong>Record your experiments:</strong></p>
+<pre><code>| Resistor | Capacitor | Blink Speed (blinks per 10 sec) |
+|----------|-----------|-------------------------------|
+| 100k     | 100uF     |                               |
+| 100k     | 1000uF    |                               |
+| 10k      | 100uF     |                               |</code></pre>
+<p><strong>Award: <span class="xp-badge">+20 XP</span> for experimenting with at least 2 different blink speeds!</strong></p>
+<hr>
+<h3 id="phase-7-build-the-lighthouse-tower-10-min" style="border-left-color:#E05C5C; color:#E05C5C;">Phase 7: Build the Lighthouse Tower (10 min)</h3>
+<blockquote><p>"Now the fun part &mdash; building the lighthouse itself!"</p></blockquote>
+<p><strong>Step 1: The tower</strong></p>
+<ul>
+<li>Take the cardboard tube (paper towel roll)</li>
+<li>Optional: paint it with red and white stripes, or wrap with colored tape</li>
+</ul>
+<p><strong>Step 2: The light chamber</strong></p>
+<ul>
+<li>At the top of the tube, tape a piece of white tissue paper or translucent plastic over the opening</li>
+<li>This is the "diffuser" &mdash; it spreads the LED light and makes it glow evenly</li>
+</ul>
+<p><strong>Step 3: Mount the LED</strong></p>
+<ul>
+<li>Extend the LED wires (using jumper wires if needed) up through the tube</li>
+<li>Position the LED at the top, behind the tissue paper</li>
+<li>Tape or hot-glue the LED in place (adult helps with hot glue)</li>
+</ul>
+<p><strong>Step 4: The base</strong></p>
+<ul>
+<li>Place the breadboard on a small piece of cardboard</li>
+<li>Stand the tube on the cardboard, next to the breadboard</li>
+<li>Route wires neatly from breadboard up into the tube</li>
+</ul>
+<p><strong>Step 5: Add the status LED (optional)</strong></p>
+<ul>
+<li>Wire a small red LED (with 330-ohm resistor) in parallel from the + rail to - rail</li>
+<li>This stays ON whenever the switch is on, showing the lighthouse is "powered"</li>
+</ul>
+<pre><code>  Finished Lighthouse:
+
+       .----.
+      / O O  \   &lt;-- tissue paper diffuser
+     |  (LED) |       with blinking LED behind it
+     |--------|
+     |  tube  |   &lt;-- decorated tower
+     |  tube  |
+     |  tube  |
+  +--+--------+--+
+  | breadboard    |
+  | + battery     |
+  | + switch      |
+  | (red status LED) |
+  +--------------+</code></pre>
+<p><strong>Award: <span class="xp-badge">+30 XP</span> for building the lighthouse tower!</strong></p>
+<hr>
+<h3 id="phase-8-final-wand-check-the-complete-diagnostic-5-min" style="border-left-color:#45B7D1; color:#45B7D1;">Phase 8: Final Wand Check &mdash; The Complete Diagnostic (5 min)</h3>
+<blockquote><p>"One last mission. Prove to me that EVERYTHING in your circuit is correct by taking these measurements."</p></blockquote>
+<p><strong>Final diagnostic table:</strong></p>
+<pre><code>| Measurement | Wand Mode | Expected | My Reading |
+|------------|----------|---------|-----------|
+| Battery voltage | DC Volts | 8.5--9.5V | |
+| Voltage at row 2 (switch ON) | DC Volts | about 9V | |
+| 100k resistor value | Ohms | about 100k | |
+| 1k resistor value | Ohms | about 1k | |
+| Voltage across LED (when ON) | DC Volts | 2--3.5V | |
+| Base voltage (when LED is ON) | DC Volts | about 0.6--0.7V | |
+| Continuity: switch ON | Continuity | BEEP | |
+| Continuity: + rail to - rail | Continuity | NO BEEP | |</code></pre>
+<blockquote><p>"You just ran a COMPLETE diagnostic on your lighthouse circuit. You measured voltage, resistance, and continuity. You understand every part of this circuit. You are a true Circuit Builder!"</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+30 XP</span> for completing the full diagnostic!</strong></p>
+<hr>
+<h2 id="module-2-final-assessment" style="background:#C678B0;">Module 2 Final Assessment</h2>
+<p>After building the lighthouse, have the kid answer these:</p>
+<p><strong>Circuit Knowledge:</strong></p>
+<ol>
+<li>"What is Ohm's Law?" (V = I x R)</li>
+<li>"What is the difference between series and parallel circuits?" (Series = one path, parallel = multiple paths)</li>
+<li>"In a voltage divider with equal resistors, what is Vout?" (Half of Vin)</li>
+<li>"What makes the LED blink in the lighthouse?" (Capacitor charging and discharging through the transistor)</li>
+</ol>
+<p><strong>Wand Skills Check:</strong></p>
+<ol>
+<li>"Measure the battery." (DC Volts mode, probes in V/ohm and COM)</li>
+<li>"Measure the 1k resistor." (Ohms mode, power off)</li>
+<li>"Test this wire with continuity." (Continuity mode, listen for beep)</li>
+<li>"Where would you put the probes to measure current through the LED?" (Break the circuit, insert Wand in series, red probe in mA jack)</li>
+</ol>
+<p><strong>Award: <span class="xp-badge">+50 XP</span> for completing the final assessment!</strong></p>
+<hr>
+<h2 id="quick-quiz-earn-bonus-xp" style="background:#E05C5C;">Quick Quiz &mdash; Earn Bonus XP!</h2>
+<p><strong>Question 1:</strong> Why does the LED in the lighthouse blink?</p>
+<ul>
+<li>A) The battery turns on and off</li>
+<li>B) A capacitor charges and discharges, turning a transistor on and off</li>
+<li>C) The switch has a timer inside</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<p><strong>Question 2:</strong> You want the lighthouse to blink SLOWER. What should you change?</p>
+<ul>
+<li>A) Use a SMALLER capacitor</li>
+<li>B) Use a BIGGER capacitor (or bigger resistor)</li>
+<li>C) Use a brighter LED</li>
+</ul>
+<p><strong>(Correct: B &mdash; bigger capacitor or resistor = slower charging = slower blink &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<p><strong>Question 3:</strong> Your lighthouse LED does not light at all. What is the FIRST thing you should check with your Wand?</p>
+<ul>
+<li>A) Measure the LED voltage</li>
+<li>B) Measure the battery voltage to make sure it is charged</li>
+<li>C) Measure resistance of the resistor</li>
+</ul>
+<p><strong>(Correct: B &mdash; always check the power source first! &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<hr>
+<h2 id="module-2-complete-grand-finale" style="background:#FF6B35;">Module 2 Complete &mdash; Grand Finale!</h2>
+<pre><code>  ======================================================
+
+     MODULE 2 CHAMPION BADGE UNLOCKED!
+
+     _____________________ has mastered
+        Building Simple Circuits
+
+     [check] Breadboard mastery
+     [check] Ohm&#x27;s Law (V = I x R)
+     [check] Series circuits
+     [check] Parallel circuits
+     [check] Voltage dividers
+     [check] ALL four multimeter modes
+     [check] Power sources and batteries
+     [check] Built a blinking lighthouse!
+
+  ======================================================</code></pre>
+<p><strong>Lesson 16 XP Breakdown:</strong></p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Activity</th>
+<th>XP</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Understand blinker circuit</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Build the blinker circuit</td>
+<td>40</td>
+</tr>
+<tr>
+<td>Pre-power Wand verification</td>
+<td>40</td>
+</tr>
+<tr>
+<td>Successful blink (power on)</td>
+<td>30</td>
+</tr>
+<tr>
+<td>Wand-assisted debugging</td>
+<td>40</td>
+</tr>
+<tr>
+<td>Blink speed experiments</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Build the lighthouse tower</td>
+<td>30</td>
+</tr>
+<tr>
+<td>Final diagnostic</td>
+<td>30</td>
+</tr>
+<tr>
+<td>Final assessment</td>
+<td>50</td>
+</tr>
+<tr>
+<td>Quiz (3 questions)</td>
+<td>60</td>
+</tr>
+<tr>
+<td><strong>TOTAL POSSIBLE</strong></td>
+<td><strong>360</strong></td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="module-2-total-xp-summary" style="background:#4ECDC4;">Module 2 Total XP Summary</h2>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Lesson</th>
+<th>Title</th>
+<th>Max XP</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>9</td>
+<td>The Breadboard</td>
+<td>230</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Ohm's Law</td>
+<td>240</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Series Circuits</td>
+<td>220</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Parallel Circuits</td>
+<td>230</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Voltage Dividers</td>
+<td>230</td>
+</tr>
+<tr>
+<td>14</td>
+<td>Using a Multimeter (Deep Dive)</td>
+<td>260</td>
+</tr>
+<tr>
+<td>15</td>
+<td>Power Sources</td>
+<td>210</td>
+</tr>
+<tr>
+<td>16</td>
+<td>Lighthouse Project</td>
+<td>360</td>
+</tr>
+<tr>
+<td><strong>MODULE 2 TOTAL</strong></td>
+<td></td>
+<td><strong>1,980</strong></td>
+</tr>
+</tbody></table></div>
+<p><strong>Combined with Module 1 (2,030 XP): Grand Total Available = 4,010 XP</strong></p>
+<p><strong>XP Ranks (cumulative):</strong></p>
+<ul>
+<li>0&mdash;500 XP: Circuit Apprentice</li>
+<li>501&mdash;1,000 XP: Circuit Explorer</li>
+<li>1,001&mdash;1,500 XP: Circuit Builder</li>
+<li>1,501&mdash;2,000 XP: Circuit Engineer</li>
+<li>2,001&mdash;2,500 XP: Circuit Scientist</li>
+<li>2,501&mdash;3,500 XP: Circuit Wizard</li>
+<li>3,501&mdash;4,010 XP: Circuit Master!</li>
+</ul>
+<hr>
+<h2 id="all-badges-earned-in-module-2" style="background:#45B7D1;">All Badges Earned in Module 2</h2>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Badge</th>
+<th>Lesson</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Breadboard Navigator</td>
+<td>Lesson 9</td>
+</tr>
+<tr>
+<td>Ohm's Law Apprentice</td>
+<td>Lesson 10</td>
+</tr>
+<tr>
+<td>Series Circuit Specialist</td>
+<td>Lesson 11</td>
+</tr>
+<tr>
+<td>Parallel Circuit Pro</td>
+<td>Lesson 12</td>
+</tr>
+<tr>
+<td>Voltage Divider Decoder</td>
+<td>Lesson 13</td>
+</tr>
+<tr>
+<td>Multimeter Master</td>
+<td>Lesson 14</td>
+</tr>
+<tr>
+<td>Power Source Expert</td>
+<td>Lesson 15</td>
+</tr>
+<tr>
+<td>Module 2 Champion</td>
+<td>Lesson 16</td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="reflection-questions-talk-through-together" style="background:#96CEB4;">Reflection Questions (Talk Through Together)</h2>
+<blockquote><p>"What was the coolest thing you built or discovered in Module 2?" "Which lesson was the hardest? What made it click?" "Which Wand mode are you MOST confident with now?" "Can you explain Ohm's Law to a friend?" "If you could change one thing about your lighthouse, what would it be?" "What do you think Module 3 will be about?"</p></blockquote>
+<hr>
+<h2 id="whats-next-module-3-preview" style="background:#E8A838;">What's Next &mdash; Module 3 Preview</h2>
+<blockquote><p>"You now know how to build real circuits, measure everything with your Wand, and debug like a pro! In Module 3, we enter the world of <strong>integrated circuits and sensors</strong>. You will meet the famous 555 timer chip, build a light-sensing circuit, and start connecting electronics to the real world. The journey from circuits to ROBOTS is getting closer!"</p></blockquote>
+<hr>
+<h2 id="parentinstructor-notes" style="background:#C678B0;">Parent/Instructor Notes</h2>
+<ul>
+<li>This project takes longer than a regular lesson &mdash; plan for <strong>60&mdash;90 minutes</strong> or split across two sessions (build circuit in session 1, build tower + test in session 2).</li>
+<li><strong>The debugging phase (Phase 5) is the most valuable part of this lesson.</strong> If the circuit works on the first try, consider intentionally introducing a bug (reversed LED, wrong resistor, loose wire) and having the child find it with the Wand.</li>
+<li>The blinker circuit described here is a simplified relaxation oscillator. It is not a perfect square wave, and blink timing may vary. That is fine &mdash; the learning goal is understanding RC timing and transistor switching, not precision.</li>
+<li>For a more reliable blinker, consider using a 555 timer IC (covered in Module 3). But the transistor + capacitor version is better for learning because every component has a clear role the child already understands.</li>
+<li><strong>Ages 6&mdash;8:</strong> Focus on building the tower and watching it blink. The debugging and measurement phases can be done together with an adult guiding. The key win is "I built a lighthouse that blinks by itself!"</li>
+<li><strong>Ages 9&mdash;12:</strong> Challenge them to predict the blink rate using T = R x C before building. Have them adjust values to hit a target blink rate (e.g., "Can you make it blink once every 5 seconds?").</li>
+<li>The lighthouse makes an excellent <strong>show-and-tell</strong> piece. Encourage the child to explain how the circuit works to family members.</li>
+<li>Take a photo or video of the finished lighthouse for their portfolio!</li>
+<li><strong>Celebrate completion of Module 2!</strong> This is a major milestone. Consider a small reward, certificate, or special outing.</li>
+</ul>
+    </main>
+
+    <!-- Footer -->
+    <footer class="page-footer">
+        <span>Lesson 16: Project -- The Lighthouse Circuit</span>
+        <span>Module 2: Building Simple Circuits</span>
+    </footer>
+
+</body>
+</html>

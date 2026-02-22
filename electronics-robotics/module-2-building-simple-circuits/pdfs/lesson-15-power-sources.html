@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 15: Power Sources -- Batteries, Volts, and Energy</title>
+    <style>
+
+        /* ── Reset & Base ─────────────────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            line-height: 1.75;
+            color: #2C3E50;
+            background: #FAFAFA;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px 40px;
+        }
+
+        /* ── Header Banner ─────────────────────────────────────────── */
+        .lesson-header {
+            background: linear-gradient(135deg, #FF6B35 0%, #FF9A5C 50%, #FFB347 100%);
+            color: #fff;
+            border-radius: 16px;
+            padding: 32px 36px 28px;
+            margin: 24px 0 32px;
+            box-shadow: 0 6px 20px rgba(255,107,53,0.35);
+            position: relative;
+            overflow: hidden;
+        }
+        .lesson-header::before {
+            content: "";
+            position: absolute;
+            top: -40px; right: -40px;
+            width: 160px; height: 160px;
+            background: rgba(255,255,255,0.12);
+            border-radius: 50%;
+        }
+        .lesson-header::after {
+            content: "";
+            position: absolute;
+            bottom: -30px; left: -20px;
+            width: 100px; height: 100px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+        }
+        .lesson-header h1 {
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            position: relative;
+            z-index: 1;
+        }
+        .module-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.25);
+            border: 2px solid rgba(255,255,255,0.6);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 4px 14px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 1;
+        }
+        .meta-row {
+            margin-top: 12px;
+            font-size: 14px;
+            color: rgba(255,255,255,0.9);
+            position: relative;
+            z-index: 1;
+        }
+        .meta-pill {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            border-radius: 12px;
+            padding: 2px 10px;
+            margin: 2px 4px 2px 0;
+            white-space: nowrap;
+        }
+
+        /* ── Section Headings ──────────────────────────────────────── */
+        h2 {
+            font-size: 22px;
+            font-weight: 800;
+            margin: 36px 0 14px;
+            padding: 10px 18px;
+            border-radius: 10px;
+            color: #fff;
+            /* colour applied inline via data-color */
+        }
+        h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 28px 0 10px;
+            padding: 8px 14px;
+            border-left: 5px solid;
+            border-radius: 0 8px 8px 0;
+            background: rgba(0,0,0,0.03);
+            /* border-left colour applied inline */
+        }
+
+        /* ── Body Text ─────────────────────────────────────────────── */
+        p { margin: 10px 0; }
+        strong { font-weight: 700; color: #1A252F; }
+        em { font-style: italic; color: #5D6D7E; }
+
+        /* ── Inline Code ───────────────────────────────────────────── */
+        code {
+            background: #F0F3F7;
+            border: 1px solid #D5DCE8;
+            border-radius: 4px;
+            padding: 1px 6px;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 14px;
+            color: #C0392B;
+        }
+
+        /* ── Fenced Code Blocks ────────────────────────────────────── */
+        pre {
+            background: #F4F6F8;
+            border: 1px solid #D0D8E4;
+            border-left: 5px solid #45B7D1;
+            border-radius: 8px;
+            padding: 16px 18px;
+            overflow-x: auto;
+            margin: 16px 0;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #2C3E50;
+            white-space: pre;
+        }
+        pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            font-size: inherit;
+            color: inherit;
+        }
+
+        /* ── Blockquotes / Callout Boxes ───────────────────────────── */
+        blockquote {
+            background: #FFF8E7;
+            border-left: 6px solid #FF6B35;
+            border-radius: 0 12px 12px 0;
+            padding: 14px 20px;
+            margin: 16px 0;
+            color: #5D3A1A;
+            font-style: normal;
+            position: relative;
+        }
+        blockquote::before {
+            content: "\1F4AC";  /* speech bubble emoji */
+            position: absolute;
+            top: -10px; left: 10px;
+            font-size: 20px;
+            line-height: 1;
+        }
+        blockquote p { margin: 6px 0; }
+
+        /* ── Lists ─────────────────────────────────────────────────── */
+        ul, ol {
+            margin: 10px 0 10px 24px;
+            padding-left: 8px;
+        }
+        li { margin: 5px 0; }
+        ul li::marker { color: #FF6B35; font-size: 18px; }
+        ol li::marker { color: #45B7D1; font-weight: 700; }
+
+        /* ── Tables ────────────────────────────────────────────────── */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 16px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+        }
+        thead th {
+            background: #45B7D1;
+            color: #fff;
+            font-weight: 700;
+            padding: 11px 14px;
+            text-align: left;
+            border-bottom: 3px solid #2E9BBD;
+        }
+        thead th:first-child { border-radius: 10px 0 0 0; }
+        thead th:last-child  { border-radius: 0 10px 0 0; }
+        tbody tr:nth-child(odd)  td { background: #F8FBFF; }
+        tbody tr:nth-child(even) td { background: #EAF6FB; }
+        tbody tr:hover td { background: #D6F0F8; transition: background 0.15s; }
+        td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #D9EEF6;
+            vertical-align: top;
+        }
+        /* Checkbox column: replace [ ] with styled checkbox */
+        td .checkbox {
+            display: inline-block;
+            width: 18px; height: 18px;
+            border: 2px solid #45B7D1;
+            border-radius: 4px;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+
+        /* ── XP Badges ─────────────────────────────────────────────── */
+        .xp-badge {
+            display: inline-block;
+            background: #FFEAA7;
+            border: 2px solid #F39C12;
+            color: #7D4F00;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin: 2px 4px;
+            white-space: nowrap;
+        }
+        .award-badge {
+            display: inline-block;
+            background: #D5F5E3;
+            border: 2px solid #27AE60;
+            color: #1A5E35;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin: 2px 4px;
+            white-space: nowrap;
+        }
+
+        /* ── Horizontal Rule ───────────────────────────────────────── */
+        hr {
+            border: none;
+            border-top: 3px dashed #B2D8E8;
+            margin: 30px 0;
+        }
+
+        /* ── Footer ────────────────────────────────────────────────── */
+        .page-footer {
+            margin-top: 48px;
+            padding-top: 16px;
+            border-top: 2px solid #D5DCE8;
+            text-align: center;
+            font-size: 13px;
+            color: #7F8C8D;
+        }
+
+        /* ── Print Styles ──────────────────────────────────────────── */
+        @media print {
+            @page { size: A4; margin: 18mm 15mm 20mm; }
+
+            body {
+                background: #fff !important;
+                font-size: 13px;
+                max-width: 100%;
+                padding: 0;
+            }
+
+            /* Force colour printing */
+            * { -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important; }
+
+            /* Page breaks */
+            h2 { page-break-before: auto; break-before: auto; }
+            pre, blockquote, table { page-break-inside: avoid; }
+            h2, h3 { page-break-after: avoid; break-after: avoid; }
+            tr { page-break-inside: avoid; }
+
+            /* No orphaned paragraphs */
+            p { orphans: 3; widows: 3; }
+
+            .lesson-header { box-shadow: none; }
+
+            .page-footer {
+                position: fixed;
+                bottom: 0; left: 0; right: 0;
+                background: #fff;
+                border-top: 1px solid #ccc;
+                padding: 6px 15mm;
+                display: flex;
+                justify-content: space-between;
+            }
+        }
+    
+    </style>
+</head>
+<body>
+
+    <!-- Header Banner -->
+    <header class="lesson-header">
+        <div class="module-badge">Module 2 -- Building Simple Circuits</div>
+        <h1>Lesson 15: Power Sources -- Batteries, Volts, and Energy</h1>
+        <div class="meta-row"><span class="meta-pill">&#9733; Star-2 Easy-Medium</span><span class="meta-pill">&#9200; 45--50 minutes</span><span class="meta-pill">&#128100; Age 6--12 years</span><span class="meta-pill xp-badge" style="background:#FFEAA7;color:#7D4F00;border:none;">&#9889; 210 XP</span></div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+<hr>
+<h2 id="your-mission-today" style="background:#FF6B35;">Your Mission Today</h2>
+<p>Circuit Explorer, every circuit needs POWER. You have been using a 9V battery this whole time, but did you know there are dozens of different battery types? Today you are going to build a <strong>Battery Lab</strong> &mdash; testing every type of battery you can find with your Magic Measurement Wand! You will also discover two amazing tricks: wiring batteries in SERIES to get more voltage, and in PARALLEL to get more capacity. Let us power up!</p>
+<hr>
+<h2 id="learning-objectives" style="background:#4ECDC4;">Learning Objectives</h2>
+<p>By the end of this lesson, you will be able to:</p>
+<ul>
+<li>Name common battery types and their voltages (9V, AA, AAA, coin cell)</li>
+<li>Measure the voltage of any battery using the Wand</li>
+<li>Test whether a battery is fresh or dying</li>
+<li>Wire batteries in series (voltages ADD up)</li>
+<li>Wire batteries in parallel (capacity adds up, voltage stays the same)</li>
+<li>Understand basic battery safety</li>
+</ul>
+<hr>
+<h2 id="what-you-need" style="background:#45B7D1;">What You Need</h2>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Item</th>
+<th>Qty</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>9V battery (fresh)</td>
+<td>2</td>
+</tr>
+<tr>
+<td>9V battery (old/used, if available)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>AA batteries (1.5V, fresh)</td>
+<td>4</td>
+</tr>
+<tr>
+<td>AAA battery (1.5V)</td>
+<td>2</td>
+</tr>
+<tr>
+<td>CR2032 coin cell battery (3V)</td>
+<td>2</td>
+</tr>
+<tr>
+<td>9V battery clip</td>
+<td>1</td>
+</tr>
+<tr>
+<td>AA battery holder (2-cell or 4-cell)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Breadboard</td>
+<td>1</td>
+</tr>
+<tr>
+<td>LEDs (red, green)</td>
+<td>2</td>
+</tr>
+<tr>
+<td>330-ohm resistors</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Jumper wires</td>
+<td>8</td>
+</tr>
+<tr>
+<td>Alligator clip wires</td>
+<td>4</td>
+</tr>
+<tr>
+<td>Multimeter (Magic Measurement Wand)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Paper + pencil</td>
+<td>1 set</td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="how-to-teach-this-lesson" style="background:#96CEB4;">How to Teach This Lesson</h2>
+<h3 id="step-1-hook-the-battery-museum-5-min" style="border-left-color:#45B7D1; color:#45B7D1;">Step 1: Hook &mdash; The Battery Museum (5 min)</h3>
+<p>Lay out every battery you have on the table. Make it look like a museum exhibit.</p>
+<blockquote><p>"Welcome to the Battery Museum! Every single one of these stores ELECTRICITY inside a chemical reaction. Some are tiny. Some are big. Some push hard (high voltage). Some push gently (low voltage). But they ALL have the same job: to push electrons around a circuit."</p></blockquote>
+<blockquote><p>"Here is a challenge: WITHOUT looking at any labels, can you guess which battery pushes the HARDEST? Which has the most voltage?"</p></blockquote>
+<p>Let the kid guess. They might think the biggest battery has the most voltage &mdash; but the tiny 9V battery actually pushes harder than the big AA battery!</p>
+<blockquote><p>"Size does NOT equal voltage! A 9V battery is SMALLER than a AA battery, but it pushes 6 times harder. Let us prove it with your Wand."</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+10 XP</span> for guessing which battery has the most voltage!</strong></p>
+<hr>
+<h3 id="step-2-the-battery-lab-measure-everything-10-min" style="border-left-color:#96CEB4; color:#96CEB4;">Step 2: The Battery Lab &mdash; Measure Everything! (10 min)</h3>
+<blockquote><p>"Set your Wand to DC Volts, 20V range. Let us test every battery in the museum!"</p></blockquote>
+<p><strong>How to measure any battery:</strong></p>
+<ol>
+<li>Touch RED probe to the <strong>+</strong> terminal</li>
+<li>Touch BLACK probe to the <strong>-</strong> terminal</li>
+<li>Read the voltage!</li>
+</ol>
+<p><strong>For a 9V battery:</strong> The + terminal is the smaller round snap. The - terminal is the larger round snap.</p>
+<p><strong>For AA/AAA:</strong> The + is the bump on top. The - is the flat bottom.</p>
+<p><strong>For a coin cell (CR2032):</strong> The + is the flat face with writing. The - is the smooth bottom.</p>
+<p><strong>Battery Lab Data Sheet:</strong></p>
+<pre><code>| Battery Type | Rated Voltage | Wand Reads | Fresh or Tired? | Notes |
+|-------------|--------------|-----------|----------------|-------|
+| 9V (new)    | 9.0V         |           |                |       |
+| 9V (old)    | 9.0V         |           |                |       |
+| AA (new)    | 1.5V         |           |                |       |
+| AAA         | 1.5V         |           |                |       |
+| CR2032      | 3.0V         |           |                |       |</code></pre>
+<p><strong>How to tell if a battery is fresh or tired:</strong></p>
+<pre><code>| Battery Type | Fresh (Good) | Getting Tired | Dead |
+|-------------|-------------|--------------|------|
+| 9V          | 9.0--9.6V   | 7.0--8.9V    | Under 7V |
+| AA / AAA    | 1.5--1.6V   | 1.2--1.4V    | Under 1.1V |
+| CR2032      | 3.0--3.3V   | 2.5--2.9V    | Under 2.5V |</code></pre>
+<blockquote><p>"Your Wand just became a battery tester! Any time someone asks 'Is this battery dead?', you can answer in seconds."</p></blockquote>
+<p><strong>Fun activity:</strong> Have the kid go around the house, find old batteries from remotes and toys, and test them all!</p>
+<p><strong>Award: <span class="xp-badge">+30 XP</span> for measuring all batteries and filling in the data sheet!</strong></p>
+<hr>
+<h3 id="step-3-what-is-inside-a-battery-5-min" style="border-left-color:#FF6B35; color:#FF6B35;">Step 3: What Is Inside a Battery? (5 min)</h3>
+<blockquote><p>"A battery is like a tiny chemical factory. Inside, chemicals react with each other. That reaction pushes electrons from the - terminal to the + terminal. When you connect a circuit, the electrons flow through the circuit, doing work (like lighting LEDs), and then return to the battery."</p></blockquote>
+<pre><code>  Inside a battery:
+
+  +-----------------------------------+
+  |                                   |
+  |   Chemical A  |  Chemical B       |
+  |   (anode)     |  (cathode)        |
+  |               |                   |
+  |   Reaction pushes electrons --&gt;   |
+  |                                   |
+  +----(-) terminal-----(+) terminal--+</code></pre>
+<p><strong>Battery vocabulary:</strong></p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Word</th>
+<th>Kid-Friendly Definition</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><strong>Voltage</strong></td>
+<td>How hard the battery pushes (more voltage = stronger push)</td>
+</tr>
+<tr>
+<td><strong>Capacity (mAh)</strong></td>
+<td>How LONG the battery can push before it runs out</td>
+</tr>
+<tr>
+<td><strong>mAh</strong></td>
+<td>Milliamp-hours &mdash; like "fuel tank size" for batteries</td>
+</tr>
+</tbody></table></div>
+<blockquote><p>"A 9V battery pushes HARDER than a AA, but a AA has MORE capacity (it lasts longer). A 9V battery is like a strong sprinter. A AA battery is like a steady marathon runner."</p></blockquote>
+<pre><code>| Battery | Voltage | Typical Capacity |
+|---------|---------|-----------------|
+| 9V      | 9V      | about 500 mAh (sprinter) |
+| AA      | 1.5V    | about 2500 mAh (marathon runner) |
+| AAA     | 1.5V    | about 1000 mAh (jogger) |
+| CR2032  | 3V      | about 225 mAh (short walk) |</code></pre>
+<p><strong>Award: <span class="xp-badge">+10 XP</span> for understanding the difference between voltage and capacity!</strong></p>
+<hr>
+<h3 id="step-4-batteries-in-series-voltage-stacking-10-min" style="border-left-color:#4ECDC4; color:#4ECDC4;">Step 4: Batteries in Series &mdash; Voltage Stacking! (10 min)</h3>
+<blockquote><p>"What if 1.5V is not enough? What if you need MORE voltage? Stack batteries in SERIES &mdash; their voltages ADD UP!"</p></blockquote>
+<p><strong>How series batteries work:</strong></p>
+<pre><code>  Series = end to end (+ of one connects to - of next)
+
+  [AA1: 1.5V] --&gt; [AA2: 1.5V] --&gt; [AA3: 1.5V] --&gt; [AA4: 1.5V]
+   +     -          +     -          +     -          +     -
+
+  Total voltage = 1.5 + 1.5 + 1.5 + 1.5 = 6V!</code></pre>
+<blockquote><p>"This is EXACTLY how battery holders work! A 4-AA battery holder connects 4 batteries in series to make 6V. That is how many toys and flashlights work."</p></blockquote>
+<p><strong>Build it:</strong></p>
+<p>If you have a battery holder:</p>
+<ol>
+<li>Insert 2 AA batteries into the holder (correct polarity!)</li>
+<li>Measure the output with the Wand</li>
+</ol>
+<p>If you do not have a holder, use alligator clips:</p>
+<ol>
+<li>Clip the + of AA1 to the - of AA2</li>
+<li>Measure from the - of AA1 to the + of AA2</li>
+</ol>
+<p><strong>Wand Check &mdash; Series batteries:</strong></p>
+<pre><code>| Configuration | Predicted Voltage | Wand Reads |
+|--------------|------------------|-----------|
+| 1 AA battery | 1.5V | _____ V |
+| 2 AA in series | 3.0V | _____ V |
+| 3 AA in series | 4.5V | _____ V |
+| 4 AA in series | 6.0V | _____ V |</code></pre>
+<blockquote><p>"Each battery adds its voltage. 4 batteries in series = 4 times the voltage! The voltages STACK."</p></blockquote>
+<p><strong>Experiment &mdash; Power an LED from AA batteries:</strong></p>
+<blockquote><p>"Can one AA battery (1.5V) light a red LED? Let us try!"</p></blockquote>
+<ol>
+<li>Connect 1 AA to a 100-ohm resistor and a red LED. Very dim or off (1.5V is barely enough for a red LED).</li>
+<li>Connect 2 AA in series (3V). LED lights up!</li>
+<li>Connect 4 AA in series (6V). LED is BRIGHT!</li>
+</ol>
+<blockquote><p>"This is why most battery-powered gadgets use multiple batteries &mdash; one is often not enough."</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+30 XP</span> for measuring batteries in series and lighting the LED!</strong></p>
+<hr>
+<h3 id="step-5-batteries-in-parallel-bigger-fuel-tank-8-min" style="border-left-color:#C678B0; color:#C678B0;">Step 5: Batteries in Parallel &mdash; Bigger Fuel Tank! (8 min)</h3>
+<blockquote><p>"What if you have ENOUGH voltage but want the battery to LAST LONGER? Wire them in PARALLEL!"</p></blockquote>
+<p><strong>How parallel batteries work:</strong></p>
+<pre><code>  Parallel = side by side (+ connects to +, - connects to -)
+
+  [AA1: 1.5V] ---+--- (+)
+  [AA2: 1.5V] ---+       Output: 1.5V
+  [AA3: 1.5V] ---+       BUT capacity = 2500 + 2500 + 2500 = 7500 mAh!
+                  |
+  [AA1: 1.5V] ---+--- (-)
+  [AA2: 1.5V] ---+
+  [AA3: 1.5V] ---+</code></pre>
+<blockquote><p>"Voltage stays the SAME (1.5V). But capacity TRIPLES! The batteries share the load &mdash; each one does less work, so they all last longer."</p></blockquote>
+<p><strong>IMPORTANT SAFETY RULE:</strong></p>
+<blockquote><p>"Only put batteries in PARALLEL if they are the SAME type and close to the SAME charge level. Mixing old and new batteries in parallel can cause the new battery to try to charge the old one &mdash; that makes heat and is not safe!"</p></blockquote>
+<p><strong>Wand Check &mdash; Parallel batteries:</strong></p>
+<p>Connect 2 AA batteries in parallel (alligator clips: + to +, - to -).</p>
+<pre><code>| Configuration | Predicted Voltage | Wand Reads |
+|--------------|------------------|-----------|
+| 1 AA battery | 1.5V | _____ V |
+| 2 AA in parallel | 1.5V (same!) | _____ V |</code></pre>
+<blockquote><p>"See? The voltage did NOT change! Parallel does not stack voltage &mdash; it stacks capacity. The batteries will last twice as long."</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+20 XP</span> for measuring parallel batteries and proving voltage stays the same!</strong></p>
+<hr>
+<h3 id="step-6-the-9v-battery-secret-3-min" style="border-left-color:#E8A838; color:#E8A838;">Step 6: The 9V Battery Secret (3 min)</h3>
+<blockquote><p>"Here is a cool secret about the 9V battery. What do you think is INSIDE it?"</p></blockquote>
+<p>Show a picture (or if you have a dead 9V battery to carefully open):</p>
+<pre><code>  Inside a 9V battery:
+
+  +-------+
+  | AAAA  |
+  | AAAA  |  &lt;-- 6 tiny cells, each 1.5V
+  | AAAA  |
+  | AAAA  |  1.5 x 6 = 9V!
+  | AAAA  |
+  | AAAA  |
+  +-------+</code></pre>
+<blockquote><p>"A 9V battery is really 6 tiny batteries wired IN SERIES inside a metal can! 6 x 1.5V = 9V. Now you know the secret!"</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+10 XP</span> for understanding the 9V battery secret!</strong></p>
+<hr>
+<h3 id="step-7-battery-safety-rules-3-min" style="border-left-color:#E05C5C; color:#E05C5C;">Step 7: Battery Safety Rules (3 min)</h3>
+<blockquote><p>"Batteries are safe when used correctly. Here are the rules:"</p></blockquote>
+<pre><code>  BATTERY SAFETY RULES
+  ====================
+
+  1. Never short-circuit a battery (connect + directly to -)
+     -- it gets HOT and can leak or burst
+
+  2. Never put batteries in fire
+     -- they can explode
+
+  3. Always check polarity before inserting batteries
+
+  4. Remove batteries from devices you will not use for a long time
+     -- they can leak and damage the device
+
+  5. Do not mix old and new batteries in series
+     -- the old one works too hard and can leak
+
+  6. Dispose of dead batteries properly
+     -- many stores have battery recycling bins
+
+  7. If a battery feels hot, smells, or is swelling -- stop using it!
+     -- tell an adult immediately</code></pre>
+<p><strong>Award: <span class="xp-badge">+10 XP</span> for reciting at least 3 safety rules!</strong></p>
+<hr>
+<h2 id="quick-quiz-earn-bonus-xp" style="background:#E8A838;">Quick Quiz &mdash; Earn Bonus XP!</h2>
+<p><strong>Question 1:</strong> A fresh AA battery measures about:</p>
+<ul>
+<li>A) 9 Volts</li>
+<li>B) 3 Volts</li>
+<li>C) 1.5 Volts</li>
+</ul>
+<p><strong>(Correct: C &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<p><strong>Question 2:</strong> You wire 3 AA batteries in series. What is the total voltage?</p>
+<ul>
+<li>A) 1.5V (same as one)</li>
+<li>B) 4.5V (1.5 x 3)</li>
+<li>C) 0.5V (1.5 divided by 3)</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<p><strong>Question 3:</strong> You wire 2 identical batteries in parallel. What happens?</p>
+<ul>
+<li>A) Voltage doubles, capacity stays the same</li>
+<li>B) Voltage stays the same, capacity doubles</li>
+<li>C) Both voltage and capacity double</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<p><strong>Bonus question for older kids (10+):</strong></p>
+<blockquote><p>"A 9V battery has about 500 mAh of capacity. Your circuit draws 20 mA. About how long will the battery last?"</p><p>Time = Capacity / Current = 500 mAh / 20 mA = 25 hours</p></blockquote>
+<p><strong>(Correct: <span class="xp-badge">+30 XP</span> bonus!)</strong></p>
+<hr>
+<h2 id="lesson-15-complete" style="background:#C678B0;">Lesson 15 Complete!</h2>
+<pre><code>  =============================================
+
+     POWER SOURCE EXPERT BADGE UNLOCKED!
+
+     Skills unlocked:
+     [check] Measured all common battery types
+     [check] Tested batteries for freshness
+     [check] Wired batteries in series (voltage stacking)
+     [check] Wired batteries in parallel (capacity stacking)
+     [check] Know battery safety rules
+     [check] Discovered the 9V battery secret
+
+  =============================================</code></pre>
+<p><strong>XP Breakdown:</strong></p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Activity</th>
+<th>XP</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Hook &mdash; guess the strongest battery</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Battery Lab data sheet (all batteries)</td>
+<td>30</td>
+</tr>
+<tr>
+<td>Voltage vs capacity understanding</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Series batteries + LED experiment</td>
+<td>30</td>
+</tr>
+<tr>
+<td>Parallel batteries measurement</td>
+<td>20</td>
+</tr>
+<tr>
+<td>9V battery secret</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Battery safety rules</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Quiz (3 questions)</td>
+<td>60</td>
+</tr>
+<tr>
+<td>Bonus question</td>
+<td>30</td>
+</tr>
+<tr>
+<td><strong>TOTAL POSSIBLE</strong></td>
+<td><strong>210</strong></td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="coming-up-next" style="background:#E05C5C;">Coming Up Next...</h2>
+<p>In <strong>Lesson 16</strong>, it is the <strong>Grand Finale of Module 2</strong> &mdash; you are going to build a working <strong>LIGHTHOUSE</strong> with a blinking LED! You will use EVERYTHING you have learned: breadboarding, Ohm's Law, series and parallel circuits, voltage dividers, power sources, and your Magic Measurement Wand to debug the entire project. This is going to be EPIC!</p>
+<hr>
+<h2 id="troubleshooting" style="background:#FF6B35;">Troubleshooting</h2>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Problem</th>
+<th>Likely Cause</th>
+<th>Fix</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Wand reads 0V on a battery</td>
+<td>Probes not touching terminals</td>
+<td>Press probe tips firmly against battery terminals</td>
+</tr>
+<tr>
+<td>Wand reads negative voltage on battery</td>
+<td>Probes reversed</td>
+<td>Red probe on +, black probe on -</td>
+</tr>
+<tr>
+<td>Series batteries give wrong total voltage</td>
+<td>One battery is dead or reversed</td>
+<td>Measure each battery individually; check all are oriented correctly</td>
+</tr>
+<tr>
+<td>LED does not light from 2 AA batteries</td>
+<td>LED or resistor connection issue</td>
+<td>Check breadboard connections and LED polarity</td>
+</tr>
+<tr>
+<td>Battery gets hot when connected</td>
+<td>Short circuit</td>
+<td>DISCONNECT IMMEDIATELY. Check for bare wires touching</td>
+</tr>
+<tr>
+<td>Parallel batteries measure slightly different voltage</td>
+<td>Batteries are at different charge levels</td>
+<td>Use batteries of the same brand and age for parallel connections</td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="parentinstructor-notes" style="background:#4ECDC4;">Parent/Instructor Notes</h2>
+<ul>
+<li><strong>Ages 6&mdash;8:</strong> Focus on the Battery Museum and the series stacking experiment. The "count the batteries and multiply by 1.5" pattern is easy and fun. Skip the capacity/mAh concept &mdash; just say "bigger batteries last longer."</li>
+<li><strong>Ages 9&mdash;12:</strong> The capacity concept (mAh) and the bonus question (time = capacity / current) introduce practical engineering thinking. Encourage them to calculate how long their project circuits will run on different batteries.</li>
+<li><strong>The 9V battery teardown</strong> is fascinating if you have a dead 9V battery. Carefully prying one open with pliers (adult only) to reveal the 6 tiny cells inside is a memorable demo. Only do this with fully dead batteries.</li>
+<li><strong>Parallel battery safety</strong> is important. Emphasize that parallel batteries must be the same type and similar charge level. In practice, for this course, series connections are more useful and safer.</li>
+<li>The Battery Lab activity is a great excuse to go around the house and test every battery. Kids love finding dead batteries and reporting their findings.</li>
+<li>This lesson sets up the project lesson (Lesson 16) by ensuring kids understand how to choose and configure power sources.</li>
+</ul>
+    </main>
+
+    <!-- Footer -->
+    <footer class="page-footer">
+        <span>Lesson 15: Power Sources -- Batteries, Volts, and Energy</span>
+        <span>Module 2: Building Simple Circuits</span>
+    </footer>
+
+</body>
+</html>

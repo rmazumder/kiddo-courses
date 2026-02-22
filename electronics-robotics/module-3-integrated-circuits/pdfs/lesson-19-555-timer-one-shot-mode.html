@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 19: The 555 Timer -- One-Shot Mode (Monostable)</title>
+    <style>
+
+        /* ── Reset & Base ─────────────────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            line-height: 1.75;
+            color: #2C3E50;
+            background: #FAFAFA;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px 40px;
+        }
+
+        /* ── Header Banner ─────────────────────────────────────────── */
+        .lesson-header {
+            background: linear-gradient(135deg, #6C5CE7 0%, #A29BFE 50%, #74B9FF 100%);
+            color: #fff;
+            border-radius: 16px;
+            padding: 32px 36px 28px;
+            margin: 24px 0 32px;
+            box-shadow: 0 6px 20px rgba(108,92,231,0.35);
+            position: relative;
+            overflow: hidden;
+        }
+        .lesson-header::before {
+            content: "";
+            position: absolute;
+            top: -40px; right: -40px;
+            width: 160px; height: 160px;
+            background: rgba(255,255,255,0.12);
+            border-radius: 50%;
+        }
+        .lesson-header::after {
+            content: "";
+            position: absolute;
+            bottom: -30px; left: -20px;
+            width: 100px; height: 100px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+        }
+        .lesson-header h1 {
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            position: relative;
+            z-index: 1;
+        }
+        .module-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.25);
+            border: 2px solid rgba(255,255,255,0.6);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 4px 14px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 1;
+        }
+        .meta-row {
+            margin-top: 12px;
+            font-size: 14px;
+            color: rgba(255,255,255,0.9);
+            position: relative;
+            z-index: 1;
+        }
+        .meta-pill {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            border-radius: 12px;
+            padding: 2px 10px;
+            margin: 2px 4px 2px 0;
+            white-space: nowrap;
+        }
+
+        /* ── Section Headings ──────────────────────────────────────── */
+        h2 {
+            font-size: 22px;
+            font-weight: 800;
+            margin: 36px 0 14px;
+            padding: 10px 18px;
+            border-radius: 10px;
+            color: #fff;
+            /* colour applied inline via data-color */
+        }
+        h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 28px 0 10px;
+            padding: 8px 14px;
+            border-left: 5px solid;
+            border-radius: 0 8px 8px 0;
+            background: rgba(0,0,0,0.03);
+            /* border-left colour applied inline */
+        }
+
+        /* ── Body Text ─────────────────────────────────────────────── */
+        p { margin: 10px 0; }
+        strong { font-weight: 700; color: #1A252F; }
+        em { font-style: italic; color: #5D6D7E; }
+
+        /* ── Inline Code ───────────────────────────────────────────── */
+        code {
+            background: #F0F3F7;
+            border: 1px solid #D5DCE8;
+            border-radius: 4px;
+            padding: 1px 6px;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 14px;
+            color: #6C5CE7;
+        }
+
+        /* ── Fenced Code Blocks ────────────────────────────────────── */
+        pre {
+            background: #F4F6F8;
+            border: 1px solid #D0D8E4;
+            border-left: 5px solid #6C5CE7;
+            border-radius: 8px;
+            padding: 16px 18px;
+            overflow-x: auto;
+            margin: 16px 0;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #2C3E50;
+            white-space: pre;
+        }
+        pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            font-size: inherit;
+            color: inherit;
+        }
+
+        /* ── Blockquotes / Callout Boxes ───────────────────────────── */
+        blockquote {
+            background: #F3F0FF;
+            border-left: 6px solid #6C5CE7;
+            border-radius: 0 12px 12px 0;
+            padding: 14px 20px;
+            margin: 16px 0;
+            color: #3D2D6B;
+            font-style: normal;
+            position: relative;
+        }
+        blockquote::before {
+            content: "\1F4AC";  /* speech bubble emoji */
+            position: absolute;
+            top: -10px; left: 10px;
+            font-size: 20px;
+            line-height: 1;
+        }
+        blockquote p { margin: 6px 0; }
+
+        /* ── Lists ─────────────────────────────────────────────────── */
+        ul, ol {
+            margin: 10px 0 10px 24px;
+            padding-left: 8px;
+        }
+        li { margin: 5px 0; }
+        ul li::marker { color: #6C5CE7; font-size: 18px; }
+        ol li::marker { color: #45B7D1; font-weight: 700; }
+
+        /* ── Tables ────────────────────────────────────────────────── */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 16px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+        }
+        thead th {
+            background: #6C5CE7;
+            color: #fff;
+            font-weight: 700;
+            padding: 11px 14px;
+            text-align: left;
+            border-bottom: 3px solid #5A4BD1;
+        }
+        thead th:first-child { border-radius: 10px 0 0 0; }
+        thead th:last-child  { border-radius: 0 10px 0 0; }
+        tbody tr:nth-child(odd)  td { background: #F8F6FF; }
+        tbody tr:nth-child(even) td { background: #EDEBFF; }
+        tbody tr:hover td { background: #DDD8FF; transition: background 0.15s; }
+        td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #D5D0F0;
+            vertical-align: top;
+        }
+        /* Checkbox column: replace [ ] with styled checkbox */
+        td .checkbox {
+            display: inline-block;
+            width: 18px; height: 18px;
+            border: 2px solid #6C5CE7;
+            border-radius: 4px;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+
+        /* ── XP Badges ─────────────────────────────────────────────── */
+        .xp-badge {
+            display: inline-block;
+            background: #FFEAA7;
+            border: 2px solid #F39C12;
+            color: #7D4F00;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin: 2px 4px;
+            white-space: nowrap;
+        }
+        .award-badge {
+            display: inline-block;
+            background: #D5F5E3;
+            border: 2px solid #27AE60;
+            color: #1A5E35;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin: 2px 4px;
+            white-space: nowrap;
+        }
+
+        /* ── Horizontal Rule ───────────────────────────────────────── */
+        hr {
+            border: none;
+            border-top: 3px dashed #C8C0F0;
+            margin: 30px 0;
+        }
+
+        /* ── Footer ────────────────────────────────────────────────── */
+        .page-footer {
+            margin-top: 48px;
+            padding-top: 16px;
+            border-top: 2px solid #D5D0F0;
+            text-align: center;
+            font-size: 13px;
+            color: #7F8C8D;
+        }
+
+        /* ── Print Styles ──────────────────────────────────────────── */
+        @media print {
+            @page { size: A4; margin: 18mm 15mm 20mm; }
+
+            body {
+                background: #fff !important;
+                font-size: 13px;
+                max-width: 100%;
+                padding: 0;
+            }
+
+            /* Force colour printing */
+            * { -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important; }
+
+            /* Page breaks */
+            h2 { page-break-before: auto; break-before: auto; }
+            pre, blockquote, table { page-break-inside: avoid; }
+            h2, h3 { page-break-after: avoid; break-after: avoid; }
+            tr { page-break-inside: avoid; }
+
+            /* No orphaned paragraphs */
+            p { orphans: 3; widows: 3; }
+
+            .lesson-header { box-shadow: none; }
+
+            .page-footer {
+                position: fixed;
+                bottom: 0; left: 0; right: 0;
+                background: #fff;
+                border-top: 1px solid #ccc;
+                padding: 6px 15mm;
+                display: flex;
+                justify-content: space-between;
+            }
+        }
+    
+    </style>
+</head>
+<body>
+
+    <!-- Header Banner -->
+    <header class="lesson-header">
+        <div class="module-badge">Module 3 -- Integrated Circuits (ICs)</div>
+        <h1>Lesson 19: The 555 Timer -- One-Shot Mode (Monostable)</h1>
+        <div class="meta-row"><span class="meta-pill">&#9733; Star-3 Intermediate</span><span class="meta-pill">&#9200; 40--45 minutes</span><span class="meta-pill">&#128100; Age 6--12 years</span><span class="meta-pill xp-badge" style="background:#FFEAA7;color:#7D4F00;border:none;">&#9889; 280 XP</span></div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+<hr>
+<h2 id="your-mission-today" style="background:#FF6B35;">Your Mission Today</h2>
+<p>Last lesson you built a blinker that keeps going forever. But what if you want something to turn on for a set amount of time and then stop? Like a hallway light that stays on for 30 seconds after you flip the switch, then turns itself off? That is <strong>monostable mode</strong> &mdash; the 555's "one-shot" trick. Press a button once and the LED stays on for exactly the time YOU choose!</p>
+<hr>
+<h2 id="learning-objectives" style="background:#4ECDC4;">Learning Objectives</h2>
+<p>By the end of this lesson, you will be able to:</p>
+<ul>
+<li>Explain the difference between astable (blinker) and monostable (one-shot) modes</li>
+<li>Build a 555 monostable circuit that triggers with a button press</li>
+<li>Calculate and control how long the output stays on</li>
+<li>Use your Magic Measurement Wand to measure the timed pulse duration</li>
+</ul>
+<hr>
+<h2 id="what-you-need" style="background:#45B7D1;">What You Need</h2>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Item</th>
+<th>Qty</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>555 timer IC</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Resistor: 100k-ohm (R)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Resistor: 47k-ohm (R swap)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Resistor: 10k-ohm (pull-up for trigger)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Electrolytic capacitor: 47 microfarad (C)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Electrolytic capacitor: 100 microfarad (C swap)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Ceramic capacitor: 0.01 microfarad (noise filter)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>LED (any color)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>330-ohm resistor (for LED)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Push button (tactile switch)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>9V battery + clip</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Breadboard</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Jumper wires</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Multimeter (Magic Measurement Wand!)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Stopwatch or phone timer</td>
+<td>1</td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="how-to-teach-this-lesson" style="background:#96CEB4;">How to Teach This Lesson</h2>
+<h3 id="step-1-hook-the-automatic-nightlight-5-min" style="border-left-color:#45B7D1; color:#45B7D1;">Step 1: Hook &mdash; The Automatic Nightlight (5 min)</h3>
+<blockquote><p>"Imagine you wake up in the middle of the night and need to go to the bathroom. You slap a big button on the wall. The hallway light turns on, you walk to the bathroom and back, and by the time you are back in bed &mdash; the light turns itself off. No switch to flip, no thinking required."</p></blockquote>
+<blockquote><p>"That is exactly what we are building today! A timed light that YOU control &mdash; press once, it stays on for 5 seconds (or 10, or 30), then turns off by itself."</p></blockquote>
+<p><strong>The difference:</strong></p>
+<ul>
+<li><strong>Astable (Lesson 18):</strong> Keeps going forever &mdash; on, off, on, off...</li>
+<li><strong>Monostable (today):</strong> One shot &mdash; press the button, output goes HIGH for a set time, then goes LOW and STAYS LOW until you press again</li>
+</ul>
+<blockquote><p>"Mono means one. Stable means steady. Monostable = one steady pulse."</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+10 XP</span> for understanding the difference between astable and monostable!</strong></p>
+<hr>
+<h3 id="step-2-how-monostable-mode-works-8-min" style="border-left-color:#96CEB4; color:#96CEB4;">Step 2: How Monostable Mode Works (8 min)</h3>
+<p><strong>The Egg Timer Analogy:</strong></p>
+<blockquote><p>"Think of an egg timer. You twist it to set the time (that is your resistor and capacitor values). When you let go, it starts counting down (the capacitor charges). When time is up, it goes DING and stops (the output goes LOW). To start it again, you have to twist it again (press the button)."</p></blockquote>
+<p><strong>The circuit:</strong></p>
+<pre><code>  +9V ----+
+          |
+         [R] 100k-ohm
+          |
+          +------------ Pin 6 (Threshold)
+          |              Pin 7 (Discharge)
+         [C] 47uF
+          |
+         GND
+
+  Pin 8 (VCC) ---- +9V
+  Pin 1 (GND) ---- GND
+  Pin 4 (Reset) ---- +9V
+  Pin 5 (Control) ---- 0.01uF ---- GND
+
+  Pin 2 (Trigger) ---- [10k pull-up to +9V]
+                   ---- push button ---- GND
+
+  Pin 3 (Output) ---- [330-ohm] ---- LED ---- GND</code></pre>
+<p><strong>What happens when you press the button:</strong></p>
+<ol>
+<li>Pin 2 (Trigger) drops below 1/3 VCC &mdash; this triggers the 555</li>
+<li>Output (Pin 3) goes HIGH &mdash; LED turns on!</li>
+<li>Capacitor C starts charging through R</li>
+<li>When the capacitor voltage reaches 2/3 VCC, the 555 flips back</li>
+<li>Output goes LOW &mdash; LED turns off</li>
+<li>Capacitor discharges quickly through Pin 7</li>
+<li>Circuit waits for the next button press</li>
+</ol>
+<p><strong>The timing formula:</strong></p>
+<pre><code>Time ON = 1.1 x R x C
+
+Example: R = 100k, C = 47uF
+T = 1.1 x 100,000 x 0.000047
+T = 5.17 seconds (about 5 seconds!)</code></pre>
+<p><strong>Award: <span class="xp-badge">+10 XP</span> for understanding how monostable timing works!</strong></p>
+<hr>
+<h3 id="step-3-build-the-one-shot-circuit-12-min" style="border-left-color:#FF6B35; color:#FF6B35;">Step 3: Build the One-Shot Circuit! (12 min)</h3>
+<blockquote><p>"Let us build this! It looks a lot like the blinker from last lesson, but simpler in some ways."</p></blockquote>
+<p><strong>Step-by-step wiring:</strong></p>
+<ol>
+<li>Place the 555 IC across the center gap, notch facing up</li>
+<li>Pin 1 (GND) to - rail</li>
+<li>Pin 8 (VCC) to + rail</li>
+<li>Pin 4 (Reset) to + rail</li>
+<li>Place R (100k-ohm) between the + rail and a row connecting to Pin 7</li>
+<li>Connect Pin 6 to Pin 7 with a short jumper (they share a row connection)</li>
+<li>Place C (47 microfarad) between Pin 6/7 and the - rail. <strong>Long leg (+) to Pin 6/7 side!</strong></li>
+<li>Place 0.01 microfarad cap between Pin 5 and - rail</li>
+<li>Connect the trigger: 10k-ohm resistor from + rail to Pin 2 (pull-up), then push button from Pin 2 to - rail</li>
+<li>Connect LED: Pin 3 to 330-ohm resistor to LED to - rail</li>
+<li>Connect 9V battery</li>
+</ol>
+<p><strong>Test it:</strong></p>
+<blockquote><p>"Press the button quickly and let go. The LED should turn on for about 5 seconds, then turn off by itself. Press again &mdash; another 5-second glow!"</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+40 XP</span> for building a working monostable circuit!</strong></p>
+<hr>
+<h3 id="step-4-time-control-experiments-8-min" style="border-left-color:#4ECDC4; color:#4ECDC4;">Step 4: Time Control Experiments (8 min)</h3>
+<blockquote><p>"Now let us play with the timing. You are the time controller!"</p></blockquote>
+<p><strong>Experiment: Change R and C to change the ON time</strong></p>
+<pre><code>| R Value  | C Value | Calculated Time | Measured Time | Close? |
+|----------|---------|----------------|---------------|--------|
+| 100k     | 47uF    | 5.17 sec       |               |        |
+| 47k      | 47uF    | 2.43 sec       |               |        |
+| 100k     | 100uF   | 11 sec         |               |        |
+| 47k      | 100uF   | 5.17 sec       |               |        |</code></pre>
+<p><strong>How to measure:</strong> Press the button, start the stopwatch. When the LED turns off, stop the stopwatch. Write down the time.</p>
+<blockquote><p>"See how the formula works? Bigger R or bigger C = longer time. You are programming the chip without a computer!"</p></blockquote>
+<p><strong>Challenge &mdash; The 10-Second Timer:</strong></p>
+<blockquote><p>"Can you pick a resistor and capacitor combination that gives you exactly 10 seconds? Try it!"</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+30 XP</span> for testing at least 3 combinations and the 10-second challenge!</strong></p>
+<hr>
+<h3 id="step-5-wand-check-measure-the-timed-pulse-8-min" style="border-left-color:#C678B0; color:#C678B0;">Step 5: Wand Check &mdash; Measure the Timed Pulse! (8 min)</h3>
+<blockquote><p>"Let us see what the Wand shows during a one-shot pulse."</p></blockquote>
+<p><strong>Measurement 1: Output Voltage During the Pulse</strong></p>
+<ol>
+<li>Set Wand to DC Voltage</li>
+<li>Black probe on GND</li>
+<li>Red probe on Pin 3 (Output)</li>
+<li>Press the button and watch the display</li>
+</ol>
+<blockquote><p>"You should see the voltage jump up to about 8V when you press the button, hold steady for the timed duration, then drop back to near 0V. That is the one-shot pulse!"</p></blockquote>
+<p><strong>Measurement 2: Watch the Capacitor Charge</strong></p>
+<ol>
+<li>Move the red probe to the + leg of the capacitor (Pin 6/7 side)</li>
+<li>Press the button and watch</li>
+</ol>
+<blockquote><p>"The voltage on the capacitor slowly climbs from 0V up to about 6V. When it hits 6V (two-thirds of 9V), the 555 says 'time is up!' and flips the output off. Then the capacitor voltage drops back to 0V quickly."</p></blockquote>
+<p><strong>Fill in:</strong></p>
+<pre><code>| Measurement | Before Button | During Pulse | After Pulse |
+|-------------|--------------|-------------|-------------|
+| Pin 3 (Output) |           |             |             |
+| Capacitor      |           |             |             |
+| Pin 2 (Trigger)|           |             |             |</code></pre>
+<p><strong>Award: <span class="xp-badge">+40 XP</span> for measuring all three signals during a pulse!</strong></p>
+<hr>
+<h3 id="step-6-real-world-monostable-uses-3-min" style="border-left-color:#E8A838; color:#E8A838;">Step 6: Real-World Monostable Uses (3 min)</h3>
+<blockquote><p>"The one-shot timer is used everywhere!"</p></blockquote>
+<ul>
+<li><strong>Hallway lights</strong> &mdash; press a button, light stays on for 60 seconds</li>
+<li><strong>Hand dryers in bathrooms</strong> &mdash; press once, blows for 30 seconds</li>
+<li><strong>Debouncing buttons</strong> &mdash; when you press a button, it actually bounces many times in a millisecond. A monostable 555 can clean that up into one clean signal</li>
+<li><strong>Alarms</strong> &mdash; trigger once, siren sounds for a set time</li>
+</ul>
+<p><strong>Award: <span class="xp-badge">+10 XP</span> for discussing real-world uses!</strong></p>
+<hr>
+<h2 id="quick-quiz-earn-bonus-xp" style="background:#E8A838;">Quick Quiz &mdash; Earn Bonus XP!</h2>
+<p><strong>Question 1:</strong> What does "monostable" mean?</p>
+<ul>
+<li>A) Two stable states that keep switching</li>
+<li>B) One stable state &mdash; it triggers once, stays on for a set time, then returns</li>
+<li>C) No stable states</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<p><strong>Question 2:</strong> The formula for the ON time in monostable mode is T = 1.1 x R x C. If you DOUBLE the capacitor value, what happens to the time?</p>
+<ul>
+<li>A) It stays the same</li>
+<li>B) It doubles</li>
+<li>C) It halves</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<p><strong>Question 3:</strong> What triggers the 555 in monostable mode?</p>
+<ul>
+<li>A) Pin 3 going HIGH</li>
+<li>B) Pin 2 (Trigger) dropping below 1/3 of VCC</li>
+<li>C) Turning off the power</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<hr>
+<h2 id="lesson-19-complete" style="background:#C678B0;">Lesson 19 Complete!</h2>
+<pre><code>  =============================================
+
+     ONE-SHOT WIZARD BADGE UNLOCKED!
+
+     Skills unlocked:
+     [check] Built a 555 monostable circuit
+     [check] Controlled pulse duration with R and C
+     [check] Measured the timed pulse with the Wand
+     [check] Watched capacitor charging in real time
+     [check] Understand monostable real-world uses
+
+  =============================================</code></pre>
+<p><strong>XP Breakdown:</strong></p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Activity</th>
+<th>XP</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Astable vs monostable understanding</td>
+<td>10</td>
+</tr>
+<tr>
+<td>How monostable works</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Build one-shot circuit</td>
+<td>40</td>
+</tr>
+<tr>
+<td>Time control experiments</td>
+<td>30</td>
+</tr>
+<tr>
+<td>Wand Check (3 measurements)</td>
+<td>40</td>
+</tr>
+<tr>
+<td>Real-world uses discussion</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Quiz (3 questions)</td>
+<td>60</td>
+</tr>
+<tr>
+<td><strong>TOTAL POSSIBLE</strong></td>
+<td><strong>200</strong></td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="coming-up-next" style="background:#E05C5C;">Coming Up Next...</h2>
+<p>In <strong>Lesson 20</strong>, we leave the 555 timer and enter the world of <strong>Logic Gates</strong>! You will learn about AND, OR, and NOT gates &mdash; the building blocks of every computer ever made. If two switches are both ON, the light turns on. If either switch is ON, the light turns on. These simple rules power the entire digital world!</p>
+<hr>
+<h2 id="troubleshooting" style="background:#FF6B35;">Troubleshooting</h2>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Problem</th>
+<th>Fix</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>LED stays on permanently</td>
+<td>Check that Pin 2 (Trigger) has the 10k pull-up resistor to +VCC</td>
+</tr>
+<tr>
+<td>LED never turns on</td>
+<td>Check button wiring &mdash; it should connect Pin 2 to GND when pressed</td>
+</tr>
+<tr>
+<td>LED turns on but immediately turns off</td>
+<td>Capacitor might be too small or R too small &mdash; try bigger values</td>
+</tr>
+<tr>
+<td>Timer is way off from calculated time</td>
+<td>Battery voltage affects timing &mdash; measure battery with Wand</td>
+</tr>
+<tr>
+<td>Button press does nothing</td>
+<td>Test the button with Wand continuity mode &mdash; does it beep when pressed?</td>
+</tr>
+<tr>
+<td>IC gets hot</td>
+<td>Check wiring carefully &mdash; something is likely shorted</td>
+</tr>
+</tbody></table></div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="page-footer">
+        <span>Lesson 19: The 555 Timer -- One-Shot Mode (Monostable)</span>
+        <span>Module 3: Integrated Circuits (ICs)</span>
+    </footer>
+
+</body>
+</html>

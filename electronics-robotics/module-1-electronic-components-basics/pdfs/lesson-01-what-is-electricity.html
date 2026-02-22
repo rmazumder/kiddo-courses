@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 1: What is Electricity?</title>
+    <style>
+
+        /* ── Reset & Base ─────────────────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            line-height: 1.75;
+            color: #2C3E50;
+            background: #FAFAFA;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px 40px;
+        }
+
+        /* ── Header Banner ─────────────────────────────────────────── */
+        .lesson-header {
+            background: linear-gradient(135deg, #FF6B35 0%, #FF9A5C 50%, #FFB347 100%);
+            color: #fff;
+            border-radius: 16px;
+            padding: 32px 36px 28px;
+            margin: 24px 0 32px;
+            box-shadow: 0 6px 20px rgba(255,107,53,0.35);
+            position: relative;
+            overflow: hidden;
+        }
+        .lesson-header::before {
+            content: "";
+            position: absolute;
+            top: -40px; right: -40px;
+            width: 160px; height: 160px;
+            background: rgba(255,255,255,0.12);
+            border-radius: 50%;
+        }
+        .lesson-header::after {
+            content: "";
+            position: absolute;
+            bottom: -30px; left: -20px;
+            width: 100px; height: 100px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+        }
+        .lesson-header h1 {
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            position: relative;
+            z-index: 1;
+        }
+        .module-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.25);
+            border: 2px solid rgba(255,255,255,0.6);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 4px 14px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 1;
+        }
+        .meta-row {
+            margin-top: 12px;
+            font-size: 14px;
+            color: rgba(255,255,255,0.9);
+            position: relative;
+            z-index: 1;
+        }
+        .meta-pill {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            border-radius: 12px;
+            padding: 2px 10px;
+            margin: 2px 4px 2px 0;
+            white-space: nowrap;
+        }
+
+        /* ── Section Headings ──────────────────────────────────────── */
+        h2 {
+            font-size: 22px;
+            font-weight: 800;
+            margin: 36px 0 14px;
+            padding: 10px 18px;
+            border-radius: 10px;
+            color: #fff;
+            /* colour applied inline via data-color */
+        }
+        h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 28px 0 10px;
+            padding: 8px 14px;
+            border-left: 5px solid;
+            border-radius: 0 8px 8px 0;
+            background: rgba(0,0,0,0.03);
+            /* border-left colour applied inline */
+        }
+
+        /* ── Body Text ─────────────────────────────────────────────── */
+        p { margin: 10px 0; }
+        strong { font-weight: 700; color: #1A252F; }
+        em { font-style: italic; color: #5D6D7E; }
+
+        /* ── Inline Code ───────────────────────────────────────────── */
+        code {
+            background: #F0F3F7;
+            border: 1px solid #D5DCE8;
+            border-radius: 4px;
+            padding: 1px 6px;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 14px;
+            color: #C0392B;
+        }
+
+        /* ── Fenced Code Blocks ────────────────────────────────────── */
+        pre {
+            background: #F4F6F8;
+            border: 1px solid #D0D8E4;
+            border-left: 5px solid #45B7D1;
+            border-radius: 8px;
+            padding: 16px 18px;
+            overflow-x: auto;
+            margin: 16px 0;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #2C3E50;
+            white-space: pre;
+        }
+        pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            font-size: inherit;
+            color: inherit;
+        }
+
+        /* ── Blockquotes / Callout Boxes ───────────────────────────── */
+        blockquote {
+            background: #FFF8E7;
+            border-left: 6px solid #FF6B35;
+            border-radius: 0 12px 12px 0;
+            padding: 14px 20px;
+            margin: 16px 0;
+            color: #5D3A1A;
+            font-style: normal;
+            position: relative;
+        }
+        blockquote::before {
+            content: "\1F4AC";  /* speech bubble emoji */
+            position: absolute;
+            top: -10px; left: 10px;
+            font-size: 20px;
+            line-height: 1;
+        }
+        blockquote p { margin: 6px 0; }
+
+        /* ── Lists ─────────────────────────────────────────────────── */
+        ul, ol {
+            margin: 10px 0 10px 24px;
+            padding-left: 8px;
+        }
+        li { margin: 5px 0; }
+        ul li::marker { color: #FF6B35; font-size: 18px; }
+        ol li::marker { color: #45B7D1; font-weight: 700; }
+
+        /* ── Tables ────────────────────────────────────────────────── */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 16px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+        }
+        thead th {
+            background: #45B7D1;
+            color: #fff;
+            font-weight: 700;
+            padding: 11px 14px;
+            text-align: left;
+            border-bottom: 3px solid #2E9BBD;
+        }
+        thead th:first-child { border-radius: 10px 0 0 0; }
+        thead th:last-child  { border-radius: 0 10px 0 0; }
+        tbody tr:nth-child(odd)  td { background: #F8FBFF; }
+        tbody tr:nth-child(even) td { background: #EAF6FB; }
+        tbody tr:hover td { background: #D6F0F8; transition: background 0.15s; }
+        td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #D9EEF6;
+            vertical-align: top;
+        }
+        /* Checkbox column: replace [ ] with styled checkbox */
+        td .checkbox {
+            display: inline-block;
+            width: 18px; height: 18px;
+            border: 2px solid #45B7D1;
+            border-radius: 4px;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+
+        /* ── XP Badges ─────────────────────────────────────────────── */
+        .xp-badge {
+            display: inline-block;
+            background: #FFEAA7;
+            border: 2px solid #F39C12;
+            color: #7D4F00;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin: 2px 4px;
+            white-space: nowrap;
+        }
+        .award-badge {
+            display: inline-block;
+            background: #D5F5E3;
+            border: 2px solid #27AE60;
+            color: #1A5E35;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin: 2px 4px;
+            white-space: nowrap;
+        }
+
+        /* ── Horizontal Rule ───────────────────────────────────────── */
+        hr {
+            border: none;
+            border-top: 3px dashed #B2D8E8;
+            margin: 30px 0;
+        }
+
+        /* ── Footer ────────────────────────────────────────────────── */
+        .page-footer {
+            margin-top: 48px;
+            padding-top: 16px;
+            border-top: 2px solid #D5DCE8;
+            text-align: center;
+            font-size: 13px;
+            color: #7F8C8D;
+        }
+
+        /* ── Print Styles ──────────────────────────────────────────── */
+        @media print {
+            @page { size: A4; margin: 18mm 15mm 20mm; }
+
+            body {
+                background: #fff !important;
+                font-size: 13px;
+                max-width: 100%;
+                padding: 0;
+            }
+
+            /* Force colour printing */
+            * { -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important; }
+
+            /* Page breaks */
+            h2 { page-break-before: auto; break-before: auto; }
+            pre, blockquote, table { page-break-inside: avoid; }
+            h2, h3 { page-break-after: avoid; break-after: avoid; }
+            tr { page-break-inside: avoid; }
+
+            /* No orphaned paragraphs */
+            p { orphans: 3; widows: 3; }
+
+            .lesson-header { box-shadow: none; }
+
+            .page-footer {
+                position: fixed;
+                bottom: 0; left: 0; right: 0;
+                background: #fff;
+                border-top: 1px solid #ccc;
+                padding: 6px 15mm;
+                display: flex;
+                justify-content: space-between;
+            }
+        }
+    
+    </style>
+</head>
+<body>
+
+    <!-- Header Banner -->
+    <header class="lesson-header">
+        <div class="module-badge">Module 1 -- Electronic Components Basics</div>
+        <h1>Lesson 1: What is Electricity?</h1>
+        <div class="meta-row"><span class="meta-pill">&#9733; Star-1 Beginner</span><span class="meta-pill">&#9200; 40--45 minutes</span><span class="meta-pill">&#128100; Age 6--12 years</span><span class="meta-pill xp-badge" style="background:#FFEAA7;color:#7D4F00;border:none;">&#9889; 250 XP</span></div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+<hr>
+<h2 id="your-mission-today" style="background:#FF6B35;">Your Mission Today</h2>
+<p>Welcome, Circuit Explorer! You are about to go on an incredible journey into the invisible world of ELECTRICITY. Your very first mission: make a tiny light glow using nothing but a battery, a wire, and a component called an LED. Are you ready? Let's go!</p>
+<hr>
+<h2 id="learning-objectives" style="background:#4ECDC4;">Learning Objectives</h2>
+<p>By the end of this lesson, you will be able to:</p>
+<ul>
+<li>Explain electricity as the flow of tiny particles called electrons</li>
+<li>Know what voltage, current, and circuit mean &mdash; in your own words</li>
+<li>Successfully light up your very first LED</li>
+<li>Understand why a complete loop (circuit) is needed</li>
+</ul>
+<hr>
+<h2 id="what-you-need" style="background:#45B7D1;">What You Need</h2>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Item</th>
+<th>Qty</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>9V battery</td>
+<td>1</td>
+</tr>
+<tr>
+<td>9V battery clip with wires</td>
+<td>1</td>
+</tr>
+<tr>
+<td>LED (any color)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>330-ohm resistor</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Jumper wires</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Breadboard</td>
+<td>1</td>
+</tr>
+<tr>
+<td>A piece of wire (or foil strip)</td>
+<td>1</td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="how-to-teach-this-lesson" style="background:#96CEB4;">How to Teach This Lesson</h2>
+<h3 id="step-1-hook-the-magic-light-5-min" style="border-left-color:#45B7D1; color:#45B7D1;">Step 1: Hook &mdash; The Magic Light (5 min)</h3>
+<p><strong>Before explaining anything</strong>, hand the kid a battery, an LED, and a wire.</p>
+<p>Say:</p>
+<blockquote><p>"Can you make this LED light up? You can only use what is in your hand."</p></blockquote>
+<p>Let them experiment. They might:</p>
+<ul>
+<li>Touch the LED legs to the battery terminals (works! but not safe long-term without a resistor)</li>
+<li>Get confused about which leg is which</li>
+</ul>
+<p><strong>The goal is curiosity first.</strong> After a minute or two, guide them gently.</p>
+<blockquote><p>"You just made electricity flow! Let us figure out why that worked &mdash; and how to do it safely."</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+20 XP</span> for trying the experiment, even if it did not work the first time!</strong></p>
+<hr>
+<h3 id="step-2-the-water-analogy-8-min" style="border-left-color:#96CEB4; color:#96CEB4;">Step 2: The Water Analogy (8 min)</h3>
+<p>Draw this on paper or a whiteboard together:</p>
+<pre><code>  +------------------------------+
+  |                              |
+ [Pump]  --water--&gt;  [Narrow pipe]  --&gt;  [Water wheel]
+  |                              |
+  +------------------------------+
+
+  Pump        = Battery
+  Water       = Electrons (electricity)
+  Water pressure = Voltage (V)
+  Water flow rate = Current (A)
+  Narrow pipe = Resistor (slows flow)
+  Water wheel = LED / component doing work
+  Full loop   = Circuit</code></pre>
+<p><strong>Ask the kids:</strong></p>
+<ul>
+<li>"What happens if we cut the pipe?" (Water stops. Circuit is broken. LED goes off.)</li>
+<li>"What if we make the pipe really narrow?" (Less water flows. Less current. Dimmer LED.)</li>
+<li>"What if we have a really powerful pump?" (More pressure. More current. Brighter LED... or it breaks!)</li>
+</ul>
+<p><strong>Key words to introduce:</strong></p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Word</th>
+<th>Kid-Friendly Definition</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><strong>Voltage (V)</strong></td>
+<td>How hard the battery "pushes" electricity</td>
+</tr>
+<tr>
+<td><strong>Current (A)</strong></td>
+<td>How much electricity is actually flowing</td>
+</tr>
+<tr>
+<td><strong>Resistance (ohms)</strong></td>
+<td>Something that slows the electricity down</td>
+</tr>
+<tr>
+<td><strong>Circuit</strong></td>
+<td>A complete loop &mdash; electricity must go in a circle</td>
+</tr>
+</tbody></table></div>
+<p><strong>Award: <span class="xp-badge">+20 XP</span> for answering at least 2 of the 3 questions!</strong></p>
+<hr>
+<h3 id="step-3-the-circuit-on-a-breadboard-15-min" style="border-left-color:#FF6B35; color:#FF6B35;">Step 3: The Circuit on a Breadboard (15 min)</h3>
+<p><strong>First, explain the breadboard:</strong></p>
+<pre><code>  Breadboard top view:
+
+  + + + + + + + + + +    &lt;-- Power rail (+ connected along the whole row)
+  - - - - - - - - - -    &lt;-- Ground rail (- connected along the whole row)
+
+  a b c d e   f g h i j
+  [ ][ ][ ][ ][ ]   [ ][ ][ ][ ][ ]   &lt;-- Row 1 (a through e connected together)
+  [ ][ ][ ][ ][ ]   [ ][ ][ ][ ][ ]   &lt;-- Row 2
+  [ ][ ][ ][ ][ ]   [ ][ ][ ][ ][ ]   &lt;-- Row 3
+  ...</code></pre>
+<p>Say:</p>
+<blockquote><p>"The breadboard is like a pegboard where wires and components snap in. Connected holes share electricity &mdash; like water pipes that are joined."</p></blockquote>
+<p><strong>Build the circuit together, step by step:</strong></p>
+<pre><code>Circuit diagram:
+
+  9V (+) ---- [330-ohm resistor] ---- LED (+leg) ---- LED (-leg) ---- 9V (-)
+
+  On breadboard:
+  1. Battery clip: red wire to + rail, black wire to - rail
+  2. Resistor: one leg in + rail, other leg in row 5
+  3. LED: long leg (anode +) in row 5, short leg (cathode -) in row 7
+  4. Wire: row 7 to - rail</code></pre>
+<p><strong>Go slowly.</strong> Have the kid place each component themselves. Describe what you are doing as you go:</p>
+<blockquote><p>"This resistor is like the narrow pipe &mdash; it protects the LED from getting too much electricity."</p></blockquote>
+<p><strong>Power it on together!</strong></p>
+<p>When the LED lights up: celebrate! High five! Take a photo.</p>
+<p><strong>Award: <span class="xp-badge">+50 XP</span> for building your first circuit!</strong></p>
+<hr>
+<h3 id="step-4-experiment-time-10-min" style="border-left-color:#4ECDC4; color:#4ECDC4;">Step 4: Experiment Time (10 min)</h3>
+<p>Now let them explore:</p>
+<p><strong>Experiment A &mdash; Break the Circuit</strong></p>
+<blockquote><p>"Pull out the resistor. What happens?"</p></blockquote>
+<p>(LED goes off. Circuit is broken.)</p>
+<p><strong>Experiment B &mdash; Reverse the LED</strong></p>
+<blockquote><p>"Flip the LED around. What happens?"</p></blockquote>
+<p>(LED goes off. Electricity can only flow one way through an LED!)</p>
+<blockquote><p>"This is called <strong>polarity</strong>. The LED is picky about which direction electricity flows."</p></blockquote>
+<p><strong>Experiment C &mdash; The Missing Wire</strong> Remove one jumper wire.</p>
+<blockquote><p>"Why did it stop working?"</p></blockquote>
+<p>(The loop is broken. Electricity has nowhere to go.)</p>
+<p><strong>Experiment D &mdash; Touch the wire to complete the circuit</strong> Remove one wire and have the kid hold both bare ends together with their fingers.</p>
+<blockquote><p>"You ARE part of the circuit right now! Electricity is flowing through you (a tiny, tiny, completely safe amount)."</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+30 XP</span> for completing at least 3 of the 4 experiments!</strong></p>
+<hr>
+<h3 id="step-5-sneak-peek-the-magic-measurement-wand-2-min" style="border-left-color:#C678B0; color:#C678B0;">Step 5: Sneak Peek &mdash; The Magic Measurement Wand (2 min)</h3>
+<p>If you have a multimeter handy, hold it up:</p>
+<blockquote><p>"Next lesson, you are going to meet this. It is called a multimeter, but we call it the <strong>Magic Measurement Wand</strong>. It can SEE invisible electricity. It can tell you how strong a battery is, how much a resistor blocks, and whether electricity can flow through ANYTHING."</p></blockquote>
+<blockquote><p>"Want to know if your pencil conducts electricity? This Wand will tell you. Want to know if your battery is dead? This Wand knows. Get excited &mdash; it is your new best friend!"</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+10 XP</span> just for being curious about the Wand!</strong></p>
+<hr>
+<h3 id="step-6-wrap-up-and-quiz-5-min" style="border-left-color:#E8A838; color:#E8A838;">Step 6: Wrap Up and Quiz (5 min)</h3>
+<p>Ask these questions out loud (not a written test &mdash; keep it fun):</p>
+<p><strong>Question 1:</strong> "What does a battery do?" (Pushes electricity around the circuit) <strong><span class="xp-badge">+20 XP</span> for a correct answer!</strong></p>
+<p><strong>Question 2:</strong> "Why do we need a complete loop?" (So electricity has somewhere to go) <strong><span class="xp-badge">+20 XP</span> for a correct answer!</strong></p>
+<p><strong>Question 3:</strong> "What happens if I remove the resistor?" (Too much current &mdash; LED could burn out) <strong><span class="xp-badge">+20 XP</span> for a correct answer!</strong></p>
+<p><strong>Bonus question for older kids (10+):</strong></p>
+<blockquote><p>"If the battery is 9V and the LED needs 2V, where does the extra 7V go?"</p></blockquote>
+<p>(Into the resistor &mdash; it "uses up" the leftover voltage as heat) <strong><span class="xp-badge">+30 XP</span> bonus!</strong></p>
+<hr>
+<h2 id="fun-extras-optional" style="background:#E8A838;">Fun Extras (Optional)</h2>
+<h3 id="make-it-glow-in-the-dark" style="border-left-color:#E05C5C; color:#E05C5C;">Make It Glow in the Dark</h3>
+<p>Turn off the lights and show off the glowing LED. Kids love this!</p>
+<h3 id="the-lemon-battery" style="border-left-color:#45B7D1; color:#45B7D1;">The Lemon Battery</h3>
+<p>Stick a copper coin and a zinc nail into a lemon. Can it light the LED?</p>
+<blockquote><p>"A lemon is a battery! Sour = chemistry = electricity. In our next lesson, you will learn to use the Magic Measurement Wand to measure exactly how many volts a lemon makes!"</p></blockquote>
+<hr>
+<h2 id="lesson-1-complete" style="background:#C678B0;">Lesson 1 Complete!</h2>
+<pre><code>  =============================================
+
+     CIRCUIT STARTER BADGE UNLOCKED!
+
+     Skills unlocked:
+     [check] Know what voltage, current, and resistance mean
+     [check] Built your first LED circuit
+     [check] Understand what a circuit loop is
+
+  =============================================</code></pre>
+<p><strong>XP Breakdown:</strong></p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Activity</th>
+<th>XP</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Hook experiment</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Water analogy questions</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Build first circuit</td>
+<td>50</td>
+</tr>
+<tr>
+<td>Experiments (3 of 4)</td>
+<td>30</td>
+</tr>
+<tr>
+<td>Wand sneak peek</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Quiz (3 questions)</td>
+<td>60</td>
+</tr>
+<tr>
+<td>Bonus question</td>
+<td>30</td>
+</tr>
+<tr>
+<td><strong>TOTAL POSSIBLE</strong></td>
+<td><strong>220</strong></td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="coming-up-next" style="background:#E05C5C;">Coming Up Next...</h2>
+<p>In <strong>Lesson 2</strong>, you will meet your <strong>Magic Measurement Wand</strong> &mdash; the multimeter! You will discover its three superpowers and use it to test whether coins, pencils, and even your own finger can conduct electricity. Get ready!</p>
+<hr>
+<h2 id="troubleshooting" style="background:#FF6B35;">Troubleshooting</h2>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Problem</th>
+<th>Likely Cause</th>
+<th>Fix</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>LED does not light up</td>
+<td>LED reversed</td>
+<td>Flip the LED around</td>
+</tr>
+<tr>
+<td>LED does not light up</td>
+<td>Bad connection</td>
+<td>Check each wire in the breadboard</td>
+</tr>
+<tr>
+<td>LED flickers</td>
+<td>Loose wire</td>
+<td>Press wires firmly into the breadboard</td>
+</tr>
+<tr>
+<td>LED very dim</td>
+<td>Wrong resistor</td>
+<td>Try a smaller resistor (e.g., 100 ohms)</td>
+</tr>
+<tr>
+<td>Nothing works</td>
+<td>Battery dead</td>
+<td>You will learn to test this with the Wand in Lesson 2!</td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="parentinstructor-notes" style="background:#4ECDC4;">Parent/Instructor Notes</h2>
+<ul>
+<li>For ages 6&mdash;8: Skip the bonus question. Focus entirely on the hands-on experience. The key win is "I made a light turn on!"</li>
+<li>For ages 9&mdash;12: Encourage them to explain WHY the LED goes off when they flip it (polarity concept).</li>
+<li>The "Sneak Peek" of the multimeter at the end builds anticipation for Lesson 2 and sets up the "Magic Measurement Wand" framing.</li>
+<li>Track XP on paper or a whiteboard. Kids respond incredibly well to seeing their score go up. Consider making a poster-sized XP tracker for the wall.</li>
+</ul>
+    </main>
+
+    <!-- Footer -->
+    <footer class="page-footer">
+        <span>Lesson 1: What is Electricity?</span>
+        <span>Module 1: Electronic Components Basics</span>
+    </footer>
+
+</body>
+</html>

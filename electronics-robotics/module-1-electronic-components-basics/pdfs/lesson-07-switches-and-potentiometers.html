@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 7: Switches and Potentiometers -- Twist, Click, Control</title>
+    <style>
+
+        /* ── Reset & Base ─────────────────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            line-height: 1.75;
+            color: #2C3E50;
+            background: #FAFAFA;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px 40px;
+        }
+
+        /* ── Header Banner ─────────────────────────────────────────── */
+        .lesson-header {
+            background: linear-gradient(135deg, #FF6B35 0%, #FF9A5C 50%, #FFB347 100%);
+            color: #fff;
+            border-radius: 16px;
+            padding: 32px 36px 28px;
+            margin: 24px 0 32px;
+            box-shadow: 0 6px 20px rgba(255,107,53,0.35);
+            position: relative;
+            overflow: hidden;
+        }
+        .lesson-header::before {
+            content: "";
+            position: absolute;
+            top: -40px; right: -40px;
+            width: 160px; height: 160px;
+            background: rgba(255,255,255,0.12);
+            border-radius: 50%;
+        }
+        .lesson-header::after {
+            content: "";
+            position: absolute;
+            bottom: -30px; left: -20px;
+            width: 100px; height: 100px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+        }
+        .lesson-header h1 {
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            position: relative;
+            z-index: 1;
+        }
+        .module-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.25);
+            border: 2px solid rgba(255,255,255,0.6);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 4px 14px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 1;
+        }
+        .meta-row {
+            margin-top: 12px;
+            font-size: 14px;
+            color: rgba(255,255,255,0.9);
+            position: relative;
+            z-index: 1;
+        }
+        .meta-pill {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            border-radius: 12px;
+            padding: 2px 10px;
+            margin: 2px 4px 2px 0;
+            white-space: nowrap;
+        }
+
+        /* ── Section Headings ──────────────────────────────────────── */
+        h2 {
+            font-size: 22px;
+            font-weight: 800;
+            margin: 36px 0 14px;
+            padding: 10px 18px;
+            border-radius: 10px;
+            color: #fff;
+            /* colour applied inline via data-color */
+        }
+        h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 28px 0 10px;
+            padding: 8px 14px;
+            border-left: 5px solid;
+            border-radius: 0 8px 8px 0;
+            background: rgba(0,0,0,0.03);
+            /* border-left colour applied inline */
+        }
+
+        /* ── Body Text ─────────────────────────────────────────────── */
+        p { margin: 10px 0; }
+        strong { font-weight: 700; color: #1A252F; }
+        em { font-style: italic; color: #5D6D7E; }
+
+        /* ── Inline Code ───────────────────────────────────────────── */
+        code {
+            background: #F0F3F7;
+            border: 1px solid #D5DCE8;
+            border-radius: 4px;
+            padding: 1px 6px;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 14px;
+            color: #C0392B;
+        }
+
+        /* ── Fenced Code Blocks ────────────────────────────────────── */
+        pre {
+            background: #F4F6F8;
+            border: 1px solid #D0D8E4;
+            border-left: 5px solid #45B7D1;
+            border-radius: 8px;
+            padding: 16px 18px;
+            overflow-x: auto;
+            margin: 16px 0;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #2C3E50;
+            white-space: pre;
+        }
+        pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            font-size: inherit;
+            color: inherit;
+        }
+
+        /* ── Blockquotes / Callout Boxes ───────────────────────────── */
+        blockquote {
+            background: #FFF8E7;
+            border-left: 6px solid #FF6B35;
+            border-radius: 0 12px 12px 0;
+            padding: 14px 20px;
+            margin: 16px 0;
+            color: #5D3A1A;
+            font-style: normal;
+            position: relative;
+        }
+        blockquote::before {
+            content: "\1F4AC";  /* speech bubble emoji */
+            position: absolute;
+            top: -10px; left: 10px;
+            font-size: 20px;
+            line-height: 1;
+        }
+        blockquote p { margin: 6px 0; }
+
+        /* ── Lists ─────────────────────────────────────────────────── */
+        ul, ol {
+            margin: 10px 0 10px 24px;
+            padding-left: 8px;
+        }
+        li { margin: 5px 0; }
+        ul li::marker { color: #FF6B35; font-size: 18px; }
+        ol li::marker { color: #45B7D1; font-weight: 700; }
+
+        /* ── Tables ────────────────────────────────────────────────── */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 16px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+        }
+        thead th {
+            background: #45B7D1;
+            color: #fff;
+            font-weight: 700;
+            padding: 11px 14px;
+            text-align: left;
+            border-bottom: 3px solid #2E9BBD;
+        }
+        thead th:first-child { border-radius: 10px 0 0 0; }
+        thead th:last-child  { border-radius: 0 10px 0 0; }
+        tbody tr:nth-child(odd)  td { background: #F8FBFF; }
+        tbody tr:nth-child(even) td { background: #EAF6FB; }
+        tbody tr:hover td { background: #D6F0F8; transition: background 0.15s; }
+        td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #D9EEF6;
+            vertical-align: top;
+        }
+        /* Checkbox column: replace [ ] with styled checkbox */
+        td .checkbox {
+            display: inline-block;
+            width: 18px; height: 18px;
+            border: 2px solid #45B7D1;
+            border-radius: 4px;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+
+        /* ── XP Badges ─────────────────────────────────────────────── */
+        .xp-badge {
+            display: inline-block;
+            background: #FFEAA7;
+            border: 2px solid #F39C12;
+            color: #7D4F00;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin: 2px 4px;
+            white-space: nowrap;
+        }
+        .award-badge {
+            display: inline-block;
+            background: #D5F5E3;
+            border: 2px solid #27AE60;
+            color: #1A5E35;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin: 2px 4px;
+            white-space: nowrap;
+        }
+
+        /* ── Horizontal Rule ───────────────────────────────────────── */
+        hr {
+            border: none;
+            border-top: 3px dashed #B2D8E8;
+            margin: 30px 0;
+        }
+
+        /* ── Footer ────────────────────────────────────────────────── */
+        .page-footer {
+            margin-top: 48px;
+            padding-top: 16px;
+            border-top: 2px solid #D5DCE8;
+            text-align: center;
+            font-size: 13px;
+            color: #7F8C8D;
+        }
+
+        /* ── Print Styles ──────────────────────────────────────────── */
+        @media print {
+            @page { size: A4; margin: 18mm 15mm 20mm; }
+
+            body {
+                background: #fff !important;
+                font-size: 13px;
+                max-width: 100%;
+                padding: 0;
+            }
+
+            /* Force colour printing */
+            * { -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important; }
+
+            /* Page breaks */
+            h2 { page-break-before: auto; break-before: auto; }
+            pre, blockquote, table { page-break-inside: avoid; }
+            h2, h3 { page-break-after: avoid; break-after: avoid; }
+            tr { page-break-inside: avoid; }
+
+            /* No orphaned paragraphs */
+            p { orphans: 3; widows: 3; }
+
+            .lesson-header { box-shadow: none; }
+
+            .page-footer {
+                position: fixed;
+                bottom: 0; left: 0; right: 0;
+                background: #fff;
+                border-top: 1px solid #ccc;
+                padding: 6px 15mm;
+                display: flex;
+                justify-content: space-between;
+            }
+        }
+    
+    </style>
+</head>
+<body>
+
+    <!-- Header Banner -->
+    <header class="lesson-header">
+        <div class="module-badge">Module 1 -- Electronic Components Basics</div>
+        <h1>Lesson 7: Switches and Potentiometers -- Twist, Click, Control</h1>
+        <div class="meta-row"><span class="meta-pill">&#9733; Star-1 Beginner</span><span class="meta-pill">&#9200; 40 minutes</span><span class="meta-pill">&#128100; Age 6--12 years</span><span class="meta-pill xp-badge" style="background:#FFEAA7;color:#7D4F00;border:none;">&#9889; 290 XP</span></div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+<hr>
+<h2 id="your-mission-today" style="background:#FF6B35;">Your Mission Today</h2>
+<p>Circuit Explorer, today you get to play with controls! Buttons you press, switches you flip, and knobs you twist. You will build an LED dimmer that YOU control &mdash; and use your Magic Measurement Wand to see the resistance change in real time as you turn the knob!</p>
+<hr>
+<h2 id="learning-objectives" style="background:#4ECDC4;">Learning Objectives</h2>
+<p>By the end of this lesson, you will be able to:</p>
+<ul>
+<li>Know the difference between push buttons, toggle switches, and slide switches</li>
+<li>Explain what a potentiometer is and how it works</li>
+<li>Build an LED dimmer controlled by a knob</li>
+<li>Use the Magic Measurement Wand to measure changing resistance</li>
+</ul>
+<hr>
+<h2 id="what-you-need" style="background:#45B7D1;">What You Need</h2>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Item</th>
+<th>Qty</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>10k-ohm potentiometer (knob type)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Push button (tactile)</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Toggle switch (SPDT or SPST)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>LEDs (bright red or yellow)</td>
+<td>2</td>
+</tr>
+<tr>
+<td>100-ohm resistor</td>
+<td>2</td>
+</tr>
+<tr>
+<td>9V battery + clip</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Breadboard</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Jumper wires</td>
+<td>8</td>
+</tr>
+<tr>
+<td>Multimeter (Magic Measurement Wand)</td>
+<td>1</td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="how-to-teach-this-lesson" style="background:#96CEB4;">How to Teach This Lesson</h2>
+<h3 id="step-1-hook-the-switch-hunt-3-min" style="border-left-color:#45B7D1; color:#45B7D1;">Step 1: Hook &mdash; The Switch Hunt (3 min)</h3>
+<blockquote><p>"How many switches do you think are in this room right now?"</p></blockquote>
+<p>Let the kid count: light switches, TV remote buttons, door handles, phone buttons, keyboard keys, game controller buttons...</p>
+<blockquote><p>"Switches are EVERYWHERE. And a potentiometer is just a fancy switch &mdash; one that does not go on/off but smoothly changes from 0 to maximum. Let us explore them all."</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+10 XP</span> for finding at least 5 switches in the room!</strong></p>
+<hr>
+<h3 id="step-2-types-of-switches-8-min" style="border-left-color:#96CEB4; color:#96CEB4;">Step 2: Types of Switches (8 min)</h3>
+<p><strong>Show each type and explain:</strong></p>
+<p><strong>Push Button (Tactile Switch):</strong></p>
+<pre><code>  State:   NOT pressed        PRESSED
+           --  --              --------
+           open (off)          closed (on)
+
+  Use: Doorbell, keyboard key, game controller button
+  Key feature: Spring-loaded -- only ON while pressed (momentary)</code></pre>
+<p><strong>Toggle Switch:</strong></p>
+<pre><code>  State:   DOWN               UP
+           --------           --  --
+           closed (on)        open (off)
+
+  Use: Light switch, power switch on old equipment
+  Key feature: STAYS in position (latching)</code></pre>
+<p><strong>Rotary Switch:</strong></p>
+<pre><code>  Turns to connect to one of several positions
+  Use: Fan speed (low/med/high), and... your multimeter dial!</code></pre>
+<blockquote><p>"Can you find the rotary switch in this room?" (Point to the multimeter dial!)</p></blockquote>
+<p><strong>Activity &mdash; Switch Scavenger Hunt:</strong> Walk around the house for 2 minutes and find as many switches as possible. Categorize them:</p>
+<ul>
+<li>Momentary (only on while pressed/held)</li>
+<li>Latching (stays on or off)</li>
+</ul>
+<p><strong>Award: <span class="xp-badge">+20 XP</span> for finding and categorizing at least 6 switches!</strong></p>
+<hr>
+<h3 id="step-3-the-potentiometer-a-variable-resistor-8-min" style="border-left-color:#FF6B35; color:#FF6B35;">Step 3: The Potentiometer &mdash; A Variable Resistor (8 min)</h3>
+<p><strong>Show the potentiometer:</strong></p>
+<pre><code>  Three legs:
+
+  Left leg -------- full resistance track (0 ohms to max)
+  Middle leg ------  WIPER (moves as you turn)
+  Right leg ------- other end of track
+
+  Between left and right: always = max resistance (e.g., 10k ohms)
+  Between left and middle: changes from 0 to 10k ohms as you turn
+  Between right and middle: changes from 10k ohms to 0 as you turn</code></pre>
+<blockquote><p>"The middle leg is called the <strong>WIPER</strong>. It slides along a resistive strip. Turn the knob, wiper moves, resistance between middle and either end changes."</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+10 XP</span> for identifying the wiper (middle leg)!</strong></p>
+<hr>
+<h3 id="step-4-wand-check-watch-resistance-change-live-8-min" style="border-left-color:#4ECDC4; color:#4ECDC4;">Step 4: Wand Check &mdash; Watch Resistance Change Live! (8 min)</h3>
+<blockquote><p>"This is SO cool. Set your Magic Measurement Wand to resistance mode (the horseshoe symbol). Now you are going to watch the numbers change AS you turn the knob!"</p></blockquote>
+<p><strong>Measurement 1 &mdash; Fixed resistance:</strong></p>
+<ul>
+<li>Touch probes to the left and right legs</li>
+<li>Read the display: should be about 10k ohms</li>
+<li>Turn the knob... nothing changes! (These two legs always show full resistance)</li>
+</ul>
+<p><strong>Measurement 2 &mdash; Variable resistance:</strong></p>
+<ul>
+<li>Touch probes to the left leg and the MIDDLE leg</li>
+<li>Read the display</li>
+<li>Now SLOWLY turn the knob</li>
+<li>Watch the number go from near 0 to near 10k ohms!</li>
+</ul>
+<p><strong>Measurement 3 &mdash; The other direction:</strong></p>
+<ul>
+<li>Touch probes to the right leg and the MIDDLE leg</li>
+<li>Turn the knob slowly</li>
+<li>This time the number goes the OPPOSITE direction!</li>
+</ul>
+<blockquote><p>"When one side goes up, the other side goes down. The total always adds up to the same number. That is because the knob is just sliding a contact along a fixed strip of resistive material!"</p></blockquote>
+<p><strong>Fill in the readings:</strong></p>
+<pre><code>| Knob Position    | Left-to-Middle | Right-to-Middle | Total (add both) |
+|------------------|---------------|----------------|-----------------|
+| All the way left |               |                |                 |
+| Middle           |               |                |                 |
+| All the way right|               |                |                 |</code></pre>
+<blockquote><p>"Look at the Total column. Is it always about 10k? That proves the potentiometer is just splitting the same resistance into two parts!"</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+50 XP</span> for completing all three Wand measurements and filling in the table!</strong></p>
+<hr>
+<h3 id="step-5-build-the-led-dimmer-10-min" style="border-left-color:#C678B0; color:#C678B0;">Step 5: Build the LED Dimmer (10 min)</h3>
+<p><strong>Circuit:</strong></p>
+<pre><code>  9V (+) ---- [potentiometer left leg]
+              [potentiometer middle leg] ---- [100-ohm] ---- LED (+) ---- LED (-) ---- 9V (-)
+
+  The potentiometer middle leg gives variable resistance.
+  Turn knob one way: more resistance -- dimmer LED
+  Turn knob other way: less resistance -- brighter LED</code></pre>
+<p><strong>Build it:</strong></p>
+<ol>
+<li>Connect 9V (+) to left leg of potentiometer</li>
+<li>Middle leg to 100-ohm resistor to LED (+)</li>
+<li>LED (-) to 9V (-)</li>
+</ol>
+<p><strong>Test:</strong> Slowly turn the knob. The LED should smoothly brighten and dim!</p>
+<blockquote><p>"You just built a real dimmer switch &mdash; just like the ones used for room lighting!"</p></blockquote>
+<p><strong>Why the extra 100-ohm resistor?</strong></p>
+<blockquote><p>"When the potentiometer is turned all the way to 0 ohms, we would have NO resistance protecting the LED. The 100 ohms is a minimum safety resistor."</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+30 XP</span> for building the dimmer!</strong></p>
+<hr>
+<h3 id="step-6-add-a-button-switch-5-min" style="border-left-color:#E8A838; color:#E8A838;">Step 6: Add a Button Switch (5 min)</h3>
+<p>Now add a push button to turn the whole circuit on/off:</p>
+<pre><code>  9V (+) ---- [BUTTON] ---- [potentiometer left leg]
+                             [potentiometer middle] ---- [100-ohm] ---- LED ---- GND</code></pre>
+<p><strong>Test:</strong></p>
+<ul>
+<li>Button not pressed: LED off (no matter what the knob says)</li>
+<li>Button pressed: LED brightness controlled by knob</li>
+</ul>
+<blockquote><p>"You now have two controls: one that switches on/off (button) and one that controls brightness (knob). That is exactly how a professional stage lighting dimmer works!"</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+20 XP</span> for adding the button control!</strong></p>
+<hr>
+<h2 id="quick-quiz-earn-bonus-xp" style="background:#E8A838;">Quick Quiz &mdash; Earn Bonus XP!</h2>
+<p><strong>Question 1:</strong> What is a potentiometer?</p>
+<ul>
+<li>A) A type of battery</li>
+<li>B) A variable resistor &mdash; you turn a knob to change resistance</li>
+<li>C) A type of LED</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<p><strong>Question 2:</strong> You measured the potentiometer with your Wand. Left-to-middle reads 3k ohms. Right-to-middle reads 7k ohms. What is the total?</p>
+<ul>
+<li>A) 3k ohms</li>
+<li>B) 7k ohms</li>
+<li>C) 10k ohms (they add up!)</li>
+</ul>
+<p><strong>(Correct: C &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<p><strong>Question 3:</strong> A push button is "momentary." What does that mean?</p>
+<ul>
+<li>A) It stays on forever</li>
+<li>B) It is only on while you are pressing it</li>
+<li>C) It works for one moment and then breaks</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<hr>
+<h2 id="lesson-7-complete" style="background:#C678B0;">Lesson 7 Complete!</h2>
+<pre><code>  =============================================
+
+     DIAL MASTER BADGE UNLOCKED!
+
+     Skills unlocked:
+     [check] Know push button vs toggle vs rotary switches
+     [check] Understand potentiometers as variable resistors
+     [check] Measured changing resistance with the Wand
+     [check] Built a working LED dimmer
+
+  =============================================</code></pre>
+<p><strong>XP Breakdown:</strong></p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Activity</th>
+<th>XP</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Switch scavenger hunt</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Hook (find 5 switches)</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Identify the wiper</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Wand Check (3 measurements + table)</td>
+<td>50</td>
+</tr>
+<tr>
+<td>Build the dimmer</td>
+<td>30</td>
+</tr>
+<tr>
+<td>Add button control</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Quiz (3 questions)</td>
+<td>60</td>
+</tr>
+<tr>
+<td><strong>TOTAL POSSIBLE</strong></td>
+<td><strong>200</strong></td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="real-world-connection" style="background:#E05C5C;">Real-World Connection</h2>
+<p>Ask the kid:</p>
+<ul>
+<li>"When you turn the volume knob on a speaker or TV &mdash; that is a potentiometer!"</li>
+<li>"The throttle on a remote-control car? Potentiometer."</li>
+<li>"Old video game joysticks? Two potentiometers &mdash; one for left/right, one for up/down."</li>
+</ul>
+<hr>
+<h2 id="coming-up-next" style="background:#FF6B35;">Coming Up Next...</h2>
+<p>In <strong>Lesson 8</strong>, we add <strong>sound</strong> to our toolkit with buzzers. You will build a door alarm and use your Magic Measurement Wand to explore the difference between connected and disconnected circuits using continuity mode!</p>
+    </main>
+
+    <!-- Footer -->
+    <footer class="page-footer">
+        <span>Lesson 7: Switches and Potentiometers -- Twist, Click, Control</span>
+        <span>Module 1: Electronic Components Basics</span>
+    </footer>
+
+</body>
+</html>

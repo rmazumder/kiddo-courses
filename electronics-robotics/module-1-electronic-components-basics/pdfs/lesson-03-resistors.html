@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 3: Resistors -- The Traffic Controllers of Electronics</title>
+    <style>
+
+        /* ── Reset & Base ─────────────────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            line-height: 1.75;
+            color: #2C3E50;
+            background: #FAFAFA;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px 40px;
+        }
+
+        /* ── Header Banner ─────────────────────────────────────────── */
+        .lesson-header {
+            background: linear-gradient(135deg, #FF6B35 0%, #FF9A5C 50%, #FFB347 100%);
+            color: #fff;
+            border-radius: 16px;
+            padding: 32px 36px 28px;
+            margin: 24px 0 32px;
+            box-shadow: 0 6px 20px rgba(255,107,53,0.35);
+            position: relative;
+            overflow: hidden;
+        }
+        .lesson-header::before {
+            content: "";
+            position: absolute;
+            top: -40px; right: -40px;
+            width: 160px; height: 160px;
+            background: rgba(255,255,255,0.12);
+            border-radius: 50%;
+        }
+        .lesson-header::after {
+            content: "";
+            position: absolute;
+            bottom: -30px; left: -20px;
+            width: 100px; height: 100px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+        }
+        .lesson-header h1 {
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            position: relative;
+            z-index: 1;
+        }
+        .module-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.25);
+            border: 2px solid rgba(255,255,255,0.6);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 4px 14px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 1;
+        }
+        .meta-row {
+            margin-top: 12px;
+            font-size: 14px;
+            color: rgba(255,255,255,0.9);
+            position: relative;
+            z-index: 1;
+        }
+        .meta-pill {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            border-radius: 12px;
+            padding: 2px 10px;
+            margin: 2px 4px 2px 0;
+            white-space: nowrap;
+        }
+
+        /* ── Section Headings ──────────────────────────────────────── */
+        h2 {
+            font-size: 22px;
+            font-weight: 800;
+            margin: 36px 0 14px;
+            padding: 10px 18px;
+            border-radius: 10px;
+            color: #fff;
+            /* colour applied inline via data-color */
+        }
+        h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 28px 0 10px;
+            padding: 8px 14px;
+            border-left: 5px solid;
+            border-radius: 0 8px 8px 0;
+            background: rgba(0,0,0,0.03);
+            /* border-left colour applied inline */
+        }
+
+        /* ── Body Text ─────────────────────────────────────────────── */
+        p { margin: 10px 0; }
+        strong { font-weight: 700; color: #1A252F; }
+        em { font-style: italic; color: #5D6D7E; }
+
+        /* ── Inline Code ───────────────────────────────────────────── */
+        code {
+            background: #F0F3F7;
+            border: 1px solid #D5DCE8;
+            border-radius: 4px;
+            padding: 1px 6px;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 14px;
+            color: #C0392B;
+        }
+
+        /* ── Fenced Code Blocks ────────────────────────────────────── */
+        pre {
+            background: #F4F6F8;
+            border: 1px solid #D0D8E4;
+            border-left: 5px solid #45B7D1;
+            border-radius: 8px;
+            padding: 16px 18px;
+            overflow-x: auto;
+            margin: 16px 0;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #2C3E50;
+            white-space: pre;
+        }
+        pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            font-size: inherit;
+            color: inherit;
+        }
+
+        /* ── Blockquotes / Callout Boxes ───────────────────────────── */
+        blockquote {
+            background: #FFF8E7;
+            border-left: 6px solid #FF6B35;
+            border-radius: 0 12px 12px 0;
+            padding: 14px 20px;
+            margin: 16px 0;
+            color: #5D3A1A;
+            font-style: normal;
+            position: relative;
+        }
+        blockquote::before {
+            content: "\1F4AC";  /* speech bubble emoji */
+            position: absolute;
+            top: -10px; left: 10px;
+            font-size: 20px;
+            line-height: 1;
+        }
+        blockquote p { margin: 6px 0; }
+
+        /* ── Lists ─────────────────────────────────────────────────── */
+        ul, ol {
+            margin: 10px 0 10px 24px;
+            padding-left: 8px;
+        }
+        li { margin: 5px 0; }
+        ul li::marker { color: #FF6B35; font-size: 18px; }
+        ol li::marker { color: #45B7D1; font-weight: 700; }
+
+        /* ── Tables ────────────────────────────────────────────────── */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 16px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+        }
+        thead th {
+            background: #45B7D1;
+            color: #fff;
+            font-weight: 700;
+            padding: 11px 14px;
+            text-align: left;
+            border-bottom: 3px solid #2E9BBD;
+        }
+        thead th:first-child { border-radius: 10px 0 0 0; }
+        thead th:last-child  { border-radius: 0 10px 0 0; }
+        tbody tr:nth-child(odd)  td { background: #F8FBFF; }
+        tbody tr:nth-child(even) td { background: #EAF6FB; }
+        tbody tr:hover td { background: #D6F0F8; transition: background 0.15s; }
+        td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #D9EEF6;
+            vertical-align: top;
+        }
+        /* Checkbox column: replace [ ] with styled checkbox */
+        td .checkbox {
+            display: inline-block;
+            width: 18px; height: 18px;
+            border: 2px solid #45B7D1;
+            border-radius: 4px;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+
+        /* ── XP Badges ─────────────────────────────────────────────── */
+        .xp-badge {
+            display: inline-block;
+            background: #FFEAA7;
+            border: 2px solid #F39C12;
+            color: #7D4F00;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin: 2px 4px;
+            white-space: nowrap;
+        }
+        .award-badge {
+            display: inline-block;
+            background: #D5F5E3;
+            border: 2px solid #27AE60;
+            color: #1A5E35;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin: 2px 4px;
+            white-space: nowrap;
+        }
+
+        /* ── Horizontal Rule ───────────────────────────────────────── */
+        hr {
+            border: none;
+            border-top: 3px dashed #B2D8E8;
+            margin: 30px 0;
+        }
+
+        /* ── Footer ────────────────────────────────────────────────── */
+        .page-footer {
+            margin-top: 48px;
+            padding-top: 16px;
+            border-top: 2px solid #D5DCE8;
+            text-align: center;
+            font-size: 13px;
+            color: #7F8C8D;
+        }
+
+        /* ── Print Styles ──────────────────────────────────────────── */
+        @media print {
+            @page { size: A4; margin: 18mm 15mm 20mm; }
+
+            body {
+                background: #fff !important;
+                font-size: 13px;
+                max-width: 100%;
+                padding: 0;
+            }
+
+            /* Force colour printing */
+            * { -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important; }
+
+            /* Page breaks */
+            h2 { page-break-before: auto; break-before: auto; }
+            pre, blockquote, table { page-break-inside: avoid; }
+            h2, h3 { page-break-after: avoid; break-after: avoid; }
+            tr { page-break-inside: avoid; }
+
+            /* No orphaned paragraphs */
+            p { orphans: 3; widows: 3; }
+
+            .lesson-header { box-shadow: none; }
+
+            .page-footer {
+                position: fixed;
+                bottom: 0; left: 0; right: 0;
+                background: #fff;
+                border-top: 1px solid #ccc;
+                padding: 6px 15mm;
+                display: flex;
+                justify-content: space-between;
+            }
+        }
+    
+    </style>
+</head>
+<body>
+
+    <!-- Header Banner -->
+    <header class="lesson-header">
+        <div class="module-badge">Module 1 -- Electronic Components Basics</div>
+        <h1>Lesson 3: Resistors -- The Traffic Controllers of Electronics</h1>
+        <div class="meta-row"><span class="meta-pill">&#9733; Star-1 Beginner</span><span class="meta-pill">&#9200; 40--45 minutes</span><span class="meta-pill">&#128100; Age 6--12 years</span><span class="meta-pill xp-badge" style="background:#FFEAA7;color:#7D4F00;border:none;">&#9889; 350 XP</span></div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+<hr>
+<h2 id="your-mission-today" style="background:#FF6B35;">Your Mission Today</h2>
+<p>Circuit Explorer, it is time to meet one of the most common components in all of electronics: the <strong>resistor</strong>. These tiny striped cylinders are hiding a secret code, and today you are going to crack it. Plus, you will use your Magic Measurement Wand to prove you decoded it correctly!</p>
+<hr>
+<h2 id="learning-objectives" style="background:#4ECDC4;">Learning Objectives</h2>
+<p>By the end of this lesson, you will be able to:</p>
+<ul>
+<li>Explain what a resistor does and why circuits need them</li>
+<li>Read resistor values using the color band code</li>
+<li>Use your Magic Measurement Wand to measure resistance</li>
+<li>See how resistance changes LED brightness</li>
+</ul>
+<hr>
+<h2 id="what-you-need" style="background:#45B7D1;">What You Need</h2>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Item</th>
+<th>Qty</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Resistors: 100-ohm, 330-ohm, 1k-ohm, 4.7k-ohm, 10k-ohm</td>
+<td>2 each</td>
+</tr>
+<tr>
+<td>LEDs (any color)</td>
+<td>3</td>
+</tr>
+<tr>
+<td>9V battery + clip</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Breadboard</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Multimeter (your Magic Measurement Wand!)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Jumper wires</td>
+<td>5</td>
+</tr>
+<tr>
+<td>Paper + colored pencils (for color code activity)</td>
+<td>1 set</td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="how-to-teach-this-lesson" style="background:#96CEB4;">How to Teach This Lesson</h2>
+<h3 id="step-1-hook-the-burned-led-5-min" style="border-left-color:#45B7D1; color:#45B7D1;">Step 1: Hook &mdash; The Burned LED (5 min)</h3>
+<p>Start with a story (or demonstration if you have a spare LED):</p>
+<blockquote><p>"Last lesson we used a resistor to protect our LED. What do you think happens if we connect the LED directly to 9V with NO resistor?"</p></blockquote>
+<p>If you have a spare LED and are comfortable doing it: connect an LED directly to 9V briefly. It will flash very bright and likely burn out.</p>
+<blockquote><p>"That LED just got way too much electricity &mdash; like drinking from a fire hose instead of a regular tap. The resistor is the LED's bodyguard."</p></blockquote>
+<p><strong>Or use this safer demo:</strong> Connect an LED with a 10k-ohm resistor (very dim), then swap to 100 ohms (much brighter). Ask:</p>
+<blockquote><p>"Why is it brighter with this resistor? Which one lets more electricity through?"</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+10 XP</span> for watching the demo and answering the question!</strong></p>
+<hr>
+<h3 id="step-2-what-does-a-resistor-do-8-min" style="border-left-color:#96CEB4; color:#96CEB4;">Step 2: What Does a Resistor Do? (8 min)</h3>
+<p><strong>The Hallway Analogy:</strong></p>
+<p>Draw on paper:</p>
+<pre><code>   Wide hallway             Narrow hallway
+   (low resistance)         (high resistance)
+
+   ====   ====              == crowd ==
+   people can walk fast     people squeeze through slowly
+   = lots of current        = less current</code></pre>
+<blockquote><p>"A resistor is like making a hallway narrower. More resistance = harder for electricity to squeeze through = less current flows."</p></blockquote>
+<p><strong>Show them a real resistor:</strong></p>
+<ul>
+<li>Small cylinder, two legs</li>
+<li>Colored bands painted on</li>
+<li>All resistors look basically the same &mdash; the bands are how you tell them apart</li>
+</ul>
+<p><strong>The unit:</strong> Ohms &mdash; named after Georg Simon Ohm, a German physicist.</p>
+<p>Fun fact:</p>
+<blockquote><p>"Georg Ohm discovered the relationship between voltage, current, and resistance in 1827. His boss laughed at him and called it wrong. He was right. They named the unit after him."</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+10 XP</span> for learning the hallway analogy!</strong></p>
+<hr>
+<h3 id="step-3-the-color-code-cracking-the-secret-12-min" style="border-left-color:#FF6B35; color:#FF6B35;">Step 3: The Color Code &mdash; Cracking the Secret (12 min)</h3>
+<p>This is the most fun part. Make it feel like a <strong>spy decoder activity</strong>.</p>
+<p><strong>The Color Code:</strong></p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Color</th>
+<th>Number</th>
+<th>Memory Trick</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Black</td>
+<td>0</td>
+<td><strong>B</strong>lack = <strong>0</strong> &mdash; dark, nothing</td>
+</tr>
+<tr>
+<td>Brown</td>
+<td>1</td>
+<td><strong>B</strong>rown = <strong>1</strong> &mdash; 1 brownie</td>
+</tr>
+<tr>
+<td>Red</td>
+<td>2</td>
+<td><strong>R</strong>ed = <strong>2</strong> &mdash; 2 roses</td>
+</tr>
+<tr>
+<td>Orange</td>
+<td>3</td>
+<td><strong>O</strong>range = <strong>3</strong> &mdash; 3 oranges</td>
+</tr>
+<tr>
+<td>Yellow</td>
+<td>4</td>
+<td><strong>Y</strong>ellow = <strong>4</strong> &mdash; 4 yellow bananas</td>
+</tr>
+<tr>
+<td>Green</td>
+<td>5</td>
+<td><strong>G</strong>reen = <strong>5</strong> &mdash; 5 green apples</td>
+</tr>
+<tr>
+<td>Blue</td>
+<td>6</td>
+<td><strong>Bl</strong>ue = <strong>6</strong> &mdash; 6 blueberries</td>
+</tr>
+<tr>
+<td>Violet</td>
+<td>7</td>
+<td><strong>V</strong>iolet = <strong>7</strong> &mdash; 7 purple grapes</td>
+</tr>
+<tr>
+<td>Gray</td>
+<td>8</td>
+<td><strong>G</strong>ray = <strong>8</strong> &mdash; 8 gray elephants</td>
+</tr>
+<tr>
+<td>White</td>
+<td>9</td>
+<td><strong>W</strong>hite = <strong>9</strong> &mdash; 9 white clouds</td>
+</tr>
+</tbody></table></div>
+<p><strong>How to read a 4-band resistor:</strong></p>
+<pre><code>   +-----------------------------------+
+   |  Band 1  Band 2  Band 3  Band 4   |
+   |  (1st    (2nd    (multi- (toler-  |
+   |  digit)  digit)  plier)  ance)    |
+   +-----------------------------------+
+
+Example: Orange - Orange - Red - Gold
+           3         3      x100   +/-5%
+         = 3,300 ohms = 3.3k ohms</code></pre>
+<p><strong>Step-by-step reading:</strong></p>
+<ol>
+<li>Band 1 = first digit</li>
+<li>Band 2 = second digit</li>
+<li>Band 3 = multiply by this power of 10</li>
+</ol>
+<ul>
+<li>Black = x1, Brown = x10, Red = x100, Orange = x1000, Yellow = x10,000</li>
+</ul>
+<ol>
+<li>Band 4 = tolerance (gold = +/-5%, silver = +/-10%)</li>
+</ol>
+<p><strong>Activity &mdash; Resistor Decoder Card:</strong></p>
+<p>Have the kid make their own decoder card on paper:</p>
+<pre><code>MY RESISTOR DECODER
+--------------------
+B B R O Y G Bl V Gy W
+0 1 2 3 4 5  6  7  8 9</code></pre>
+<p>Now decode these together:</p>
+<ul>
+<li>Brown-Black-Red-Gold = 1-0-x100 = <strong>1,000 ohms = 1k ohms</strong></li>
+<li>Yellow-Violet-Orange-Gold = 4-7-x1000 = <strong>47,000 ohms = 47k ohms</strong></li>
+<li>Red-Red-Brown-Gold = 2-2-x10 = <strong>220 ohms</strong></li>
+</ul>
+<p><strong>Award: <span class="xp-badge">+40 XP</span> for making the decoder card!</strong> <strong>Award: <span class="xp-badge">+10 XP</span> for each resistor decoded correctly (30 XP max)!</strong></p>
+<hr>
+<h3 id="step-4-hands-on-the-brightness-experiment-10-min" style="border-left-color:#4ECDC4; color:#4ECDC4;">Step 4: Hands-On &mdash; The Brightness Experiment (10 min)</h3>
+<p><strong>Build this circuit on the breadboard:</strong></p>
+<pre><code>  9V (+) ---- [RESISTOR] ---- LED (+) ---- LED (-) ---- 9V (-)</code></pre>
+<p><strong>Round 1:</strong> Use 100-ohm resistor. Observe brightness. <strong>Round 2:</strong> Swap for 330 ohms. Is it brighter or dimmer? <strong>Round 3:</strong> Swap for 1k ohm. How about now? <strong>Round 4:</strong> Try 10k ohms. Can you even see it glow?</p>
+<p>Fill in this table together:</p>
+<pre><code>| Resistor  | Brightness (1-5) | Feels warm? |
+|-----------|-----------------|-------------|
+| 100 ohm   |                 |             |
+| 330 ohm   |                 |             |
+| 1k ohm    |                 |             |
+| 10k ohm   |                 |             |</code></pre>
+<p><strong>Ask:</strong></p>
+<blockquote><p>"So what does a resistor control?" (How much current flows &mdash; which changes how bright the LED is) "Which resistor is safest for the LED?" (330 ohm to 1k ohm &mdash; not too bright, not dead)</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+30 XP</span> for completing all 4 rounds of the brightness experiment!</strong></p>
+<hr>
+<h3 id="step-5-wand-check-verify-the-color-code-8-min" style="border-left-color:#C678B0; color:#C678B0;">Step 5: Wand Check &mdash; Verify the Color Code! (8 min)</h3>
+<blockquote><p>"You cracked the color code like a spy. But how do you know the code told the TRUTH? Time to use your Magic Measurement Wand!"</p></blockquote>
+<p><strong>How to measure resistance with the Wand:</strong></p>
+<ol>
+<li>Make sure the resistor is NOT connected to a battery or circuit</li>
+<li>Turn the dial to the ohm symbol (the horseshoe shape)</li>
+<li>Touch the red probe to one leg, black probe to the other</li>
+<li>Read the display!</li>
+</ol>
+<p><strong>Activity &mdash; Code vs Wand Challenge:</strong></p>
+<p>Measure all 5 resistors. Compare to what the color code says.</p>
+<pre><code>| Resistor (color code says) | Wand reads | Match? | Points |
+|---------------------------|-----------|--------|--------|
+| 100 ohm                    |           |        | +10 XP |
+| 330 ohm                    |           |        | +10 XP |
+| 1k ohm                     |           |        | +10 XP |
+| 4.7k ohm                   |           |        | +10 XP |
+| 10k ohm                    |           |        | +10 XP |</code></pre>
+<blockquote><p>"They are not exactly the same &mdash; and that is OK! Real resistors have a small tolerance (5% error is fine). Your Wand shows the REAL value. The color code gives the APPROXIMATE value."</p></blockquote>
+<p><strong>Fun Wand Tricks (bonus):</strong></p>
+<ul>
+<li>Measure the resistance of a pencil line drawn on paper (graphite conducts!)</li>
+<li>Draw a thick line and a thin line &mdash; which has more resistance?</li>
+<li>Try to measure an eraser (insulator &mdash; "OL" or very high!)</li>
+</ul>
+<p><strong>Award: <span class="xp-badge">+50 XP</span> for measuring all 5 resistors!</strong> <strong>Award: <span class="xp-badge">+20 XP</span> bonus for trying the pencil trick!</strong></p>
+<hr>
+<h2 id="fun-game-resistor-bingo-optional-extension" style="background:#E8A838;">Fun Game: Resistor Bingo (Optional Extension)</h2>
+<p>Make a 3x3 bingo card with resistor values:</p>
+<pre><code>+--------+--------+--------+
+| 100 ohm | 1k ohm | 47k ohm|
++--------+--------+--------+
+| 330 ohm | FREE   | 10k ohm|
++--------+--------+--------+
+| 220 ohm | 4.7k   | 22k ohm|
++--------+--------+--------+</code></pre>
+<p>Draw resistors from a bag one by one. Kids decode the color bands and mark their card. <strong>For extra accuracy, verify each one with the Wand!</strong></p>
+<hr>
+<h2 id="quick-quiz-earn-bonus-xp" style="background:#C678B0;">Quick Quiz &mdash; Earn Bonus XP!</h2>
+<p><strong>Question 1:</strong> What does a resistor do?</p>
+<ul>
+<li>A) Stores electricity</li>
+<li>B) Limits how much current flows</li>
+<li>C) Makes electricity flow backwards</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<p><strong>Question 2:</strong> If you want a DIMMER LED, should you use a bigger or smaller resistor?</p>
+<ul>
+<li>A) Bigger (more resistance = less current = dimmer)</li>
+<li>B) Smaller</li>
+</ul>
+<p><strong>(Correct: A &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<p><strong>Question 3:</strong> You decoded a resistor as 330 ohms from its color bands. Your Wand reads 327 ohms. Is the resistor broken?</p>
+<ul>
+<li>A) Yes, it is broken!</li>
+<li>B) No &mdash; that is within the normal tolerance. It is perfectly fine!</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<hr>
+<h2 id="lesson-3-complete" style="background:#E05C5C;">Lesson 3 Complete!</h2>
+<pre><code>  =============================================
+
+     COLOR CODE CRACKER BADGE UNLOCKED!
+
+     Skills unlocked:
+     [check] Read resistor color codes
+     [check] Measure resistance with the Wand
+     [check] Understand brightness vs resistance
+     [check] Verified color code with the Wand
+
+  =============================================</code></pre>
+<p><strong>XP Breakdown:</strong></p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Activity</th>
+<th>XP</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Hook demo</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Hallway analogy</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Decoder card</td>
+<td>40</td>
+</tr>
+<tr>
+<td>Decode 3 resistors</td>
+<td>30</td>
+</tr>
+<tr>
+<td>Brightness experiment</td>
+<td>30</td>
+</tr>
+<tr>
+<td>Wand Check (5 resistors)</td>
+<td>50</td>
+</tr>
+<tr>
+<td>Pencil trick bonus</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Quiz (3 questions)</td>
+<td>60</td>
+</tr>
+<tr>
+<td><strong>TOTAL POSSIBLE</strong></td>
+<td><strong>250</strong></td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="coming-up-next" style="background:#FF6B35;">Coming Up Next...</h2>
+<p>In <strong>Lesson 4</strong>, we explore <strong>capacitors</strong> &mdash; tiny energy tanks that charge up and then release their power in a flash. You will charge one and watch your Wand show the voltage slowly draining away. It is like watching a bathtub empty!</p>
+<hr>
+<h2 id="troubleshooting" style="background:#4ECDC4;">Troubleshooting</h2>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Problem</th>
+<th>Fix</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Cannot read color bands</td>
+<td>Use a magnifying glass; hold under good light</td>
+</tr>
+<tr>
+<td>Wand reads 0 ohms</td>
+<td>Probe leads are touching each other &mdash; separate them</td>
+</tr>
+<tr>
+<td>Wand reads "OL" or "1"</td>
+<td>Resistance too high for current range &mdash; switch to a higher range</td>
+</tr>
+<tr>
+<td>LED burns out</td>
+<td>Resistor too small &mdash; use 330 ohms minimum with 9V</td>
+</tr>
+</tbody></table></div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="page-footer">
+        <span>Lesson 3: Resistors -- The Traffic Controllers of Electronics</span>
+        <span>Module 1: Electronic Components Basics</span>
+    </footer>
+
+</body>
+</html>

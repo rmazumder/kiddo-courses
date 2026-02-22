@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 10: Ohm&#x27;s Law -- The Superpower Formula</title>
+    <style>
+
+        /* ── Reset & Base ─────────────────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            line-height: 1.75;
+            color: #2C3E50;
+            background: #FAFAFA;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px 40px;
+        }
+
+        /* ── Header Banner ─────────────────────────────────────────── */
+        .lesson-header {
+            background: linear-gradient(135deg, #FF6B35 0%, #FF9A5C 50%, #FFB347 100%);
+            color: #fff;
+            border-radius: 16px;
+            padding: 32px 36px 28px;
+            margin: 24px 0 32px;
+            box-shadow: 0 6px 20px rgba(255,107,53,0.35);
+            position: relative;
+            overflow: hidden;
+        }
+        .lesson-header::before {
+            content: "";
+            position: absolute;
+            top: -40px; right: -40px;
+            width: 160px; height: 160px;
+            background: rgba(255,255,255,0.12);
+            border-radius: 50%;
+        }
+        .lesson-header::after {
+            content: "";
+            position: absolute;
+            bottom: -30px; left: -20px;
+            width: 100px; height: 100px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+        }
+        .lesson-header h1 {
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            position: relative;
+            z-index: 1;
+        }
+        .module-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.25);
+            border: 2px solid rgba(255,255,255,0.6);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 4px 14px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 1;
+        }
+        .meta-row {
+            margin-top: 12px;
+            font-size: 14px;
+            color: rgba(255,255,255,0.9);
+            position: relative;
+            z-index: 1;
+        }
+        .meta-pill {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            border-radius: 12px;
+            padding: 2px 10px;
+            margin: 2px 4px 2px 0;
+            white-space: nowrap;
+        }
+
+        /* ── Section Headings ──────────────────────────────────────── */
+        h2 {
+            font-size: 22px;
+            font-weight: 800;
+            margin: 36px 0 14px;
+            padding: 10px 18px;
+            border-radius: 10px;
+            color: #fff;
+            /* colour applied inline via data-color */
+        }
+        h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 28px 0 10px;
+            padding: 8px 14px;
+            border-left: 5px solid;
+            border-radius: 0 8px 8px 0;
+            background: rgba(0,0,0,0.03);
+            /* border-left colour applied inline */
+        }
+
+        /* ── Body Text ─────────────────────────────────────────────── */
+        p { margin: 10px 0; }
+        strong { font-weight: 700; color: #1A252F; }
+        em { font-style: italic; color: #5D6D7E; }
+
+        /* ── Inline Code ───────────────────────────────────────────── */
+        code {
+            background: #F0F3F7;
+            border: 1px solid #D5DCE8;
+            border-radius: 4px;
+            padding: 1px 6px;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 14px;
+            color: #C0392B;
+        }
+
+        /* ── Fenced Code Blocks ────────────────────────────────────── */
+        pre {
+            background: #F4F6F8;
+            border: 1px solid #D0D8E4;
+            border-left: 5px solid #45B7D1;
+            border-radius: 8px;
+            padding: 16px 18px;
+            overflow-x: auto;
+            margin: 16px 0;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #2C3E50;
+            white-space: pre;
+        }
+        pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            font-size: inherit;
+            color: inherit;
+        }
+
+        /* ── Blockquotes / Callout Boxes ───────────────────────────── */
+        blockquote {
+            background: #FFF8E7;
+            border-left: 6px solid #FF6B35;
+            border-radius: 0 12px 12px 0;
+            padding: 14px 20px;
+            margin: 16px 0;
+            color: #5D3A1A;
+            font-style: normal;
+            position: relative;
+        }
+        blockquote::before {
+            content: "\1F4AC";  /* speech bubble emoji */
+            position: absolute;
+            top: -10px; left: 10px;
+            font-size: 20px;
+            line-height: 1;
+        }
+        blockquote p { margin: 6px 0; }
+
+        /* ── Lists ─────────────────────────────────────────────────── */
+        ul, ol {
+            margin: 10px 0 10px 24px;
+            padding-left: 8px;
+        }
+        li { margin: 5px 0; }
+        ul li::marker { color: #FF6B35; font-size: 18px; }
+        ol li::marker { color: #45B7D1; font-weight: 700; }
+
+        /* ── Tables ────────────────────────────────────────────────── */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 16px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+        }
+        thead th {
+            background: #45B7D1;
+            color: #fff;
+            font-weight: 700;
+            padding: 11px 14px;
+            text-align: left;
+            border-bottom: 3px solid #2E9BBD;
+        }
+        thead th:first-child { border-radius: 10px 0 0 0; }
+        thead th:last-child  { border-radius: 0 10px 0 0; }
+        tbody tr:nth-child(odd)  td { background: #F8FBFF; }
+        tbody tr:nth-child(even) td { background: #EAF6FB; }
+        tbody tr:hover td { background: #D6F0F8; transition: background 0.15s; }
+        td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #D9EEF6;
+            vertical-align: top;
+        }
+        /* Checkbox column: replace [ ] with styled checkbox */
+        td .checkbox {
+            display: inline-block;
+            width: 18px; height: 18px;
+            border: 2px solid #45B7D1;
+            border-radius: 4px;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+
+        /* ── XP Badges ─────────────────────────────────────────────── */
+        .xp-badge {
+            display: inline-block;
+            background: #FFEAA7;
+            border: 2px solid #F39C12;
+            color: #7D4F00;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin: 2px 4px;
+            white-space: nowrap;
+        }
+        .award-badge {
+            display: inline-block;
+            background: #D5F5E3;
+            border: 2px solid #27AE60;
+            color: #1A5E35;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin: 2px 4px;
+            white-space: nowrap;
+        }
+
+        /* ── Horizontal Rule ───────────────────────────────────────── */
+        hr {
+            border: none;
+            border-top: 3px dashed #B2D8E8;
+            margin: 30px 0;
+        }
+
+        /* ── Footer ────────────────────────────────────────────────── */
+        .page-footer {
+            margin-top: 48px;
+            padding-top: 16px;
+            border-top: 2px solid #D5DCE8;
+            text-align: center;
+            font-size: 13px;
+            color: #7F8C8D;
+        }
+
+        /* ── Print Styles ──────────────────────────────────────────── */
+        @media print {
+            @page { size: A4; margin: 18mm 15mm 20mm; }
+
+            body {
+                background: #fff !important;
+                font-size: 13px;
+                max-width: 100%;
+                padding: 0;
+            }
+
+            /* Force colour printing */
+            * { -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important; }
+
+            /* Page breaks */
+            h2 { page-break-before: auto; break-before: auto; }
+            pre, blockquote, table { page-break-inside: avoid; }
+            h2, h3 { page-break-after: avoid; break-after: avoid; }
+            tr { page-break-inside: avoid; }
+
+            /* No orphaned paragraphs */
+            p { orphans: 3; widows: 3; }
+
+            .lesson-header { box-shadow: none; }
+
+            .page-footer {
+                position: fixed;
+                bottom: 0; left: 0; right: 0;
+                background: #fff;
+                border-top: 1px solid #ccc;
+                padding: 6px 15mm;
+                display: flex;
+                justify-content: space-between;
+            }
+        }
+    
+    </style>
+</head>
+<body>
+
+    <!-- Header Banner -->
+    <header class="lesson-header">
+        <div class="module-badge">Module 2 -- Building Simple Circuits</div>
+        <h1>Lesson 10: Ohm&#x27;s Law -- The Superpower Formula</h1>
+        <div class="meta-row"><span class="meta-pill">&#9733; Star-2 Easy-Medium</span><span class="meta-pill">&#9200; 45--50 minutes</span><span class="meta-pill">&#128100; Age 6--12 years</span><span class="meta-pill xp-badge" style="background:#FFEAA7;color:#7D4F00;border:none;">&#9889; 240 XP</span></div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+<hr>
+<h2 id="your-mission-today" style="background:#FF6B35;">Your Mission Today</h2>
+<p>Circuit Explorer, today you are going to learn THE most important formula in all of electronics. It is called <strong>Ohm's Law</strong>, and once you know it, you can PREDICT what your Magic Measurement Wand will read before you even touch the probes. Imagine that &mdash; seeing the future! Let us discover how.</p>
+<hr>
+<h2 id="learning-objectives" style="background:#4ECDC4;">Learning Objectives</h2>
+<p>By the end of this lesson, you will be able to:</p>
+<ul>
+<li>State Ohm's Law: V = I x R (Voltage = Current x Resistance)</li>
+<li>Use the formula to calculate voltage, current, or resistance</li>
+<li>Build a circuit and PREDICT what the Wand will measure</li>
+<li>Verify your predictions by measuring actual voltage and resistance</li>
+<li>Understand why Ohm's Law matters for every circuit you build</li>
+</ul>
+<hr>
+<h2 id="what-you-need" style="background:#45B7D1;">What You Need</h2>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Item</th>
+<th>Qty</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>9V battery + clip</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Breadboard</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Resistors: 220-ohm, 330-ohm, 470-ohm, 1k-ohm, 10k-ohm</td>
+<td>2 each</td>
+</tr>
+<tr>
+<td>LEDs (red)</td>
+<td>3</td>
+</tr>
+<tr>
+<td>Jumper wires</td>
+<td>6</td>
+</tr>
+<tr>
+<td>Multimeter (Magic Measurement Wand)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Paper + pencil (for calculations)</td>
+<td>1 set</td>
+</tr>
+<tr>
+<td>Calculator (optional, for younger kids)</td>
+<td>1</td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="how-to-teach-this-lesson" style="background:#96CEB4;">How to Teach This Lesson</h2>
+<h3 id="step-1-hook-the-prediction-challenge-5-min" style="border-left-color:#45B7D1; color:#45B7D1;">Step 1: Hook &mdash; The Prediction Challenge (5 min)</h3>
+<p>Build this simple circuit (without the kid seeing your setup):</p>
+<pre><code>  9V battery ---- [1k-ohm resistor] ---- LED ---- back to battery</code></pre>
+<blockquote><p>"I am going to tell you EXACTLY what the Wand will read when I measure this circuit &mdash; WITHOUT touching it. Ready?"</p></blockquote>
+<blockquote><p>"The Wand will read about 7 volts across the resistor and about 2 volts across the LED."</p></blockquote>
+<p>Now measure. Show the kid the readings.</p>
+<blockquote><p>"How did I know? Am I psychic? Nope. I used a formula. And today, YOU are going to learn it."</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+10 XP</span> for being amazed by the prediction!</strong></p>
+<hr>
+<h3 id="step-2-the-water-park-analogy-10-min" style="border-left-color:#96CEB4; color:#96CEB4;">Step 2: The Water Park Analogy (10 min)</h3>
+<p>Draw this picture together:</p>
+<pre><code>  WATER PARK CIRCUIT
+  ==================
+
+  Water pump at the top of a hill
+        |
+        | (water pressure = VOLTAGE)
+        |
+        v
+  [ Wide waterslide ]  -- low resistance, fast flow
+        |
+        v
+  [ Narrow waterslide ] -- high resistance, slow flow
+        |
+        v
+  Pool at the bottom (water returns to pump)
+
+
+  The formula:
+
+  Water pressure = Water flow x Slide narrowness
+
+  In electricity:
+
+  Voltage (V) = Current (I) x Resistance (R)
+
+  V = I x R</code></pre>
+<p><strong>Break it down simply:</strong></p>
+<blockquote><p>"V is <strong>Voltage</strong> &mdash; how hard the battery pushes. We measure it in Volts."</p><p>"I is <strong>Current</strong> &mdash; how much electricity actually flows. We measure it in Amps."</p><p>"R is <strong>Resistance</strong> &mdash; how much the path blocks the flow. We measure it in Ohms."</p></blockquote>
+<p><strong>The three rearrangements (for ages 9&mdash;12):</strong></p>
+<pre><code>  V = I x R    (find voltage if you know current and resistance)
+  I = V / R    (find current if you know voltage and resistance)
+  R = V / I    (find resistance if you know voltage and current)</code></pre>
+<p><strong>The VIR Triangle trick:</strong></p>
+<pre><code>      +-------+
+     /    V    \
+    /  -------  \
+   /   I  x  R   \
+  +----------------+
+
+  Cover what you want to find:
+  - Cover V: you see I x R  --&gt; V = I x R
+  - Cover I: you see V / R  --&gt; I = V / R
+  - Cover R: you see V / I  --&gt; R = V / I</code></pre>
+<blockquote><p>"Draw this triangle on a sticky note and keep it next to your breadboard. It is your cheat code!"</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+20 XP</span> for drawing the VIR triangle!</strong></p>
+<hr>
+<h3 id="step-3-your-first-calculation-8-min" style="border-left-color:#FF6B35; color:#FF6B35;">Step 3: Your First Calculation (8 min)</h3>
+<p><strong>Problem 1 &mdash; Finding Current:</strong></p>
+<blockquote><p>"You have a 9V battery and a 1,000-ohm resistor (1k ohm). How much current flows?"</p></blockquote>
+<pre><code>  I = V / R
+  I = 9V / 1000 ohms
+  I = 0.009 Amps
+  I = 9 milliamps (mA)</code></pre>
+<blockquote><p>"9 milliamps! That is 9 thousandths of an Amp. Tiny! But enough to light an LED."</p></blockquote>
+<p><strong>Problem 2 &mdash; Finding Voltage:</strong></p>
+<blockquote><p>"A circuit has 0.02 Amps (20 mA) flowing through a 330-ohm resistor. How much voltage does the resistor use?"</p></blockquote>
+<pre><code>  V = I x R
+  V = 0.02 x 330
+  V = 6.6 Volts</code></pre>
+<p><strong>Problem 3 &mdash; Finding Resistance:</strong></p>
+<blockquote><p>"You want 0.01 Amps (10 mA) to flow from a 9V battery. What resistor do you need?"</p></blockquote>
+<pre><code>  R = V / I
+  R = 9V / 0.01
+  R = 900 ohms (closest standard value: 1k ohm)</code></pre>
+<p><strong>For ages 6&mdash;8:</strong> Do Problem 1 only. Use a calculator. Focus on the concept: "bigger resistor = less current."</p>
+<p><strong>For ages 9&mdash;12:</strong> Do all three. Have them write the formula, plug in numbers, and solve.</p>
+<p><strong>Award: <span class="xp-badge">+30 XP</span> for solving at least 2 problems correctly!</strong></p>
+<hr>
+<h3 id="step-4-predict-then-prove-the-ohms-law-lab-12-min" style="border-left-color:#4ECDC4; color:#4ECDC4;">Step 4: Predict, Then Prove &mdash; The Ohm's Law Lab (12 min)</h3>
+<blockquote><p>"Now here is the exciting part. You are going to PREDICT what your Wand will read, and then CHECK if you were right. This is real science &mdash; making predictions and testing them!"</p></blockquote>
+<p><strong>Build this circuit on the breadboard:</strong></p>
+<pre><code>  9V (+) ---- [resistor] ---- LED (+) ---- LED (-) ---- 9V (-)</code></pre>
+<p><strong>Round 1 &mdash; 330-ohm resistor:</strong></p>
+<p>Step 1: Calculate the expected voltage across the resistor.</p>
+<blockquote><p>"The LED uses about 2V. The battery is 9V. So the resistor gets... 9 - 2 = 7V!"</p></blockquote>
+<p>Step 2: Calculate the expected current.</p>
+<blockquote><p>"I = V / R = 7V / 330 ohms = 0.021 Amps = 21 mA."</p></blockquote>
+<p>Step 3: MEASURE with the Wand!</p>
+<p><strong>Round 2 &mdash; 1k-ohm resistor:</strong></p>
+<p>Swap the resistor. Repeat the prediction and measurement.</p>
+<blockquote><p>"Resistor voltage: still about 7V. Current: I = 7V / 1000 = 7 mA. LED should be dimmer!"</p></blockquote>
+<p><strong>Round 3 &mdash; 10k-ohm resistor:</strong></p>
+<p>Swap again.</p>
+<blockquote><p>"Current: I = 7V / 10000 = 0.7 mA. Very dim! Maybe barely visible."</p></blockquote>
+<p><strong>Fill in this results table:</strong></p>
+<pre><code>| Resistor | Predicted V_resistor | Wand Reads V | Predicted I | LED Brightness |
+|----------|---------------------|-------------|------------|---------------|
+| 330 ohm  |                     |             |            | Bright / Dim  |
+| 1k ohm   |                     |             |            | Bright / Dim  |
+| 10k ohm  |                     |             |            | Bright / Dim  |</code></pre>
+<blockquote><p>"Did your predictions match the Wand? They should be close! If they are a little off, that is because real components are not perfect &mdash; remember tolerance from the resistor lesson?"</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+40 XP</span> for completing all three rounds of predict-and-prove!</strong></p>
+<hr>
+<h3 id="step-5-wand-check-verify-ohms-law-with-real-measurements-8-min" style="border-left-color:#C678B0; color:#C678B0;">Step 5: Wand Check &mdash; Verify Ohm's Law with Real Measurements (8 min)</h3>
+<blockquote><p>"Let us put Ohm's Law on trial. We will measure BOTH voltage and resistance, then calculate current &mdash; and see if the formula holds."</p></blockquote>
+<p><strong>Verification Experiment:</strong></p>
+<p>Build the circuit with a <strong>470-ohm resistor</strong> and a red LED.</p>
+<p><strong>Measurement 1 &mdash; Measure the actual resistance:</strong></p>
+<ol>
+<li>REMOVE the resistor from the circuit (very important &mdash; no power!)</li>
+<li>Set Wand to ohms mode</li>
+<li>Measure the resistor</li>
+<li>Write down the ACTUAL resistance (it might be 465 ohms or 478 ohms &mdash; tolerance!)</li>
+</ol>
+<p><strong>Measurement 2 &mdash; Measure the voltage across the resistor:</strong></p>
+<ol>
+<li>Put the resistor back in the circuit</li>
+<li>Connect the battery</li>
+<li>Set Wand to DC Volts</li>
+<li>Touch probes across the resistor</li>
+<li>Write down the voltage</li>
+</ol>
+<p><strong>Measurement 3 &mdash; Measure the voltage across the LED:</strong></p>
+<ol>
+<li>Touch probes across the LED</li>
+<li>Write down the voltage</li>
+</ol>
+<p><strong>Now calculate:</strong></p>
+<pre><code>  Measured resistance: _____ ohms
+  Measured V_resistor: _____ V
+  Measured V_LED: _____ V
+
+  Check 1: V_resistor + V_LED = _____ V (should be close to 9V!)
+  Check 2: I = V_resistor / R_actual = _____ A = _____ mA</code></pre>
+<blockquote><p>"If V_resistor + V_LED is close to 9V, Ohm's Law passed the test! The battery's push is PERFECTLY divided between the resistor and the LED. Nothing is wasted, nothing is created &mdash; it all adds up."</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+40 XP</span> for completing the full Ohm's Law verification!</strong></p>
+<hr>
+<h3 id="step-6-why-does-this-matter-3-min" style="border-left-color:#E8A838; color:#E8A838;">Step 6: Why Does This Matter? (3 min)</h3>
+<blockquote><p>"So why should you care about Ohm's Law?"</p></blockquote>
+<p><strong>Real-world reason 1 &mdash; Protecting LEDs:</strong></p>
+<blockquote><p>"An LED can handle about 20 mA. Too much current and it burns out. Ohm's Law tells you EXACTLY which resistor to use: R = V / I. That is how we chose 330 ohms for our 9V circuits!"</p></blockquote>
+<p><strong>Real-world reason 2 &mdash; Designing circuits:</strong></p>
+<blockquote><p>"Engineers use Ohm's Law hundreds of times a day. Every circuit in your phone, your computer, your game console &mdash; they all follow this law."</p></blockquote>
+<p><strong>Real-world reason 3 &mdash; Troubleshooting:</strong></p>
+<blockquote><p>"If the Wand reads a different voltage than you predicted, something is wrong. Ohm's Law helps you figure out WHAT."</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+10 XP</span> for explaining one reason Ohm's Law matters!</strong></p>
+<hr>
+<h2 id="quick-quiz-earn-bonus-xp" style="background:#E8A838;">Quick Quiz &mdash; Earn Bonus XP!</h2>
+<p><strong>Question 1:</strong> What does Ohm's Law say?</p>
+<ul>
+<li>A) V = I + R (Voltage equals current plus resistance)</li>
+<li>B) V = I x R (Voltage equals current times resistance)</li>
+<li>C) V = I - R (Voltage equals current minus resistance)</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<p><strong>Question 2:</strong> A 9V battery pushes current through a 1,000-ohm resistor. How much current flows?</p>
+<ul>
+<li>A) 9,000 Amps</li>
+<li>B) 9 milliamps (0.009 A)</li>
+<li>C) 0.9 Amps</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<p><strong>Question 3:</strong> You measure 7V across a 330-ohm resistor with your Wand. About how much current is flowing?</p>
+<ul>
+<li>A) About 2 mA</li>
+<li>B) About 21 mA</li>
+<li>C) About 330 mA</li>
+</ul>
+<p><strong>(Correct: B &mdash; 7 / 330 = 0.021 A = 21 mA &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<p><strong>Bonus question for older kids (10+):</strong></p>
+<blockquote><p>"You want exactly 15 mA through an LED with a forward voltage of 2V, using a 9V battery. What resistor should you use?"</p><p>R = (9V - 2V) / 0.015A = 7V / 0.015 = 467 ohms. Closest standard value: 470 ohms!</p></blockquote>
+<p><strong>(Correct: <span class="xp-badge">+30 XP</span> bonus!)</strong></p>
+<hr>
+<h2 id="lesson-10-complete" style="background:#C678B0;">Lesson 10 Complete!</h2>
+<pre><code>  =============================================
+
+     OHM&#x27;S LAW APPRENTICE BADGE UNLOCKED!
+
+     Skills unlocked:
+     [check] Know V = I x R and the VIR triangle
+     [check] Calculate voltage, current, and resistance
+     [check] Predict Wand readings using math
+     [check] Verified Ohm&#x27;s Law with real measurements
+     [check] Chose the right resistor for an LED
+
+  =============================================</code></pre>
+<p><strong>XP Breakdown:</strong></p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Activity</th>
+<th>XP</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Hook &mdash; prediction amazement</td>
+<td>10</td>
+</tr>
+<tr>
+<td>VIR triangle</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Solve 2+ calculation problems</td>
+<td>30</td>
+</tr>
+<tr>
+<td>Predict-and-prove lab (3 rounds)</td>
+<td>40</td>
+</tr>
+<tr>
+<td>Full Ohm's Law verification</td>
+<td>40</td>
+</tr>
+<tr>
+<td>Why it matters</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Quiz (3 questions)</td>
+<td>60</td>
+</tr>
+<tr>
+<td>Bonus question</td>
+<td>30</td>
+</tr>
+<tr>
+<td><strong>TOTAL POSSIBLE</strong></td>
+<td><strong>240</strong></td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="coming-up-next" style="background:#E05C5C;">Coming Up Next...</h2>
+<p>In <strong>Lesson 11</strong>, we explore <strong>series circuits</strong> &mdash; where components line up one after the other like train cars. You will discover that voltage gets SPLIT between them, and you will use your Magic Measurement Wand to go on a voltage treasure hunt across every component!</p>
+<hr>
+<h2 id="troubleshooting" style="background:#FF6B35;">Troubleshooting</h2>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Problem</th>
+<th>Likely Cause</th>
+<th>Fix</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Wand reads 0V across resistor</td>
+<td>Battery not connected or dead</td>
+<td>Check battery; measure battery voltage first</td>
+</tr>
+<tr>
+<td>Predictions are way off</td>
+<td>Using wrong resistor value</td>
+<td>Measure resistor with Wand in ohms mode before calculating</td>
+</tr>
+<tr>
+<td>LED does not light up</td>
+<td>LED reversed or wrong row</td>
+<td>Check polarity and breadboard connections</td>
+</tr>
+<tr>
+<td>Voltages do not add up to 9V</td>
+<td>Probe placement error</td>
+<td>Make sure red probe is on the + side, black on - side</td>
+</tr>
+<tr>
+<td>Current calculation gives huge number</td>
+<td>Divided wrong way</td>
+<td>Double-check: I = V / R, not R / V</td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="parentinstructor-notes" style="background:#4ECDC4;">Parent/Instructor Notes</h2>
+<ul>
+<li><strong>Ages 6&mdash;8:</strong> Focus on the BIG IDEA: bigger resistor = less current = dimmer LED. Skip the math calculations. Let the Wand do the measuring and just compare brightness. The "water park" analogy is enough.</li>
+<li><strong>Ages 9&mdash;12:</strong> This is the lesson where math becomes a superpower. Encourage them to do all calculations on paper first, THEN measure. The thrill of a prediction matching reality is extremely motivating.</li>
+<li>The VIR triangle is a powerful memory tool. Encourage them to draw it on a sticky note and keep it at their workspace.</li>
+<li>Common mistake: kids forget that the LED also "uses" voltage. When they calculate current, they need to subtract the LED's forward voltage (about 2V) from the battery voltage first: I = (V_battery - V_LED) / R.</li>
+<li>The bonus question introduces the concept of choosing a resistor for a specific current &mdash; this is the core design skill for LED circuits.</li>
+<li>Keep the Wand Journal going! Every measurement should be recorded with the prediction next to it.</li>
+</ul>
+    </main>
+
+    <!-- Footer -->
+    <footer class="page-footer">
+        <span>Lesson 10: Ohm&#x27;s Law -- The Superpower Formula</span>
+        <span>Module 2: Building Simple Circuits</span>
+    </footer>
+
+</body>
+</html>

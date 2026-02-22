@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 2: Meet Your Magic Measurement Wand!</title>
+    <style>
+
+        /* ── Reset & Base ─────────────────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            line-height: 1.75;
+            color: #2C3E50;
+            background: #FAFAFA;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px 40px;
+        }
+
+        /* ── Header Banner ─────────────────────────────────────────── */
+        .lesson-header {
+            background: linear-gradient(135deg, #FF6B35 0%, #FF9A5C 50%, #FFB347 100%);
+            color: #fff;
+            border-radius: 16px;
+            padding: 32px 36px 28px;
+            margin: 24px 0 32px;
+            box-shadow: 0 6px 20px rgba(255,107,53,0.35);
+            position: relative;
+            overflow: hidden;
+        }
+        .lesson-header::before {
+            content: "";
+            position: absolute;
+            top: -40px; right: -40px;
+            width: 160px; height: 160px;
+            background: rgba(255,255,255,0.12);
+            border-radius: 50%;
+        }
+        .lesson-header::after {
+            content: "";
+            position: absolute;
+            bottom: -30px; left: -20px;
+            width: 100px; height: 100px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+        }
+        .lesson-header h1 {
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            position: relative;
+            z-index: 1;
+        }
+        .module-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.25);
+            border: 2px solid rgba(255,255,255,0.6);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 4px 14px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 1;
+        }
+        .meta-row {
+            margin-top: 12px;
+            font-size: 14px;
+            color: rgba(255,255,255,0.9);
+            position: relative;
+            z-index: 1;
+        }
+        .meta-pill {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            border-radius: 12px;
+            padding: 2px 10px;
+            margin: 2px 4px 2px 0;
+            white-space: nowrap;
+        }
+
+        /* ── Section Headings ──────────────────────────────────────── */
+        h2 {
+            font-size: 22px;
+            font-weight: 800;
+            margin: 36px 0 14px;
+            padding: 10px 18px;
+            border-radius: 10px;
+            color: #fff;
+            /* colour applied inline via data-color */
+        }
+        h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 28px 0 10px;
+            padding: 8px 14px;
+            border-left: 5px solid;
+            border-radius: 0 8px 8px 0;
+            background: rgba(0,0,0,0.03);
+            /* border-left colour applied inline */
+        }
+
+        /* ── Body Text ─────────────────────────────────────────────── */
+        p { margin: 10px 0; }
+        strong { font-weight: 700; color: #1A252F; }
+        em { font-style: italic; color: #5D6D7E; }
+
+        /* ── Inline Code ───────────────────────────────────────────── */
+        code {
+            background: #F0F3F7;
+            border: 1px solid #D5DCE8;
+            border-radius: 4px;
+            padding: 1px 6px;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 14px;
+            color: #C0392B;
+        }
+
+        /* ── Fenced Code Blocks ────────────────────────────────────── */
+        pre {
+            background: #F4F6F8;
+            border: 1px solid #D0D8E4;
+            border-left: 5px solid #45B7D1;
+            border-radius: 8px;
+            padding: 16px 18px;
+            overflow-x: auto;
+            margin: 16px 0;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #2C3E50;
+            white-space: pre;
+        }
+        pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            font-size: inherit;
+            color: inherit;
+        }
+
+        /* ── Blockquotes / Callout Boxes ───────────────────────────── */
+        blockquote {
+            background: #FFF8E7;
+            border-left: 6px solid #FF6B35;
+            border-radius: 0 12px 12px 0;
+            padding: 14px 20px;
+            margin: 16px 0;
+            color: #5D3A1A;
+            font-style: normal;
+            position: relative;
+        }
+        blockquote::before {
+            content: "\1F4AC";  /* speech bubble emoji */
+            position: absolute;
+            top: -10px; left: 10px;
+            font-size: 20px;
+            line-height: 1;
+        }
+        blockquote p { margin: 6px 0; }
+
+        /* ── Lists ─────────────────────────────────────────────────── */
+        ul, ol {
+            margin: 10px 0 10px 24px;
+            padding-left: 8px;
+        }
+        li { margin: 5px 0; }
+        ul li::marker { color: #FF6B35; font-size: 18px; }
+        ol li::marker { color: #45B7D1; font-weight: 700; }
+
+        /* ── Tables ────────────────────────────────────────────────── */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 16px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+        }
+        thead th {
+            background: #45B7D1;
+            color: #fff;
+            font-weight: 700;
+            padding: 11px 14px;
+            text-align: left;
+            border-bottom: 3px solid #2E9BBD;
+        }
+        thead th:first-child { border-radius: 10px 0 0 0; }
+        thead th:last-child  { border-radius: 0 10px 0 0; }
+        tbody tr:nth-child(odd)  td { background: #F8FBFF; }
+        tbody tr:nth-child(even) td { background: #EAF6FB; }
+        tbody tr:hover td { background: #D6F0F8; transition: background 0.15s; }
+        td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #D9EEF6;
+            vertical-align: top;
+        }
+        /* Checkbox column: replace [ ] with styled checkbox */
+        td .checkbox {
+            display: inline-block;
+            width: 18px; height: 18px;
+            border: 2px solid #45B7D1;
+            border-radius: 4px;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+
+        /* ── XP Badges ─────────────────────────────────────────────── */
+        .xp-badge {
+            display: inline-block;
+            background: #FFEAA7;
+            border: 2px solid #F39C12;
+            color: #7D4F00;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin: 2px 4px;
+            white-space: nowrap;
+        }
+        .award-badge {
+            display: inline-block;
+            background: #D5F5E3;
+            border: 2px solid #27AE60;
+            color: #1A5E35;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin: 2px 4px;
+            white-space: nowrap;
+        }
+
+        /* ── Horizontal Rule ───────────────────────────────────────── */
+        hr {
+            border: none;
+            border-top: 3px dashed #B2D8E8;
+            margin: 30px 0;
+        }
+
+        /* ── Footer ────────────────────────────────────────────────── */
+        .page-footer {
+            margin-top: 48px;
+            padding-top: 16px;
+            border-top: 2px solid #D5DCE8;
+            text-align: center;
+            font-size: 13px;
+            color: #7F8C8D;
+        }
+
+        /* ── Print Styles ──────────────────────────────────────────── */
+        @media print {
+            @page { size: A4; margin: 18mm 15mm 20mm; }
+
+            body {
+                background: #fff !important;
+                font-size: 13px;
+                max-width: 100%;
+                padding: 0;
+            }
+
+            /* Force colour printing */
+            * { -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important; }
+
+            /* Page breaks */
+            h2 { page-break-before: auto; break-before: auto; }
+            pre, blockquote, table { page-break-inside: avoid; }
+            h2, h3 { page-break-after: avoid; break-after: avoid; }
+            tr { page-break-inside: avoid; }
+
+            /* No orphaned paragraphs */
+            p { orphans: 3; widows: 3; }
+
+            .lesson-header { box-shadow: none; }
+
+            .page-footer {
+                position: fixed;
+                bottom: 0; left: 0; right: 0;
+                background: #fff;
+                border-top: 1px solid #ccc;
+                padding: 6px 15mm;
+                display: flex;
+                justify-content: space-between;
+            }
+        }
+    
+    </style>
+</head>
+<body>
+
+    <!-- Header Banner -->
+    <header class="lesson-header">
+        <div class="module-badge">Module 1 -- Electronic Components Basics</div>
+        <h1>Lesson 2: Meet Your Magic Measurement Wand!</h1>
+        <div class="meta-row"><span class="meta-pill">&#9733; Star-1 Beginner</span><span class="meta-pill">&#9200; 35--40 minutes</span><span class="meta-pill">&#128100; Age 6--12 years</span><span class="meta-pill xp-badge" style="background:#FFEAA7;color:#7D4F00;border:none;">&#9889; 350 XP</span></div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+<hr>
+<h2 id="your-mission-today" style="background:#FF6B35;">Your Mission Today</h2>
+<p>Welcome back, Circuit Explorer! Last lesson you made an LED glow &mdash; that was amazing! But here is a question: how do you KNOW how much electricity is flowing? Today you get your very own <strong>Magic Measurement Wand</strong> &mdash; a tool that lets you SEE invisible electricity. By the end of this mission, you will be a certified Wand Wielder!</p>
+<hr>
+<h2 id="learning-objectives" style="background:#4ECDC4;">Learning Objectives</h2>
+<p>By the end of this lesson, you will be able to:</p>
+<ul>
+<li>Name the three superpowers of the multimeter (voltage, resistance, continuity)</li>
+<li>Identify the main parts of a multimeter (dial, display, probes)</li>
+<li>Safely measure the voltage of a battery</li>
+<li>Test whether something conducts electricity using continuity mode</li>
+<li>Earn your <strong>Wand Wielder Badge</strong></li>
+</ul>
+<hr>
+<h2 id="what-you-need" style="background:#45B7D1;">What You Need</h2>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Item</th>
+<th>Qty</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Digital multimeter (basic)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>9V battery</td>
+<td>1</td>
+</tr>
+<tr>
+<td>AA battery</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Jumper wires</td>
+<td>2</td>
+</tr>
+<tr>
+<td>LED (from Lesson 1)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>330-ohm resistor (from Lesson 1)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>A coin (penny or nickel)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>A pencil</td>
+<td>1</td>
+</tr>
+<tr>
+<td>A rubber eraser</td>
+<td>1</td>
+</tr>
+<tr>
+<td>A piece of aluminum foil</td>
+<td>1</td>
+</tr>
+<tr>
+<td>A wooden popsicle stick</td>
+<td>1</td>
+</tr>
+<tr>
+<td>A glass of water (with a pinch of salt)</td>
+<td>1</td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="how-to-teach-this-lesson" style="background:#96CEB4;">How to Teach This Lesson</h2>
+<h3 id="step-1-hook-the-invisible-river-5-min" style="border-left-color:#45B7D1; color:#45B7D1;">Step 1: Hook &mdash; The Invisible River (5 min)</h3>
+<p>Hold up the LED circuit from Lesson 1 (battery + resistor + LED).</p>
+<blockquote><p>"Remember how we said electricity is like water flowing through a pipe? Well... can you actually SEE the water? Not in this pipe. It is invisible! So how do scientists know how much electricity is flowing? They need a special tool. A tool that can see the invisible."</p></blockquote>
+<p>Pull out the multimeter dramatically.</p>
+<blockquote><p>"THIS is a multimeter. But we are going to call it something cooler. This... is your <strong>Magic Measurement Wand</strong>. It has THREE superpowers."</p></blockquote>
+<p>Hold up three fingers:</p>
+<blockquote><p>"Superpower 1: It can feel how hard the battery PUSHES. That is called measuring <strong>voltage</strong>."</p><p>"Superpower 2: It can tell how much something BLOCKS electricity. That is called measuring <strong>resistance</strong>."</p><p>"Superpower 3: It can tell if electricity can flow through something at all &mdash; and it BEEPS when it can! That is called <strong>continuity</strong>."</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+20 XP</span> for listening to the full introduction!</strong></p>
+<hr>
+<h3 id="step-2-know-your-wand-parts-of-the-multimeter-5-min" style="border-left-color:#96CEB4; color:#96CEB4;">Step 2: Know Your Wand &mdash; Parts of the Multimeter (5 min)</h3>
+<p>Lay the multimeter flat on the table. Point to each part:</p>
+<pre><code>  ┌─────────────────────────────────┐
+  │        [ DISPLAY ]              │  &lt;-- Shows the numbers
+  │     (big screen on top)         │
+  │                                 │
+  │        ┌───────┐                │
+  │        │ DIAL  │                │  &lt;-- Turn this to choose
+  │        │       │                │      your superpower
+  │        └───────┘                │
+  │                                 │
+  │  [COM]    [V/ohm]    [A]       │  &lt;-- Holes for the probes
+  │  (black)  (red)    (red-amps)  │
+  └─────────────────────────────────┘
+
+  Probes:
+  BLACK probe = always goes in COM hole (COM = Common = home base)
+  RED probe   = goes in V/ohm hole for voltage and resistance</code></pre>
+<p><strong>Key vocabulary:</strong></p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Word</th>
+<th>Kid-Friendly Definition</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><strong>Display</strong></td>
+<td>The screen that shows you the measurement &mdash; like a scoreboard!</td>
+</tr>
+<tr>
+<td><strong>Dial</strong></td>
+<td>The knob you turn to pick which superpower you want</td>
+</tr>
+<tr>
+<td><strong>Probes</strong></td>
+<td>The two pointy sticks you touch to things &mdash; like magic wand tips</td>
+</tr>
+<tr>
+<td><strong>COM</strong></td>
+<td>Short for "Common" &mdash; the black probe's home. It ALWAYS lives here.</td>
+</tr>
+</tbody></table></div>
+<blockquote><p>"Think of the probes like chopsticks for electricity. You need BOTH to complete the measurement &mdash; one on each side."</p></blockquote>
+<p><strong>Activity &mdash; Label the Wand:</strong> Give the kid a sticky note. Have them write "DISPLAY," "DIAL," "COM," and "RED" and stick the labels onto the correct parts of the multimeter.</p>
+<p><strong>Award: <span class="xp-badge">+30 XP</span> for correctly labeling all 4 parts!</strong></p>
+<hr>
+<h3 id="step-3-superpower-1-measuring-voltage-10-min" style="border-left-color:#FF6B35; color:#FF6B35;">Step 3: Superpower 1 &mdash; Measuring Voltage (10 min)</h3>
+<blockquote><p>"Voltage is how hard the battery pushes electricity. A 9V battery pushes HARD. A AA battery pushes gently. Let us use our Wand to prove it!"</p></blockquote>
+<p><strong>How to measure voltage:</strong></p>
+<ol>
+<li>Plug the BLACK probe into COM</li>
+<li>Plug the RED probe into the hole marked V (or V/ohm)</li>
+<li>Turn the dial to <strong>DCV</strong> (or the section with a V and a straight line)</li>
+</ol>
+<ul>
+<li>For a 9V battery: select the 20V range (or "auto" if your meter has it)</li>
+</ul>
+<ol>
+<li>Touch the RED probe to the <strong>+</strong> end of the battery</li>
+<li>Touch the BLACK probe to the <strong>-</strong> end of the battery</li>
+<li>Read the number on the display!</li>
+</ol>
+<p><strong>Experiment A &mdash; The 9V Battery:</strong></p>
+<blockquote><p>"What number do you see? Write it down!"</p></blockquote>
+<p>Expected: something near 9.0 (a fresh battery might show 9.4&mdash;9.6V)</p>
+<p><strong>Experiment B &mdash; The AA Battery:</strong></p>
+<blockquote><p>"Now measure the AA battery. What number?"</p></blockquote>
+<p>Expected: something near 1.5V</p>
+<p><strong>Experiment C &mdash; The Used Battery Test:</strong></p>
+<blockquote><p>"Find the oldest battery in the house. Is it still full? What does the Wand say?"</p></blockquote>
+<p>A dead battery will show much less than its rated voltage.</p>
+<blockquote><p>"Your Wand just told you something INVISIBLE &mdash; whether a battery is fresh or dead. No other tool can do that!"</p></blockquote>
+<p><strong>Fill in this chart together:</strong></p>
+<pre><code>| Battery       | Expected Voltage | My Wand Says | Fresh or Tired? |
+|---------------|-----------------|-------------|-----------------|
+| 9V (new)      | 9V              |             |                 |
+| AA (new)      | 1.5V            |             |                 |
+| Old battery   | ???             |             |                 |</code></pre>
+<p><strong>Award: <span class="xp-badge">+50 XP</span> for measuring all three batteries correctly!</strong></p>
+<hr>
+<h3 id="step-4-superpower-2-measuring-resistance-8-min" style="border-left-color:#4ECDC4; color:#4ECDC4;">Step 4: Superpower 2 &mdash; Measuring Resistance (8 min)</h3>
+<blockquote><p>"Resistance is how much something blocks electricity. Remember the narrow hallway from our water analogy? The Wand can measure how narrow the hallway is!"</p></blockquote>
+<p><strong>How to measure resistance:</strong></p>
+<ol>
+<li>Make sure nothing is connected to power (NO battery in the circuit!)</li>
+<li>Turn the dial to the <strong>ohm</strong> symbol (looks like a horseshoe: a Greek letter)</li>
+<li>Touch one probe to each end of the thing you want to measure</li>
+<li>Read the number &mdash; that is the resistance in ohms!</li>
+</ol>
+<p><strong>Experiment D &mdash; Measure a Resistor:</strong></p>
+<p>Take the 330-ohm resistor from Lesson 1.</p>
+<blockquote><p>"The color bands say this should be 330 ohms. Let us ask the Wand!"</p></blockquote>
+<p>Touch one probe to each leg. The display should show something near 330.</p>
+<blockquote><p>"They might not match EXACTLY &mdash; that is normal! Resistors are allowed to be a little off. That is called <strong>tolerance</strong>."</p></blockquote>
+<p><strong>Experiment E &mdash; Measure Your Finger!</strong></p>
+<blockquote><p>"Hold one probe in your left hand and one in your right hand. What number do you see?"</p></blockquote>
+<p>(They will see a very high number &mdash; hundreds of thousands or millions of ohms, or possibly OL meaning "too high to measure")</p>
+<blockquote><p>"Your body has HUGE resistance! That is why the tiny 9V battery does not hurt you &mdash; your body blocks almost all of it."</p></blockquote>
+<p>Now: lick your finger and try again.</p>
+<blockquote><p>"The number went DOWN! Wet skin has less resistance than dry skin. That is why we NEVER touch electronics with wet hands!"</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+50 XP</span> for measuring both the resistor AND your finger!</strong></p>
+<hr>
+<h3 id="step-5-superpower-3-continuity-the-beep-test-7-min" style="border-left-color:#C678B0; color:#C678B0;">Step 5: Superpower 3 &mdash; Continuity (The Beep Test!) (7 min)</h3>
+<blockquote><p>"This is the FUN superpower. Continuity mode makes the Wand BEEP when electricity can flow through something. No beep? Electricity is blocked. Think of it like a metal detector &mdash; but for electrical paths!"</p></blockquote>
+<p><strong>How to use continuity mode:</strong></p>
+<ol>
+<li>Turn the dial to the symbol that looks like a sound wave or a little speaker icon (often near the ohm symbol)</li>
+<li>Touch the two probes together: BEEP! That means "electricity can flow!"</li>
+<li>Now you are ready to test things!</li>
+</ol>
+<p><strong>Activity &mdash; The Conductor Detective Game:</strong></p>
+<p>Lay out these items on the table:</p>
+<ul>
+<li>A coin</li>
+<li>A pencil (test the graphite tip)</li>
+<li>A rubber eraser</li>
+<li>A piece of aluminum foil</li>
+<li>A wooden popsicle stick</li>
+<li>A glass of salt water (dip probes gently)</li>
+<li>A jumper wire</li>
+</ul>
+<blockquote><p>"Your mission: test each item. Does the Wand beep? Write C for Conductor (beeps) or I for Insulator (no beep)."</p></blockquote>
+<pre><code>| Item              | My Prediction | Wand Says (C or I) | Was I Right? |
+|-------------------|--------------|--------------------|----|
+| Coin              |              |                    |    |
+| Pencil tip        |              |                    |    |
+| Rubber eraser     |              |                    |    |
+| Aluminum foil     |              |                    |    |
+| Popsicle stick    |              |                    |    |
+| Salt water        |              |                    |    |
+| Jumper wire       |              |                    |    |</code></pre>
+<p><strong>Expected results:</strong></p>
+<ul>
+<li>Coin: C (beep!)</li>
+<li>Pencil graphite: C (weak beep &mdash; graphite conducts a little!)</li>
+<li>Rubber eraser: I (no beep)</li>
+<li>Aluminum foil: C (beep!)</li>
+<li>Popsicle stick: I (no beep)</li>
+<li>Salt water: C (beep &mdash; ions conduct!)</li>
+<li>Jumper wire: C (beep!)</li>
+</ul>
+<blockquote><p>"You just discovered that metals and salty water conduct electricity, but rubber and wood block it. Scientists call conductors and insulators two of the most important types of materials in the universe!"</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+60 XP</span> for completing the Conductor Detective Game!</strong></p>
+<hr>
+<h3 id="step-6-safety-rules-for-the-wand-3-min" style="border-left-color:#E8A838; color:#E8A838;">Step 6: Safety Rules for the Wand (3 min)</h3>
+<p>Before we finish, every Wand Wielder must know the safety rules:</p>
+<blockquote><p><strong>Rule 1:</strong> Never measure wall outlets or anything plugged into the wall. Our Wand is for batteries and small circuits ONLY.</p><p><strong>Rule 2:</strong> When measuring resistance or continuity, make sure the circuit has NO power. Turn off or disconnect the battery first!</p><p><strong>Rule 3:</strong> Always start with the probes in COM and V/ohm. Only move to the A (amps) hole when a grown-up helps you.</p><p><strong>Rule 4:</strong> If the display shows "OL" (overload), do not panic! It just means the number is too big to show. Try a different dial setting.</p><p><strong>Rule 5:</strong> Treat the probes gently. The tips are sharp &mdash; do not poke people, pets, or your sandwich with them!</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+20 XP</span> for reciting at least 3 safety rules back!</strong></p>
+<hr>
+<h2 id="quick-quiz-earn-bonus-xp" style="background:#E8A838;">Quick Quiz &mdash; Earn Bonus XP!</h2>
+<p><strong>Question 1:</strong> What are the three superpowers of the multimeter?</p>
+<ul>
+<li>A) Speed, strength, flying</li>
+<li>B) Voltage, resistance, continuity</li>
+<li>C) Red, blue, green</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+30 XP</span>!)</strong></p>
+<p><strong>Question 2:</strong> Where does the BLACK probe ALWAYS go?</p>
+<ul>
+<li>A) In the A hole</li>
+<li>B) In the V/ohm hole</li>
+<li>C) In the COM hole</li>
+</ul>
+<p><strong>(Correct: C &mdash; <span class="xp-badge">+30 XP</span>!)</strong></p>
+<p><strong>Question 3:</strong> You touch the probes to an eraser in continuity mode. What happens?</p>
+<ul>
+<li>A) It beeps loudly</li>
+<li>B) Nothing &mdash; no beep (eraser is an insulator)</li>
+<li>C) The multimeter explodes</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+30 XP</span>!)</strong></p>
+<hr>
+<h2 id="module-progress-lesson-2-complete" style="background:#C678B0;">Module Progress: Lesson 2 Complete!</h2>
+<p><strong>Celebration!</strong> You did it, Circuit Explorer! You just unlocked your Magic Measurement Wand and discovered its THREE superpowers!</p>
+<pre><code>  =============================================
+
+     WAND WIELDER BADGE UNLOCKED!
+
+     You earned: 320 XP (possible 350 XP)
+
+     Skills unlocked:
+     [check] Measure voltage
+     [check] Measure resistance
+     [check] Test continuity
+     [check] Know the safety rules
+
+  =============================================</code></pre>
+<p><strong>Total XP Breakdown:</strong></p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Activity</th>
+<th>XP</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Introduction</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Label the Wand</td>
+<td>30</td>
+</tr>
+<tr>
+<td>Measure 3 Batteries</td>
+<td>50</td>
+</tr>
+<tr>
+<td>Measure Resistor + Finger</td>
+<td>50</td>
+</tr>
+<tr>
+<td>Conductor Detective Game</td>
+<td>60</td>
+</tr>
+<tr>
+<td>Safety Rules</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Quiz (3 correct)</td>
+<td>90</td>
+</tr>
+<tr>
+<td><strong>TOTAL POSSIBLE</strong></td>
+<td><strong>320</strong></td>
+</tr>
+</tbody></table></div>
+<blockquote><p>From now on, you will use your Wand in EVERY lesson. Each lesson has a special "Wand Check" challenge worth bonus XP. Keep your multimeter close &mdash; it is your most important tool!</p></blockquote>
+<hr>
+<h2 id="coming-up-next" style="background:#E05C5C;">Coming Up Next...</h2>
+<p>In <strong>Lesson 3</strong>, we meet <strong>Resistors &mdash; The Traffic Controllers of Electronics</strong>. You will learn to crack a secret color code AND use your Magic Measurement Wand to verify the code is telling the truth!</p>
+<hr>
+<h2 id="parentinstructor-notes" style="background:#FF6B35;">Parent/Instructor Notes</h2>
+<ul>
+<li>This lesson works best when the child handles the multimeter themselves. Guide their hands but let them do the touching and reading.</li>
+<li>For ages 6&mdash;8: Focus on the continuity "beep test" game &mdash; it is the most engaging. Simplify voltage to just "bigger number = stronger battery."</li>
+<li>For ages 9&mdash;12: Encourage them to predict results before measuring and discuss why their predictions were right or wrong.</li>
+<li>If the multimeter does not have an auto-range feature, help the child select the right range on the dial. Explain that it is like choosing the right ruler &mdash; you would not measure a room with a 6-inch ruler!</li>
+<li>The "measure your finger" experiment is completely safe with a multimeter (it uses tiny internal current). It consistently gets big reactions from kids.</li>
+<li>Consider letting the child keep a "Wand Journal" &mdash; a small notebook where they record every measurement they make throughout the module.</li>
+</ul>
+    </main>
+
+    <!-- Footer -->
+    <footer class="page-footer">
+        <span>Lesson 2: Meet Your Magic Measurement Wand!</span>
+        <span>Module 1: Electronic Components Basics</span>
+    </footer>
+
+</body>
+</html>

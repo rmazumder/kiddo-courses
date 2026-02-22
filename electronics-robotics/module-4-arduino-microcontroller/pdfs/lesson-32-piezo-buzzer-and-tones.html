@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 32: Piezo Buzzer and Tones -- Give Your Arduino a Musical Voice</title>
+    <style>
+
+        /* -- Reset & Base -- */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            line-height: 1.75;
+            color: #2C3E50;
+            background: #FAFAFA;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px 40px;
+        }
+
+        /* -- Header Banner -- */
+        .lesson-header {
+            background: linear-gradient(135deg, #2980B9 0%, #3498DB 50%, #5DADE2 100%);
+            color: #fff;
+            border-radius: 16px;
+            padding: 32px 36px 28px;
+            margin: 24px 0 32px;
+            box-shadow: 0 6px 20px rgba(41,128,185,0.35);
+            position: relative;
+            overflow: hidden;
+        }
+        .lesson-header::before {
+            content: "";
+            position: absolute;
+            top: -40px; right: -40px;
+            width: 160px; height: 160px;
+            background: rgba(255,255,255,0.12);
+            border-radius: 50%;
+        }
+        .lesson-header::after {
+            content: "";
+            position: absolute;
+            bottom: -30px; left: -20px;
+            width: 100px; height: 100px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+        }
+        .lesson-header h1 {
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            position: relative;
+            z-index: 1;
+        }
+        .module-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.25);
+            border: 2px solid rgba(255,255,255,0.6);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 4px 14px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 1;
+        }
+        .meta-row {
+            margin-top: 12px;
+            font-size: 14px;
+            color: rgba(255,255,255,0.9);
+            position: relative;
+            z-index: 1;
+        }
+        .meta-pill {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            border-radius: 12px;
+            padding: 2px 10px;
+            margin: 2px 4px 2px 0;
+            white-space: nowrap;
+        }
+
+        /* -- Section Headings -- */
+        h2 {
+            font-size: 22px;
+            font-weight: 800;
+            margin: 36px 0 14px;
+            padding: 10px 18px;
+            border-radius: 10px;
+            color: #fff;
+        }
+        h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 28px 0 10px;
+            padding: 8px 14px;
+            border-left: 5px solid;
+            border-radius: 0 8px 8px 0;
+            background: rgba(0,0,0,0.03);
+        }
+
+        /* -- Body Text -- */
+        p { margin: 10px 0; }
+        strong { font-weight: 700; color: #1A252F; }
+        em { font-style: italic; color: #5D6D7E; }
+
+        /* -- Inline Code -- */
+        code {
+            background: #F0F3F7;
+            border: 1px solid #D5DCE8;
+            border-radius: 4px;
+            padding: 1px 6px;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 14px;
+            color: #C0392B;
+        }
+
+        /* -- Fenced Code Blocks -- */
+        pre {
+            background: #F4F6F8;
+            border: 1px solid #D0D8E4;
+            border-left: 5px solid #2980B9;
+            border-radius: 8px;
+            padding: 16px 18px;
+            overflow-x: auto;
+            margin: 16px 0;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #2C3E50;
+            white-space: pre;
+        }
+        pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            font-size: inherit;
+            color: inherit;
+        }
+
+        /* -- Blockquotes / Callout Boxes -- */
+        blockquote {
+            background: #FFF8E7;
+            border-left: 6px solid #2980B9;
+            border-radius: 0 12px 12px 0;
+            padding: 14px 20px;
+            margin: 16px 0;
+            color: #5D3A1A;
+            font-style: normal;
+            position: relative;
+        }
+        blockquote::before {
+            content: "\1F4AC";
+            position: absolute;
+            top: -10px; left: 10px;
+            font-size: 20px;
+            line-height: 1;
+        }
+        blockquote p { margin: 6px 0; }
+
+        /* -- Lists -- */
+        ul, ol {
+            margin: 10px 0 10px 24px;
+            padding-left: 8px;
+        }
+        li { margin: 5px 0; }
+        ul li::marker { color: #2980B9; font-size: 18px; }
+        ol li::marker { color: #2980B9; font-weight: 700; }
+
+        /* -- Tables -- */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 16px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+        }
+        thead th {
+            background: #2980B9;
+            color: #fff;
+            font-weight: 700;
+            padding: 11px 14px;
+            text-align: left;
+            border-bottom: 3px solid #1F6DA0;
+        }
+        thead th:first-child { border-radius: 10px 0 0 0; }
+        thead th:last-child  { border-radius: 0 10px 0 0; }
+        tbody tr:nth-child(odd)  td { background: #F0F8FF; }
+        tbody tr:nth-child(even) td { background: #E1F0FA; }
+        tbody tr:hover td { background: #C8E6F8; transition: background 0.15s; }
+        td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #C8E6F8;
+            vertical-align: top;
+        }
+        td .checkbox {
+            display: inline-block;
+            width: 18px; height: 18px;
+            border: 2px solid #2980B9;
+            border-radius: 4px;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+
+        /* -- XP Badges -- */
+        .xp-badge {
+            display: inline-block;
+            background: #FFEAA7;
+            border: 2px solid #F39C12;
+            color: #7D4F00;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin: 2px 4px;
+            white-space: nowrap;
+        }
+        .award-badge {
+            display: inline-block;
+            background: #D5F5E3;
+            border: 2px solid #27AE60;
+            color: #1A5E35;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin: 2px 4px;
+            white-space: nowrap;
+        }
+
+        /* -- Horizontal Rule -- */
+        hr {
+            border: none;
+            border-top: 3px dashed #A8D8EA;
+            margin: 30px 0;
+        }
+
+        /* -- Footer -- */
+        .page-footer {
+            margin-top: 48px;
+            padding-top: 16px;
+            border-top: 2px solid #D5DCE8;
+            text-align: center;
+            font-size: 13px;
+            color: #7F8C8D;
+        }
+
+        /* -- Print Styles -- */
+        @media print {
+            @page { size: A4; margin: 18mm 15mm 20mm; }
+
+            body {
+                background: #fff !important;
+                font-size: 13px;
+                max-width: 100%;
+                padding: 0;
+            }
+
+            * { -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important; }
+
+            h2 { page-break-before: auto; break-before: auto; }
+            pre, blockquote, table { page-break-inside: avoid; }
+            h2, h3 { page-break-after: avoid; break-after: avoid; }
+            tr { page-break-inside: avoid; }
+
+            p { orphans: 3; widows: 3; }
+
+            .lesson-header { box-shadow: none; }
+
+            .page-footer {
+                position: fixed;
+                bottom: 0; left: 0; right: 0;
+                background: #fff;
+                border-top: 1px solid #ccc;
+                padding: 6px 15mm;
+                display: flex;
+                justify-content: space-between;
+            }
+        }
+    
+    </style>
+</head>
+<body>
+
+    <!-- Header Banner -->
+    <header class="lesson-header">
+        <div class="module-badge">Module 4 -- Arduino Microcontroller</div>
+        <h1>Lesson 32: Piezo Buzzer and Tones -- Give Your Arduino a Musical Voice</h1>
+        <div class="meta-row"><span class="meta-pill">&#9733; Star-3 Intermediate</span><span class="meta-pill">&#9200; 40--45 minutes</span><span class="meta-pill">&#128100; Age 6--12 years</span><span class="meta-pill xp-badge" style="background:#FFEAA7;color:#7D4F00;border:none;">&#9889; 250 XP</span></div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+<hr>
+<h2 id="your-mission-today" style="background:#FF6B35;">Your Mission Today</h2>
+<p>Circuit Explorer, your Arduino can blink, fade, read buttons, and scan LEDs. But it has been totally silent! Today that changes. You will connect a <strong>piezo buzzer</strong> and use the <code>tone()</code> function to play real musical notes. By the end of this lesson, you will have programmed your own melody &mdash; maybe even "Twinkle Twinkle Little Star" or "Happy Birthday." Time to make some noise!</p>
+<hr>
+<h2 id="learning-objectives" style="background:#4ECDC4;">Learning Objectives</h2>
+<p>By the end of this lesson, you will be able to:</p>
+<ul>
+<li>Connect a piezo buzzer to an Arduino digital pin</li>
+<li>Use the <code>tone()</code> and <code>noTone()</code> functions to play sounds</li>
+<li>Understand that musical notes are specific frequencies (measured in Hz)</li>
+<li>Program a simple melody using note frequencies and durations</li>
+<li>Combine a button with the buzzer to play notes on demand</li>
+</ul>
+<hr>
+<h2 id="what-you-need" style="background:#45B7D1;">What You Need</h2>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Item</th>
+<th>Qty</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Arduino Uno + USB cable</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Breadboard</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Piezo buzzer (passive type)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Push button</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Jumper wires</td>
+<td>4</td>
+</tr>
+<tr>
+<td>Multimeter (Magic Measurement Wand!)</td>
+<td>1</td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="how-to-teach-this-lesson" style="background:#96CEB4;">How to Teach This Lesson</h2>
+<h3 id="step-1-hook-how-does-sound-work-3-min" style="border-left-color:#45B7D1; color:#45B7D1;">Step 1: Hook &mdash; How Does Sound Work? (3 min)</h3>
+<blockquote><p>"Put your hand on your throat and hum. Feel that vibration? That vibration makes the air shake, and your ears pick up the shaking air as sound."</p></blockquote>
+<blockquote><p>"A buzzer works the same way! A tiny disc inside it vibrates really fast, pushing the air back and forth. The FASTER it vibrates, the HIGHER the sound. The SLOWER it vibrates, the LOWER the sound."</p></blockquote>
+<p><strong>Key Vocabulary:</strong></p>
+<ul>
+<li><strong>Frequency</strong> &mdash; how many times per second something vibrates. Measured in <strong>Hertz (Hz)</strong></li>
+<li><strong>440 Hz</strong> means 440 vibrations per second. This is the musical note <strong>A</strong> (above middle C)</li>
+<li>Higher Hz = higher pitch. Lower Hz = lower pitch</li>
+</ul>
+<p><strong>Award: <span class="xp-badge">+10 XP</span> for learning how sound works!</strong></p>
+<hr>
+<h3 id="step-2-wire-the-buzzer-5-min" style="border-left-color:#96CEB4; color:#96CEB4;">Step 2: Wire the Buzzer (5 min)</h3>
+<p><strong>Important &mdash; Use a PASSIVE buzzer for tone(), not an active buzzer.</strong></p>
+<blockquote><p>"A passive buzzer needs a signal to make sound (the Arduino provides it with tone()). An active buzzer has its own built-in oscillator and just needs power. We want passive so WE control the pitch."</p></blockquote>
+<p><strong>Wiring:</strong></p>
+<pre><code>  Arduino Uno                    Breadboard
+  +---------+
+  | Pin 8   |----[wire]----+---- Buzzer (+) leg (longer)
+  |         |
+  | GND     |----[wire]----+---- Buzzer (-) leg (shorter)
+  +---------+
+
+  Buzzer Detail:
+  +--------+
+  |  (+)   |  &lt;-- longer leg or marked with +
+  |   o    |
+  |  (-)   |  &lt;-- shorter leg
+  +--------+</code></pre>
+<p><strong>Steps:</strong></p>
+<ol>
+<li>Place the buzzer on the breadboard</li>
+<li>Connect the <strong>positive leg</strong> (+, often longer or marked) to <strong>Arduino pin 8</strong></li>
+<li>Connect the <strong>negative leg</strong> (-) to <strong>Arduino GND</strong></li>
+</ol>
+<p><strong>Award: <span class="xp-badge">+10 XP</span> for wiring the buzzer!</strong></p>
+<hr>
+<h3 id="step-3-play-your-first-tone-5-min" style="border-left-color:#FF6B35; color:#FF6B35;">Step 3: Play Your First Tone (5 min)</h3>
+<p><strong>The tone() Command:</strong></p>
+<pre><code>tone(pin, frequency, duration);</code></pre>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Parameter</th>
+<th>What It Means</th>
+<th>Example</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>pin</code></td>
+<td>Which pin the buzzer is on</td>
+<td>8</td>
+</tr>
+<tr>
+<td><code>frequency</code></td>
+<td>How many Hz (pitch)</td>
+<td>440 (note A)</td>
+</tr>
+<tr>
+<td><code>duration</code></td>
+<td>How long in milliseconds</td>
+<td>500 (half second)</td>
+</tr>
+</tbody></table></div>
+<p><strong>First Tone Code:</strong></p>
+<pre><code>int buzzerPin = 8;
+
+void setup() {
+  tone(buzzerPin, 440, 1000);  // Play A4 for 1 second
+}
+
+void loop() {
+  // Nothing here
+}</code></pre>
+<blockquote><p>"Upload this and you should hear a single beeeep! That is the note A at 440 Hz &mdash; the same note orchestras use to tune their instruments."</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+10 XP</span> for playing your first tone!</strong></p>
+<hr>
+<h3 id="step-4-the-musical-note-chart-5-min" style="border-left-color:#4ECDC4; color:#4ECDC4;">Step 4: The Musical Note Chart (5 min)</h3>
+<p>Each musical note has a specific frequency:</p>
+<pre><code>Note Frequencies (4th Octave):
+
+  C4  = 262 Hz     C#4 = 277 Hz
+  D4  = 294 Hz     D#4 = 311 Hz
+  E4  = 330 Hz
+  F4  = 349 Hz     F#4 = 370 Hz
+  G4  = 392 Hz     G#4 = 415 Hz
+  A4  = 440 Hz     A#4 = 466 Hz
+  B4  = 494 Hz
+  C5  = 523 Hz     (one octave higher)
+  D5  = 587 Hz
+  E5  = 659 Hz</code></pre>
+<blockquote><p>"Higher numbers = higher pitch. C4 (262) sounds lower than C5 (523). C5 is exactly double C4 &mdash; that is what 'one octave' means!"</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+10 XP</span> for learning note frequencies!</strong></p>
+<hr>
+<h3 id="step-5-program-a-melody-10-min" style="border-left-color:#C678B0; color:#C678B0;">Step 5: Program a Melody (10 min)</h3>
+<p><strong>Twinkle Twinkle Little Star:</strong></p>
+<pre><code>int buzzerPin = 8;
+
+// Note frequencies
+int C4 = 262;
+int D4 = 294;
+int E4 = 330;
+int F4 = 349;
+int G4 = 392;
+int A4 = 440;
+
+// The melody: Twinkle Twinkle Little Star
+int melody[] = {C4, C4, G4, G4, A4, A4, G4,
+                F4, F4, E4, E4, D4, D4, C4};
+
+int noteDurations[] = {400, 400, 400, 400, 400, 400, 800,
+                       400, 400, 400, 400, 400, 400, 800};
+
+int numNotes = 14;
+
+void setup() {
+  Serial.begin(9600);
+  Serial.println(&quot;Playing Twinkle Twinkle Little Star!&quot;);
+
+  for (int i = 0; i &lt; numNotes; i++) {
+    tone(buzzerPin, melody[i], noteDurations[i]);
+    delay(noteDurations[i] + 50);  // Small gap between notes
+    noTone(buzzerPin);
+  }
+
+  Serial.println(&quot;Song complete!&quot;);
+}
+
+void loop() {
+  // Nothing -- plays once in setup
+}</code></pre>
+<blockquote><p>"You just used arrays AND for loops together to play a real song! The melody array holds the notes, the noteDurations array holds how long each note plays, and the for loop steps through them one by one."</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+30 XP</span> for programming a melody!</strong></p>
+<hr>
+<h3 id="step-6-button-triggered-sound-effects-5-min" style="border-left-color:#E8A838; color:#E8A838;">Step 6: Button-Triggered Sound Effects (5 min)</h3>
+<p><strong>Add a button to play sounds on demand:</strong></p>
+<pre><code>int buzzerPin = 8;
+int buttonPin = 2;
+
+void setup() {
+  pinMode(buttonPin, INPUT_PULLUP);
+}
+
+void loop() {
+  if (digitalRead(buttonPin) == LOW) {
+    // Play a fun sound effect when button is pressed
+    tone(buzzerPin, 262, 100); delay(150);
+    tone(buzzerPin, 330, 100); delay(150);
+    tone(buzzerPin, 392, 100); delay(150);
+    tone(buzzerPin, 523, 300); delay(350);
+    noTone(buzzerPin);
+  }
+}</code></pre>
+<blockquote><p>"Press the button and you hear a little victory jingle! This is exactly how video game sound effects work."</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+20 XP</span> for button-triggered sounds!</strong></p>
+<hr>
+<h3 id="step-7-wand-check-what-does-a-tone-look-like-electrically-5-min" style="border-left-color:#E05C5C; color:#E05C5C;">Step 7: Wand Check &mdash; What Does a Tone Look Like Electrically? (5 min)</h3>
+<blockquote><p>"The tone() function makes pin 8 switch between 5V and 0V really fast &mdash; at the exact frequency of the note. Let us see what the Wand shows!"</p></blockquote>
+<ol>
+<li>Set the Wand to <strong>DC Voltage</strong></li>
+<li>Black probe on <strong>GND</strong>, red probe on <strong>pin 8</strong></li>
+<li>Play a continuous tone: <code>tone(8, 440);</code> in setup with nothing in loop</li>
+</ol>
+<blockquote><p>"The Wand shows an average voltage around 2.5V. Just like PWM, the pin is rapidly switching between 5V and 0V. The buzzer vibrates with each switch, making sound!"</p></blockquote>
+<p><strong>Fun Experiment:</strong></p>
+<ul>
+<li>Play a low note (262 Hz): Wand shows ~2.5V</li>
+<li>Play a high note (1000 Hz): Wand still shows ~2.5V</li>
+<li>The average voltage is the same, but the SPEED of switching is different!</li>
+</ul>
+<p><strong>Award: <span class="xp-badge">+20 XP</span> for measuring tone voltage!</strong></p>
+<hr>
+<h2 id="quick-quiz-earn-bonus-xp" style="background:#E8A838;">Quick Quiz &mdash; Earn Bonus XP!</h2>
+<p><strong>Question 1:</strong> What does the <code>tone()</code> function do?</p>
+<ul>
+<li>A) Measures sound volume</li>
+<li>B) Makes a buzzer vibrate at a specific frequency</li>
+<li>C) Records your voice</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<p><strong>Question 2:</strong> The note A4 has a frequency of 440 Hz. What does Hz mean?</p>
+<ul>
+<li>A) Vibrations per minute</li>
+<li>B) Vibrations per second</li>
+<li>C) Vibrations per hour</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<p><strong>Question 3:</strong> To play a higher-pitched note, do you use a higher or lower frequency number?</p>
+<ul>
+<li>A) Higher number = higher pitch</li>
+<li>B) Lower number = higher pitch</li>
+<li>C) The number does not matter</li>
+</ul>
+<p><strong>(Correct: A &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<hr>
+<h2 id="lesson-32-complete" style="background:#C678B0;">Lesson 32 Complete!</h2>
+<pre><code>  =============================================
+
+     MELODY MAKER BADGE UNLOCKED!
+
+     Skills unlocked:
+     [check] Wire a piezo buzzer
+     [check] Use tone() and noTone()
+     [check] Know note frequencies
+     [check] Program a melody with arrays
+     [check] Trigger sounds with a button
+
+  =============================================</code></pre>
+<p><strong>XP Breakdown:</strong></p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Activity</th>
+<th>XP</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Hook &mdash; sound concepts</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Buzzer wiring</td>
+<td>10</td>
+</tr>
+<tr>
+<td>First tone</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Note frequency chart</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Twinkle Twinkle melody</td>
+<td>30</td>
+</tr>
+<tr>
+<td>Button sound effects</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Wand Check</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Quiz (3 questions)</td>
+<td>60</td>
+</tr>
+<tr>
+<td><strong>TOTAL POSSIBLE</strong></td>
+<td><strong>250</strong></td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="coming-up-next" style="background:#E05C5C;">Coming Up Next...</h2>
+<p>In <strong>Lesson 33</strong>, you will add a <strong>screen</strong> to your Arduino! The <strong>16x2 LCD display</strong> lets your Arduino show text, numbers, and messages. No more relying on the Serial Monitor &mdash; your gadget will have its own display. Get ready to see "Hello World!" on a real screen!</p>
+<hr>
+<h2 id="troubleshooting" style="background:#FF6B35;">Troubleshooting</h2>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Problem</th>
+<th>Fix</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>No sound at all</td>
+<td>Make sure you have a PASSIVE buzzer (not active); check wiring polarity</td>
+</tr>
+<tr>
+<td>Sound is very quiet</td>
+<td>Some buzzers are quiet &mdash; try holding it closer to your ear, or try a different buzzer</td>
+</tr>
+<tr>
+<td>Wrong notes playing</td>
+<td>Double-check the frequency values in your melody array</td>
+</tr>
+<tr>
+<td>tone() gives a compile error</td>
+<td>Make sure you are passing 2 or 3 arguments: pin, frequency, and optionally duration</td>
+</tr>
+<tr>
+<td>Buzzer keeps buzzing after sketch ends</td>
+<td>Add <code>noTone(buzzerPin);</code> at the end of your melody to stop it</td>
+</tr>
+</tbody></table></div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="page-footer">
+        <span>Lesson 32: Piezo Buzzer and Tones -- Give Your Arduino a Musical Voice</span>
+        <span>Module 4: Arduino Microcontroller</span>
+    </footer>
+
+</body>
+</html>

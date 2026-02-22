@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 17: What is an Integrated Circuit?</title>
+    <style>
+
+        /* ── Reset & Base ─────────────────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            line-height: 1.75;
+            color: #2C3E50;
+            background: #FAFAFA;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px 40px;
+        }
+
+        /* ── Header Banner ─────────────────────────────────────────── */
+        .lesson-header {
+            background: linear-gradient(135deg, #6C5CE7 0%, #A29BFE 50%, #74B9FF 100%);
+            color: #fff;
+            border-radius: 16px;
+            padding: 32px 36px 28px;
+            margin: 24px 0 32px;
+            box-shadow: 0 6px 20px rgba(108,92,231,0.35);
+            position: relative;
+            overflow: hidden;
+        }
+        .lesson-header::before {
+            content: "";
+            position: absolute;
+            top: -40px; right: -40px;
+            width: 160px; height: 160px;
+            background: rgba(255,255,255,0.12);
+            border-radius: 50%;
+        }
+        .lesson-header::after {
+            content: "";
+            position: absolute;
+            bottom: -30px; left: -20px;
+            width: 100px; height: 100px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+        }
+        .lesson-header h1 {
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            position: relative;
+            z-index: 1;
+        }
+        .module-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.25);
+            border: 2px solid rgba(255,255,255,0.6);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 4px 14px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 1;
+        }
+        .meta-row {
+            margin-top: 12px;
+            font-size: 14px;
+            color: rgba(255,255,255,0.9);
+            position: relative;
+            z-index: 1;
+        }
+        .meta-pill {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            border-radius: 12px;
+            padding: 2px 10px;
+            margin: 2px 4px 2px 0;
+            white-space: nowrap;
+        }
+
+        /* ── Section Headings ──────────────────────────────────────── */
+        h2 {
+            font-size: 22px;
+            font-weight: 800;
+            margin: 36px 0 14px;
+            padding: 10px 18px;
+            border-radius: 10px;
+            color: #fff;
+            /* colour applied inline via data-color */
+        }
+        h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 28px 0 10px;
+            padding: 8px 14px;
+            border-left: 5px solid;
+            border-radius: 0 8px 8px 0;
+            background: rgba(0,0,0,0.03);
+            /* border-left colour applied inline */
+        }
+
+        /* ── Body Text ─────────────────────────────────────────────── */
+        p { margin: 10px 0; }
+        strong { font-weight: 700; color: #1A252F; }
+        em { font-style: italic; color: #5D6D7E; }
+
+        /* ── Inline Code ───────────────────────────────────────────── */
+        code {
+            background: #F0F3F7;
+            border: 1px solid #D5DCE8;
+            border-radius: 4px;
+            padding: 1px 6px;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 14px;
+            color: #6C5CE7;
+        }
+
+        /* ── Fenced Code Blocks ────────────────────────────────────── */
+        pre {
+            background: #F4F6F8;
+            border: 1px solid #D0D8E4;
+            border-left: 5px solid #6C5CE7;
+            border-radius: 8px;
+            padding: 16px 18px;
+            overflow-x: auto;
+            margin: 16px 0;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #2C3E50;
+            white-space: pre;
+        }
+        pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            font-size: inherit;
+            color: inherit;
+        }
+
+        /* ── Blockquotes / Callout Boxes ───────────────────────────── */
+        blockquote {
+            background: #F3F0FF;
+            border-left: 6px solid #6C5CE7;
+            border-radius: 0 12px 12px 0;
+            padding: 14px 20px;
+            margin: 16px 0;
+            color: #3D2D6B;
+            font-style: normal;
+            position: relative;
+        }
+        blockquote::before {
+            content: "\1F4AC";  /* speech bubble emoji */
+            position: absolute;
+            top: -10px; left: 10px;
+            font-size: 20px;
+            line-height: 1;
+        }
+        blockquote p { margin: 6px 0; }
+
+        /* ── Lists ─────────────────────────────────────────────────── */
+        ul, ol {
+            margin: 10px 0 10px 24px;
+            padding-left: 8px;
+        }
+        li { margin: 5px 0; }
+        ul li::marker { color: #6C5CE7; font-size: 18px; }
+        ol li::marker { color: #45B7D1; font-weight: 700; }
+
+        /* ── Tables ────────────────────────────────────────────────── */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 16px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+        }
+        thead th {
+            background: #6C5CE7;
+            color: #fff;
+            font-weight: 700;
+            padding: 11px 14px;
+            text-align: left;
+            border-bottom: 3px solid #5A4BD1;
+        }
+        thead th:first-child { border-radius: 10px 0 0 0; }
+        thead th:last-child  { border-radius: 0 10px 0 0; }
+        tbody tr:nth-child(odd)  td { background: #F8F6FF; }
+        tbody tr:nth-child(even) td { background: #EDEBFF; }
+        tbody tr:hover td { background: #DDD8FF; transition: background 0.15s; }
+        td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #D5D0F0;
+            vertical-align: top;
+        }
+        /* Checkbox column: replace [ ] with styled checkbox */
+        td .checkbox {
+            display: inline-block;
+            width: 18px; height: 18px;
+            border: 2px solid #6C5CE7;
+            border-radius: 4px;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+
+        /* ── XP Badges ─────────────────────────────────────────────── */
+        .xp-badge {
+            display: inline-block;
+            background: #FFEAA7;
+            border: 2px solid #F39C12;
+            color: #7D4F00;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin: 2px 4px;
+            white-space: nowrap;
+        }
+        .award-badge {
+            display: inline-block;
+            background: #D5F5E3;
+            border: 2px solid #27AE60;
+            color: #1A5E35;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin: 2px 4px;
+            white-space: nowrap;
+        }
+
+        /* ── Horizontal Rule ───────────────────────────────────────── */
+        hr {
+            border: none;
+            border-top: 3px dashed #C8C0F0;
+            margin: 30px 0;
+        }
+
+        /* ── Footer ────────────────────────────────────────────────── */
+        .page-footer {
+            margin-top: 48px;
+            padding-top: 16px;
+            border-top: 2px solid #D5D0F0;
+            text-align: center;
+            font-size: 13px;
+            color: #7F8C8D;
+        }
+
+        /* ── Print Styles ──────────────────────────────────────────── */
+        @media print {
+            @page { size: A4; margin: 18mm 15mm 20mm; }
+
+            body {
+                background: #fff !important;
+                font-size: 13px;
+                max-width: 100%;
+                padding: 0;
+            }
+
+            /* Force colour printing */
+            * { -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important; }
+
+            /* Page breaks */
+            h2 { page-break-before: auto; break-before: auto; }
+            pre, blockquote, table { page-break-inside: avoid; }
+            h2, h3 { page-break-after: avoid; break-after: avoid; }
+            tr { page-break-inside: avoid; }
+
+            /* No orphaned paragraphs */
+            p { orphans: 3; widows: 3; }
+
+            .lesson-header { box-shadow: none; }
+
+            .page-footer {
+                position: fixed;
+                bottom: 0; left: 0; right: 0;
+                background: #fff;
+                border-top: 1px solid #ccc;
+                padding: 6px 15mm;
+                display: flex;
+                justify-content: space-between;
+            }
+        }
+    
+    </style>
+</head>
+<body>
+
+    <!-- Header Banner -->
+    <header class="lesson-header">
+        <div class="module-badge">Module 3 -- Integrated Circuits (ICs)</div>
+        <h1>Lesson 17: What is an Integrated Circuit?</h1>
+        <div class="meta-row"><span class="meta-pill">&#9733; Star-3 Intermediate</span><span class="meta-pill">&#9200; 40--45 minutes</span><span class="meta-pill">&#128100; Age 6--12 years</span><span class="meta-pill xp-badge" style="background:#FFEAA7;color:#7D4F00;border:none;">&#9889; 250 XP</span></div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+<hr>
+<h2 id="your-mission-today" style="background:#FF6B35;">Your Mission Today</h2>
+<p>Welcome to Module 3, Circuit Explorer! You have mastered individual components and simple circuits. Now it is time to meet the <strong>Integrated Circuit</strong> &mdash; a tiny chip that packs hundreds or even thousands of components inside a single black rectangle. These little chips are the brains behind almost every electronic gadget you have ever used!</p>
+<hr>
+<h2 id="learning-objectives" style="background:#4ECDC4;">Learning Objectives</h2>
+<p>By the end of this lesson, you will be able to:</p>
+<ul>
+<li>Explain what an integrated circuit (IC) is and why it was invented</li>
+<li>Identify the DIP package and count pins</li>
+<li>Find Pin 1 on any IC using the notch and dot</li>
+<li>Read a simplified IC datasheet to learn what each pin does</li>
+<li>Use your Magic Measurement Wand to measure voltage on IC power pins</li>
+</ul>
+<hr>
+<h2 id="what-you-need" style="background:#45B7D1;">What You Need</h2>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Item</th>
+<th>Qty</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>555 timer IC (NE555 or LM555)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>7400 NAND gate IC (or any spare IC)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>9V battery + clip</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Breadboard</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Jumper wires</td>
+<td>5</td>
+</tr>
+<tr>
+<td>Magnifying glass (optional but fun!)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Multimeter (your Magic Measurement Wand!)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Printed simplified 555 datasheet (see below)</td>
+<td>1</td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="how-to-teach-this-lesson" style="background:#96CEB4;">How to Teach This Lesson</h2>
+<h3 id="step-1-hook-what-is-inside-your-toys-5-min" style="border-left-color:#45B7D1; color:#45B7D1;">Step 1: Hook &mdash; What Is Inside Your Toys? (5 min)</h3>
+<p>Start with a big question:</p>
+<blockquote><p>"Think about your favorite gadget &mdash; a game controller, a TV remote, a digital watch. What makes it smart? Inside every one of those is a tiny black chip with little metal legs. That chip is called an Integrated Circuit, or IC for short."</p></blockquote>
+<p>Show them a 555 timer IC. Hold it up:</p>
+<blockquote><p>"This little chip &mdash; smaller than your thumbnail &mdash; has 23 transistors, 2 diodes, and 16 resistors all crammed inside. If you built all of that with individual components on a breadboard, it would fill the entire board! The IC squeezes it all onto a chip the size of a grain of rice."</p></blockquote>
+<p><strong>Fun fact:</strong></p>
+<blockquote><p>"The first integrated circuit was built in 1958 by Jack Kilby. He won a Nobel Prize for it! Before ICs existed, computers were the size of entire rooms. Now, thanks to ICs, a computer fits in your pocket."</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+10 XP</span> for learning about the invention of the IC!</strong></p>
+<hr>
+<h3 id="step-2-what-is-an-integrated-circuit-8-min" style="border-left-color:#96CEB4; color:#96CEB4;">Step 2: What Is an Integrated Circuit? (8 min)</h3>
+<p><strong>The City Analogy:</strong></p>
+<blockquote><p>"Imagine you wanted to build a tiny city. Instead of putting each house, road, and bridge down one at a time, someone figured out how to print the entire city on a single flat chip. That is what an IC does &mdash; it prints an entire circuit onto a tiny piece of silicon."</p></blockquote>
+<p><strong>Key vocabulary:</strong></p>
+<ul>
+<li><strong>Integrated Circuit (IC):</strong> A tiny chip that contains many transistors, resistors, and other components all connected together inside one package</li>
+<li><strong>DIP (Dual In-line Package):</strong> The most common IC shape for breadboards &mdash; a rectangular chip with two rows of metal legs (pins)</li>
+<li><strong>Pin:</strong> One of the metal legs sticking out of the IC. Each pin has a specific job</li>
+<li><strong>Datasheet:</strong> The instruction manual for an IC &mdash; it tells you what every pin does</li>
+</ul>
+<p><strong>Show them the 555 timer chip:</strong></p>
+<pre><code>   555 Timer IC -- Top View
+
+       Notch
+         U
+   +-----------+
+   |  1     8  |
+   |  2     7  |
+   |  3     6  |
+   |  4     5  |
+   +-----------+
+
+   Pin 1 = GND (Ground)
+   Pin 2 = TRIGGER
+   Pin 3 = OUTPUT
+   Pin 4 = RESET
+   Pin 5 = CONTROL VOLTAGE
+   Pin 6 = THRESHOLD
+   Pin 7 = DISCHARGE
+   Pin 8 = VCC (Power +)</code></pre>
+<p><strong>How to find Pin 1:</strong></p>
+<ol>
+<li>Look for the <strong>notch</strong> (a small U-shaped dip) at one end of the chip</li>
+<li>Some chips also have a <strong>dot</strong> near Pin 1</li>
+<li>With the notch on top, Pin 1 is the <strong>bottom-left</strong> pin</li>
+<li>Count counter-clockwise (down the left side, then up the right side)</li>
+</ol>
+<p><strong>Activity: Find Pin 1 on both ICs (555 and 7400).</strong></p>
+<p><strong>Award: <span class="xp-badge">+20 XP</span> for correctly identifying Pin 1 on both chips!</strong></p>
+<hr>
+<h3 id="step-3-reading-a-simplified-datasheet-10-min" style="border-left-color:#FF6B35; color:#FF6B35;">Step 3: Reading a Simplified Datasheet (10 min)</h3>
+<blockquote><p>"Every IC comes with an instruction manual called a datasheet. Real datasheets can be 20 pages long! But do not worry &mdash; we only need to know a few key things."</p></blockquote>
+<p><strong>The 5 Things to Find on Any Datasheet:</strong></p>
+<ol>
+<li><strong>Name and number</strong> &mdash; What is the chip called? (555 Timer)</li>
+<li><strong>Pin diagram</strong> &mdash; Which pin does what?</li>
+<li><strong>Power supply voltage</strong> &mdash; How much voltage does it need? (4.5V to 16V for the 555)</li>
+<li><strong>What it does</strong> &mdash; One-sentence description (the 555 makes timing circuits)</li>
+<li><strong>Example circuit</strong> &mdash; A picture of how to wire it up</li>
+</ol>
+<p><strong>Activity &mdash; Datasheet Scavenger Hunt:</strong></p>
+<p>Give the kid a printed simplified 555 datasheet (or show one on screen). Have them find and circle:</p>
+<ul>
+<li>The pin diagram</li>
+<li>The power supply range</li>
+<li>Pin 3 (what does it do? OUTPUT!)</li>
+<li>Pin 1 (what does it do? GROUND!)</li>
+</ul>
+<pre><code>SCAVENGER HUNT CARD
+--------------------
+Find and check off:
+[ ] Pin diagram found
+[ ] Power supply voltage range found
+[ ] What Pin 3 does
+[ ] What Pin 1 does
+[ ] What the chip is used for</code></pre>
+<p><strong>Award: <span class="xp-badge">+30 XP</span> for completing the Datasheet Scavenger Hunt!</strong></p>
+<hr>
+<h3 id="step-4-hands-on-place-the-ic-on-the-breadboard-8-min" style="border-left-color:#4ECDC4; color:#4ECDC4;">Step 4: Hands-On &mdash; Place the IC on the Breadboard (8 min)</h3>
+<p><strong>The golden rule of ICs and breadboards:</strong></p>
+<blockquote><p>"An IC chip ALWAYS straddles the center gap of the breadboard. One row of pins goes on the left side, the other row goes on the right side. This way, every pin gets its own row and nothing short-circuits."</p></blockquote>
+<pre><code>  Breadboard:
+
+  Left side        GAP        Right side
+  [ ][ ][ ][ ][ ] | | [ ][ ][ ][ ][ ]
+  [1][ ][ ][ ][ ] | | [ ][ ][ ][ ][8]
+  [2][ ][ ][ ][ ] | | [ ][ ][ ][ ][7]
+  [3][ ][ ][ ][ ] | | [ ][ ][ ][ ][6]
+  [4][ ][ ][ ][ ] | | [ ][ ][ ][ ][5]
+  [ ][ ][ ][ ][ ] | | [ ][ ][ ][ ][ ]
+
+  IC straddles the center gap
+  Notch faces UP (toward top of breadboard)</code></pre>
+<p><strong>Steps:</strong></p>
+<ol>
+<li>Place the 555 IC across the center gap, notch facing up</li>
+<li>Gently press it in &mdash; do NOT force it or bend the pins</li>
+<li>Connect a wire from Pin 8 (VCC) to the + power rail</li>
+<li>Connect a wire from Pin 1 (GND) to the - power rail</li>
+<li>Connect the 9V battery to the power rails (+ to +, - to -)</li>
+</ol>
+<blockquote><p>"We are not building a circuit yet &mdash; we are just powering the chip so we can measure its pins with the Wand."</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+20 XP</span> for placing the IC correctly on the breadboard!</strong></p>
+<hr>
+<h3 id="step-5-wand-check-measure-ic-pin-voltages-10-min" style="border-left-color:#C678B0; color:#C678B0;">Step 5: Wand Check &mdash; Measure IC Pin Voltages! (10 min)</h3>
+<blockquote><p>"Your IC is powered up! Let us use the Magic Measurement Wand to peek at the voltages on each pin. This is how real engineers check if a chip is getting power."</p></blockquote>
+<p><strong>How to measure IC pin voltages:</strong></p>
+<ol>
+<li>Set the Wand to <strong>DC Voltage</strong> mode (the V with a straight line)</li>
+<li>Connect the <strong>black probe</strong> to the GND rail (or touch Pin 1 &mdash; GND)</li>
+<li>Touch the <strong>red probe</strong> to each pin, one at a time</li>
+<li>Read the voltage on the display</li>
+</ol>
+<p><strong>Fill in this table together:</strong></p>
+<pre><code>| Pin | Name | Expected Voltage | Wand Reads | Match? |
+|-----|------|-----------------|-----------|--------|
+| 1   | GND  | 0V              |           |        |
+| 2   | TRIGGER | varies       |           |        |
+| 3   | OUTPUT | 0V or ~9V     |           |        |
+| 4   | RESET | should be HIGH |           |        |
+| 5   | CONTROL | ~6V (2/3 VCC)|           |        |
+| 6   | THRESHOLD | varies     |           |        |
+| 7   | DISCHARGE | varies     |           |        |
+| 8   | VCC  | ~9V             |           |        |</code></pre>
+<p><strong>Key discoveries:</strong></p>
+<ul>
+<li>Pin 8 (VCC) should read close to 9V &mdash; that means power is reaching the chip</li>
+<li>Pin 1 (GND) should read 0V &mdash; that is our reference point</li>
+<li>Pin 5 (CONTROL VOLTAGE) should read about 6V (two-thirds of 9V) &mdash; this is an internal voltage divider inside the chip!</li>
+</ul>
+<blockquote><p>"You just proved the chip is alive and getting power! Pin 5 reading about 6V is especially cool &mdash; it means the circuit INSIDE the chip is working. You cannot see it, but your Wand can!"</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+50 XP</span> for measuring all 8 pins and recording the voltages!</strong></p>
+<hr>
+<h3 id="step-6-ic-dos-and-donts-5-min" style="border-left-color:#E8A838; color:#E8A838;">Step 6: IC Do's and Don'ts (5 min)</h3>
+<blockquote><p>"ICs are tougher than you think, but they still have a few rules."</p></blockquote>
+<p><strong>DO:</strong></p>
+<ul>
+<li>Always check Pin 1 before wiring</li>
+<li>Straddle the center gap on the breadboard</li>
+<li>Connect power (VCC) and ground (GND) first</li>
+<li>Handle gently by the sides</li>
+</ul>
+<p><strong>DO NOT:</strong></p>
+<ul>
+<li>Put the IC in backwards (it might get hot or break!)</li>
+<li>Touch the pins while the circuit is powered</li>
+<li>Force the pins &mdash; if they are bent, gently straighten them with fingers</li>
+<li>Connect voltage higher than the datasheet says (16V max for the 555)</li>
+</ul>
+<p><strong>Award: <span class="xp-badge">+10 XP</span> for reviewing the IC safety rules!</strong></p>
+<hr>
+<h2 id="fun-game-pin-number-race-optional-extension" style="background:#E8A838;">Fun Game: Pin Number Race (Optional Extension)</h2>
+<p>Print or draw two copies of the 555 pin diagram (blank &mdash; no labels). Two players race to fill in all 8 pin names correctly. First one finished with all correct answers wins!</p>
+<pre><code>BLANK PIN DIAGRAM -- Fill in the names!
+
+       Notch
+         U
+   +-----------+
+   |  1: _____ 8: _____ |
+   |  2: _____ 7: _____ |
+   |  3: _____ 6: _____ |
+   |  4: _____ 5: _____ |
+   +-----------+</code></pre>
+<hr>
+<h2 id="quick-quiz-earn-bonus-xp" style="background:#C678B0;">Quick Quiz &mdash; Earn Bonus XP!</h2>
+<p><strong>Question 1:</strong> What does IC stand for?</p>
+<ul>
+<li>A) Internet Connection</li>
+<li>B) Integrated Circuit</li>
+<li>C) Inside Computer</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<p><strong>Question 2:</strong> How do you find Pin 1 on a DIP IC?</p>
+<ul>
+<li>A) It is always the biggest pin</li>
+<li>B) Look for the notch or dot &mdash; Pin 1 is next to it</li>
+<li>C) It does not matter which pin is which</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<p><strong>Question 3:</strong> How many transistors are packed inside a single 555 timer IC?</p>
+<ul>
+<li>A) 2</li>
+<li>B) 10</li>
+<li>C) 23</li>
+</ul>
+<p><strong>(Correct: C &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<p><strong>Question 4:</strong> When you place an IC on a breadboard, it should:</p>
+<ul>
+<li>A) Go on one side only</li>
+<li>B) Straddle the center gap</li>
+<li>C) Float above the board</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<hr>
+<h2 id="lesson-17-complete" style="background:#E05C5C;">Lesson 17 Complete!</h2>
+<pre><code>  =============================================
+
+     CHIP DETECTIVE BADGE UNLOCKED!
+
+     Skills unlocked:
+     [check] Know what an IC is and why it exists
+     [check] Find Pin 1 using the notch
+     [check] Read a simplified datasheet
+     [check] Place an IC on a breadboard
+     [check] Measure IC pin voltages with the Wand
+
+  =============================================</code></pre>
+<p><strong>XP Breakdown:</strong></p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Activity</th>
+<th>XP</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Hook &mdash; IC invention</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Find Pin 1 on two ICs</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Datasheet Scavenger Hunt</td>
+<td>30</td>
+</tr>
+<tr>
+<td>Place IC on breadboard</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Wand Check (8 pins)</td>
+<td>50</td>
+</tr>
+<tr>
+<td>IC safety rules</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Quiz (4 questions)</td>
+<td>80</td>
+</tr>
+<tr>
+<td><strong>TOTAL POSSIBLE</strong></td>
+<td><strong>220</strong></td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="coming-up-next" style="background:#FF6B35;">Coming Up Next...</h2>
+<p>In <strong>Lesson 18</strong>, you will use the 555 timer to build a <strong>Blinker Circuit</strong>! The LED will flash on and off automatically, and you will control how fast it blinks by changing resistors and capacitors. Your Wand will help you time the blinks!</p>
+<hr>
+<h2 id="troubleshooting" style="background:#4ECDC4;">Troubleshooting</h2>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Problem</th>
+<th>Fix</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>IC gets hot when powered</td>
+<td>Remove power immediately! Check if IC is inserted backwards</td>
+</tr>
+<tr>
+<td>Wand reads 0V on Pin 8 (VCC)</td>
+<td>Check power rail connections and battery</td>
+</tr>
+<tr>
+<td>Cannot find Pin 1</td>
+<td>Look for the notch (U shape) &mdash; Pin 1 is bottom-left when notch is on top</td>
+</tr>
+<tr>
+<td>IC pins are bent</td>
+<td>Gently straighten them by pressing against a flat table</td>
+</tr>
+<tr>
+<td>Wand reads odd voltage on Pin 5</td>
+<td>Should be about 2/3 of battery voltage &mdash; if battery is low, charge/replace it</td>
+</tr>
+</tbody></table></div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="page-footer">
+        <span>Lesson 17: What is an Integrated Circuit?</span>
+        <span>Module 3: Integrated Circuits (ICs)</span>
+    </footer>
+
+</body>
+</html>

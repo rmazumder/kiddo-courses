@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 29: Analog Inputs -- Reading the In-Between</title>
+    <style>
+
+        /* -- Reset & Base -- */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            line-height: 1.75;
+            color: #2C3E50;
+            background: #FAFAFA;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px 40px;
+        }
+
+        /* -- Header Banner -- */
+        .lesson-header {
+            background: linear-gradient(135deg, #2980B9 0%, #3498DB 50%, #5DADE2 100%);
+            color: #fff;
+            border-radius: 16px;
+            padding: 32px 36px 28px;
+            margin: 24px 0 32px;
+            box-shadow: 0 6px 20px rgba(41,128,185,0.35);
+            position: relative;
+            overflow: hidden;
+        }
+        .lesson-header::before {
+            content: "";
+            position: absolute;
+            top: -40px; right: -40px;
+            width: 160px; height: 160px;
+            background: rgba(255,255,255,0.12);
+            border-radius: 50%;
+        }
+        .lesson-header::after {
+            content: "";
+            position: absolute;
+            bottom: -30px; left: -20px;
+            width: 100px; height: 100px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+        }
+        .lesson-header h1 {
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            position: relative;
+            z-index: 1;
+        }
+        .module-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.25);
+            border: 2px solid rgba(255,255,255,0.6);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 4px 14px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 1;
+        }
+        .meta-row {
+            margin-top: 12px;
+            font-size: 14px;
+            color: rgba(255,255,255,0.9);
+            position: relative;
+            z-index: 1;
+        }
+        .meta-pill {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            border-radius: 12px;
+            padding: 2px 10px;
+            margin: 2px 4px 2px 0;
+            white-space: nowrap;
+        }
+
+        /* -- Section Headings -- */
+        h2 {
+            font-size: 22px;
+            font-weight: 800;
+            margin: 36px 0 14px;
+            padding: 10px 18px;
+            border-radius: 10px;
+            color: #fff;
+        }
+        h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 28px 0 10px;
+            padding: 8px 14px;
+            border-left: 5px solid;
+            border-radius: 0 8px 8px 0;
+            background: rgba(0,0,0,0.03);
+        }
+
+        /* -- Body Text -- */
+        p { margin: 10px 0; }
+        strong { font-weight: 700; color: #1A252F; }
+        em { font-style: italic; color: #5D6D7E; }
+
+        /* -- Inline Code -- */
+        code {
+            background: #F0F3F7;
+            border: 1px solid #D5DCE8;
+            border-radius: 4px;
+            padding: 1px 6px;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 14px;
+            color: #C0392B;
+        }
+
+        /* -- Fenced Code Blocks -- */
+        pre {
+            background: #F4F6F8;
+            border: 1px solid #D0D8E4;
+            border-left: 5px solid #2980B9;
+            border-radius: 8px;
+            padding: 16px 18px;
+            overflow-x: auto;
+            margin: 16px 0;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #2C3E50;
+            white-space: pre;
+        }
+        pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            font-size: inherit;
+            color: inherit;
+        }
+
+        /* -- Blockquotes / Callout Boxes -- */
+        blockquote {
+            background: #FFF8E7;
+            border-left: 6px solid #2980B9;
+            border-radius: 0 12px 12px 0;
+            padding: 14px 20px;
+            margin: 16px 0;
+            color: #5D3A1A;
+            font-style: normal;
+            position: relative;
+        }
+        blockquote::before {
+            content: "\1F4AC";
+            position: absolute;
+            top: -10px; left: 10px;
+            font-size: 20px;
+            line-height: 1;
+        }
+        blockquote p { margin: 6px 0; }
+
+        /* -- Lists -- */
+        ul, ol {
+            margin: 10px 0 10px 24px;
+            padding-left: 8px;
+        }
+        li { margin: 5px 0; }
+        ul li::marker { color: #2980B9; font-size: 18px; }
+        ol li::marker { color: #2980B9; font-weight: 700; }
+
+        /* -- Tables -- */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 16px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+        }
+        thead th {
+            background: #2980B9;
+            color: #fff;
+            font-weight: 700;
+            padding: 11px 14px;
+            text-align: left;
+            border-bottom: 3px solid #1F6DA0;
+        }
+        thead th:first-child { border-radius: 10px 0 0 0; }
+        thead th:last-child  { border-radius: 0 10px 0 0; }
+        tbody tr:nth-child(odd)  td { background: #F0F8FF; }
+        tbody tr:nth-child(even) td { background: #E1F0FA; }
+        tbody tr:hover td { background: #C8E6F8; transition: background 0.15s; }
+        td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #C8E6F8;
+            vertical-align: top;
+        }
+        td .checkbox {
+            display: inline-block;
+            width: 18px; height: 18px;
+            border: 2px solid #2980B9;
+            border-radius: 4px;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+
+        /* -- XP Badges -- */
+        .xp-badge {
+            display: inline-block;
+            background: #FFEAA7;
+            border: 2px solid #F39C12;
+            color: #7D4F00;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin: 2px 4px;
+            white-space: nowrap;
+        }
+        .award-badge {
+            display: inline-block;
+            background: #D5F5E3;
+            border: 2px solid #27AE60;
+            color: #1A5E35;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin: 2px 4px;
+            white-space: nowrap;
+        }
+
+        /* -- Horizontal Rule -- */
+        hr {
+            border: none;
+            border-top: 3px dashed #A8D8EA;
+            margin: 30px 0;
+        }
+
+        /* -- Footer -- */
+        .page-footer {
+            margin-top: 48px;
+            padding-top: 16px;
+            border-top: 2px solid #D5DCE8;
+            text-align: center;
+            font-size: 13px;
+            color: #7F8C8D;
+        }
+
+        /* -- Print Styles -- */
+        @media print {
+            @page { size: A4; margin: 18mm 15mm 20mm; }
+
+            body {
+                background: #fff !important;
+                font-size: 13px;
+                max-width: 100%;
+                padding: 0;
+            }
+
+            * { -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important; }
+
+            h2 { page-break-before: auto; break-before: auto; }
+            pre, blockquote, table { page-break-inside: avoid; }
+            h2, h3 { page-break-after: avoid; break-after: avoid; }
+            tr { page-break-inside: avoid; }
+
+            p { orphans: 3; widows: 3; }
+
+            .lesson-header { box-shadow: none; }
+
+            .page-footer {
+                position: fixed;
+                bottom: 0; left: 0; right: 0;
+                background: #fff;
+                border-top: 1px solid #ccc;
+                padding: 6px 15mm;
+                display: flex;
+                justify-content: space-between;
+            }
+        }
+    
+    </style>
+</head>
+<body>
+
+    <!-- Header Banner -->
+    <header class="lesson-header">
+        <div class="module-badge">Module 4 -- Arduino Microcontroller</div>
+        <h1>Lesson 29: Analog Inputs -- Reading the In-Between</h1>
+        <div class="meta-row"><span class="meta-pill">&#9733; Star-3 Intermediate</span><span class="meta-pill">&#9200; 40--45 minutes</span><span class="meta-pill">&#128100; Age 6--12 years</span><span class="meta-pill xp-badge" style="background:#FFEAA7;color:#7D4F00;border:none;">&#9889; 250 XP</span></div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+<hr>
+<h2 id="your-mission-today" style="background:#FF6B35;">Your Mission Today</h2>
+<p>Circuit Explorer, so far the Arduino has only dealt with ON or OFF &mdash; HIGH or LOW &mdash; like a light switch. But the real world is not just black and white! A volume knob does not go from silent to max with nothing in between. Today you will learn how the Arduino reads <strong>analog values</strong> &mdash; numbers from 0 to 1023 that represent anything in between 0V and 5V. You will hook up a potentiometer (that twisty knob from Module 1!) and watch the Arduino read every tiny turn. This is how real sensors work!</p>
+<hr>
+<h2 id="learning-objectives" style="background:#4ECDC4;">Learning Objectives</h2>
+<p>By the end of this lesson, you will be able to:</p>
+<ul>
+<li>Explain the difference between digital and analog signals</li>
+<li>Connect a potentiometer to an Arduino analog pin</li>
+<li>Use <code>analogRead()</code> to read values from 0 to 1023</li>
+<li>Convert analog readings to voltage using math</li>
+<li>Measure potentiometer voltage with the Wand and compare to Arduino readings</li>
+</ul>
+<hr>
+<h2 id="what-you-need" style="background:#45B7D1;">What You Need</h2>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Item</th>
+<th>Qty</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Arduino Uno + USB cable</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Breadboard</td>
+<td>1</td>
+</tr>
+<tr>
+<td>10k-ohm potentiometer</td>
+<td>1</td>
+</tr>
+<tr>
+<td>LED (any color)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>330-ohm resistor</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Jumper wires</td>
+<td>5</td>
+</tr>
+<tr>
+<td>Multimeter (Magic Measurement Wand!)</td>
+<td>1</td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="how-to-teach-this-lesson" style="background:#96CEB4;">How to Teach This Lesson</h2>
+<h3 id="step-1-hook-the-light-switch-problem-3-min" style="border-left-color:#45B7D1; color:#45B7D1;">Step 1: Hook &mdash; The Light Switch Problem (3 min)</h3>
+<blockquote><p>"Imagine you only had two volume levels on your music player: SILENT and FULL BLAST. That would be terrible! You need all the levels in between."</p></blockquote>
+<blockquote><p>"Digital is like a light switch &mdash; ON or OFF, 1 or 0, HIGH or LOW. Analog is like a dimmer &mdash; it can be anywhere in between. The Arduino has 6 special analog pins (A0 through A5) that can read these in-between values."</p></blockquote>
+<p><strong>The Big Numbers:</strong></p>
+<ul>
+<li>Digital: just 2 values &mdash; HIGH (5V) or LOW (0V)</li>
+<li>Analog: <strong>1024 values</strong> &mdash; from 0 (0V) all the way to 1023 (5V)</li>
+</ul>
+<blockquote><p>"1024 steps from off to full! That is like having 1024 volume levels instead of just 2."</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+10 XP</span> for understanding digital vs analog!</strong></p>
+<hr>
+<h3 id="step-2-build-the-potentiometer-circuit-8-min" style="border-left-color:#96CEB4; color:#96CEB4;">Step 2: Build the Potentiometer Circuit (8 min)</h3>
+<p><strong>How a Potentiometer Works (Refresher):</strong></p>
+<blockquote><p>"Remember from Module 1? A potentiometer is a variable resistor with a twisty knob. It has 3 legs. The middle leg gives you a voltage that changes as you turn the knob."</p></blockquote>
+<p><strong>Wiring Diagram:</strong></p>
+<pre><code>  Arduino Uno                    Breadboard
+  +---------+
+  | 5V      |----[wire]----+---- Potentiometer Left Leg
+  |         |
+  | A0      |----[wire]----+---- Potentiometer Middle Leg (wiper)
+  |         |
+  | GND     |----[wire]----+---- Potentiometer Right Leg
+  +---------+
+
+  Potentiometer:
+  +-------+
+  |       |
+  |  (o)  |  &lt;-- twist the knob
+  |       |
+  +--+--+-+
+     |  |  |
+   Left Mid Right
+   5V  A0  GND</code></pre>
+<p><strong>Steps:</strong></p>
+<ol>
+<li>Place the potentiometer on the breadboard</li>
+<li>Connect the <strong>left leg</strong> to <strong>Arduino 5V</strong></li>
+<li>Connect the <strong>right leg</strong> to <strong>Arduino GND</strong></li>
+<li>Connect the <strong>middle leg</strong> (wiper) to <strong>Arduino A0</strong></li>
+</ol>
+<blockquote><p>"The middle leg gives a voltage between 0V and 5V depending on the knob position. Turned all the way to the 5V side = 5V. All the way to GND = 0V. Halfway = about 2.5V."</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+20 XP</span> for wiring the potentiometer!</strong></p>
+<hr>
+<h3 id="step-3-read-the-potentiometer-with-code-10-min" style="border-left-color:#FF6B35; color:#FF6B35;">Step 3: Read the Potentiometer with Code (10 min)</h3>
+<p><strong>The Code:</strong></p>
+<pre><code>// Lesson 29: Reading Analog Input from a Potentiometer
+
+void setup() {
+  Serial.begin(9600);
+  Serial.println(&quot;=== Analog Reader Ready! ===&quot;);
+}
+
+void loop() {
+  int sensorValue = analogRead(A0);         // Read potentiometer (0-1023)
+  float voltage = sensorValue * (5.0 / 1023.0);  // Convert to volts
+
+  Serial.print(&quot;Raw Value: &quot;);
+  Serial.print(sensorValue);
+  Serial.print(&quot;  |  Voltage: &quot;);
+  Serial.print(voltage, 2);  // 2 decimal places
+  Serial.println(&quot; V&quot;);
+
+  delay(200);  // Read 5 times per second
+}</code></pre>
+<p><strong>Upload and open the Serial Monitor!</strong></p>
+<p>Now twist the potentiometer knob slowly. You should see:</p>
+<pre><code>=== Analog Reader Ready! ===
+Raw Value: 0      |  Voltage: 0.00 V
+Raw Value: 256    |  Voltage: 1.25 V
+Raw Value: 512    |  Voltage: 2.50 V
+Raw Value: 768    |  Voltage: 3.76 V
+Raw Value: 1023   |  Voltage: 5.00 V</code></pre>
+<blockquote><p>"The Arduino is reading 1024 different levels! When you turn the knob slowly, you can see every tiny step. This is how real sensors report temperature, light level, sound volume, and much more."</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+30 XP</span> for reading analog values!</strong></p>
+<hr>
+<h3 id="step-4-the-math-behind-it-5-min" style="border-left-color:#4ECDC4; color:#4ECDC4;">Step 4: The Math Behind It (5 min)</h3>
+<blockquote><p>"How do we convert the number 512 into 2.5 volts? Simple math!"</p></blockquote>
+<p><strong>The Formula:</strong></p>
+<pre><code>voltage = analogRead value * (5.0 / 1023.0)</code></pre>
+<p><strong>Why?</strong></p>
+<ul>
+<li>The analog pin reads 0 to 1023 (1024 steps)</li>
+<li>0 means 0 volts, 1023 means 5 volts</li>
+<li>So each step = 5.0 / 1023.0 = about 0.00489 volts</li>
+<li>A reading of 512 = 512 * 0.00489 = about 2.50 volts</li>
+</ul>
+<p><strong>Quick Practice:</strong></p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Raw Value</th>
+<th>Voltage (calculate!)</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>0.00 V</td>
+</tr>
+<tr>
+<td>200</td>
+<td>?</td>
+</tr>
+<tr>
+<td>512</td>
+<td>?</td>
+</tr>
+<tr>
+<td>800</td>
+<td>?</td>
+</tr>
+<tr>
+<td>1023</td>
+<td>5.00 V</td>
+</tr>
+</tbody></table></div>
+<p><strong>Answers:</strong> 200 = 0.98V, 512 = 2.50V, 800 = 3.91V</p>
+<p><strong>Award: <span class="xp-badge">+10 XP</span> for doing the voltage math!</strong></p>
+<hr>
+<h3 id="step-5-wand-check-compare-arduino-to-the-wand-8-min" style="border-left-color:#C678B0; color:#C678B0;">Step 5: Wand Check &mdash; Compare Arduino to the Wand (8 min)</h3>
+<blockquote><p>"The Arduino says it is reading 2.50 volts on A0. But is it REALLY 2.5 volts? Let us double-check with the Magic Measurement Wand!"</p></blockquote>
+<p><strong>Setup:</strong></p>
+<ol>
+<li>Set the Wand to <strong>DC Voltage</strong></li>
+<li>Black probe on <strong>GND</strong></li>
+<li>Red probe on the <strong>middle leg</strong> of the potentiometer (or on the wire going to A0)</li>
+</ol>
+<p><strong>The Comparison Test:</strong></p>
+<p>Turn the knob to 5 different positions. At each position, read both the Serial Monitor AND the Wand:</p>
+<pre><code>| Knob Position | Serial Monitor Says | Wand Reads | Match? |
+|---------------|-------------------|------------|--------|
+| All left      |                   |            |        |
+| Quarter turn  |                   |            |        |
+| Half turn     |                   |            |        |
+| Three-quarter |                   |            |        |
+| All right     |                   |            |        |</code></pre>
+<blockquote><p>"They should be very close! The Arduino and the Wand are both measuring the same voltage. If they differ by a little (like 0.05V), that is normal &mdash; neither instrument is perfectly exact. But they should agree within a few percent."</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+40 XP</span> for completing the comparison test!</strong></p>
+<hr>
+<h3 id="step-6-bonus-control-led-blink-speed-with-the-knob-5-min" style="border-left-color:#E8A838; color:#E8A838;">Step 6: Bonus &mdash; Control LED Blink Speed with the Knob (5 min)</h3>
+<p><strong>The Code:</strong></p>
+<pre><code>int ledPin = 7;
+
+void setup() {
+  pinMode(ledPin, OUTPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  int potValue = analogRead(A0);            // 0 to 1023
+  int blinkDelay = potValue;                // Use raw value as delay
+
+  digitalWrite(ledPin, HIGH);
+  delay(blinkDelay);
+  digitalWrite(ledPin, LOW);
+  delay(blinkDelay);
+
+  Serial.print(&quot;Delay: &quot;);
+  Serial.print(blinkDelay);
+  Serial.println(&quot; ms&quot;);
+}</code></pre>
+<blockquote><p>"Now twist the knob! The LED blinks fast when the knob is turned to one side and slow on the other. You just built a real speed controller!"</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+20 XP</span> for controlling blink speed with the potentiometer!</strong></p>
+<hr>
+<h2 id="quick-quiz-earn-bonus-xp" style="background:#E8A838;">Quick Quiz &mdash; Earn Bonus XP!</h2>
+<p><strong>Question 1:</strong> What is the range of values <code>analogRead()</code> returns?</p>
+<ul>
+<li>A) 0 to 255</li>
+<li>B) HIGH or LOW</li>
+<li>C) 0 to 1023</li>
+</ul>
+<p><strong>(Correct: C &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<p><strong>Question 2:</strong> If <code>analogRead()</code> returns 512, approximately what voltage is that?</p>
+<ul>
+<li>A) 1.0V</li>
+<li>B) 2.5V</li>
+<li>C) 5.0V</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<p><strong>Question 3:</strong> Which Arduino pins can read analog values?</p>
+<ul>
+<li>A) Pins 0 through 13</li>
+<li>B) Pins A0 through A5</li>
+<li>C) Only pin 13</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<hr>
+<h2 id="lesson-29-complete" style="background:#C678B0;">Lesson 29 Complete!</h2>
+<pre><code>  =============================================
+
+     ANALOG ADVENTURER BADGE UNLOCKED!
+
+     Skills unlocked:
+     [check] Understand digital vs analog
+     [check] Wire a potentiometer to Arduino
+     [check] Read analog values with analogRead()
+     [check] Convert raw values to voltage
+     [check] Verified readings with the Wand
+     [check] Controlled LED speed with a knob
+
+  =============================================</code></pre>
+<p><strong>XP Breakdown:</strong></p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Activity</th>
+<th>XP</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Hook discussion</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Potentiometer wiring</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Analog reading code</td>
+<td>30</td>
+</tr>
+<tr>
+<td>Voltage math practice</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Wand Check (5 comparisons)</td>
+<td>40</td>
+</tr>
+<tr>
+<td>LED speed controller bonus</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Quiz (3 questions)</td>
+<td>60</td>
+</tr>
+<tr>
+<td><strong>TOTAL POSSIBLE</strong></td>
+<td><strong>250</strong></td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="coming-up-next" style="background:#E05C5C;">Coming Up Next...</h2>
+<p>In <strong>Lesson 30</strong>, you will learn the coolest trick in Arduino: <strong>PWM (Pulse Width Modulation)</strong>. Instead of just ON or OFF, you will make an LED FADE smoothly from dark to bright and back! It is like the opposite of analog input &mdash; it is analog-like OUTPUT. And you will use the Wand to see something really surprising about how it works.</p>
+<hr>
+<h2 id="troubleshooting" style="background:#FF6B35;">Troubleshooting</h2>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Problem</th>
+<th>Fix</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Serial Monitor shows 0 all the time</td>
+<td>Check that the potentiometer middle leg is connected to A0, not a digital pin</td>
+</tr>
+<tr>
+<td>Reading jumps around wildly</td>
+<td>Make sure all three potentiometer legs are connected (5V, A0, GND)</td>
+</tr>
+<tr>
+<td>Reading stuck at 1023</td>
+<td>The middle leg might be connected to 5V instead of A0</td>
+</tr>
+<tr>
+<td>Wand and Arduino disagree a lot</td>
+<td>Make sure both are measuring the same point (middle leg of the pot)</td>
+</tr>
+<tr>
+<td>LED blink speed does not change</td>
+<td>Make sure you are using the potValue as the delay in the LED code</td>
+</tr>
+</tbody></table></div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="page-footer">
+        <span>Lesson 29: Analog Inputs -- Reading the In-Between</span>
+        <span>Module 4: Arduino Microcontroller</span>
+    </footer>
+
+</body>
+</html>

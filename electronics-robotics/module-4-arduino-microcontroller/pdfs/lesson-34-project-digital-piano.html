@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 34: Module 4 Project -- Digital Piano + Display</title>
+    <style>
+
+        /* -- Reset & Base -- */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            line-height: 1.75;
+            color: #2C3E50;
+            background: #FAFAFA;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px 40px;
+        }
+
+        /* -- Header Banner -- */
+        .lesson-header {
+            background: linear-gradient(135deg, #2980B9 0%, #3498DB 50%, #5DADE2 100%);
+            color: #fff;
+            border-radius: 16px;
+            padding: 32px 36px 28px;
+            margin: 24px 0 32px;
+            box-shadow: 0 6px 20px rgba(41,128,185,0.35);
+            position: relative;
+            overflow: hidden;
+        }
+        .lesson-header::before {
+            content: "";
+            position: absolute;
+            top: -40px; right: -40px;
+            width: 160px; height: 160px;
+            background: rgba(255,255,255,0.12);
+            border-radius: 50%;
+        }
+        .lesson-header::after {
+            content: "";
+            position: absolute;
+            bottom: -30px; left: -20px;
+            width: 100px; height: 100px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+        }
+        .lesson-header h1 {
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            position: relative;
+            z-index: 1;
+        }
+        .module-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.25);
+            border: 2px solid rgba(255,255,255,0.6);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 4px 14px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 1;
+        }
+        .meta-row {
+            margin-top: 12px;
+            font-size: 14px;
+            color: rgba(255,255,255,0.9);
+            position: relative;
+            z-index: 1;
+        }
+        .meta-pill {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            border-radius: 12px;
+            padding: 2px 10px;
+            margin: 2px 4px 2px 0;
+            white-space: nowrap;
+        }
+
+        /* -- Section Headings -- */
+        h2 {
+            font-size: 22px;
+            font-weight: 800;
+            margin: 36px 0 14px;
+            padding: 10px 18px;
+            border-radius: 10px;
+            color: #fff;
+        }
+        h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 28px 0 10px;
+            padding: 8px 14px;
+            border-left: 5px solid;
+            border-radius: 0 8px 8px 0;
+            background: rgba(0,0,0,0.03);
+        }
+
+        /* -- Body Text -- */
+        p { margin: 10px 0; }
+        strong { font-weight: 700; color: #1A252F; }
+        em { font-style: italic; color: #5D6D7E; }
+
+        /* -- Inline Code -- */
+        code {
+            background: #F0F3F7;
+            border: 1px solid #D5DCE8;
+            border-radius: 4px;
+            padding: 1px 6px;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 14px;
+            color: #C0392B;
+        }
+
+        /* -- Fenced Code Blocks -- */
+        pre {
+            background: #F4F6F8;
+            border: 1px solid #D0D8E4;
+            border-left: 5px solid #2980B9;
+            border-radius: 8px;
+            padding: 16px 18px;
+            overflow-x: auto;
+            margin: 16px 0;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #2C3E50;
+            white-space: pre;
+        }
+        pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            font-size: inherit;
+            color: inherit;
+        }
+
+        /* -- Blockquotes / Callout Boxes -- */
+        blockquote {
+            background: #FFF8E7;
+            border-left: 6px solid #2980B9;
+            border-radius: 0 12px 12px 0;
+            padding: 14px 20px;
+            margin: 16px 0;
+            color: #5D3A1A;
+            font-style: normal;
+            position: relative;
+        }
+        blockquote::before {
+            content: "\1F4AC";
+            position: absolute;
+            top: -10px; left: 10px;
+            font-size: 20px;
+            line-height: 1;
+        }
+        blockquote p { margin: 6px 0; }
+
+        /* -- Lists -- */
+        ul, ol {
+            margin: 10px 0 10px 24px;
+            padding-left: 8px;
+        }
+        li { margin: 5px 0; }
+        ul li::marker { color: #2980B9; font-size: 18px; }
+        ol li::marker { color: #2980B9; font-weight: 700; }
+
+        /* -- Tables -- */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 16px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+        }
+        thead th {
+            background: #2980B9;
+            color: #fff;
+            font-weight: 700;
+            padding: 11px 14px;
+            text-align: left;
+            border-bottom: 3px solid #1F6DA0;
+        }
+        thead th:first-child { border-radius: 10px 0 0 0; }
+        thead th:last-child  { border-radius: 0 10px 0 0; }
+        tbody tr:nth-child(odd)  td { background: #F0F8FF; }
+        tbody tr:nth-child(even) td { background: #E1F0FA; }
+        tbody tr:hover td { background: #C8E6F8; transition: background 0.15s; }
+        td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #C8E6F8;
+            vertical-align: top;
+        }
+        td .checkbox {
+            display: inline-block;
+            width: 18px; height: 18px;
+            border: 2px solid #2980B9;
+            border-radius: 4px;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+
+        /* -- XP Badges -- */
+        .xp-badge {
+            display: inline-block;
+            background: #FFEAA7;
+            border: 2px solid #F39C12;
+            color: #7D4F00;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin: 2px 4px;
+            white-space: nowrap;
+        }
+        .award-badge {
+            display: inline-block;
+            background: #D5F5E3;
+            border: 2px solid #27AE60;
+            color: #1A5E35;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin: 2px 4px;
+            white-space: nowrap;
+        }
+
+        /* -- Horizontal Rule -- */
+        hr {
+            border: none;
+            border-top: 3px dashed #A8D8EA;
+            margin: 30px 0;
+        }
+
+        /* -- Footer -- */
+        .page-footer {
+            margin-top: 48px;
+            padding-top: 16px;
+            border-top: 2px solid #D5DCE8;
+            text-align: center;
+            font-size: 13px;
+            color: #7F8C8D;
+        }
+
+        /* -- Print Styles -- */
+        @media print {
+            @page { size: A4; margin: 18mm 15mm 20mm; }
+
+            body {
+                background: #fff !important;
+                font-size: 13px;
+                max-width: 100%;
+                padding: 0;
+            }
+
+            * { -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important; }
+
+            h2 { page-break-before: auto; break-before: auto; }
+            pre, blockquote, table { page-break-inside: avoid; }
+            h2, h3 { page-break-after: avoid; break-after: avoid; }
+            tr { page-break-inside: avoid; }
+
+            p { orphans: 3; widows: 3; }
+
+            .lesson-header { box-shadow: none; }
+
+            .page-footer {
+                position: fixed;
+                bottom: 0; left: 0; right: 0;
+                background: #fff;
+                border-top: 1px solid #ccc;
+                padding: 6px 15mm;
+                display: flex;
+                justify-content: space-between;
+            }
+        }
+    
+    </style>
+</head>
+<body>
+
+    <!-- Header Banner -->
+    <header class="lesson-header">
+        <div class="module-badge">Module 4 -- Arduino Microcontroller (FINAL PROJECT)</div>
+        <h1>Lesson 34: Module 4 Project -- Digital Piano + Display</h1>
+        <div class="meta-row"><span class="meta-pill">&#9733; Star-4 Intermediate-Advanced</span><span class="meta-pill">&#9200; 60--75 minutes (longer -- it is a project!)</span><span class="meta-pill">&#128100; Age 6--12 years</span><span class="meta-pill xp-badge" style="background:#FFEAA7;color:#7D4F00;border:none;">&#9889; 500 XP (the biggest XP haul of the module!)</span></div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+<hr>
+<h2 id="your-mission-today" style="background:#FF6B35;">Your Mission Today</h2>
+<p>This is it, Circuit Explorer &mdash; the GRAND FINALE of Module 4! You are going to build a real, working <strong>Digital Piano</strong> that combines EVERYTHING you have learned: digital outputs (LEDs), digital inputs (buttons), analog concepts (PWM), sound (buzzer and tones), display (LCD), arrays, loops, and variables. When you press a button, a musical note plays, the matching LED lights up, and the LCD shows the note name. This is a real instrument you built and programmed yourself. Let us make it happen!</p>
+<hr>
+<h2 id="learning-objectives" style="background:#4ECDC4;">Learning Objectives</h2>
+<p>This project brings together everything from Module 4:</p>
+<ul>
+<li>Digital outputs: LEDs controlled by code</li>
+<li>Digital inputs: buttons read with digitalRead()</li>
+<li>Sound: piezo buzzer with tone() function</li>
+<li>Display: 16x2 LCD showing note information</li>
+<li>Programming: arrays, for loops, if statements, variables</li>
+<li>Wiring: complex multi-component circuit on breadboard</li>
+</ul>
+<hr>
+<h2 id="what-you-need" style="background:#45B7D1;">What You Need</h2>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Item</th>
+<th>Qty</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Arduino Uno + USB cable</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Breadboard (830-point recommended)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Push buttons (tactile switches)</td>
+<td>8</td>
+</tr>
+<tr>
+<td>LEDs (assorted colors)</td>
+<td>8</td>
+</tr>
+<tr>
+<td>330-ohm resistors</td>
+<td>8</td>
+</tr>
+<tr>
+<td>Piezo buzzer (passive)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>16x2 LCD with I2C backpack</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Jumper wires</td>
+<td>25+</td>
+</tr>
+<tr>
+<td>Multimeter (Magic Measurement Wand!)</td>
+<td>1</td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="how-to-build-it" style="background:#96CEB4;">How to Build It</h2>
+<h3 id="phase-1-plan-the-piano-layout-5-min" style="border-left-color:#45B7D1; color:#45B7D1;">Phase 1: Plan the Piano Layout (5 min)</h3>
+<p><strong>The 8 Notes (One Octave of C Major):</strong></p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Button</th>
+<th>Note</th>
+<th>Frequency</th>
+<th>LED Color (suggested)</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>C4</td>
+<td>262 Hz</td>
+<td>Red</td>
+</tr>
+<tr>
+<td>2</td>
+<td>D4</td>
+<td>294 Hz</td>
+<td>Orange (or Red)</td>
+</tr>
+<tr>
+<td>3</td>
+<td>E4</td>
+<td>330 Hz</td>
+<td>Yellow</td>
+</tr>
+<tr>
+<td>4</td>
+<td>F4</td>
+<td>349 Hz</td>
+<td>Green</td>
+</tr>
+<tr>
+<td>5</td>
+<td>G4</td>
+<td>392 Hz</td>
+<td>Green</td>
+</tr>
+<tr>
+<td>6</td>
+<td>A4</td>
+<td>440 Hz</td>
+<td>Blue</td>
+</tr>
+<tr>
+<td>7</td>
+<td>B4</td>
+<td>494 Hz</td>
+<td>Blue</td>
+</tr>
+<tr>
+<td>8</td>
+<td>C5</td>
+<td>523 Hz</td>
+<td>White</td>
+</tr>
+</tbody></table></div>
+<blockquote><p>"You are building a full octave &mdash; from low C to high C. That is all the white keys on a piano between two C notes!"</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+20 XP</span> for planning the piano layout!</strong></p>
+<hr>
+<h3 id="phase-2-wire-the-buttons-15-min" style="border-left-color:#96CEB4; color:#96CEB4;">Phase 2: Wire the Buttons (15 min)</h3>
+<p><strong>Button Wiring (using INPUT_PULLUP &mdash; no external resistors needed):</strong></p>
+<pre><code>  Arduino Pin   --&gt;   Button   --&gt;   GND
+
+  Pin 2  ---- [BUTTON 1] ---- GND    (C4)
+  Pin 3  ---- [BUTTON 2] ---- GND    (D4)
+  Pin 4  ---- [BUTTON 3] ---- GND    (E4)
+  Pin 5  ---- [BUTTON 4] ---- GND    (F4)
+  Pin 6  ---- [BUTTON 5] ---- GND    (G4)
+  Pin 7  ---- [BUTTON 6] ---- GND    (A4)
+  Pin 12 ---- [BUTTON 7] ---- GND    (B4)
+  Pin 13 ---- [BUTTON 8] ---- GND    (C5)</code></pre>
+<p><strong>Steps:</strong></p>
+<ol>
+<li>Place 8 buttons in a row across the center gap of the breadboard</li>
+<li>Connect one side of each button to its Arduino pin (2, 3, 4, 5, 6, 7, 12, 13)</li>
+<li>Connect the other side of ALL buttons to the GND rail</li>
+<li>Run one wire from the GND rail to Arduino GND</li>
+</ol>
+<blockquote><p>"We use INPUT_PULLUP mode in the code, so we do not need external pull-up resistors. The Arduino handles it internally. Nice and simple!"</p></blockquote>
+<p><strong>Test Each Button:</strong></p>
+<p>Upload a quick test sketch to make sure all buttons work:</p>
+<pre><code>void setup() {
+  Serial.begin(9600);
+  for (int pin = 2; pin &lt;= 7; pin++) {
+    pinMode(pin, INPUT_PULLUP);
+  }
+  pinMode(12, INPUT_PULLUP);
+  pinMode(13, INPUT_PULLUP);
+  Serial.println(&quot;Button test ready!&quot;);
+}
+
+void loop() {
+  for (int pin = 2; pin &lt;= 7; pin++) {
+    if (digitalRead(pin) == LOW) {
+      Serial.print(&quot;Button on pin &quot;);
+      Serial.print(pin);
+      Serial.println(&quot; PRESSED&quot;);
+    }
+  }
+  if (digitalRead(12) == LOW) Serial.println(&quot;Button on pin 12 PRESSED&quot;);
+  if (digitalRead(13) == LOW) Serial.println(&quot;Button on pin 13 PRESSED&quot;);
+  delay(100);
+}</code></pre>
+<p><strong>Award: <span class="xp-badge">+40 XP</span> for wiring and testing all 8 buttons!</strong></p>
+<hr>
+<h3 id="phase-3-wire-the-buzzer-5-min" style="border-left-color:#FF6B35; color:#FF6B35;">Phase 3: Wire the Buzzer (5 min)</h3>
+<pre><code>  Arduino Pin 8 ---- Buzzer (+) ---- Buzzer (-) ---- GND</code></pre>
+<p>Connect the buzzer to <strong>pin 8</strong> (same as Lesson 32).</p>
+<p><strong>Award: <span class="xp-badge">+10 XP</span> for wiring the buzzer!</strong></p>
+<hr>
+<h3 id="phase-4-wire-the-lcd-5-min" style="border-left-color:#4ECDC4; color:#4ECDC4;">Phase 4: Wire the LCD (5 min)</h3>
+<pre><code>  Arduino 5V  ---- LCD VCC
+  Arduino GND ---- LCD GND
+  Arduino A4  ---- LCD SDA
+  Arduino A5  ---- LCD SCL</code></pre>
+<p>Connect the LCD (same as Lesson 33).</p>
+<p><strong>Award: <span class="xp-badge">+10 XP</span> for wiring the LCD!</strong></p>
+<hr>
+<h3 id="phase-5-wire-the-leds-optional-but-awesome-10-min" style="border-left-color:#C678B0; color:#C678B0;">Phase 5: Wire the LEDs (Optional but Awesome) (10 min)</h3>
+<p><strong>LED Wiring using PWM and digital pins:</strong></p>
+<p>Since we have used pins 2-8, 12, 13, A4, and A5, we can use pins 9, 10, 11 for LEDs and share some with the buttons for a simpler build. However, for a full 8-LED setup, we can use a shift register or reduce to 3 indicator LEDs.</p>
+<p><strong>Simplified 3-LED Indicator Version:</strong></p>
+<pre><code>  Pin 9  (~) ---- [330 ohm] ---- LED (Red)   ---- GND   (low notes C,D,E)
+  Pin 10 (~) ---- [330 ohm] ---- LED (Green) ---- GND   (mid notes F,G)
+  Pin 11 (~) ---- [330 ohm] ---- LED (Blue)  ---- GND   (high notes A,B,C5)</code></pre>
+<blockquote><p>"Three LEDs show which range you are playing in &mdash; red for low notes, green for middle, blue for high. It is like a visual equalizer!"</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+20 XP</span> for wiring the indicator LEDs!</strong></p>
+<hr>
+<h3 id="phase-6-the-piano-code-15-min" style="border-left-color:#E8A838; color:#E8A838;">Phase 6: The Piano Code (15 min)</h3>
+<p><strong>The Complete Digital Piano Sketch:</strong></p>
+<pre><code>// Lesson 34: Digital Piano with LCD Display
+// Module 4 Final Project
+
+#include &lt;LiquidCrystal_I2C.h&gt;
+
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+
+// Button pins
+int buttonPins[] = {2, 3, 4, 5, 6, 7, 12, 13};
+int numButtons = 8;
+
+// Note frequencies (C4 to C5)
+int noteFreqs[] = {262, 294, 330, 349, 392, 440, 494, 523};
+
+// Note names for the LCD
+String noteNames[] = {&quot;C4&quot;, &quot;D4&quot;, &quot;E4&quot;, &quot;F4&quot;, &quot;G4&quot;, &quot;A4&quot;, &quot;B4&quot;, &quot;C5&quot;};
+
+// LED pins (3 indicator LEDs)
+int ledLow = 9;    // Red -- C4, D4, E4
+int ledMid = 10;   // Green -- F4, G4
+int ledHigh = 11;  // Blue -- A4, B4, C5
+
+// Buzzer pin
+int buzzerPin = 8;
+
+// Track what is playing
+bool notePlaying = false;
+
+void setup() {
+  // Set up buttons
+  for (int i = 0; i &lt; numButtons; i++) {
+    pinMode(buttonPins[i], INPUT_PULLUP);
+  }
+
+  // Set up LEDs
+  pinMode(ledLow, OUTPUT);
+  pinMode(ledMid, OUTPUT);
+  pinMode(ledHigh, OUTPUT);
+
+  // Set up LCD
+  lcd.init();
+  lcd.backlight();
+  lcd.setCursor(0, 0);
+  lcd.print(&quot;Digital Piano!&quot;);
+  lcd.setCursor(0, 1);
+  lcd.print(&quot;Press a button!&quot;);
+
+  Serial.begin(9600);
+  Serial.println(&quot;=== Digital Piano Ready! ===&quot;);
+}
+
+void loop() {
+  bool anyPressed = false;
+
+  for (int i = 0; i &lt; numButtons; i++) {
+    if (digitalRead(buttonPins[i]) == LOW) {
+      anyPressed = true;
+
+      // Play the note
+      tone(buzzerPin, noteFreqs[i]);
+
+      // Light the correct LED
+      digitalWrite(ledLow, LOW);
+      digitalWrite(ledMid, LOW);
+      digitalWrite(ledHigh, LOW);
+
+      if (i &lt; 3) {
+        digitalWrite(ledLow, HIGH);   // Low notes: C, D, E
+      } else if (i &lt; 5) {
+        digitalWrite(ledMid, HIGH);   // Mid notes: F, G
+      } else {
+        digitalWrite(ledHigh, HIGH);  // High notes: A, B, C5
+      }
+
+      // Display on LCD
+      lcd.setCursor(0, 0);
+      lcd.print(&quot;Now Playing:    &quot;);
+      lcd.setCursor(0, 1);
+      lcd.print(&quot;Note: &quot;);
+      lcd.print(noteNames[i]);
+      lcd.print(&quot;  &quot;);
+      lcd.print(noteFreqs[i]);
+      lcd.print(&quot; Hz  &quot;);
+
+      // Print to Serial Monitor too
+      Serial.print(&quot;Playing: &quot;);
+      Serial.print(noteNames[i]);
+      Serial.print(&quot; (&quot;);
+      Serial.print(noteFreqs[i]);
+      Serial.println(&quot; Hz)&quot;);
+
+      notePlaying = true;
+      break;  // Only play one note at a time
+    }
+  }
+
+  if (!anyPressed &amp;&amp; notePlaying) {
+    noTone(buzzerPin);
+    digitalWrite(ledLow, LOW);
+    digitalWrite(ledMid, LOW);
+    digitalWrite(ledHigh, LOW);
+
+    lcd.setCursor(0, 0);
+    lcd.print(&quot;Digital Piano!  &quot;);
+    lcd.setCursor(0, 1);
+    lcd.print(&quot;Press a button! &quot;);
+
+    notePlaying = false;
+  }
+
+  delay(10);  // Small delay for stability
+}</code></pre>
+<p><strong>Upload and play!</strong></p>
+<blockquote><p>"Press each button &mdash; you hear a different note, the LCD shows which note it is and its frequency, and the LEDs glow in the matching color range. You just built a real musical instrument with a computer brain!"</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+60 XP</span> for getting the full piano working!</strong></p>
+<hr>
+<h3 id="phase-7-wand-assisted-debugging-5-min" style="border-left-color:#E05C5C; color:#E05C5C;">Phase 7: Wand-Assisted Debugging (5 min)</h3>
+<blockquote><p>"If something is not working, do not panic! Grab your Magic Measurement Wand and become a circuit detective."</p></blockquote>
+<p><strong>Debugging Checklist:</strong></p>
+<ol>
+<li><strong>Power check:</strong> Measure 5V pin to GND. Should read ~5V</li>
+<li><strong>Button check:</strong> Measure each button pin to GND. Should read ~5V when NOT pressed, ~0V when pressed</li>
+<li><strong>Buzzer check:</strong> Measure pin 8 while pressing a button. Should show ~2.5V average (tone playing)</li>
+<li><strong>LED check:</strong> Measure each LED pin while the correct buttons are pressed. Should show ~5V</li>
+<li><strong>LCD check:</strong> Measure VCC to GND on the LCD. Should read ~5V</li>
+</ol>
+<pre><code>| Check Point        | Expected  | Your Reading | OK? |
+|--------------------|-----------|-------------|-----|
+| Arduino 5V         | ~5.0V     |             |     |
+| Button pin (idle)  | ~5.0V     |             |     |
+| Button pin (pressed)| ~0.0V    |             |     |
+| Buzzer pin (playing)| ~2.5V    |             |     |
+| LED pin (active)   | ~5.0V     |             |     |
+| LCD VCC            | ~5.0V     |             |     |</code></pre>
+<p><strong>Award: <span class="xp-badge">+40 XP</span> for successfully debugging with the Wand!</strong></p>
+<hr>
+<h3 id="phase-8-bonus-challenges-optional" style="border-left-color:#45B7D1; color:#45B7D1;">Phase 8: Bonus Challenges (Optional)</h3>
+<p><strong>Challenge 1 &mdash; Play a Song Automatically:</strong></p>
+<p>Add a function that plays a pre-programmed song when no buttons are pressed for 10 seconds.</p>
+<p><strong>Challenge 2 &mdash; Record and Playback:</strong></p>
+<p>Record which buttons the player presses (store in an array), then play it back.</p>
+<p><strong>Challenge 3 &mdash; Two-Octave Piano:</strong></p>
+<p>Use the potentiometer to switch between two octaves (C3-C4 and C4-C5).</p>
+<p><strong>Award: <span class="xp-badge">+30 XP</span> for completing any bonus challenge!</strong></p>
+<hr>
+<h2 id="module-4-final-assessment" style="background:#E8A838;">Module 4 Final Assessment</h2>
+<p>After building the piano, have the kid answer these (no looking at notes!):</p>
+<p><strong>Concept Check:</strong></p>
+<ol>
+<li>"What is a microcontroller?"</li>
+<li>"What is the difference between setup() and loop()?"</li>
+<li>"What does digitalRead() return?"</li>
+<li>"What is the range of analogRead()?"</li>
+<li>"What does PWM stand for, and what does it do?"</li>
+<li>"What is an array?"</li>
+</ol>
+<p><strong>Code Challenge &mdash; Write from Scratch:</strong></p>
+<blockquote><p>"Write a sketch from scratch that blinks an LED on pin 7 five times, then stops."</p></blockquote>
+<pre><code>// Expected answer (roughly):
+int ledPin = 7;
+
+void setup() {
+  pinMode(ledPin, OUTPUT);
+  for (int i = 0; i &lt; 5; i++) {
+    digitalWrite(ledPin, HIGH);
+    delay(500);
+    digitalWrite(ledPin, LOW);
+    delay(500);
+  }
+}
+
+void loop() {
+  // Empty -- we only want 5 blinks
+}</code></pre>
+<p><strong>Wand Skills Check:</strong></p>
+<blockquote><p>"Measure the 5V pin on the Arduino." "Measure a button pin while pressing and releasing it." "What voltage does the Wand show on a PWM pin set to 127?"</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+50 XP</span> for completing the final assessment!</strong></p>
+<hr>
+<h2 id="module-4-complete-grand-finale" style="background:#C678B0;">Module 4 Complete &mdash; Grand Finale!</h2>
+<pre><code>  ======================================================
+
+     MODULE 4 CHAMPION BADGE UNLOCKED!
+
+     _____________________ has mastered
+        Arduino Microcontroller
+
+     [check] What is a Microcontroller
+     [check] First Sketch -- Blink
+     [check] Variables and Serial Monitor
+     [check] Reading Digital Inputs -- Buttons
+     [check] Analog Inputs
+     [check] PWM -- Dimming LEDs
+     [check] For Loops and Arrays
+     [check] Piezo Buzzer and Tones
+     [check] LCD Display
+     [check] Built the Digital Piano!
+
+  ======================================================</code></pre>
+<p><strong>Lesson 34 XP Breakdown:</strong></p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Activity</th>
+<th>XP</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Plan piano layout</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Wire and test 8 buttons</td>
+<td>40</td>
+</tr>
+<tr>
+<td>Wire buzzer</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Wire LCD</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Wire indicator LEDs</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Complete piano code working</td>
+<td>60</td>
+</tr>
+<tr>
+<td>Wand debugging</td>
+<td>40</td>
+</tr>
+<tr>
+<td>Bonus challenges</td>
+<td>30</td>
+</tr>
+<tr>
+<td>Final assessment</td>
+<td>50</td>
+</tr>
+<tr>
+<td><strong>TOTAL POSSIBLE</strong></td>
+<td><strong>500</strong> (project bonus!)</td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="module-4-total-xp-summary" style="background:#E05C5C;">Module 4 Total XP Summary</h2>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Lesson</th>
+<th>Title</th>
+<th>Max XP</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>25</td>
+<td>What is a Microcontroller?</td>
+<td>250</td>
+</tr>
+<tr>
+<td>26</td>
+<td>Your First Sketch &mdash; Blink</td>
+<td>250</td>
+</tr>
+<tr>
+<td>27</td>
+<td>Variables and Serial Monitor</td>
+<td>250</td>
+</tr>
+<tr>
+<td>28</td>
+<td>Reading Digital Inputs &mdash; Buttons</td>
+<td>250</td>
+</tr>
+<tr>
+<td>29</td>
+<td>Analog Inputs</td>
+<td>250</td>
+</tr>
+<tr>
+<td>30</td>
+<td>PWM &mdash; Dimming LEDs</td>
+<td>250</td>
+</tr>
+<tr>
+<td>31</td>
+<td>For Loops and Arrays</td>
+<td>250</td>
+</tr>
+<tr>
+<td>32</td>
+<td>Piezo Buzzer and Tones</td>
+<td>250</td>
+</tr>
+<tr>
+<td>33</td>
+<td>LCD Display (16x2)</td>
+<td>250</td>
+</tr>
+<tr>
+<td>34</td>
+<td>Digital Piano Project</td>
+<td>500</td>
+</tr>
+<tr>
+<td><strong>MODULE TOTAL</strong></td>
+<td></td>
+<td><strong>2,750</strong></td>
+</tr>
+</tbody></table></div>
+<p><strong>XP Ranks:</strong></p>
+<ul>
+<li>0&mdash;600 XP: Arduino Apprentice</li>
+<li>601&mdash;1,200 XP: Arduino Explorer</li>
+<li>1,201&mdash;1,800 XP: Arduino Builder</li>
+<li>1,801&mdash;2,400 XP: Arduino Engineer</li>
+<li>2,401&mdash;2,750 XP: Arduino Champion!</li>
+</ul>
+<hr>
+<h2 id="all-badges-earned-in-module-4" style="background:#FF6B35;">All Badges Earned in Module 4</h2>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Badge</th>
+<th>Lesson</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Microcontroller Explorer</td>
+<td>25</td>
+</tr>
+<tr>
+<td>Blink Master</td>
+<td>26</td>
+</tr>
+<tr>
+<td>Variable Wizard</td>
+<td>27</td>
+</tr>
+<tr>
+<td>Input Handler</td>
+<td>28</td>
+</tr>
+<tr>
+<td>Analog Adventurer</td>
+<td>29</td>
+</tr>
+<tr>
+<td>PWM Wizard</td>
+<td>30</td>
+</tr>
+<tr>
+<td>Loop Legend</td>
+<td>31</td>
+</tr>
+<tr>
+<td>Melody Maker</td>
+<td>32</td>
+</tr>
+<tr>
+<td>Display Commander</td>
+<td>33</td>
+</tr>
+<tr>
+<td>Module 4 Champion</td>
+<td>34</td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="reflection-questions-talk-through-together" style="background:#4ECDC4;">Reflection Questions (Talk Through Together)</h2>
+<blockquote><p>"What was the coolest thing you programmed in this module?" "What was the hardest concept to understand?" "Which project would you want to build next using Arduino?" "If you could add one more feature to your piano, what would it be?" "How do you think sensors (like temperature or distance) could make the piano even cooler?"</p></blockquote>
+<hr>
+<h2 id="whats-next-module-5-preview" style="background:#45B7D1;">What's Next &mdash; Module 5 Preview</h2>
+<blockquote><p>"Now you know how to program an Arduino and control LEDs, buttons, buzzers, and displays! In Module 5, we are going to connect SENSORS &mdash; devices that let the Arduino see, feel, and measure the real world. Temperature sensors, light sensors, distance sensors, motion detectors, and MOTORS! You will build gadgets that react to their environment automatically. Get ready for Sensors and Actuators!"</p></blockquote>
+<hr>
+<h2 id="parentinstructor-notes" style="background:#96CEB4;">Parent/Instructor Notes</h2>
+<ul>
+<li>This project takes longer than a regular lesson &mdash; plan for 60&mdash;75 minutes or split across two sessions.</li>
+<li><strong>Session 1:</strong> Wire buttons, buzzer, and test. <strong>Session 2:</strong> Add LCD, LEDs, and final code.</li>
+<li>The most common issue is wiring mistakes with 8 buttons. Encourage the child to test each button individually before writing the piano code.</li>
+<li>The Wand debugging phase is extremely valuable. Let the child lead the debugging process.</li>
+<li>If you run out of pins, the 3-LED indicator approach (low/mid/high) works great. A full 8-LED version requires a shift register (74HC595), which is a great extension project.</li>
+<li>Encourage the child to perform a mini concert for family members and explain how each part works.</li>
+<li>The Digital Piano is a fantastic project to photograph or video for a portfolio.</li>
+<li>Consider having the child teach a younger sibling how to play a simple song on their piano.</li>
+</ul>
+    </main>
+
+    <!-- Footer -->
+    <footer class="page-footer">
+        <span>Lesson 34: Module 4 Project -- Digital Piano + Display</span>
+        <span>Module 4: Arduino Microcontroller</span>
+    </footer>
+
+</body>
+</html>

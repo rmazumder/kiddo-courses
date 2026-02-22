@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 8: Buzzers and Sound -- Make Some Noise!</title>
+    <style>
+
+        /* ── Reset & Base ─────────────────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            line-height: 1.75;
+            color: #2C3E50;
+            background: #FAFAFA;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px 40px;
+        }
+
+        /* ── Header Banner ─────────────────────────────────────────── */
+        .lesson-header {
+            background: linear-gradient(135deg, #FF6B35 0%, #FF9A5C 50%, #FFB347 100%);
+            color: #fff;
+            border-radius: 16px;
+            padding: 32px 36px 28px;
+            margin: 24px 0 32px;
+            box-shadow: 0 6px 20px rgba(255,107,53,0.35);
+            position: relative;
+            overflow: hidden;
+        }
+        .lesson-header::before {
+            content: "";
+            position: absolute;
+            top: -40px; right: -40px;
+            width: 160px; height: 160px;
+            background: rgba(255,255,255,0.12);
+            border-radius: 50%;
+        }
+        .lesson-header::after {
+            content: "";
+            position: absolute;
+            bottom: -30px; left: -20px;
+            width: 100px; height: 100px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+        }
+        .lesson-header h1 {
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            position: relative;
+            z-index: 1;
+        }
+        .module-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.25);
+            border: 2px solid rgba(255,255,255,0.6);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 4px 14px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 1;
+        }
+        .meta-row {
+            margin-top: 12px;
+            font-size: 14px;
+            color: rgba(255,255,255,0.9);
+            position: relative;
+            z-index: 1;
+        }
+        .meta-pill {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            border-radius: 12px;
+            padding: 2px 10px;
+            margin: 2px 4px 2px 0;
+            white-space: nowrap;
+        }
+
+        /* ── Section Headings ──────────────────────────────────────── */
+        h2 {
+            font-size: 22px;
+            font-weight: 800;
+            margin: 36px 0 14px;
+            padding: 10px 18px;
+            border-radius: 10px;
+            color: #fff;
+            /* colour applied inline via data-color */
+        }
+        h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 28px 0 10px;
+            padding: 8px 14px;
+            border-left: 5px solid;
+            border-radius: 0 8px 8px 0;
+            background: rgba(0,0,0,0.03);
+            /* border-left colour applied inline */
+        }
+
+        /* ── Body Text ─────────────────────────────────────────────── */
+        p { margin: 10px 0; }
+        strong { font-weight: 700; color: #1A252F; }
+        em { font-style: italic; color: #5D6D7E; }
+
+        /* ── Inline Code ───────────────────────────────────────────── */
+        code {
+            background: #F0F3F7;
+            border: 1px solid #D5DCE8;
+            border-radius: 4px;
+            padding: 1px 6px;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 14px;
+            color: #C0392B;
+        }
+
+        /* ── Fenced Code Blocks ────────────────────────────────────── */
+        pre {
+            background: #F4F6F8;
+            border: 1px solid #D0D8E4;
+            border-left: 5px solid #45B7D1;
+            border-radius: 8px;
+            padding: 16px 18px;
+            overflow-x: auto;
+            margin: 16px 0;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #2C3E50;
+            white-space: pre;
+        }
+        pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            font-size: inherit;
+            color: inherit;
+        }
+
+        /* ── Blockquotes / Callout Boxes ───────────────────────────── */
+        blockquote {
+            background: #FFF8E7;
+            border-left: 6px solid #FF6B35;
+            border-radius: 0 12px 12px 0;
+            padding: 14px 20px;
+            margin: 16px 0;
+            color: #5D3A1A;
+            font-style: normal;
+            position: relative;
+        }
+        blockquote::before {
+            content: "\1F4AC";  /* speech bubble emoji */
+            position: absolute;
+            top: -10px; left: 10px;
+            font-size: 20px;
+            line-height: 1;
+        }
+        blockquote p { margin: 6px 0; }
+
+        /* ── Lists ─────────────────────────────────────────────────── */
+        ul, ol {
+            margin: 10px 0 10px 24px;
+            padding-left: 8px;
+        }
+        li { margin: 5px 0; }
+        ul li::marker { color: #FF6B35; font-size: 18px; }
+        ol li::marker { color: #45B7D1; font-weight: 700; }
+
+        /* ── Tables ────────────────────────────────────────────────── */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 16px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+        }
+        thead th {
+            background: #45B7D1;
+            color: #fff;
+            font-weight: 700;
+            padding: 11px 14px;
+            text-align: left;
+            border-bottom: 3px solid #2E9BBD;
+        }
+        thead th:first-child { border-radius: 10px 0 0 0; }
+        thead th:last-child  { border-radius: 0 10px 0 0; }
+        tbody tr:nth-child(odd)  td { background: #F8FBFF; }
+        tbody tr:nth-child(even) td { background: #EAF6FB; }
+        tbody tr:hover td { background: #D6F0F8; transition: background 0.15s; }
+        td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #D9EEF6;
+            vertical-align: top;
+        }
+        /* Checkbox column: replace [ ] with styled checkbox */
+        td .checkbox {
+            display: inline-block;
+            width: 18px; height: 18px;
+            border: 2px solid #45B7D1;
+            border-radius: 4px;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+
+        /* ── XP Badges ─────────────────────────────────────────────── */
+        .xp-badge {
+            display: inline-block;
+            background: #FFEAA7;
+            border: 2px solid #F39C12;
+            color: #7D4F00;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin: 2px 4px;
+            white-space: nowrap;
+        }
+        .award-badge {
+            display: inline-block;
+            background: #D5F5E3;
+            border: 2px solid #27AE60;
+            color: #1A5E35;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin: 2px 4px;
+            white-space: nowrap;
+        }
+
+        /* ── Horizontal Rule ───────────────────────────────────────── */
+        hr {
+            border: none;
+            border-top: 3px dashed #B2D8E8;
+            margin: 30px 0;
+        }
+
+        /* ── Footer ────────────────────────────────────────────────── */
+        .page-footer {
+            margin-top: 48px;
+            padding-top: 16px;
+            border-top: 2px solid #D5DCE8;
+            text-align: center;
+            font-size: 13px;
+            color: #7F8C8D;
+        }
+
+        /* ── Print Styles ──────────────────────────────────────────── */
+        @media print {
+            @page { size: A4; margin: 18mm 15mm 20mm; }
+
+            body {
+                background: #fff !important;
+                font-size: 13px;
+                max-width: 100%;
+                padding: 0;
+            }
+
+            /* Force colour printing */
+            * { -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important; }
+
+            /* Page breaks */
+            h2 { page-break-before: auto; break-before: auto; }
+            pre, blockquote, table { page-break-inside: avoid; }
+            h2, h3 { page-break-after: avoid; break-after: avoid; }
+            tr { page-break-inside: avoid; }
+
+            /* No orphaned paragraphs */
+            p { orphans: 3; widows: 3; }
+
+            .lesson-header { box-shadow: none; }
+
+            .page-footer {
+                position: fixed;
+                bottom: 0; left: 0; right: 0;
+                background: #fff;
+                border-top: 1px solid #ccc;
+                padding: 6px 15mm;
+                display: flex;
+                justify-content: space-between;
+            }
+        }
+    
+    </style>
+</head>
+<body>
+
+    <!-- Header Banner -->
+    <header class="lesson-header">
+        <div class="module-badge">Module 1 -- Electronic Components Basics</div>
+        <h1>Lesson 8: Buzzers and Sound -- Make Some Noise!</h1>
+        <div class="meta-row"><span class="meta-pill">&#9733; Star-1 Beginner</span><span class="meta-pill">&#9200; 40 minutes</span><span class="meta-pill">&#128100; Age 6--12 years</span><span class="meta-pill xp-badge" style="background:#FFEAA7;color:#7D4F00;border:none;">&#9889; 260 XP</span></div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+<hr>
+<h2 id="your-mission-today" style="background:#FF6B35;">Your Mission Today</h2>
+<p>Circuit Explorer, it is time to make some NOISE! So far your circuits have been silent (except for that satisfying LED glow). Today you add SOUND. You will build a button-triggered alarm and use your Magic Measurement Wand's continuity mode to become a circuit detective!</p>
+<hr>
+<h2 id="learning-objectives" style="background:#4ECDC4;">Learning Objectives</h2>
+<p>By the end of this lesson, you will be able to:</p>
+<ul>
+<li>Explain how a buzzer makes sound</li>
+<li>Know the difference between active and passive buzzers</li>
+<li>Build a button-triggered alarm circuit</li>
+<li>Use the Wand's continuity mode to test circuits before powering them on</li>
+</ul>
+<hr>
+<h2 id="what-you-need" style="background:#45B7D1;">What You Need</h2>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Item</th>
+<th>Qty</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Active buzzer (with built-in oscillator)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Passive buzzer (without oscillator)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Push button</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Toggle switch</td>
+<td>1</td>
+</tr>
+<tr>
+<td>9V battery + clip</td>
+<td>1</td>
+</tr>
+<tr>
+<td>100-ohm resistor</td>
+<td>1</td>
+</tr>
+<tr>
+<td>LED (red)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>330-ohm resistor</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Breadboard</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Jumper wires</td>
+<td>6</td>
+</tr>
+<tr>
+<td>Multimeter (Magic Measurement Wand)</td>
+<td>1</td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="how-to-teach-this-lesson" style="background:#96CEB4;">How to Teach This Lesson</h2>
+<h3 id="step-1-hook-what-is-sound-5-min" style="border-left-color:#45B7D1; color:#45B7D1;">Step 1: Hook &mdash; What is Sound? (5 min)</h3>
+<p>Before showing the buzzer:</p>
+<blockquote><p>"Put your finger gently on your throat and say 'Ahhh'."</p></blockquote>
+<p>They will feel vibrations.</p>
+<blockquote><p>"Sound is just vibrations in air. Your vocal cords vibrate, air vibrates, your ears detect it."</p></blockquote>
+<blockquote><p>"Now &mdash; what if we could make something vibrate using electricity?"</p></blockquote>
+<p>Hand them the buzzer. Let them hold it and press battery terminals to it. They will feel the vibration in their fingertips.</p>
+<blockquote><p>"That is how a buzzer works! Electricity makes a thin metal disc inside vibrate very fast &mdash; and that vibration travels through the air to your ears as sound."</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+10 XP</span> for feeling the vibration in your fingers!</strong></p>
+<hr>
+<h3 id="step-2-active-vs-passive-buzzers-7-min" style="border-left-color:#96CEB4; color:#96CEB4;">Step 2: Active vs Passive Buzzers (7 min)</h3>
+<p><strong>Show both buzzers side by side.</strong></p>
+<p>They often look identical! How to tell them apart:</p>
+<pre><code>  Active Buzzer:              Passive Buzzer:
+
+  Has a circuit inside        Just a piezo disc
+  Apply power -- beeps        Needs AC signal to vibrate
+  Usually has a + marking     No polarity marking usually
+
+  Easy test: touch to 9V battery
+  Active -- makes a steady tone immediately
+  Passive -- either silent or just a click</code></pre>
+<p><strong>Active Buzzer:</strong></p>
+<blockquote><p>"Like a music box built into a can. Just give it power and it plays."</p></blockquote>
+<p><strong>Passive Buzzer:</strong></p>
+<blockquote><p>"Like a speaker &mdash; you need to give it a rapidly changing signal to make it vibrate at a specific frequency (pitch). Later, when we use Arduino, we will play TUNES on a passive buzzer!"</p></blockquote>
+<p><strong>For today we use the active buzzer</strong> (simpler, no microcontroller needed).</p>
+<p><strong>Award: <span class="xp-badge">+10 XP</span> for correctly identifying which buzzer is active!</strong></p>
+<hr>
+<h3 id="step-3-wand-check-circuit-detective-mode-8-min" style="border-left-color:#FF6B35; color:#FF6B35;">Step 3: Wand Check &mdash; Circuit Detective Mode! (8 min)</h3>
+<blockquote><p>"Before we build the alarm, let us practice an important skill: using your Wand to check a circuit BEFORE you power it on. This is what real engineers do!"</p></blockquote>
+<p>Set the Wand to <strong>continuity mode</strong> (the speaker/sound wave symbol).</p>
+<p><strong>The Wand Continuity Challenge:</strong></p>
+<p>Build the buzzer alarm circuit on the breadboard BUT do NOT connect the battery yet.</p>
+<pre><code>  (no battery) ---- BUTTON ---- BUZZER (+) ---- BUZZER (-) ---- (no battery)</code></pre>
+<p>Now use continuity mode to trace the circuit:</p>
+<p><strong>Test 1:</strong> Touch probes to both ends of a jumper wire.</p>
+<ul>
+<li>Beep! That wire is connected.</li>
+</ul>
+<p><strong>Test 2:</strong> Touch probes across the button (not pressed).</p>
+<ul>
+<li>No beep! The button is open. Circuit is broken here.</li>
+</ul>
+<p><strong>Test 3:</strong> Press the button. Touch probes across it again.</p>
+<ul>
+<li>Beep! The button is now closed. Circuit is complete!</li>
+</ul>
+<p><strong>Test 4:</strong> Touch one probe to where the battery (+) would connect, and the other to where battery (-) would connect. Press the button.</p>
+<ul>
+<li>Beep! The entire circuit path is complete. It is ready for power!</li>
+</ul>
+<blockquote><p>"You just tested your circuit WITHOUT any electricity flowing! Engineers do this to find mistakes before turning on power. It is like checking a road on a map before you drive on it."</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+40 XP</span> for completing all 4 continuity tests!</strong></p>
+<hr>
+<h3 id="step-4-build-the-simple-buzzer-alarm-8-min" style="border-left-color:#4ECDC4; color:#4ECDC4;">Step 4: Build the Simple Buzzer Alarm (8 min)</h3>
+<p><strong>Now connect the battery and test it for real!</strong></p>
+<pre><code>  9V (+) ---- BUTTON ---- BUZZER (+) ---- BUZZER (-) ---- 9V (-)</code></pre>
+<p>Press button: BEEP!</p>
+<blockquote><p>"Congratulations. You just built a doorbell."</p></blockquote>
+<p><strong>Now add a visual alert &mdash; an LED:</strong></p>
+<pre><code>  9V (+) --+---- BUTTON ---- BUZZER (+) ---- BUZZER (-) ---- GND
+           |
+           +---- BUTTON ---- [330-ohm] ---- LED (+) ---- LED (-) ---- GND
+
+  (Same button triggers both the buzzer AND the LED)</code></pre>
+<blockquote><p>"When someone presses the doorbell: buzzer sounds AND light flashes. Now it works for people who cannot hear!"</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+30 XP</span> for building the doorbell with LED!</strong></p>
+<hr>
+<h3 id="step-5-the-door-alarm-challenge-8-min" style="border-left-color:#C678B0; color:#C678B0;">Step 5: The Door Alarm Challenge (8 min)</h3>
+<p><strong>The concept:</strong> A door alarm that triggers when a "door opens."</p>
+<p><strong>Simple version using aluminum foil:</strong></p>
+<p>Materials:</p>
+<ul>
+<li>Two pieces of aluminum foil</li>
+<li>Tape them to a door and door frame so they touch when the door is closed</li>
+</ul>
+<pre><code>  9V (+) ---- [foil switch on door] ---- BUZZER ---- 9V (-)
+
+  Door closed: foil touches -- circuit complete -- buzzer sounds
+  Door opens: foil separates -- circuit breaks -- buzzer stops</code></pre>
+<blockquote><p>"Wait &mdash; we want it to beep when the door OPENS, not when it is closed! For now, this simple version beeps when the circuit is complete. In later modules, we will learn to flip this around using transistor logic."</p></blockquote>
+<p><strong>Wand Tip:</strong> Before taping the foil to the door, use continuity mode to make sure each foil strip conducts electricity end-to-end. Some foils have a non-conductive coating!</p>
+<p><strong>Award: <span class="xp-badge">+20 XP</span> for building the door alarm concept!</strong></p>
+<hr>
+<h3 id="step-6-sound-science-sidebar-3-min" style="border-left-color:#E8A838; color:#E8A838;">Step 6: Sound Science Sidebar (3 min)</h3>
+<blockquote><p>"Why does the buzzer make THAT specific pitch?"</p></blockquote>
+<blockquote><p>"Inside is a piezoelectric disc &mdash; a special crystal that physically changes shape when you apply electricity. It vibrates at its natural frequency, like blowing across a bottle top."</p></blockquote>
+<p><strong>Human hearing range:</strong></p>
+<pre><code>  Human hearing: 20 Hz to 20,000 Hz
+  Buzzer: usually about 2,400 Hz -- that is why it sounds so ANNOYING!
+  Dog whistle: about 23,000 Hz -- dogs hear it, humans do not
+  Most annoying frequency to humans: 2,000 to 4,000 Hz
+  (Guess where alarm designers put their alarms? Exactly!)</code></pre>
+<hr>
+<h2 id="quick-quiz-earn-bonus-xp" style="background:#E8A838;">Quick Quiz &mdash; Earn Bonus XP!</h2>
+<p><strong>Question 1:</strong> What is the difference between an active and passive buzzer?</p>
+<ul>
+<li>A) Active buzzers are louder</li>
+<li>B) Active buzzers have a built-in circuit and just need power; passive buzzers need a changing signal</li>
+<li>C) There is no difference</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<p><strong>Question 2:</strong> You used continuity mode to test a wire. The Wand beeped. What does that mean?</p>
+<ul>
+<li>A) The wire is broken</li>
+<li>B) The wire is connected &mdash; electricity can flow through it</li>
+<li>C) The wire is dangerous</li>
+</ul>
+<p><strong>(Correct: B &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<p><strong>Question 3:</strong> You tested your circuit with continuity mode BEFORE connecting the battery. The Wand beeped when you pressed the button. What does that tell you?</p>
+<ul>
+<li>A) The circuit path is complete and ready for power</li>
+<li>B) The circuit is broken</li>
+<li>C) You need more wires</li>
+</ul>
+<p><strong>(Correct: A &mdash; <span class="xp-badge">+20 XP</span>!)</strong></p>
+<hr>
+<h2 id="bonus-morse-code-tapper-optional" style="background:#C678B0;">Bonus: Morse Code Tapper (Optional)</h2>
+<blockquote><p>"Morse code uses short and long beeps to spell letters. Tap the button quickly = dot. Hold = dash."</p></blockquote>
+<pre><code>S = . . . (3 short)
+O = --- --- --- (3 long)
+SOS = . . . --- --- --- . . .</code></pre>
+<p>Have the kid practice tapping SOS on the buzzer button.</p>
+<blockquote><p>"Ships in trouble used Morse code radios to call for help. The Titanic sent SOS signals using exactly this kind of on/off circuit!"</p></blockquote>
+<p><strong>Award: <span class="xp-badge">+20 XP</span> bonus for successfully tapping SOS!</strong></p>
+<hr>
+<h2 id="lesson-8-complete" style="background:#E05C5C;">Lesson 8 Complete!</h2>
+<pre><code>  =============================================
+
+     SOUND ENGINEER BADGE UNLOCKED!
+
+     Skills unlocked:
+     [check] Built a buzzer alarm with LED
+     [check] Used continuity mode like a circuit detective
+     [check] Tested circuits before powering them on
+     [check] Know active vs passive buzzers
+
+  =============================================</code></pre>
+<p><strong>XP Breakdown:</strong></p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Activity</th>
+<th>XP</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Feel vibration</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Identify active buzzer</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Wand Continuity Challenge (4 tests)</td>
+<td>40</td>
+</tr>
+<tr>
+<td>Build doorbell with LED</td>
+<td>30</td>
+</tr>
+<tr>
+<td>Door alarm concept</td>
+<td>20</td>
+</tr>
+<tr>
+<td>SOS Morse code bonus</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Quiz (3 questions)</td>
+<td>60</td>
+</tr>
+<tr>
+<td><strong>TOTAL POSSIBLE</strong></td>
+<td><strong>190</strong></td>
+</tr>
+</tbody></table></div>
+<hr>
+<h2 id="coming-up-next" style="background:#FF6B35;">Coming Up Next...</h2>
+<p>In <strong>Lesson 9</strong> &mdash; the FINAL lesson of Module 1 &mdash; you put EVERYTHING together and build a <strong>Quiz Board game</strong> where correct answers light up an LED and your Magic Measurement Wand helps you debug any problems. It is a real, working game you can play with friends and family!</p>
+    </main>
+
+    <!-- Footer -->
+    <footer class="page-footer">
+        <span>Lesson 8: Buzzers and Sound -- Make Some Noise!</span>
+        <span>Module 1: Electronic Components Basics</span>
+    </footer>
+
+</body>
+</html>
