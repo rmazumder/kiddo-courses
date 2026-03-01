@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 20: Logic Gates — AND, OR, NOT — Circuit Explorer Academy</title>
+  <style>
+    /* =============================================
+       BASE RESET & TYPOGRAPHY
+    ============================================= */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, Arial, sans-serif;
+      font-size: 13px;
+      line-height: 1.45;
+      color: #1a1a2e;
+      background: #f0f4ff;
+    }
+
+    /* =============================================
+       PAGE LAYOUT
+    ============================================= */
+    .page {
+      width: 8.5in;
+      min-height: 11in;
+      margin: 0 auto 0.4in auto;
+      padding: 0.5in;
+      background: #fff;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-label {
+      position: absolute;
+      top: 0.18in;
+      right: 0.22in;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #aaa;
+    }
+
+    /* =============================================
+       SIDE A — HEADER
+    ============================================= */
+    .header {
+      text-align: center;
+      border-bottom: 3px solid #f4c430;
+      margin-bottom: 0.16in;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+      border-radius: 10px;
+      color: #fff;
+      padding: 0.22in 0.2in 0.18in 0.2in;
+    }
+
+    .header-course {
+      font-size: 19px;
+      font-weight: 900;
+      letter-spacing: 0.03em;
+      color: #f4c430;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+
+    .header-lesson {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      margin-top: 4px;
+    }
+
+    .header-module {
+      font-size: 11px;
+      color: #a8d8ea;
+      margin-top: 3px;
+      letter-spacing: 0.04em;
+    }
+
+    .header-xp {
+      display: inline-block;
+      margin-top: 8px;
+      background: #f4c430;
+      color: #1a1a2e;
+      font-weight: 900;
+      font-size: 12px;
+      padding: 3px 14px;
+      border-radius: 20px;
+      letter-spacing: 0.06em;
+    }
+
+    .spark-row {
+      text-align: center;
+      font-size: 16px;
+      letter-spacing: 0.25em;
+      margin: 0.1in 0 0.04in 0;
+      color: #f4c430;
+    }
+
+    /* =============================================
+       SECTION HEADINGS
+    ============================================= */
+    .section-title {
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #fff;
+      background: #0f3460;
+      padding: 5px 12px;
+      border-radius: 6px;
+      margin-bottom: 0.1in;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .section-title .icon {
+      font-size: 14px;
+    }
+
+    /* =============================================
+       VOCABULARY CARDS  (2x2 grid)
+    ============================================= */
+    .vocab-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.1in;
+      margin-bottom: 0.14in;
+    }
+
+    .vocab-card {
+      border-radius: 10px;
+      padding: 0.1in 0.12in;
+      border-top: 5px solid transparent;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .vocab-card::before {
+      content: '';
+      position: absolute;
+      top: -18px;
+      right: -18px;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      opacity: 0.13;
+      background: #fff;
+    }
+
+    .vocab-card.voltage  { background: #fff3e0; border-top-color: #ff9800; }
+    .vocab-card.current  { background: #e3f2fd; border-top-color: #2196f3; }
+    .vocab-card.resist   { background: #fce4ec; border-top-color: #e91e63; }
+    .vocab-card.circuit  { background: #e8f5e9; border-top-color: #43a047; }
+
+    .vocab-term {
+      font-size: 13px;
+      font-weight: 900;
+      margin-bottom: 2px;
+    }
+
+    .vocab-card.voltage  .vocab-term { color: #e65100; }
+    .vocab-card.current  .vocab-term { color: #0d47a1; }
+    .vocab-card.resist   .vocab-term { color: #880e4f; }
+    .vocab-card.circuit  .vocab-term { color: #1b5e20; }
+
+    .vocab-symbol {
+      font-size: 18px;
+      font-weight: 900;
+      float: right;
+      margin-top: -2px;
+      opacity: 0.55;
+    }
+
+    .vocab-def {
+      font-size: 11.5px;
+      color: #333;
+      line-height: 1.4;
+      margin-top: 2px;
+    }
+
+    .vocab-emoji {
+      font-size: 20px;
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    /* =============================================
+       TRUTH TABLE / LOGIC DIAGRAM BOX
+    ============================================= */
+    .analogy-box {
+      background: #e8f4fd;
+      border: 2px solid #90caf9;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.14in;
+    }
+
+    .analogy-caption {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: #0d47a1;
+      margin-top: 6px;
+    }
+
+    /* =============================================
+       TRUTH TABLE GRID
+    ============================================= */
+    .truth-tables-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0.09in;
+      margin: 0.07in 0 0.04in 0;
+    }
+
+    .truth-table-wrap {
+      border-radius: 8px;
+      overflow: hidden;
+      border: 2px solid transparent;
+    }
+
+    .truth-table-wrap.and-gate { border-color: #ff9800; }
+    .truth-table-wrap.or-gate  { border-color: #2196f3; }
+    .truth-table-wrap.not-gate { border-color: #e91e63; }
+
+    .truth-table-header {
+      font-size: 11px;
+      font-weight: 900;
+      text-align: center;
+      padding: 4px 6px;
+      letter-spacing: 0.04em;
+    }
+
+    .and-gate .truth-table-header { background: #ff9800; color: #fff; }
+    .or-gate  .truth-table-header { background: #2196f3; color: #fff; }
+    .not-gate .truth-table-header { background: #e91e63; color: #fff; }
+
+    .truth-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: monospace;
+      font-size: 10px;
+    }
+
+    .truth-table thead th {
+      padding: 3px 4px;
+      text-align: center;
+      font-weight: 900;
+      font-size: 9.5px;
+    }
+
+    .and-gate .truth-table thead th { background: #fff3e0; color: #e65100; }
+    .or-gate  .truth-table thead th { background: #e3f2fd; color: #0d47a1; }
+    .not-gate .truth-table thead th { background: #fce4ec; color: #880e4f; }
+
+    .truth-table tbody td {
+      padding: 3px 4px;
+      text-align: center;
+      border-bottom: 1px solid rgba(0,0,0,0.07);
+      font-size: 11px;
+      color: #222;
+    }
+
+    .truth-table tbody tr:nth-child(even) td { background: rgba(0,0,0,0.03); }
+
+    .truth-table td.out-high {
+      font-weight: 900;
+      color: #2e7d32;
+    }
+
+    .truth-table td.out-low {
+      color: #999;
+    }
+
+    .gate-rule {
+      font-size: 9.5px;
+      text-align: center;
+      padding: 3px 5px;
+      font-style: italic;
+      color: #555;
+    }
+
+    .and-gate .gate-rule { background: #fff3e0; }
+    .or-gate  .gate-rule { background: #e3f2fd; }
+    .not-gate .gate-rule { background: #fce4ec; }
+
+    /* =============================================
+       ASCII CIRCUIT DIAGRAM
+    ============================================= */
+    .circuit-diagram {
+      font-family: monospace;
+      font-size: 10.5px;
+      background: #1a1a2e;
+      color: #76ff03;
+      padding: 0.1in;
+      border-radius: 8px;
+      margin: 0.07in 0;
+      line-height: 1.6;
+      white-space: pre;
+      overflow: visible;
+    }
+
+    /* =============================================
+       IC PIN-OUT BOX
+    ============================================= */
+    .ic-pinout-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.09in;
+      margin-bottom: 0.06in;
+    }
+
+    .ic-box {
+      border-radius: 10px;
+      padding: 0.08in 0.1in;
+      border-top: 5px solid transparent;
+    }
+
+    .ic-box.ic-and { background: #fff3e0; border-top-color: #ff9800; }
+    .ic-box.ic-not { background: #fce4ec; border-top-color: #e91e63; }
+
+    .ic-title {
+      font-size: 11.5px;
+      font-weight: 900;
+      margin-bottom: 4px;
+    }
+
+    .ic-box.ic-and .ic-title { color: #e65100; }
+    .ic-box.ic-not .ic-title { color: #880e4f; }
+
+    .ic-diagram {
+      font-family: monospace;
+      font-size: 9px;
+      background: #1a1a2e;
+      color: #76ff03;
+      padding: 6px 8px;
+      border-radius: 5px;
+      line-height: 1.55;
+      white-space: pre;
+    }
+
+    /* =============================================
+       SIDE B — CIRCUIT BUILD
+    ============================================= */
+    .circuit-box {
+      background: #f1f8e9;
+      border: 2px solid #aed581;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.13in;
+    }
+
+    .circuit-note {
+      font-size: 11px;
+      color: #33691e;
+      font-style: italic;
+      margin-top: 5px;
+      padding: 4px 8px;
+      background: #dcedc8;
+      border-radius: 5px;
+    }
+
+    .wiring-steps {
+      list-style: none;
+      margin: 6px 0;
+      padding: 0;
+    }
+
+    .wiring-steps li {
+      font-size: 11px;
+      color: #1a1a2e;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: flex-start;
+      gap: 7px;
+      line-height: 1.4;
+    }
+
+    .step-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      background: #2e7d32;
+      color: #fff;
+      border-radius: 50%;
+      font-size: 9.5px;
+      font-weight: 900;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .checklist-title {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #2e7d32;
+      margin-top: 8px;
+      margin-bottom: 4px;
+    }
+
+    .checklist {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 3px 10px;
+      list-style: none;
+    }
+
+    .checklist li {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: #333;
+    }
+
+    .check-box {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid #43a047;
+      border-radius: 3px;
+      flex-shrink: 0;
+      background: #fff;
+    }
+
+    /* =============================================
+       QUIZ
+    ============================================= */
+    .quiz-box {
+      background: #fff9c4;
+      border: 2px solid #f9a825;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.13in;
+    }
+
+    .quiz-item {
+      margin-bottom: 0.08in;
+    }
+
+    .quiz-q {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 2px;
+    }
+
+    .quiz-blank {
+      display: block;
+      border-bottom: 1.5px solid #999;
+      width: 100%;
+      height: 20px;
+      margin-top: 2px;
+    }
+
+    .quiz-hint {
+      font-size: 9px;
+      color: #aaa;
+      font-style: italic;
+      float: right;
+      margin-top: 1px;
+    }
+
+    .quiz-item.bonus .quiz-q {
+      color: #e65100;
+    }
+
+    .quiz-item.bonus .quiz-blank {
+      border-bottom-color: #ff9800;
+    }
+
+    /* =============================================
+       SIDE B HEADER
+    ============================================= */
+    .side-b-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 3px solid #f4c430;
+      margin-bottom: 0.15in;
+      padding-bottom: 0.09in;
+    }
+
+    .side-b-title {
+      font-size: 14px;
+      font-weight: 900;
+      color: #0f3460;
+    }
+
+    .side-b-sub {
+      font-size: 10px;
+      color: #888;
+      margin-top: 1px;
+    }
+
+    .side-b-xp {
+      background: #f4c430;
+      color: #1a1a2e;
+      font-weight: 900;
+      font-size: 11px;
+      padding: 3px 12px;
+      border-radius: 20px;
+    }
+
+    /* =============================================
+       EXPERIMENTS GRID
+    ============================================= */
+    .experiments-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.08in;
+      margin-bottom: 0.12in;
+    }
+
+    .experiment-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      border-radius: 8px;
+      padding: 0.08in 0.1in;
+      border-left: 5px solid transparent;
+    }
+
+    .experiment-card.exp-a { background: #fff3e0; border-left-color: #ff9800; }
+    .experiment-card.exp-b { background: #e3f2fd; border-left-color: #2196f3; }
+    .experiment-card.exp-c { background: #fce4ec; border-left-color: #e91e63; }
+    .experiment-card.exp-d { background: #e8f5e9; border-left-color: #43a047; }
+
+    .exp-letter {
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1;
+      flex-shrink: 0;
+      width: 24px;
+      text-align: center;
+    }
+
+    .experiment-card.exp-a .exp-letter { color: #e65100; }
+    .experiment-card.exp-b .exp-letter { color: #0d47a1; }
+    .experiment-card.exp-c .exp-letter { color: #880e4f; }
+    .experiment-card.exp-d .exp-letter { color: #1b5e20; }
+
+    .exp-body { flex: 1; }
+
+    .exp-title {
+      font-size: 11.5px;
+      font-weight: 900;
+      margin-bottom: 2px;
+      color: #1a1a2e;
+    }
+
+    .exp-do {
+      font-size: 10.5px;
+      color: #444;
+      margin-bottom: 3px;
+    }
+
+    .exp-do::before {
+      content: "▶ Do: ";
+      font-weight: 700;
+      color: #555;
+    }
+
+    .exp-discover {
+      font-size: 10.5px;
+      color: #333;
+      font-style: italic;
+    }
+
+    /* =============================================
+       TRY AT HOME + TROUBLESHOOTING
+    ============================================= */
+    .lemon-box {
+      background: #f9fbe7;
+      border: 2px solid #c5e1a5;
+      border-radius: 10px;
+      padding: 0.09in 0.11in;
+    }
+
+    .lemon-title {
+      font-size: 12px;
+      font-weight: 900;
+      color: #33691e;
+      margin-bottom: 5px;
+    }
+
+    .lemon-body {
+      font-size: 10.5px;
+      color: #333;
+      line-height: 1.5;
+    }
+
+    .trouble-box {
+      background: #fafafa;
+      border: 2px solid #bdbdbd;
+      border-radius: 10px;
+      padding: 0.09in 0.11in;
+    }
+
+    .trouble-title {
+      font-size: 12px;
+      font-weight: 900;
+      color: #37474f;
+      margin-bottom: 5px;
+    }
+
+    .trouble-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9.5px;
+    }
+
+    .trouble-table thead th {
+      background: #37474f;
+      color: #fff;
+      padding: 3px 6px;
+      text-align: left;
+      font-weight: 700;
+    }
+
+    .trouble-table tbody tr:nth-child(even) {
+      background: #f5f5f5;
+    }
+
+    .trouble-table tbody td {
+      padding: 3px 6px;
+      color: #333;
+      border-bottom: 1px solid #e0e0e0;
+      vertical-align: top;
+    }
+
+    /* =============================================
+       COMING UP NEXT
+    ============================================= */
+    .next-box {
+      background: linear-gradient(90deg, #e3f2fd 0%, #f3e5f5 100%);
+      border-left: 5px solid #7c4dff;
+      border-radius: 0 10px 10px 0;
+      padding: 0.08in 0.14in;
+      font-size: 11.5px;
+      color: #1a1a2e;
+    }
+
+    .next-box strong {
+      color: #6a1b9a;
+    }
+
+    /* =============================================
+       PRINT STYLES
+    ============================================= */
+    @media print {
+      body {
+        background: #fff;
+        font-size: 12px;
+      }
+
+      .page {
+        width: 100%;
+        min-height: auto;
+        margin: 0;
+        box-shadow: none;
+        padding: 0.5in;
+      }
+
+      .page-a {
+        page-break-after: always;
+      }
+
+      .header {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .vocab-card,
+      .analogy-box,
+      .circuit-box,
+      .circuit-diagram,
+      .ic-diagram,
+      .quiz-box,
+      .next-box,
+      .experiment-card,
+      .lemon-box,
+      .trouble-box,
+      .trouble-table thead th,
+      .truth-table-header,
+      .truth-table thead th {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .vocab-card.voltage  { background: #fff !important; border: 2px solid #ff9800; border-top: 5px solid #ff9800; }
+      .vocab-card.current  { background: #fff !important; border: 2px solid #2196f3; border-top: 5px solid #2196f3; }
+      .vocab-card.resist   { background: #fff !important; border: 2px solid #e91e63; border-top: 5px solid #e91e63; }
+      .vocab-card.circuit  { background: #fff !important; border: 2px solid #43a047; border-top: 5px solid #43a047; }
+    }
+
+    @page {
+      size: A4;
+      margin: 12mm;
+    }
+
+    .clearfix::after {
+      content: '';
+      display: table;
+      clear: both;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ======================================================
+       SIDE A (FRONT)
+  ====================================================== -->
+  <div class="page page-a">
+    <div class="page-label">Side A — Front</div>
+
+    <!-- HEADER -->
+    <div class="header">
+      <div class="header-course">&#9889; Circuit Explorer Academy</div>
+      <div class="header-lesson">Lesson 20: Logic Gates — AND, OR, NOT</div>
+      <div class="header-module">Module 3: Integrated Circuits (ICs)</div>
+      <div><span class="header-xp">&#11088; 300 XP Available</span></div>
+    </div>
+
+    <div class="spark-row" aria-hidden="true">&#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889;</div>
+
+    <!-- VOCABULARY -->
+    <div class="section-title">
+      <span class="icon">&#128218;</span> Key Words — Learn These!
+    </div>
+
+    <div class="vocab-grid">
+
+      <div class="vocab-card voltage">
+        <span class="vocab-emoji">&#128268;</span>
+        <span class="vocab-symbol">1/0</span>
+        <div class="vocab-term">Logic Gate</div>
+        <div class="vocab-def">A tiny circuit that takes one or two inputs (1 or 0) and produces one output based on a <strong>rule</strong>. The decision-maker inside every computer!</div>
+      </div>
+
+      <div class="vocab-card current">
+        <span class="vocab-emoji">&#9195;</span>
+        <span class="vocab-symbol">H/L</span>
+        <div class="vocab-term">HIGH and LOW</div>
+        <div class="vocab-def"><strong>HIGH (1)</strong> = voltage ON, close to 5V. <strong>LOW (0)</strong> = voltage OFF, close to 0V. Digital circuits have nothing in between!</div>
+      </div>
+
+      <div class="vocab-card resist">
+        <span class="vocab-emoji">&#128203;</span>
+        <span class="vocab-symbol">TT</span>
+        <div class="vocab-term">Truth Table</div>
+        <div class="vocab-def">A chart showing <strong>every possible</strong> combination of inputs and what the output will be. One row per combination!</div>
+      </div>
+
+      <div class="vocab-card circuit">
+        <span class="vocab-emoji">&#128260;</span>
+        <span class="vocab-symbol">IC</span>
+        <div class="vocab-term">74xx IC Chip</div>
+        <div class="vocab-def">A chip that contains <strong>multiple logic gates</strong> in one package. Pin 14 = power (+5V), Pin 7 = ground. Use 5V power!</div>
+      </div>
+
+    </div>
+
+    <!-- TRUTH TABLES — ALL THREE GATES -->
+    <div class="section-title">
+      <span class="icon">&#128300;</span> The 3 Logic Gates — Truth Tables
+    </div>
+
+    <div class="analogy-box">
+
+      <div class="truth-tables-row">
+
+        <!-- AND GATE -->
+        <div class="truth-table-wrap and-gate">
+          <div class="truth-table-header">AND Gate (7408)</div>
+          <table class="truth-table">
+            <thead>
+              <tr><th>A</th><th>B</th><th>OUT</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>0</td><td>0</td><td class="out-low">0</td></tr>
+              <tr><td>0</td><td>1</td><td class="out-low">0</td></tr>
+              <tr><td>1</td><td>0</td><td class="out-low">0</td></tr>
+              <tr><td>1</td><td>1</td><td class="out-high">1 &#9650;</td></tr>
+            </tbody>
+          </table>
+          <div class="gate-rule">Both must be 1</div>
+        </div>
+
+        <!-- OR GATE -->
+        <div class="truth-table-wrap or-gate">
+          <div class="truth-table-header">OR Gate (7432)</div>
+          <table class="truth-table">
+            <thead>
+              <tr><th>A</th><th>B</th><th>OUT</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>0</td><td>0</td><td class="out-low">0</td></tr>
+              <tr><td>0</td><td>1</td><td class="out-high">1 &#9650;</td></tr>
+              <tr><td>1</td><td>0</td><td class="out-high">1 &#9650;</td></tr>
+              <tr><td>1</td><td>1</td><td class="out-high">1 &#9650;</td></tr>
+            </tbody>
+          </table>
+          <div class="gate-rule">At least one must be 1</div>
+        </div>
+
+        <!-- NOT GATE -->
+        <div class="truth-table-wrap not-gate">
+          <div class="truth-table-header">NOT Gate (7404)</div>
+          <table class="truth-table">
+            <thead>
+              <tr><th>IN</th><th colspan="2">OUT</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>0</td><td colspan="2" class="out-high">1 &#9650;</td></tr>
+              <tr><td>1</td><td colspan="2" class="out-low">0</td></tr>
+            </tbody>
+          </table>
+          <div class="gate-rule">Always flips the input!</div>
+        </div>
+
+      </div>
+
+      <div class="analogy-caption">GREEN = output is HIGH (LED ON) &nbsp;|&nbsp; GREY = output is LOW (LED OFF) &nbsp;|&nbsp; &#9650; = the winning combination!</div>
+
+    </div>
+
+    <!-- IC CHIP ASCII DIAGRAMS -->
+    <div class="section-title">
+      <span class="icon">&#9881;</span> IC Chip Pin-Outs — Top View
+    </div>
+
+    <div class="ic-pinout-grid">
+
+      <div class="ic-box ic-and">
+        <div class="ic-title">7408 AND Gate &amp; 7432 OR Gate (Same pin layout!)</div>
+        <div class="ic-diagram">     Notch
+       U
+  +----------+
+  | 1      14| &lt;-- VCC (+5V)
+  | 2      13|
+  | 3      12|
+  | 4      11|
+  | 5      10|
+  | 6       9|
+  | 7       8|
+  +----------+
+  ^
+  Pin 7 = GND
+
+Gate 1: In=1,2  Out=3
+Gate 2: In=4,5  Out=6
+Gate 3: In=9,10 Out=8
+Gate 4: In=12,13 Out=11</div>
+      </div>
+
+      <div class="ic-box ic-not">
+        <div class="ic-title">7404 NOT Gate (Hex Inverter — 6 gates!)</div>
+        <div class="ic-diagram">     Notch
+       U
+  +----------+
+  | 1      14| &lt;-- VCC (+5V)
+  | 2      13|
+  | 3      12|
+  | 4      11|
+  | 5      10|
+  | 6       9|
+  | 7       8|
+  +----------+
+  ^
+  Pin 7 = GND
+
+Inv 1: In=1  Out=2
+Inv 2: In=3  Out=4
+Inv 3: In=5  Out=6</div>
+      </div>
+
+    </div>
+
+  </div><!-- end page-a -->
+
+
+  <!-- ======================================================
+       SIDE B (BACK)
+  ====================================================== -->
+  <div class="page page-b">
+    <div class="page-label">Side B — Back</div>
+
+    <!-- SIDE B MINI HEADER -->
+    <div class="side-b-header">
+      <div>
+        <div class="side-b-title">&#9889; Circuit Explorer Academy — Lesson 20</div>
+        <div class="side-b-sub">Logic Gates: AND, OR, NOT &nbsp;|&nbsp; Module 3: Integrated Circuits (ICs)</div>
+      </div>
+      <div class="side-b-xp">&#11088; 300 XP</div>
+    </div>
+
+    <!-- CIRCUIT BUILD -->
+    <div class="section-title">
+      <span class="icon">&#128161;</span> My Activity Today — Build All 3 Gates!
+    </div>
+
+    <div class="circuit-box">
+
+      <div class="circuit-diagram">AND Gate (7408) — Build Steps:
+  (+)rail ──[BTN A]──> Pin 1 ──[10k to GND]
+  (+)rail ──[BTN B]──> Pin 2 ──[10k to GND]
+  Pin 3 (OUT) ──> [330Ω] ──> LED(+) ──> LED(-) ──> GND
+  Pin 14 to (+)rail  |  Pin 7 to GND
+
+NOT Gate (7404) — The Backwards LED!
+  (+)rail ──[BTN]──> Pin 1 ──[10k to GND]
+  Pin 2 (OUT) ──> [330Ω] ──> LED(+) ──> GND
+  Button NOT pressed (0) → LED is ON!   (output = 1)
+  Button pressed    (1) → LED is OFF!   (output = 0)</div>
+
+      <div class="circuit-note">OR Gate (7432): Identical wiring to AND gate — just swap the chip! Press EITHER button to light the LED.</div>
+
+      <div class="checklist-title">&#9989; Components I Used:</div>
+      <ul class="checklist">
+        <li><span class="check-box"></span>7408 AND IC</li>
+        <li><span class="check-box"></span>7432 OR IC</li>
+        <li><span class="check-box"></span>7404 NOT IC</li>
+        <li><span class="check-box"></span>3 LEDs</li>
+        <li><span class="check-box"></span>3x 330&#937; resistors</li>
+        <li><span class="check-box"></span>4x 10k&#937; resistors</li>
+        <li><span class="check-box"></span>2 push buttons</li>
+        <li><span class="check-box"></span>Breadboard</li>
+        <li><span class="check-box"></span>Multimeter (Wand!)</li>
+      </ul>
+
+    </div>
+
+    <!-- QUIZ -->
+    <div class="section-title">
+      <span class="icon">&#129504;</span> Quiz Time! Fill in the blanks.
+    </div>
+
+    <div class="quiz-box">
+
+      <div class="quiz-item">
+        <div class="quiz-q">1. An AND gate output is 1 ONLY when ________________ inputs are 1.</div>
+        <span class="quiz-hint">hint: "all / both"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item">
+        <div class="quiz-q">2. An OR gate output is 1 when at least ________________ input is 1.</div>
+        <span class="quiz-hint">hint: "one"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item">
+        <div class="quiz-q">3. A NOT gate has only ________________ input, and it always flips the signal.</div>
+        <span class="quiz-hint">hint: "one"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item bonus" style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed #f9a825;">
+        <div class="quiz-q">&#127381; BONUS: When you measure a logic HIGH with the Wand, you see a voltage close to ________________.</div>
+        <span class="quiz-hint">hint: "5V / power supply voltage"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+    </div>
+
+    <!-- EXPERIMENTS -->
+    <div class="section-title">
+      <span class="icon">&#128268;</span> 4 Experiments You Did Today!
+    </div>
+
+    <div class="experiments-grid">
+
+      <div class="experiment-card exp-a">
+        <div class="exp-letter">A</div>
+        <div class="exp-body">
+          <div class="exp-title">AND Gate Challenge</div>
+          <div class="exp-do">Press only one button on the AND gate circuit.</div>
+          <div class="exp-discover">LED stays OFF — you need BOTH keys to open the treasure chest!</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-b">
+        <div class="exp-letter">B</div>
+        <div class="exp-body">
+          <div class="exp-title">OR Gate Door Test</div>
+          <div class="exp-do">Press EITHER button on the OR gate circuit.</div>
+          <div class="exp-discover">LED lights up with just ONE button — either door lets you in!</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-c">
+        <div class="exp-letter">C</div>
+        <div class="exp-body">
+          <div class="exp-title">NOT Gate Backwards!</div>
+          <div class="exp-do">Build the NOT gate and observe the LED with no button pressed.</div>
+          <div class="exp-discover">LED is ON when button is up — pressing turns it OFF. Everything is reversed!</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-d">
+        <div class="exp-letter">D</div>
+        <div class="exp-body">
+          <div class="exp-title">Wand Voltage Hunt</div>
+          <div class="exp-do">Measure output pins with the multimeter for HIGH and LOW states.</div>
+          <div class="exp-discover">HIGH reads near 5V, LOW reads near 0V — now you know what 1 and 0 really look like!</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TRY AT HOME + TROUBLESHOOTING -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.1in; margin-bottom: 0.12in;">
+
+      <div class="lemon-box">
+        <div class="lemon-title">&#127514; Try at Home: Logic Gate Charades!</div>
+        <div class="lemon-body">
+          One person is the <strong>gate</strong>. Two people are <strong>inputs</strong>.<br/><br/>
+          Inputs raise a hand = 1, lower it = 0. The gate person shows the correct output (hand up or down).<br/><br/>
+          Can the other players guess which gate it is — AND, OR, or NOT?<br/><br/>
+          <em>In <strong>Lesson 21</strong> you will learn NAND, NOR, and XOR — the next level of logic!</em>
+        </div>
+      </div>
+
+      <div class="trouble-box">
+        <div class="trouble-title">&#128295; Troubleshooting Quick Guide</div>
+        <table class="trouble-table">
+          <thead>
+            <tr><th>Problem</th><th>Quick Fix</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>LED always ON</td><td>Check 10k pull-down resistors — inputs may be floating HIGH</td></tr>
+            <tr><td>LED never ON</td><td>Verify Pin 14 (+5V) and Pin 7 (GND) are connected</td></tr>
+            <tr><td>Random output</td><td>Tie unused inputs to GND or VCC — never leave them floating</td></tr>
+            <tr><td>IC gets hot</td><td>Power/GND pins reversed — check and fix immediately!</td></tr>
+            <tr><td>Wand reads middle voltage</td><td>Input is floating — add a 10k pull-down resistor to GND</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- COMING UP NEXT -->
+    <div class="next-box">
+      <strong>Coming Up Next &#8594; Lesson 21: Logic Gates — NAND, NOR, XOR! &#128268;</strong><br/>
+      You will meet three MORE logic gates, including the legendary NAND gate — the "universal gate" that can build ANY other gate all by itself. You will prove it with your own circuits on the breadboard!
+    </div>
+
+  </div><!-- end page-b -->
+
+</body>
+</html>

@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 42: Smart Room Project — Circuit Explorer Academy</title>
+  <style>
+    /* =============================================
+       BASE RESET & TYPOGRAPHY
+    ============================================= */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, Arial, sans-serif;
+      font-size: 13px;
+      line-height: 1.45;
+      color: #1a1a2e;
+      background: #f0f4ff;
+    }
+
+    /* =============================================
+       PAGE LAYOUT
+    ============================================= */
+    .page {
+      width: 8.5in;
+      min-height: 11in;
+      margin: 0 auto 0.4in auto;
+      padding: 0.5in;
+      background: #fff;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-label {
+      position: absolute;
+      top: 0.18in;
+      right: 0.22in;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #aaa;
+    }
+
+    /* =============================================
+       SIDE A — HEADER
+    ============================================= */
+    .header {
+      text-align: center;
+      border-bottom: 3px solid #f4c430;
+      margin-bottom: 0.16in;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+      border-radius: 10px;
+      color: #fff;
+      padding: 0.22in 0.2in 0.18in 0.2in;
+    }
+
+    .header-course {
+      font-size: 19px;
+      font-weight: 900;
+      letter-spacing: 0.03em;
+      color: #f4c430;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+
+    .header-lesson {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      margin-top: 4px;
+    }
+
+    .header-module {
+      font-size: 11px;
+      color: #a8d8ea;
+      margin-top: 3px;
+      letter-spacing: 0.04em;
+    }
+
+    .header-xp {
+      display: inline-block;
+      margin-top: 8px;
+      background: #f4c430;
+      color: #1a1a2e;
+      font-weight: 900;
+      font-size: 12px;
+      padding: 3px 14px;
+      border-radius: 20px;
+      letter-spacing: 0.06em;
+    }
+
+    .spark-row {
+      text-align: center;
+      font-size: 16px;
+      letter-spacing: 0.25em;
+      margin: 0.1in 0 0.04in 0;
+      color: #f4c430;
+    }
+
+    /* =============================================
+       SECTION HEADINGS
+    ============================================= */
+    .section-title {
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #fff;
+      background: #0f3460;
+      padding: 5px 12px;
+      border-radius: 6px;
+      margin-bottom: 0.1in;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .section-title .icon {
+      font-size: 14px;
+    }
+
+    /* =============================================
+       VOCABULARY CARDS  (2x2 grid)
+    ============================================= */
+    .vocab-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.1in;
+      margin-bottom: 0.14in;
+    }
+
+    .vocab-card {
+      border-radius: 10px;
+      padding: 0.1in 0.12in;
+      border-top: 5px solid transparent;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .vocab-card::before {
+      content: '';
+      position: absolute;
+      top: -18px;
+      right: -18px;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      opacity: 0.13;
+      background: #fff;
+    }
+
+    .vocab-card.voltage  { background: #fff3e0; border-top-color: #ff9800; }
+    .vocab-card.current  { background: #e3f2fd; border-top-color: #2196f3; }
+    .vocab-card.resist   { background: #fce4ec; border-top-color: #e91e63; }
+    .vocab-card.circuit  { background: #e8f5e9; border-top-color: #43a047; }
+
+    .vocab-term {
+      font-size: 13px;
+      font-weight: 900;
+      margin-bottom: 2px;
+    }
+
+    .vocab-card.voltage  .vocab-term { color: #e65100; }
+    .vocab-card.current  .vocab-term { color: #0d47a1; }
+    .vocab-card.resist   .vocab-term { color: #880e4f; }
+    .vocab-card.circuit  .vocab-term { color: #1b5e20; }
+
+    .vocab-symbol {
+      font-size: 18px;
+      font-weight: 900;
+      float: right;
+      margin-top: -2px;
+      opacity: 0.55;
+    }
+
+    .vocab-def {
+      font-size: 11.5px;
+      color: #333;
+      line-height: 1.4;
+      margin-top: 2px;
+    }
+
+    .vocab-emoji {
+      font-size: 20px;
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    /* =============================================
+       SMART ROOM DIAGRAM BOX
+    ============================================= */
+    .concept-box {
+      background: #e8f4fd;
+      border: 2px solid #90caf9;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.14in;
+    }
+
+    .concept-box-title {
+      font-size: 12px;
+      font-weight: 900;
+      color: #0d47a1;
+      margin-bottom: 6px;
+    }
+
+    .circuit-diagram {
+      font-family: monospace;
+      font-size: 9.5px;
+      background: #1a1a2e;
+      color: #76ff03;
+      padding: 0.1in;
+      border-radius: 8px;
+      margin: 0.07in 0;
+      line-height: 1.55;
+      overflow: visible;
+      white-space: pre;
+    }
+
+    .code-snippet {
+      font-family: monospace;
+      font-size: 8.5px;
+      background: #1a1a2e;
+      color: #80cbc4;
+      padding: 0.09in 0.12in;
+      border-radius: 8px;
+      margin: 0.06in 0 0.04in 0;
+      line-height: 1.5;
+      overflow: visible;
+      white-space: pre;
+    }
+
+    .code-comment { color: #546e7a; }
+    .code-keyword { color: #ce93d8; }
+    .code-string  { color: #a5d6a7; }
+    .code-number  { color: #ffcc80; }
+
+    .concept-note {
+      font-size: 11px;
+      color: #33691e;
+      font-style: italic;
+      margin-top: 5px;
+      padding: 4px 8px;
+      background: #dcedc8;
+      border-radius: 5px;
+    }
+
+    /* =============================================
+       MODULE 5 MASTERY SUMMARY
+    ============================================= */
+    .mastery-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5px 14px;
+      margin-bottom: 0.04in;
+    }
+
+    .mastery-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 10.5px;
+      color: #1a1a2e;
+    }
+
+    .mastery-dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .mastery-dot.sensor   { background: #2196f3; }
+    .mastery-dot.actuator { background: #ff9800; }
+    .mastery-dot.display  { background: #9c27b0; }
+    .mastery-dot.coding   { background: #43a047; }
+
+    .mastery-label {
+      font-weight: 700;
+    }
+
+    .mastery-box {
+      background: #f3e5f5;
+      border: 2px solid #ce93d8;
+      border-radius: 10px;
+      padding: 0.09in 0.12in;
+      margin-bottom: 0.04in;
+    }
+
+    .mastery-box-title {
+      font-size: 12px;
+      font-weight: 900;
+      color: #6a1b9a;
+      margin-bottom: 6px;
+    }
+
+    /* =============================================
+       SIDE B — CIRCUIT BUILD
+    ============================================= */
+    .circuit-box {
+      background: #f1f8e9;
+      border: 2px solid #aed581;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.13in;
+    }
+
+    .circuit-box-title {
+      font-size: 12px;
+      font-weight: 900;
+      color: #2e7d32;
+      margin-bottom: 6px;
+    }
+
+    .build-steps {
+      list-style: none;
+      margin-bottom: 8px;
+    }
+
+    .build-steps li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 11px;
+      color: #1a1a2e;
+      padding: 3px 0;
+      border-bottom: 1px dashed #c8e6c9;
+    }
+
+    .build-steps li:last-child {
+      border-bottom: none;
+    }
+
+    .step-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      background: #43a047;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 900;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .checklist-title {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #2e7d32;
+      margin-top: 8px;
+      margin-bottom: 4px;
+    }
+
+    .checklist {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 3px 10px;
+      list-style: none;
+    }
+
+    .checklist li {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: #333;
+    }
+
+    .check-box {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid #43a047;
+      border-radius: 3px;
+      flex-shrink: 0;
+      background: #fff;
+    }
+
+    /* =============================================
+       QUIZ
+    ============================================= */
+    .quiz-box {
+      background: #fff9c4;
+      border: 2px solid #f9a825;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.13in;
+    }
+
+    .quiz-item {
+      margin-bottom: 0.08in;
+    }
+
+    .quiz-q {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 2px;
+    }
+
+    .quiz-blank {
+      display: block;
+      border-bottom: 1.5px solid #999;
+      width: 100%;
+      height: 20px;
+      margin-top: 2px;
+    }
+
+    .quiz-hint {
+      font-size: 9px;
+      color: #aaa;
+      font-style: italic;
+      float: right;
+      margin-top: 1px;
+    }
+
+    .quiz-item.bonus .quiz-q {
+      color: #e65100;
+    }
+
+    .quiz-item.bonus .quiz-blank {
+      border-bottom-color: #ff9800;
+    }
+
+    /* =============================================
+       EXPERIMENTS GRID
+    ============================================= */
+    .experiments-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.08in;
+      margin-bottom: 0.12in;
+    }
+
+    .experiment-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      border-radius: 8px;
+      padding: 0.08in 0.1in;
+      border-left: 5px solid transparent;
+    }
+
+    .experiment-card.exp-a { background: #fff3e0; border-left-color: #ff9800; }
+    .experiment-card.exp-b { background: #e3f2fd; border-left-color: #2196f3; }
+    .experiment-card.exp-c { background: #fce4ec; border-left-color: #e91e63; }
+    .experiment-card.exp-d { background: #e8f5e9; border-left-color: #43a047; }
+
+    .exp-letter {
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1;
+      flex-shrink: 0;
+      width: 24px;
+      text-align: center;
+    }
+
+    .experiment-card.exp-a .exp-letter { color: #e65100; }
+    .experiment-card.exp-b .exp-letter { color: #0d47a1; }
+    .experiment-card.exp-c .exp-letter { color: #880e4f; }
+    .experiment-card.exp-d .exp-letter { color: #1b5e20; }
+
+    .exp-body { flex: 1; }
+
+    .exp-title {
+      font-size: 11.5px;
+      font-weight: 900;
+      margin-bottom: 2px;
+      color: #1a1a2e;
+    }
+
+    .exp-do {
+      font-size: 10.5px;
+      color: #444;
+      margin-bottom: 3px;
+    }
+
+    .exp-do::before {
+      content: "▶ Do: ";
+      font-weight: 700;
+      color: #555;
+    }
+
+    .exp-discover {
+      font-size: 10.5px;
+      color: #333;
+      font-style: italic;
+    }
+
+    /* =============================================
+       TRY AT HOME + TROUBLESHOOTING
+    ============================================= */
+    .lemon-box {
+      background: #f9fbe7;
+      border: 2px solid #c5e1a5;
+      border-radius: 10px;
+      padding: 0.09in 0.11in;
+    }
+
+    .lemon-title {
+      font-size: 12px;
+      font-weight: 900;
+      color: #33691e;
+      margin-bottom: 5px;
+    }
+
+    .lemon-body {
+      font-size: 10.5px;
+      color: #333;
+      line-height: 1.5;
+    }
+
+    .trouble-box {
+      background: #fafafa;
+      border: 2px solid #bdbdbd;
+      border-radius: 10px;
+      padding: 0.09in 0.11in;
+    }
+
+    .trouble-title {
+      font-size: 12px;
+      font-weight: 900;
+      color: #37474f;
+      margin-bottom: 5px;
+    }
+
+    .trouble-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9.5px;
+    }
+
+    .trouble-table thead th {
+      background: #37474f;
+      color: #fff;
+      padding: 3px 6px;
+      text-align: left;
+      font-weight: 700;
+    }
+
+    .trouble-table tbody tr:nth-child(even) {
+      background: #f5f5f5;
+    }
+
+    .trouble-table tbody td {
+      padding: 3px 6px;
+      color: #333;
+      border-bottom: 1px solid #e0e0e0;
+      vertical-align: top;
+    }
+
+    /* =============================================
+       MODULE COMPLETE / BADGE BOX
+    ============================================= */
+    .badge-box {
+      border: 4px dashed #f4c430;
+      border-radius: 14px;
+      background: #fffde7;
+      padding: 0.12in 0.16in;
+      text-align: center;
+      margin-bottom: 0.13in;
+      position: relative;
+    }
+
+    .badge-stars {
+      font-size: 20px;
+      letter-spacing: 0.1em;
+      color: #f4c430;
+    }
+
+    .badge-title {
+      font-size: 15px;
+      font-weight: 900;
+      color: #1a1a2e;
+      margin: 5px 0 4px 0;
+      letter-spacing: 0.04em;
+    }
+
+    .badge-subtitle {
+      font-size: 11px;
+      color: #555;
+      margin-bottom: 6px;
+    }
+
+    .badge-skills {
+      list-style: none;
+      text-align: left;
+      display: inline-block;
+      margin-top: 4px;
+    }
+
+    .badge-skills li {
+      font-size: 11px;
+      color: #333;
+      margin-bottom: 3px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .badge-check {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      background: #43a047;
+      border-radius: 50%;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    .badge-corner {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #f4c430;
+      color: #1a1a2e;
+      font-size: 22px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    }
+
+    .badge-name-line {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin: 8px 0 6px 0;
+      font-size: 11.5px;
+      color: #555;
+    }
+
+    .badge-name-blank {
+      display: inline-block;
+      border-bottom: 2px solid #1a1a2e;
+      width: 140px;
+      height: 18px;
+    }
+
+    /* =============================================
+       COMING UP NEXT
+    ============================================= */
+    .next-box {
+      background: linear-gradient(90deg, #e3f2fd 0%, #f3e5f5 100%);
+      border-left: 5px solid #7c4dff;
+      border-radius: 0 10px 10px 0;
+      padding: 0.08in 0.14in;
+      font-size: 11.5px;
+      color: #1a1a2e;
+    }
+
+    .next-box strong {
+      color: #6a1b9a;
+    }
+
+    /* =============================================
+       SIDE B HEADER
+    ============================================= */
+    .side-b-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 3px solid #f4c430;
+      margin-bottom: 0.15in;
+      padding-bottom: 0.09in;
+    }
+
+    .side-b-title {
+      font-size: 14px;
+      font-weight: 900;
+      color: #0f3460;
+    }
+
+    .side-b-sub {
+      font-size: 10px;
+      color: #888;
+      margin-top: 1px;
+    }
+
+    .side-b-xp {
+      background: #f4c430;
+      color: #1a1a2e;
+      font-weight: 900;
+      font-size: 11px;
+      padding: 3px 12px;
+      border-radius: 20px;
+    }
+
+    /* =============================================
+       XP TRACKER
+    ============================================= */
+    .xp-box {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.13in;
+      color: #fff;
+    }
+
+    .xp-title {
+      font-size: 13px;
+      font-weight: 900;
+      color: #f4c430;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .xp-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px 16px;
+    }
+
+    .xp-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 10.5px;
+      color: #e0e0e0;
+    }
+
+    .xp-check {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      border: 2px solid #f4c430;
+      border-radius: 4px;
+      flex-shrink: 0;
+      background: rgba(244,196,48,0.08);
+    }
+
+    .xp-pts {
+      margin-left: auto;
+      font-size: 10px;
+      font-weight: 700;
+      color: #f4c430;
+      white-space: nowrap;
+    }
+
+    .xp-total-row {
+      margin-top: 8px;
+      border-top: 1px solid rgba(255,255,255,0.2);
+      padding-top: 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      font-weight: 900;
+      color: #f4c430;
+    }
+
+    .xp-total-blank {
+      display: inline-block;
+      border-bottom: 2px solid #f4c430;
+      width: 60px;
+      height: 18px;
+      margin: 0 4px;
+    }
+
+    /* =============================================
+       WAND CHECK TABLE
+    ============================================= */
+    .wand-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9.5px;
+      margin-bottom: 6px;
+    }
+
+    .wand-table thead th {
+      background: #0f3460;
+      color: #f4c430;
+      padding: 3px 6px;
+      text-align: left;
+      font-weight: 700;
+    }
+
+    .wand-table tbody tr:nth-child(even) {
+      background: #f0f4ff;
+    }
+
+    .wand-table tbody td {
+      padding: 3px 6px;
+      color: #333;
+      border-bottom: 1px solid #e0e0e0;
+      vertical-align: top;
+    }
+
+    .wand-table .reading-blank {
+      display: inline-block;
+      border-bottom: 1.5px solid #999;
+      width: 50px;
+      height: 14px;
+    }
+
+    /* =============================================
+       PRINT STYLES
+    ============================================= */
+    @media print {
+      body {
+        background: #fff;
+        font-size: 12px;
+      }
+
+      .page {
+        width: 100%;
+        min-height: auto;
+        margin: 0;
+        box-shadow: none;
+        padding: 0.5in;
+      }
+
+      .page-a {
+        page-break-after: always;
+      }
+
+      .header {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .vocab-card,
+      .concept-box,
+      .circuit-box,
+      .quiz-box,
+      .xp-box,
+      .badge-box,
+      .next-box,
+      .mastery-box,
+      .circuit-diagram,
+      .code-snippet,
+      .experiment-card,
+      .lemon-box,
+      .trouble-box,
+      .trouble-table thead th,
+      .wand-table thead th {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .vocab-card.voltage  { background: #fff !important; border: 2px solid #ff9800; border-top: 5px solid #ff9800; }
+      .vocab-card.current  { background: #fff !important; border: 2px solid #2196f3; border-top: 5px solid #2196f3; }
+      .vocab-card.resist   { background: #fff !important; border: 2px solid #e91e63; border-top: 5px solid #e91e63; }
+      .vocab-card.circuit  { background: #fff !important; border: 2px solid #43a047; border-top: 5px solid #43a047; }
+    }
+
+    @page {
+      size: A4;
+      margin: 12mm;
+    }
+
+    .clearfix::after {
+      content: '';
+      display: table;
+      clear: both;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ======================================================
+       SIDE A (FRONT)
+  ====================================================== -->
+  <div class="page page-a">
+    <div class="page-label">Side A — Front</div>
+
+    <!-- HEADER -->
+    <div class="header">
+      <div class="header-course">&#9889; Circuit Explorer Academy</div>
+      <div class="header-lesson">Lesson 42: The Smart Room System — Module 5 Grand Finale!</div>
+      <div class="header-module">Module 5: Sensors and Actuators &nbsp;|&nbsp; FINAL PROJECT &nbsp;|&nbsp; Advanced</div>
+      <div><span class="header-xp">&#11088; 320 XP Available — Biggest Haul of the Module!</span></div>
+    </div>
+
+    <div class="spark-row" aria-hidden="true">&#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889;</div>
+
+    <!-- VOCABULARY -->
+    <div class="section-title">
+      <span class="icon">&#128218;</span> Key Words — Master These!
+    </div>
+
+    <div class="vocab-grid">
+
+      <div class="vocab-card voltage">
+        <span class="vocab-emoji">&#127798;</span>
+        <span class="vocab-symbol">S</span>
+        <div class="vocab-term">Sensor</div>
+        <div class="vocab-def">A component that <strong>reads the world</strong> — temperature, light, motion, distance. It converts a physical measurement into an electrical signal your Arduino can understand.</div>
+      </div>
+
+      <div class="vocab-card current">
+        <span class="vocab-emoji">&#9881;</span>
+        <span class="vocab-symbol">A</span>
+        <div class="vocab-term">Actuator</div>
+        <div class="vocab-def">A component that <strong>does something</strong> in the physical world — a servo moves, an LED lights up, a buzzer beeps. Actuators turn electrical signals into action!</div>
+      </div>
+
+      <div class="vocab-card resist">
+        <span class="vocab-emoji">&#128260;</span>
+        <span class="vocab-symbol">I2C</span>
+        <div class="vocab-term">I2C Protocol</div>
+        <div class="vocab-def">A communication method that uses <strong>only 2 wires</strong> (SDA + SCL) to let the Arduino talk to the LCD display. Many devices can share the same two wires!</div>
+      </div>
+
+      <div class="vocab-card circuit">
+        <span class="vocab-emoji">&#128200;</span>
+        <span class="vocab-symbol">T</span>
+        <div class="vocab-term">Threshold</div>
+        <div class="vocab-def">A <strong>trigger value</strong> you set in code. If temperature goes above 28C, do something. If distance drops below 15cm, react! Thresholds make systems smart.</div>
+      </div>
+
+    </div>
+
+    <!-- SMART ROOM SYSTEM DIAGRAM -->
+    <div class="section-title">
+      <span class="icon">&#127968;</span> Your Smart Room — 4 Features in One System!
+    </div>
+
+    <div class="concept-box">
+      <div class="concept-box-title">Smart Room System v1.0 — Pin Map &amp; Feature Overview</div>
+
+      <div class="circuit-diagram">  +================================================+
+  |          SMART ROOM SYSTEM v1.0                |
+  |                                                |
+  |  FEATURE 1: CLIMATE MONITOR                    |
+  |    DHT11 (Pin 2) --&gt; LCD (A4/A5)              |
+  |    Red LED (Pin 13) ON if Temp &gt; 28C           |
+  |                                                |
+  |  FEATURE 2: AUTO NIGHT LIGHT                   |
+  |    PIR (Pin 4) + LDR (A0) --&gt; Green LED (11)  |
+  |    Both dark AND motion? Light turns on!       |
+  |                                                |
+  |  FEATURE 3: PROXIMITY ALERT                    |
+  |    HC-SR04 Trig(9)/Echo(10) --&gt; Buzzer (8)    |
+  |    Yellow LED (Pin 12) + beep if &lt; 15 cm      |
+  |                                                |
+  |  FEATURE 4: SERVO GATE                         |
+  |    PIR (Pin 4) --&gt; Servo (Pin 6)              |
+  |    Motion detected? Gate opens 90 degrees!     |
+  |    Auto-closes after 5 seconds                 |
+  +================================================+</div>
+
+      <div class="code-snippet"><span class="code-comment">// Core loop structure — 4 features running together!</span>
+<span class="code-keyword">void</span> loop() {
+  <span class="code-comment">// Feature 1: Read temp, show on LCD, warn if hot</span>
+  <span class="code-keyword">float</span> temp = dht.readTemperature();
+  <span class="code-keyword">if</span> (temp &gt; hotThreshold) digitalWrite(RED_LED, HIGH);
+
+  <span class="code-comment">// Feature 2: Night light — dark room + motion = ON</span>
+  <span class="code-keyword">if</span> (motion == HIGH &amp;&amp; lightLevel &lt; darkThreshold)
+    digitalWrite(GREEN_LED, HIGH);
+
+  <span class="code-comment">// Feature 3: Proximity — buzz when object is close</span>
+  <span class="code-keyword">if</span> (distance &lt; <span class="code-number">15</span>) tone(BUZZER_PIN, <span class="code-number">2000</span>, <span class="code-number">100</span>);
+
+  <span class="code-comment">// Feature 4: Servo gate opens on motion, closes in 5s</span>
+  <span class="code-keyword">if</span> (motion == HIGH) gateServo.write(<span class="code-number">90</span>);
+}</div>
+
+      <div class="concept-note">Professional engineers call this "systems integration" — many independent modules working together as one! Companies like Nest and Ring use this exact same logic.</div>
+    </div>
+
+    <!-- MODULE 5 COMPONENT MASTERY -->
+    <div class="section-title">
+      <span class="icon">&#127942;</span> Module 5 Component Mastery — Everything You Learned!
+    </div>
+
+    <div class="mastery-box">
+      <div class="mastery-box-title">All 8 Lessons in Module 5 — Check Off What You Have Built:</div>
+      <div class="mastery-grid">
+        <div class="mastery-item"><span class="mastery-dot sensor"></span><span class="mastery-label">DHT11</span> — Temperature &amp; Humidity (L35)</div>
+        <div class="mastery-item"><span class="mastery-dot sensor"></span><span class="mastery-label">LDR</span> — Light Sensor (L36)</div>
+        <div class="mastery-item"><span class="mastery-dot sensor"></span><span class="mastery-label">HC-SR04</span> — Ultrasonic Distance (L37)</div>
+        <div class="mastery-item"><span class="mastery-dot actuator"></span><span class="mastery-label">SG90 Servo</span> — Precise Motor (L38)</div>
+        <div class="mastery-item"><span class="mastery-dot actuator"></span><span class="mastery-label">DC Motor + L298N</span> — Motor Driver (L39)</div>
+        <div class="mastery-item"><span class="mastery-dot sensor"></span><span class="mastery-label">IR Sensor</span> — Remote Control (L40)</div>
+        <div class="mastery-item"><span class="mastery-dot sensor"></span><span class="mastery-label">PIR Sensor</span> — Motion Guard (L41)</div>
+        <div class="mastery-item"><span class="mastery-dot display"></span><span class="mastery-label">LCD 16x2 + I2C</span> — Display (L42)</div>
+      </div>
+    </div>
+
+  </div><!-- end page-a -->
+
+
+  <!-- ======================================================
+       SIDE B (BACK)
+  ====================================================== -->
+  <div class="page page-b">
+    <div class="page-label">Side B — Back</div>
+
+    <!-- SIDE B MINI HEADER -->
+    <div class="side-b-header">
+      <div>
+        <div class="side-b-title">&#9889; Circuit Explorer Academy — Lesson 42</div>
+        <div class="side-b-sub">The Smart Room System &nbsp;|&nbsp; Module 5 Final Project &nbsp;|&nbsp; Sensors and Actuators</div>
+      </div>
+      <div class="side-b-xp">&#11088; 320 XP</div>
+    </div>
+
+    <!-- MY ACTIVITY TODAY + BUILD STEPS -->
+    <div class="section-title">
+      <span class="icon">&#128161;</span> My Activity Today — Build the Smart Room!
+    </div>
+
+    <div class="circuit-box">
+      <div class="circuit-box-title">Build Phases — Work Through These One at a Time:</div>
+
+      <ol class="build-steps">
+        <li><span class="step-num">1</span><strong>Wire all sensors one at a time.</strong> DHT11 on Pin 2, PIR on Pin 4, HC-SR04 on Pins 9/10, LDR on A0, LCD on A4/A5 (I2C). Test each before adding the next! (+40 XP)</li>
+        <li><span class="step-num">2</span><strong>Build Feature 1 — Climate Monitor.</strong> Add the DHT11 code. Check the LCD shows temperature and humidity. (+30 XP)</li>
+        <li><span class="step-num">3</span><strong>Add all 4 features to the loop.</strong> Night light, proximity alert, servo gate. Test each feature works as described. (+50 XP)</li>
+        <li><span class="step-num">4</span><strong>Wand Check — Full System Test.</strong> Measure 5V rail, DHT11 VCC, PIR output with/without motion, HC-SR04 VCC, LDR in bright vs. dark. (+70 XP)</li>
+        <li><span class="step-num">5</span><strong>Customize your thresholds.</strong> Adjust hotThreshold, darkThreshold, proximityThreshold for YOUR room. (+30 XP)</li>
+        <li><span class="step-num">6</span><strong>Final demo!</strong> Show all 4 features to a parent, friend, or teacher. Explain what each one does. (+50 XP)</li>
+      </ol>
+
+      <div class="checklist-title">&#9989; Components in My Smart Room:</div>
+      <ul class="checklist">
+        <li><span class="check-box"></span>Arduino Uno</li>
+        <li><span class="check-box"></span>DHT11 sensor</li>
+        <li><span class="check-box"></span>PIR sensor</li>
+        <li><span class="check-box"></span>HC-SR04</li>
+        <li><span class="check-box"></span>LDR + 10k&#937;</li>
+        <li><span class="check-box"></span>SG90 servo</li>
+        <li><span class="check-box"></span>3 LEDs (R/Y/G)</li>
+        <li><span class="check-box"></span>Active buzzer</li>
+        <li><span class="check-box"></span>16x2 LCD + I2C</li>
+      </ul>
+    </div>
+
+    <!-- QUIZ -->
+    <div class="section-title">
+      <span class="icon">&#129504;</span> Quiz Time! Fill in the blanks.
+    </div>
+
+    <div class="quiz-box">
+
+      <div class="quiz-item">
+        <div class="quiz-q">1. The DHT11 measures two things: ________________ and ________________.</div>
+        <span class="quiz-hint">hint: "temperature" and "humidity"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item">
+        <div class="quiz-q">2. The HC-SR04 ultrasonic sensor calculates distance by measuring the time it takes for a sound ________________ to bounce back.</div>
+        <span class="quiz-hint">hint: "pulse" or "echo"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item">
+        <div class="quiz-q">3. In the auto night light feature, the green LED only turns on when there is motion ________________ the room is dark.</div>
+        <span class="quiz-hint">hint: "AND"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item bonus" style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed #f9a825;">
+        <div class="quiz-q">&#127381; BONUS: The servo gate opens when the PIR detects motion and closes after _____ seconds. What variable in the code controls this time?</div>
+        <span class="quiz-hint">hint: "5 seconds" and "gateDuration"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+    </div>
+
+    <!-- FEATURE BUILD CARDS -->
+    <div class="section-title">
+      <span class="icon">&#128300;</span> 4 Smart Features I Built Today!
+    </div>
+
+    <div class="experiments-grid">
+
+      <div class="experiment-card exp-a">
+        <div class="exp-letter">A</div>
+        <div class="exp-body">
+          <div class="exp-title">Climate Monitor</div>
+          <div class="exp-do">Breathe on the DHT11 sensor.</div>
+          <div class="exp-discover">LCD values change! If temp rises above 28C, the <strong>Red LED</strong> turns on as a hot warning!</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-b">
+        <div class="exp-letter">B</div>
+        <div class="exp-body">
+          <div class="exp-title">Auto Night Light</div>
+          <div class="exp-do">Cover the LDR with your hand and wave at the PIR.</div>
+          <div class="exp-discover">The <strong>Green LED</strong> only lights up when it is BOTH dark AND there is motion — just like a real automatic hallway light!</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-c">
+        <div class="exp-letter">C</div>
+        <div class="exp-body">
+          <div class="exp-title">Proximity Alert</div>
+          <div class="exp-do">Slowly move your hand toward the HC-SR04.</div>
+          <div class="exp-discover">When you get closer than 15 cm, the <strong>buzzer beeps</strong> and the <strong>Yellow LED</strong> turns on — NEAR appears on the LCD!</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-d">
+        <div class="exp-letter">D</div>
+        <div class="exp-body">
+          <div class="exp-title">Servo Gate</div>
+          <div class="exp-do">Walk past or wave at the PIR sensor.</div>
+          <div class="exp-discover">The <strong>servo motor swings open to 90 degrees</strong> like a gate, then automatically closes again after 5 seconds!</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TRY AT HOME + TROUBLESHOOTING -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.1in; margin-bottom: 0.12in;">
+
+      <div class="lemon-box">
+        <div class="lemon-title">&#127968; Try at Home: Upgrade Your Smart Room!</div>
+        <div class="lemon-body">
+          Try these custom upgrades after the lesson:<br/><br/>
+          <strong>1. Change the hot threshold</strong> — adjust <code>hotThreshold</code> to your room's actual temperature.<br/><br/>
+          <strong>2. Custom LCD message</strong> — change <code>"Smart Room v1.0"</code> to your own name or a fun message.<br/><br/>
+          <strong>3. Build a cardboard room</strong> around your breadboard. Label each sensor. Take a photo to show your family!
+        </div>
+      </div>
+
+      <div class="trouble-box">
+        <div class="trouble-title">&#128295; Troubleshooting Guide</div>
+        <table class="trouble-table">
+          <thead>
+            <tr><th>Problem</th><th>Quick Fix</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>LCD blank / dark</td><td>Turn I2C backpack contrast knob</td></tr>
+            <tr><td>DHT11 shows NaN</td><td>Check 10k pull-up, wait 2 seconds</td></tr>
+            <tr><td>PIR always HIGH</td><td>Wait 30 sec warmup; cover PIR dome</td></tr>
+            <tr><td>Servo twitches</td><td>Add 100uF cap across servo power</td></tr>
+            <tr><td>HC-SR04 returns 999</td><td>Check Trig/Echo wires not swapped</td></tr>
+            <tr><td>Buzzer always on</td><td>Check proximity threshold value</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- MODULE COMPLETE / BADGE BOX -->
+    <div class="badge-box">
+      <div class="badge-corner">&#127942;</div>
+      <div class="badge-stars">&#11088; &#11088; &#11088; &#11088; &#11088;</div>
+      <div class="badge-title">MODULE 5 CHAMPION BADGE UNLOCKED!</div>
+      <div class="badge-subtitle">Sensors and Actuators — All 8 Lessons Complete!</div>
+
+      <div class="badge-name-line">
+        <span>Awarded to:</span>
+        <span class="badge-name-blank"></span>
+      </div>
+
+      <ul class="badge-skills">
+        <li><span class="badge-check">&#10003;</span> Temperature Sensor (DHT11) — Weather Wizard</li>
+        <li><span class="badge-check">&#10003;</span> Light Sensor (LDR) — Light Detective</li>
+        <li><span class="badge-check">&#10003;</span> Ultrasonic Distance (HC-SR04) — Echo Master</li>
+        <li><span class="badge-check">&#10003;</span> Servo Motors — Servo Commander</li>
+        <li><span class="badge-check">&#10003;</span> DC Motors + L298N Driver — Motor Master</li>
+        <li><span class="badge-check">&#10003;</span> IR Sensor + Remote — IR Code Breaker</li>
+        <li><span class="badge-check">&#10003;</span> PIR Motion Sensor — Motion Guardian</li>
+        <li><span class="badge-check">&#10003;</span> Smart Room System — Module 5 Champion!</li>
+      </ul>
+
+      <div style="margin-top: 8px; font-size: 10.5px; color: #555;">
+        <strong>Module 5 Total XP:</strong> up to 1,640 XP &nbsp;|&nbsp;
+        <strong>Your Score:</strong> <span style="display: inline-block; border-bottom: 1.5px solid #999; width: 50px; height: 14px; vertical-align: bottom;"></span> XP &nbsp;|&nbsp;
+        <strong>Rank:</strong> <span style="display: inline-block; border-bottom: 1.5px solid #999; width: 100px; height: 14px; vertical-align: bottom;"></span>
+      </div>
+    </div>
+
+    <!-- COMING UP NEXT -->
+    <div class="next-box">
+      <strong>Coming Up Next &#8594; Module 6: Robotics Projects!</strong><br/>
+      You can now sense the world AND make things move. In Module 6, you will build a real robot chassis with wheels, program movement patterns, and teach your robot to follow lines and avoid obstacles completely on its own. Everything you learned about sensors, motors, and coding comes together — it is time to build a REAL autonomous robot!
+    </div>
+
+  </div><!-- end page-b -->
+
+</body>
+</html>

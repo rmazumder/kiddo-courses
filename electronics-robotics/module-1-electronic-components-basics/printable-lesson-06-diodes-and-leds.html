@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 6: Diodes and LEDs — Circuit Explorer Academy</title>
+  <style>
+    /* =============================================
+       BASE RESET & TYPOGRAPHY
+    ============================================= */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, Arial, sans-serif;
+      font-size: 13px;
+      line-height: 1.45;
+      color: #1a1a2e;
+      background: #f0f4ff;
+    }
+
+    /* =============================================
+       PAGE LAYOUT
+    ============================================= */
+    .page {
+      width: 8.5in;
+      min-height: 11in;
+      margin: 0 auto 0.4in auto;
+      padding: 0.5in;
+      background: #fff;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-label {
+      position: absolute;
+      top: 0.18in;
+      right: 0.22in;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #aaa;
+    }
+
+    /* =============================================
+       SIDE A — HEADER
+    ============================================= */
+    .header {
+      text-align: center;
+      border-bottom: 3px solid #f4c430;
+      margin-bottom: 0.16in;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+      border-radius: 10px;
+      color: #fff;
+      padding: 0.22in 0.2in 0.18in 0.2in;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .header-course {
+      font-size: 19px;
+      font-weight: 900;
+      letter-spacing: 0.03em;
+      color: #f4c430;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+
+    .header-lesson {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      margin-top: 4px;
+    }
+
+    .header-module {
+      font-size: 11px;
+      color: #a8d8ea;
+      margin-top: 3px;
+      letter-spacing: 0.04em;
+    }
+
+    .header-xp {
+      display: inline-block;
+      margin-top: 8px;
+      background: #f4c430;
+      color: #1a1a2e;
+      font-weight: 900;
+      font-size: 12px;
+      padding: 3px 14px;
+      border-radius: 20px;
+      letter-spacing: 0.06em;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .spark-row {
+      text-align: center;
+      font-size: 16px;
+      letter-spacing: 0.25em;
+      margin: 0.1in 0 0.04in 0;
+      color: #f4c430;
+    }
+
+    /* =============================================
+       SECTION HEADINGS
+    ============================================= */
+    .section-title {
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #fff;
+      background: #0f3460;
+      padding: 5px 12px;
+      border-radius: 6px;
+      margin-bottom: 0.1in;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .section-title .icon {
+      font-size: 14px;
+    }
+
+    /* =============================================
+       VOCABULARY CARDS  (2x2 grid)
+    ============================================= */
+    .vocab-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.1in;
+      margin-bottom: 0.14in;
+    }
+
+    .vocab-card {
+      border-radius: 10px;
+      padding: 0.1in 0.12in;
+      border-top: 5px solid transparent;
+      position: relative;
+      overflow: hidden;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .vocab-card::before {
+      content: '';
+      position: absolute;
+      top: -18px;
+      right: -18px;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      opacity: 0.13;
+      background: #fff;
+    }
+
+    .vocab-card.diode   { background: #fff3e0; border-top-color: #ff9800; }
+    .vocab-card.led     { background: #e3f2fd; border-top-color: #2196f3; }
+    .vocab-card.anode   { background: #fce4ec; border-top-color: #e91e63; }
+    .vocab-card.cathode { background: #e8f5e9; border-top-color: #43a047; }
+
+    .vocab-term {
+      font-size: 13px;
+      font-weight: 900;
+      margin-bottom: 2px;
+    }
+
+    .vocab-card.diode   .vocab-term { color: #e65100; }
+    .vocab-card.led     .vocab-term { color: #0d47a1; }
+    .vocab-card.anode   .vocab-term { color: #880e4f; }
+    .vocab-card.cathode .vocab-term { color: #1b5e20; }
+
+    .vocab-symbol {
+      font-size: 18px;
+      font-weight: 900;
+      float: right;
+      margin-top: -2px;
+      opacity: 0.55;
+    }
+
+    .vocab-def {
+      font-size: 11.5px;
+      color: #333;
+      line-height: 1.4;
+      margin-top: 2px;
+    }
+
+    .vocab-emoji {
+      font-size: 20px;
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    /* =============================================
+       DIODE CONCEPT BOX
+    ============================================= */
+    .diode-box {
+      background: #fff8e1;
+      border: 2px solid #ffe082;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.14in;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    /* one-way door diagram using CSS */
+    .oneway-diagram {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      margin: 0.08in 0 0.06in 0;
+    }
+
+    .oneway-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .oneway-shape {
+      border-radius: 7px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+      text-align: center;
+      padding: 5px 6px;
+      border: 2px solid transparent;
+      min-width: 64px;
+      height: 44px;
+      line-height: 1.2;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .oneway-shape.batt    { background: #ff9800; color: #fff; border-color: #e65100; }
+    .oneway-shape.resistor{ background: #9c27b0; color: #fff; border-color: #6a1b9a; }
+    .oneway-shape.diode-s { background: #0f3460; color: #fff; border-color: #1a237e; }
+    .oneway-shape.led-s   { background: #43a047; color: #fff; border-color: #1b5e20; }
+
+    .oneway-label {
+      font-size: 9px;
+      font-weight: 700;
+      color: #444;
+      text-align: center;
+    }
+
+    .oneway-sublabel {
+      font-size: 8px;
+      color: #888;
+      font-style: italic;
+      text-align: center;
+    }
+
+    .oneway-arrow {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0 4px;
+      margin-bottom: 24px;
+      gap: 1px;
+    }
+
+    .oneway-arrow-line {
+      display: flex;
+      align-items: center;
+      gap: 1px;
+    }
+
+    .ow-body {
+      width: 24px;
+      height: 3px;
+      background: #2196f3;
+    }
+
+    .ow-head {
+      width: 0;
+      height: 0;
+      border-top: 6px solid transparent;
+      border-bottom: 6px solid transparent;
+      border-left: 8px solid #2196f3;
+    }
+
+    .ow-label {
+      font-size: 8px;
+      color: #2196f3;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .diode-return {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      margin-top: 0px;
+      color: #2196f3;
+      font-size: 9px;
+      font-weight: 700;
+    }
+
+    .return-line {
+      flex: 1;
+      height: 2px;
+      background: #2196f3;
+      max-width: 160px;
+    }
+
+    .return-arrow-head-left {
+      width: 0;
+      height: 0;
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      border-right: 7px solid #2196f3;
+    }
+
+    /* stripe indicator */
+    .stripe-demo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin: 0.05in 0 0.04in 0;
+    }
+
+    .stripe-part {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .stripe-body {
+      width: 80px;
+      height: 22px;
+      background: #37474f;
+      border-radius: 4px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .stripe-band {
+      width: 10px;
+      height: 22px;
+      background: #e91e63;
+      border-radius: 0 4px 4px 0;
+      flex-shrink: 0;
+    }
+
+    .stripe-label-plus {
+      font-size: 9px;
+      font-weight: 900;
+      color: #e65100;
+    }
+
+    .stripe-label-minus {
+      font-size: 9px;
+      font-weight: 900;
+      color: #880e4f;
+    }
+
+    .stripe-desc {
+      font-size: 8.5px;
+      color: #555;
+      text-align: center;
+    }
+
+    .diode-caption {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: #bf360c;
+      margin-top: 4px;
+    }
+
+    /* =============================================
+       LED COLORS TABLE
+    ============================================= */
+    .led-box {
+      background: #f3e5f5;
+      border: 2px solid #ce93d8;
+      border-radius: 10px;
+      padding: 0.09in 0.13in;
+      margin-bottom: 0.06in;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .led-legs {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 0.07in;
+    }
+
+    .led-leg-diagram {
+      font-family: monospace;
+      font-size: 9.5px;
+      background: #1a1a2e;
+      color: #76ff03;
+      padding: 6px 10px;
+      border-radius: 7px;
+      line-height: 1.6;
+      white-space: pre;
+      flex-shrink: 0;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .led-leg-notes {
+      flex: 1;
+      font-size: 11px;
+      color: #4a148c;
+      line-height: 1.55;
+    }
+
+    .led-leg-notes strong {
+      color: #1a1a2e;
+    }
+
+    .voltage-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 10px;
+      margin-top: 4px;
+    }
+
+    .voltage-table thead th {
+      background: #4a148c;
+      color: #fff;
+      padding: 3px 6px;
+      text-align: left;
+      font-weight: 700;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .voltage-table tbody td {
+      padding: 3px 7px;
+      border-bottom: 1px solid #e0e0e0;
+      vertical-align: middle;
+    }
+
+    .voltage-table tbody tr:nth-child(even) {
+      background: #f8f0fc;
+    }
+
+    .color-dot {
+      display: inline-block;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      margin-right: 5px;
+      vertical-align: middle;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    /* =============================================
+       SIDE B — CIRCUIT BUILD
+    ============================================= */
+    .circuit-box {
+      background: #f1f8e9;
+      border: 2px solid #aed581;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.13in;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .circuit-diagram {
+      font-family: monospace;
+      font-size: 10px;
+      background: #1a1a2e;
+      color: #76ff03;
+      padding: 0.09in;
+      border-radius: 8px;
+      margin: 0.07in 0;
+      line-height: 1.6;
+      overflow: visible;
+      white-space: pre;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .circuit-note {
+      font-size: 11px;
+      color: #33691e;
+      font-style: italic;
+      margin-top: 5px;
+      padding: 4px 8px;
+      background: #dcedc8;
+      border-radius: 5px;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .checklist-title {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #2e7d32;
+      margin-top: 8px;
+      margin-bottom: 4px;
+    }
+
+    .checklist {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 3px 10px;
+      list-style: none;
+    }
+
+    .checklist li {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: #333;
+    }
+
+    .check-box {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid #43a047;
+      border-radius: 3px;
+      flex-shrink: 0;
+      background: #fff;
+    }
+
+    /* =============================================
+       QUIZ
+    ============================================= */
+    .quiz-box {
+      background: #fff9c4;
+      border: 2px solid #f9a825;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.13in;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .quiz-item {
+      margin-bottom: 0.08in;
+    }
+
+    .quiz-q {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 2px;
+    }
+
+    .quiz-blank {
+      display: block;
+      border-bottom: 1.5px solid #999;
+      width: 100%;
+      height: 20px;
+      margin-top: 2px;
+    }
+
+    .quiz-hint {
+      font-size: 9px;
+      color: #aaa;
+      font-style: italic;
+      float: right;
+      margin-top: 1px;
+    }
+
+    .quiz-item.bonus .quiz-q {
+      color: #e65100;
+    }
+
+    .quiz-item.bonus .quiz-blank {
+      border-bottom-color: #ff9800;
+    }
+
+    /* =============================================
+       EXPERIMENTS GRID
+    ============================================= */
+    .experiments-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.08in;
+      margin-bottom: 0.12in;
+    }
+
+    .experiment-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      border-radius: 8px;
+      padding: 0.08in 0.1in;
+      border-left: 5px solid transparent;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .experiment-card.exp-a { background: #fff3e0; border-left-color: #ff9800; }
+    .experiment-card.exp-b { background: #e3f2fd; border-left-color: #2196f3; }
+    .experiment-card.exp-c { background: #fce4ec; border-left-color: #e91e63; }
+    .experiment-card.exp-d { background: #e8f5e9; border-left-color: #43a047; }
+
+    .exp-letter {
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1;
+      flex-shrink: 0;
+      width: 24px;
+      text-align: center;
+    }
+
+    .experiment-card.exp-a .exp-letter { color: #e65100; }
+    .experiment-card.exp-b .exp-letter { color: #0d47a1; }
+    .experiment-card.exp-c .exp-letter { color: #880e4f; }
+    .experiment-card.exp-d .exp-letter { color: #1b5e20; }
+
+    .exp-body { flex: 1; }
+
+    .exp-title {
+      font-size: 11.5px;
+      font-weight: 900;
+      margin-bottom: 2px;
+      color: #1a1a2e;
+    }
+
+    .exp-do {
+      font-size: 10.5px;
+      color: #444;
+      margin-bottom: 3px;
+    }
+
+    .exp-do::before {
+      content: "▶ Do: ";
+      font-weight: 700;
+      color: #555;
+    }
+
+    .exp-discover {
+      font-size: 10.5px;
+      color: #333;
+      font-style: italic;
+    }
+
+    /* =============================================
+       TRY AT HOME + TROUBLESHOOTING
+    ============================================= */
+    .rainbow-home-box {
+      background: #f9fbe7;
+      border: 2px solid #c5e1a5;
+      border-radius: 10px;
+      padding: 0.09in 0.11in;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .rainbow-home-title {
+      font-size: 12px;
+      font-weight: 900;
+      color: #33691e;
+      margin-bottom: 5px;
+    }
+
+    .rainbow-home-body {
+      font-size: 10.5px;
+      color: #333;
+      line-height: 1.5;
+    }
+
+    .trouble-box {
+      background: #fafafa;
+      border: 2px solid #bdbdbd;
+      border-radius: 10px;
+      padding: 0.09in 0.11in;
+    }
+
+    .trouble-title {
+      font-size: 12px;
+      font-weight: 900;
+      color: #37474f;
+      margin-bottom: 5px;
+    }
+
+    .trouble-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9.5px;
+    }
+
+    .trouble-table thead th {
+      background: #37474f;
+      color: #fff;
+      padding: 3px 6px;
+      text-align: left;
+      font-weight: 700;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .trouble-table tbody tr:nth-child(even) {
+      background: #f5f5f5;
+    }
+
+    .trouble-table tbody td {
+      padding: 3px 6px;
+      color: #333;
+      border-bottom: 1px solid #e0e0e0;
+      vertical-align: top;
+    }
+
+    /* =============================================
+       COMING UP NEXT
+    ============================================= */
+    .next-box {
+      background: linear-gradient(90deg, #e3f2fd 0%, #f3e5f5 100%);
+      border-left: 5px solid #7c4dff;
+      border-radius: 0 10px 10px 0;
+      padding: 0.08in 0.14in;
+      font-size: 11.5px;
+      color: #1a1a2e;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .next-box strong {
+      color: #6a1b9a;
+    }
+
+    /* =============================================
+       SIDE B HEADER
+    ============================================= */
+    .side-b-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 3px solid #f4c430;
+      margin-bottom: 0.15in;
+      padding-bottom: 0.09in;
+    }
+
+    .side-b-title {
+      font-size: 14px;
+      font-weight: 900;
+      color: #0f3460;
+    }
+
+    .side-b-sub {
+      font-size: 10px;
+      color: #888;
+      margin-top: 1px;
+    }
+
+    .side-b-xp {
+      background: #f4c430;
+      color: #1a1a2e;
+      font-weight: 900;
+      font-size: 11px;
+      padding: 3px 12px;
+      border-radius: 20px;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    /* =============================================
+       LESSON IMAGES
+    ============================================= */
+    .lesson-img {
+      display: block;
+      border-radius: 7px;
+      object-fit: contain;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .img-float-right {
+      float: right;
+      margin: 0 0 6px 12px;
+      max-height: 110px;
+      max-width: 140px;
+    }
+
+    .img-float-left {
+      float: left;
+      margin: 0 12px 6px 0;
+      max-height: 110px;
+      max-width: 130px;
+    }
+
+    .img-circuit {
+      max-height: 130px;
+      max-width: 100%;
+      margin: 6px auto 0 auto;
+      display: block;
+    }
+
+    .clearfix::after {
+      content: '';
+      display: table;
+      clear: both;
+    }
+
+    /* =============================================
+       PRINT STYLES
+    ============================================= */
+    @media print {
+      body {
+        background: #fff;
+        font-size: 12px;
+      }
+
+      .page {
+        width: 100%;
+        min-height: auto;
+        margin: 0;
+        box-shadow: none;
+        padding: 0.5in;
+      }
+
+      .page-a {
+        page-break-after: always;
+      }
+
+      .header,
+      .vocab-card,
+      .diode-box,
+      .led-box,
+      .circuit-box,
+      .quiz-box,
+      .next-box,
+      .experiments-grid,
+      .experiment-card,
+      .rainbow-home-box,
+      .trouble-box,
+      .trouble-table thead th,
+      .circuit-diagram,
+      .led-leg-diagram,
+      .voltage-table thead th,
+      .section-title,
+      .oneway-shape,
+      .side-b-xp,
+      .header-xp {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .vocab-card.diode   { background: #fff !important; border: 2px solid #ff9800; border-top: 5px solid #ff9800; }
+      .vocab-card.led     { background: #fff !important; border: 2px solid #2196f3; border-top: 5px solid #2196f3; }
+      .vocab-card.anode   { background: #fff !important; border: 2px solid #e91e63; border-top: 5px solid #e91e63; }
+      .vocab-card.cathode { background: #fff !important; border: 2px solid #43a047; border-top: 5px solid #43a047; }
+    }
+
+    @page {
+      size: A4;
+      margin: 12mm;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ======================================================
+       SIDE A (FRONT)
+  ====================================================== -->
+  <div class="page page-a">
+    <div class="page-label">Side A — Front</div>
+
+    <!-- HEADER -->
+    <div class="header">
+      <div class="header-course">&#9889; Circuit Explorer Academy</div>
+      <div class="header-lesson">Lesson 6: Diodes and LEDs — One-Way Streets and Rainbow Lights</div>
+      <div class="header-module">Module 1: Electronic Components Basics</div>
+      <div><span class="header-xp">&#11088; 310 XP Available</span></div>
+    </div>
+
+    <div class="spark-row" aria-hidden="true">&#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889;</div>
+
+    <!-- VOCABULARY -->
+    <div class="section-title">
+      <span class="icon">&#128218;</span> Key Words — Learn These!
+    </div>
+
+    <div class="vocab-grid">
+
+      <div class="vocab-card diode">
+        <span class="vocab-emoji">&#128682;</span>
+        <span class="vocab-symbol">&#8594;|</span>
+        <div class="vocab-term">Diode</div>
+        <div class="vocab-def">A component that acts like a <strong>one-way door</strong> for electricity — current can only flow in ONE direction. Flip it backwards and everything stops!</div>
+      </div>
+
+      <div class="vocab-card led">
+        <span class="vocab-emoji">&#128161;</span>
+        <span class="vocab-symbol">LED</span>
+        <div class="vocab-term">LED</div>
+        <div class="vocab-def">Stands for <strong>Light Emitting Diode</strong>. A special diode that releases energy as <strong>light</strong> instead of heat when current flows through it.</div>
+      </div>
+
+      <div class="vocab-card anode">
+        <span class="vocab-emoji">&#10133;</span>
+        <span class="vocab-symbol">+</span>
+        <div class="vocab-term">Anode (+)</div>
+        <div class="vocab-def">The <strong>positive entrance</strong> where electricity enters a diode or LED. On an LED it is the <strong>longer leg</strong>. Remember: <em>Long = Plus!</em></div>
+      </div>
+
+      <div class="vocab-card cathode">
+        <span class="vocab-emoji">&#10134;</span>
+        <span class="vocab-symbol">&#8722;</span>
+        <div class="vocab-term">Cathode (&#8722;)</div>
+        <div class="vocab-def">The <strong>negative exit</strong> where electricity leaves a diode or LED. On a diode it is marked by a <strong>stripe</strong>. On an LED it is the <strong>shorter leg</strong>.</div>
+      </div>
+
+    </div>
+
+    <!-- DIODE: THE ONE-WAY DOOR -->
+    <div class="section-title">
+      <span class="icon">&#128682;</span> How a Diode Works — The One-Way Door
+    </div>
+
+    <div class="diode-box clearfix">
+
+      <img src="images/lesson-06-diode-labeled.png" alt="Labeled diode showing anode and cathode" class="lesson-img img-float-right" />
+
+      <!-- circuit diagram -->
+      <div class="oneway-diagram">
+
+        <div class="oneway-node">
+          <div class="oneway-shape batt">&#128267;<br/>9V Battery</div>
+          <div class="oneway-label">Battery</div>
+          <div class="oneway-sublabel">pushes current</div>
+        </div>
+
+        <div class="oneway-arrow">
+          <div class="oneway-arrow-line">
+            <div class="ow-body"></div>
+            <div class="ow-head"></div>
+          </div>
+          <div class="ow-label">electrons</div>
+        </div>
+
+        <div class="oneway-node">
+          <div class="oneway-shape resistor">&#129001;<br/>330&#937;</div>
+          <div class="oneway-label">Resistor</div>
+          <div class="oneway-sublabel">limits current</div>
+        </div>
+
+        <div class="oneway-arrow">
+          <div class="oneway-arrow-line">
+            <div class="ow-body"></div>
+            <div class="ow-head"></div>
+          </div>
+          <div class="ow-label">electrons</div>
+        </div>
+
+        <div class="oneway-node">
+          <div class="oneway-shape diode-s">&#8594;|<br/>Diode</div>
+          <div class="oneway-label">Diode</div>
+          <div class="oneway-sublabel">one-way only!</div>
+        </div>
+
+        <div class="oneway-arrow">
+          <div class="oneway-arrow-line">
+            <div class="ow-body"></div>
+            <div class="ow-head"></div>
+          </div>
+          <div class="ow-label">electrons</div>
+        </div>
+
+        <div class="oneway-node">
+          <div class="oneway-shape led-s">&#128161;<br/>LED</div>
+          <div class="oneway-label">LED</div>
+          <div class="oneway-sublabel">glows!</div>
+        </div>
+
+      </div>
+
+      <div class="diode-return">
+        <div class="return-arrow-head-left"></div>
+        <div class="return-line"></div>
+        <span style="font-size:9px; color:#2196f3; font-weight:700;">&#8630; electrons return to battery (&#8722;)</span>
+        <div class="return-line"></div>
+      </div>
+
+      <!-- Stripe indicator row -->
+      <div class="stripe-demo" style="margin-top: 0.06in;">
+        <div class="stripe-part">
+          <div class="stripe-body" style="justify-content: flex-start; padding-left: 6px;">
+            <span style="font-size: 9px; color: #ccc; font-weight: 700;">No stripe</span>
+            <div style="flex:1;"></div>
+          </div>
+          <div class="stripe-label-plus">Anode (+) side</div>
+          <div class="stripe-desc">Where current enters</div>
+        </div>
+        <div style="font-size: 20px; color: #bbb; margin-bottom: 14px;">&#8594;</div>
+        <div class="stripe-part">
+          <div class="stripe-body">
+            <div class="stripe-band"></div>
+          </div>
+          <div class="stripe-label-minus">Cathode (&#8722;) side</div>
+          <div class="stripe-desc">Stripe = exit door</div>
+        </div>
+      </div>
+
+      <div class="diode-caption">Flip the diode backwards and the LED goes OFF — electricity refused to go through!</div>
+
+    </div>
+
+    <!-- LED COLORS AND FORWARD VOLTAGE -->
+    <div class="section-title">
+      <span class="icon">&#127752;</span> Meet the LED — A Diode That Glows!
+    </div>
+
+    <div class="led-box clearfix">
+
+      <img src="images/lesson-06-led-labeled.png" alt="LED with long anode leg and short cathode leg labeled" class="lesson-img img-float-right" />
+
+      <div class="led-legs">
+        <div class="led-leg-diagram">Long leg  = Anode  (+)
+Short leg = Cathode (-)
+
+Inside the LED:
+ flat side = cathode (-)</div>
+        <div class="led-leg-notes">
+          Each LED color uses a different <strong>forward voltage</strong> — the amount of voltage it needs to turn on. Blue needs <strong>more</strong> energy than red, just like blue light has more energy than red light in physics!
+        </div>
+      </div>
+
+      <table class="voltage-table">
+        <thead>
+          <tr>
+            <th>Color</th>
+            <th>Forward Voltage</th>
+            <th>Fun Fact</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="color-dot" style="background:#ef5350;"></span>Red</td>
+            <td>~1.8–2.0 V</td>
+            <td>First LED color ever made (1962)!</td>
+          </tr>
+          <tr>
+            <td><span class="color-dot" style="background:#ff9800;"></span>Orange</td>
+            <td>~2.0–2.1 V</td>
+            <td>Used in traffic lights</td>
+          </tr>
+          <tr>
+            <td><span class="color-dot" style="background:#ffee58;"></span>Yellow</td>
+            <td>~2.1–2.2 V</td>
+            <td>Used in indicator lights</td>
+          </tr>
+          <tr>
+            <td><span class="color-dot" style="background:#66bb6a;"></span>Green</td>
+            <td>~2.0–3.0 V</td>
+            <td>Standard green = 2V, bright green = 3V</td>
+          </tr>
+          <tr>
+            <td><span class="color-dot" style="background:#42a5f5;"></span>Blue</td>
+            <td>~3.0–3.4 V</td>
+            <td>Invented in 1994 — won the Nobel Prize!</td>
+          </tr>
+          <tr>
+            <td><span class="color-dot" style="background:#e0e0e0; border: 1px solid #bbb;"></span>White</td>
+            <td>~3.0–3.4 V</td>
+            <td>Actually a blue LED with yellow coating!</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+  </div><!-- end page-a -->
+
+
+  <!-- ======================================================
+       SIDE B (BACK)
+  ====================================================== -->
+  <div class="page page-b">
+    <div class="page-label">Side B — Back</div>
+
+    <!-- SIDE B MINI HEADER -->
+    <div class="side-b-header">
+      <div>
+        <div class="side-b-title">&#9889; Circuit Explorer Academy — Lesson 6</div>
+        <div class="side-b-sub">Diodes and LEDs &nbsp;|&nbsp; Module 1: Electronic Components Basics</div>
+      </div>
+      <div class="side-b-xp">&#11088; 310 XP</div>
+    </div>
+
+    <!-- ACTIVITY: RAINBOW BUILD -->
+    <div class="section-title">
+      <span class="icon">&#127752;</span> My Activity Today — Rainbow LED Display!
+    </div>
+
+    <div class="circuit-box">
+
+      <div class="circuit-diagram">9V (+) --+--[330&#937;]--[RED    LED]------+
+         +--[330&#937;]--[ORANGE LED]---+
+         +--[330&#937;]--[YELLOW LED]---+  all (-) legs
+         +--[330&#937;]--[GREEN  LED]---+  connect to
+         +--[330&#937;]--[BLUE   LED]---+  9V (-)
+         +--[330&#937;]--[WHITE  LED]---+</div>
+
+      <div class="circuit-note">Each LED has its OWN resistor and its OWN path — this is called a <strong>parallel circuit</strong>! If one LED goes off, the others stay on.</div>
+
+      <img src="images/lesson-06-rainbow-circuit.png" alt="Rainbow LED circuit on breadboard showing all 6 colors" class="lesson-img img-circuit" />
+
+      <div class="checklist-title">&#9989; Components I Used:</div>
+      <ul class="checklist">
+        <li><span class="check-box"></span>9V battery + clip</li>
+        <li><span class="check-box"></span>Red LED</li>
+        <li><span class="check-box"></span>Orange LED</li>
+        <li><span class="check-box"></span>Yellow LED</li>
+        <li><span class="check-box"></span>Green LED</li>
+        <li><span class="check-box"></span>Blue LED</li>
+        <li><span class="check-box"></span>White LED</li>
+        <li><span class="check-box"></span>6 × 330&#937; resistors</li>
+        <li><span class="check-box"></span>Breadboard + wires</li>
+      </ul>
+
+    </div>
+
+    <!-- QUIZ -->
+    <div class="section-title">
+      <span class="icon">&#129504;</span> Quiz Time! Fill in the blanks.
+    </div>
+
+    <div class="quiz-box">
+
+      <div class="quiz-item">
+        <div class="quiz-q">1. In a diode, current flows from the ________________ to the cathode (from + to &#8722;).</div>
+        <span class="quiz-hint">hint: "anode"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item">
+        <div class="quiz-q">2. On an LED, the ________________ leg is positive (the anode).</div>
+        <span class="quiz-hint">hint: "longer"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item">
+        <div class="quiz-q">3. A blue LED needs more voltage than red because blue light has more ________________.</div>
+        <span class="quiz-hint">hint: "energy"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item bonus" style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed #f9a825;">
+        <div class="quiz-q">&#127381; BONUS: If you flip one LED backwards in the rainbow display, why do the other 5 LEDs stay on?</div>
+        <span class="quiz-hint">hint: "each LED has its own path — parallel circuit!"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+    </div>
+
+    <!-- EXPERIMENTS -->
+    <div class="section-title">
+      <span class="icon">&#128300;</span> 4 Experiments You Did Today!
+    </div>
+
+    <div class="experiments-grid">
+
+      <div class="experiment-card exp-a">
+        <div class="exp-letter">A</div>
+        <div class="exp-body">
+          <div class="exp-title">The One-Way Door</div>
+          <div class="exp-do">Connect a diode in a circuit, then flip it backwards.</div>
+          <div class="exp-discover">LED goes off — the diode blocked backwards current like a one-way valve!</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-b">
+        <div class="exp-letter">B</div>
+        <div class="exp-body">
+          <div class="exp-title">Rainbow Display Build</div>
+          <div class="exp-do">Wire all 6 LED colors in parallel, each with its own 330&#937; resistor.</div>
+          <div class="exp-discover">All 6 colors glow at once — a full rainbow from one 9V battery!</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-c">
+        <div class="exp-letter">C</div>
+        <div class="exp-body">
+          <div class="exp-title">Reverse Polarity Test</div>
+          <div class="exp-do">Flip one LED in the rainbow display so it is backwards.</div>
+          <div class="exp-discover">Only that LED goes off — the other 5 stay on because each has its own path!</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-d">
+        <div class="exp-letter">D</div>
+        <div class="exp-body">
+          <div class="exp-title">Wand Check — Measure the Rainbow</div>
+          <div class="exp-do">Use your Multimeter (DC Volts, 20V range) across each lit LED.</div>
+          <div class="exp-discover">Red reads ~1.9V, blue reads ~3.2V — each color has a different forward voltage!</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TRY AT HOME + TROUBLESHOOTING -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.1in; margin-bottom: 0.12in;">
+
+      <div class="rainbow-home-box">
+        <div class="rainbow-home-title">&#127748; Try at Home: Traffic Light Project!</div>
+        <div class="rainbow-home-body">
+          Wire up <strong>1 red</strong>, <strong>1 yellow</strong>, and <strong>1 green</strong> LED — each with a 330&#937; resistor.<br/><br/>
+          Take turns pressing wires to complete each circuit:<br/>
+          <em>"You are the traffic controller! Red means stop. Yellow means get ready. Green means go!"</em><br/><br/>
+          Can you add a <strong>button</strong> to each color to make it feel real?
+        </div>
+      </div>
+
+      <div class="trouble-box">
+        <div class="trouble-title">&#128295; Troubleshooting Quick Guide</div>
+        <table class="trouble-table">
+          <thead>
+            <tr><th>Problem</th><th>Quick Fix</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>LED won&#39;t light</td><td>Flip it — check long leg = (+) rail</td></tr>
+            <tr><td>All LEDs off</td><td>Check battery clip connection</td></tr>
+            <tr><td>One LED dim</td><td>Press its resistor firmly in board</td></tr>
+            <tr><td>LED burned out</td><td>Missing resistor? Add 330&#937;</td></tr>
+            <tr><td>Wand reads 0V</td><td>LED may be in backwards — flip it</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- COMING UP NEXT -->
+    <div class="next-box">
+      <strong>Coming Up Next &#8594; Lesson 7: Transistors! &#128268;</strong><br/>
+      Meet the most important electronic component ever invented — the <strong>transistor</strong>. It is an electronic switch controlled by electricity itself. Without transistors, computers, phones, and robots would not exist. Get ready to flip the switch!
+    </div>
+
+  </div><!-- end page-b -->
+
+</body>
+</html>

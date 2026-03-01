@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 14: Using a Multimeter — Circuit Explorer Academy</title>
+  <style>
+    /* =============================================
+       BASE RESET & TYPOGRAPHY
+    ============================================= */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, Arial, sans-serif;
+      font-size: 13px;
+      line-height: 1.45;
+      color: #1a1a2e;
+      background: #f0f4ff;
+    }
+
+    /* =============================================
+       PAGE LAYOUT
+    ============================================= */
+    .page {
+      width: 8.5in;
+      min-height: 11in;
+      margin: 0 auto 0.4in auto;
+      padding: 0.5in;
+      background: #fff;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-label {
+      position: absolute;
+      top: 0.18in;
+      right: 0.22in;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #aaa;
+    }
+
+    /* =============================================
+       SIDE A — HEADER
+    ============================================= */
+    .header {
+      text-align: center;
+      border-bottom: 3px solid #f4c430;
+      margin-bottom: 0.16in;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+      border-radius: 10px;
+      color: #fff;
+      padding: 0.22in 0.2in 0.18in 0.2in;
+    }
+
+    .header-course {
+      font-size: 19px;
+      font-weight: 900;
+      letter-spacing: 0.03em;
+      color: #f4c430;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+
+    .header-lesson {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      margin-top: 4px;
+    }
+
+    .header-module {
+      font-size: 11px;
+      color: #a8d8ea;
+      margin-top: 3px;
+      letter-spacing: 0.04em;
+    }
+
+    .header-xp {
+      display: inline-block;
+      margin-top: 8px;
+      background: #f4c430;
+      color: #1a1a2e;
+      font-weight: 900;
+      font-size: 12px;
+      padding: 3px 14px;
+      border-radius: 20px;
+      letter-spacing: 0.06em;
+    }
+
+    .spark-row {
+      text-align: center;
+      font-size: 16px;
+      letter-spacing: 0.25em;
+      margin: 0.1in 0 0.04in 0;
+      color: #f4c430;
+    }
+
+    /* =============================================
+       SECTION HEADINGS
+    ============================================= */
+    .section-title {
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #fff;
+      background: #0f3460;
+      padding: 5px 12px;
+      border-radius: 6px;
+      margin-bottom: 0.1in;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .section-title .icon {
+      font-size: 14px;
+    }
+
+    /* =============================================
+       VOCABULARY CARDS  (2x2 grid)
+    ============================================= */
+    .vocab-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.1in;
+      margin-bottom: 0.14in;
+    }
+
+    .vocab-card {
+      border-radius: 10px;
+      padding: 0.1in 0.12in;
+      border-top: 5px solid transparent;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .vocab-card::before {
+      content: '';
+      position: absolute;
+      top: -18px;
+      right: -18px;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      opacity: 0.13;
+      background: #fff;
+    }
+
+    .vocab-card.voltage  { background: #fff3e0; border-top-color: #ff9800; }
+    .vocab-card.current  { background: #e3f2fd; border-top-color: #2196f3; }
+    .vocab-card.resist   { background: #fce4ec; border-top-color: #e91e63; }
+    .vocab-card.circuit  { background: #e8f5e9; border-top-color: #43a047; }
+
+    .vocab-term {
+      font-size: 13px;
+      font-weight: 900;
+      margin-bottom: 2px;
+    }
+
+    .vocab-card.voltage  .vocab-term { color: #e65100; }
+    .vocab-card.current  .vocab-term { color: #0d47a1; }
+    .vocab-card.resist   .vocab-term { color: #880e4f; }
+    .vocab-card.circuit  .vocab-term { color: #1b5e20; }
+
+    .vocab-symbol {
+      font-size: 18px;
+      font-weight: 900;
+      float: right;
+      margin-top: -2px;
+      opacity: 0.55;
+    }
+
+    .vocab-def {
+      font-size: 11.5px;
+      color: #333;
+      line-height: 1.4;
+      margin-top: 2px;
+    }
+
+    .vocab-emoji {
+      font-size: 20px;
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    /* =============================================
+       SUPERPOWER DIAGRAM BOX
+    ============================================= */
+    .analogy-box {
+      background: #e8f4fd;
+      border: 2px solid #90caf9;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.14in;
+    }
+
+    .analogy-caption {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: #0d47a1;
+      margin-top: 4px;
+    }
+
+    /* =============================================
+       FOUR SUPERPOWERS GRID
+    ============================================= */
+    .superpowers-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.08in;
+      margin: 0.08in 0 0.06in 0;
+    }
+
+    .superpower-card {
+      border-radius: 8px;
+      padding: 0.08in 0.1in;
+      border-left: 5px solid transparent;
+    }
+
+    .superpower-card.sp-voltage  { background: #fff3e0; border-left-color: #ff9800; }
+    .superpower-card.sp-current  { background: #e3f2fd; border-left-color: #2196f3; }
+    .superpower-card.sp-resist   { background: #fce4ec; border-left-color: #e91e63; }
+    .superpower-card.sp-cont     { background: #e8f5e9; border-left-color: #43a047; }
+
+    .sp-header {
+      font-size: 11.5px;
+      font-weight: 900;
+      margin-bottom: 3px;
+    }
+
+    .superpower-card.sp-voltage .sp-header { color: #e65100; }
+    .superpower-card.sp-current .sp-header { color: #0d47a1; }
+    .superpower-card.sp-resist  .sp-header { color: #880e4f; }
+    .superpower-card.sp-cont    .sp-header { color: #1b5e20; }
+
+    .sp-row {
+      font-size: 10px;
+      color: #444;
+      margin-bottom: 2px;
+      line-height: 1.4;
+    }
+
+    .sp-row strong {
+      color: #1a1a2e;
+    }
+
+    /* =============================================
+       PROBE DIAGRAM (ASCII CSS block)
+    ============================================= */
+    .probe-diagram {
+      font-family: monospace;
+      font-size: 10px;
+      background: #1a1a2e;
+      color: #76ff03;
+      padding: 0.09in 0.12in;
+      border-radius: 8px;
+      margin: 0.07in 0 0.04in 0;
+      line-height: 1.55;
+      white-space: pre;
+      overflow: visible;
+    }
+
+    /* =============================================
+       CIRCUIT BOX (Side B activity)
+    ============================================= */
+    .circuit-box {
+      background: #f1f8e9;
+      border: 2px solid #aed581;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.13in;
+    }
+
+    .circuit-diagram {
+      font-family: monospace;
+      font-size: 10.5px;
+      background: #1a1a2e;
+      color: #76ff03;
+      padding: 0.1in;
+      border-radius: 8px;
+      margin: 0.07in 0;
+      line-height: 1.6;
+      white-space: pre;
+      overflow: visible;
+    }
+
+    .circuit-note {
+      font-size: 11px;
+      color: #33691e;
+      font-style: italic;
+      margin-top: 5px;
+      padding: 4px 8px;
+      background: #dcedc8;
+      border-radius: 5px;
+    }
+
+    .checklist-title {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #2e7d32;
+      margin-top: 8px;
+      margin-bottom: 4px;
+    }
+
+    .checklist {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 3px 10px;
+      list-style: none;
+    }
+
+    .checklist li {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: #333;
+    }
+
+    .check-box {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid #43a047;
+      border-radius: 3px;
+      flex-shrink: 0;
+      background: #fff;
+    }
+
+    /* =============================================
+       QUIZ
+    ============================================= */
+    .quiz-box {
+      background: #fff9c4;
+      border: 2px solid #f9a825;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.13in;
+    }
+
+    .quiz-item {
+      margin-bottom: 0.08in;
+    }
+
+    .quiz-q {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 2px;
+    }
+
+    .quiz-blank {
+      display: block;
+      border-bottom: 1.5px solid #999;
+      width: 100%;
+      height: 20px;
+      margin-top: 2px;
+    }
+
+    .quiz-hint {
+      font-size: 9px;
+      color: #aaa;
+      font-style: italic;
+      float: right;
+      margin-top: 1px;
+    }
+
+    .quiz-item.bonus .quiz-q {
+      color: #e65100;
+    }
+
+    .quiz-item.bonus .quiz-blank {
+      border-bottom-color: #ff9800;
+    }
+
+    /* =============================================
+       EXPERIMENTS GRID
+    ============================================= */
+    .experiments-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.08in;
+      margin-bottom: 0.12in;
+    }
+
+    .experiment-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      border-radius: 8px;
+      padding: 0.08in 0.1in;
+      border-left: 5px solid transparent;
+    }
+
+    .experiment-card.exp-a { background: #fff3e0; border-left-color: #ff9800; }
+    .experiment-card.exp-b { background: #e3f2fd; border-left-color: #2196f3; }
+    .experiment-card.exp-c { background: #fce4ec; border-left-color: #e91e63; }
+    .experiment-card.exp-d { background: #e8f5e9; border-left-color: #43a047; }
+
+    .exp-letter {
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1;
+      flex-shrink: 0;
+      width: 24px;
+      text-align: center;
+    }
+
+    .experiment-card.exp-a .exp-letter { color: #e65100; }
+    .experiment-card.exp-b .exp-letter { color: #0d47a1; }
+    .experiment-card.exp-c .exp-letter { color: #880e4f; }
+    .experiment-card.exp-d .exp-letter { color: #1b5e20; }
+
+    .exp-body { flex: 1; }
+
+    .exp-title {
+      font-size: 11.5px;
+      font-weight: 900;
+      margin-bottom: 2px;
+      color: #1a1a2e;
+    }
+
+    .exp-do {
+      font-size: 10.5px;
+      color: #444;
+      margin-bottom: 3px;
+    }
+
+    .exp-do::before {
+      content: "▶ Do: ";
+      font-weight: 700;
+      color: #555;
+    }
+
+    .exp-discover {
+      font-size: 10.5px;
+      color: #333;
+      font-style: italic;
+    }
+
+    /* =============================================
+       TRY AT HOME + TROUBLESHOOTING
+    ============================================= */
+    .lemon-box {
+      background: #f9fbe7;
+      border: 2px solid #c5e1a5;
+      border-radius: 10px;
+      padding: 0.09in 0.11in;
+    }
+
+    .lemon-title {
+      font-size: 12px;
+      font-weight: 900;
+      color: #33691e;
+      margin-bottom: 5px;
+    }
+
+    .lemon-body {
+      font-size: 10.5px;
+      color: #333;
+      line-height: 1.5;
+    }
+
+    .trouble-box {
+      background: #fafafa;
+      border: 2px solid #bdbdbd;
+      border-radius: 10px;
+      padding: 0.09in 0.11in;
+    }
+
+    .trouble-title {
+      font-size: 12px;
+      font-weight: 900;
+      color: #37474f;
+      margin-bottom: 5px;
+    }
+
+    .trouble-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9.5px;
+    }
+
+    .trouble-table thead th {
+      background: #37474f;
+      color: #fff;
+      padding: 3px 6px;
+      text-align: left;
+      font-weight: 700;
+    }
+
+    .trouble-table tbody tr:nth-child(even) {
+      background: #f5f5f5;
+    }
+
+    .trouble-table tbody td {
+      padding: 3px 6px;
+      color: #333;
+      border-bottom: 1px solid #e0e0e0;
+      vertical-align: top;
+    }
+
+    /* =============================================
+       SIDE B HEADER
+    ============================================= */
+    .side-b-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 3px solid #f4c430;
+      margin-bottom: 0.15in;
+      padding-bottom: 0.09in;
+    }
+
+    .side-b-title {
+      font-size: 14px;
+      font-weight: 900;
+      color: #0f3460;
+    }
+
+    .side-b-sub {
+      font-size: 10px;
+      color: #888;
+      margin-top: 1px;
+    }
+
+    .side-b-xp {
+      background: #f4c430;
+      color: #1a1a2e;
+      font-weight: 900;
+      font-size: 11px;
+      padding: 3px 12px;
+      border-radius: 20px;
+    }
+
+    /* =============================================
+       COMING UP NEXT
+    ============================================= */
+    .next-box {
+      background: linear-gradient(90deg, #e3f2fd 0%, #f3e5f5 100%);
+      border-left: 5px solid #7c4dff;
+      border-radius: 0 10px 10px 0;
+      padding: 0.08in 0.14in;
+      font-size: 11.5px;
+      color: #1a1a2e;
+    }
+
+    .next-box strong {
+      color: #6a1b9a;
+    }
+
+    /* =============================================
+       SAFETY RULES BOX
+    ============================================= */
+    .safety-box {
+      background: #fff8e1;
+      border: 2px solid #ffc107;
+      border-radius: 10px;
+      padding: 0.09in 0.12in;
+      margin-bottom: 0.06in;
+    }
+
+    .safety-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px 14px;
+      margin-top: 5px;
+    }
+
+    .safety-rule {
+      font-size: 10px;
+      color: #333;
+      line-height: 1.4;
+      display: flex;
+      gap: 5px;
+      align-items: flex-start;
+    }
+
+    .safety-num {
+      font-weight: 900;
+      color: #ff6f00;
+      flex-shrink: 0;
+      min-width: 14px;
+    }
+
+    /* =============================================
+       PRINT STYLES
+    ============================================= */
+    @media print {
+      body {
+        background: #fff;
+        font-size: 12px;
+      }
+
+      .page {
+        width: 100%;
+        min-height: auto;
+        margin: 0;
+        box-shadow: none;
+        padding: 0.5in;
+      }
+
+      .page-a {
+        page-break-after: always;
+      }
+
+      .header {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .vocab-card,
+      .analogy-box,
+      .superpowers-grid,
+      .circuit-box,
+      .quiz-box,
+      .next-box,
+      .probe-diagram,
+      .circuit-diagram,
+      .safety-box {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .vocab-card.voltage  { background: #fff !important; border: 2px solid #ff9800; border-top: 5px solid #ff9800; }
+      .vocab-card.current  { background: #fff !important; border: 2px solid #2196f3; border-top: 5px solid #2196f3; }
+      .vocab-card.resist   { background: #fff !important; border: 2px solid #e91e63; border-top: 5px solid #e91e63; }
+      .vocab-card.circuit  { background: #fff !important; border: 2px solid #43a047; border-top: 5px solid #43a047; }
+
+      .experiment-card,
+      .lemon-box,
+      .trouble-box,
+      .trouble-table thead th {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+
+    @page {
+      size: A4;
+      margin: 12mm;
+    }
+
+    .clearfix::after {
+      content: '';
+      display: table;
+      clear: both;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ======================================================
+       SIDE A (FRONT)
+  ====================================================== -->
+  <div class="page page-a">
+    <div class="page-label">Side A — Front</div>
+
+    <!-- HEADER -->
+    <div class="header">
+      <div class="header-course">&#9889; Circuit Explorer Academy</div>
+      <div class="header-lesson">Lesson 14: Using a Multimeter — The Deep Dive</div>
+      <div class="header-module">Module 2: Building Simple Circuits</div>
+      <div><span class="header-xp">&#11088; 260 XP Available</span></div>
+    </div>
+
+    <div class="spark-row" aria-hidden="true">&#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889;</div>
+
+    <!-- VOCABULARY -->
+    <div class="section-title">
+      <span class="icon">&#128218;</span> Key Words — Learn These!
+    </div>
+
+    <div class="vocab-grid">
+
+      <div class="vocab-card voltage">
+        <span class="vocab-emoji">&#128267;</span>
+        <span class="vocab-symbol">V</span>
+        <div class="vocab-term">DC Voltage</div>
+        <div class="vocab-def">The <strong>"push"</strong> in a circuit, measured in Volts. Connect probes <strong>across</strong> (in parallel with) the component to measure it. Red probe goes in V/ohm jack.</div>
+      </div>
+
+      <div class="vocab-card current">
+        <span class="vocab-emoji">&#128166;</span>
+        <span class="vocab-symbol">A</span>
+        <div class="vocab-term">DC Current (Amps)</div>
+        <div class="vocab-def">How much electricity <strong>flows</strong> through the circuit. Must be measured <strong>in series</strong> — break the circuit and insert the Wand. Red probe moves to the mA jack!</div>
+      </div>
+
+      <div class="vocab-card resist">
+        <span class="vocab-emoji">&#128683;</span>
+        <span class="vocab-symbol">&#937;</span>
+        <div class="vocab-term">Resistance (Ohms)</div>
+        <div class="vocab-def">How much a component <strong>blocks</strong> the flow. Always measure with the <strong>power OFF</strong>. If the Wand reads OL, switch to a higher range — resistance is bigger than your setting!</div>
+      </div>
+
+      <div class="vocab-card circuit">
+        <span class="vocab-emoji">&#128276;</span>
+        <span class="vocab-symbol">&#8635;</span>
+        <div class="vocab-term">Continuity</div>
+        <div class="vocab-def">A <strong>beep test</strong> — the Wand beeps if electricity CAN flow through a path. Use it to check wires, find breaks, and trace connections. Always <strong>power OFF</strong> first!</div>
+      </div>
+
+    </div>
+
+    <!-- THE FOUR SUPERPOWERS DIAGRAM -->
+    <div class="section-title">
+      <span class="icon">&#9889;</span> The Four Superpowers of Your Magic Measurement Wand
+    </div>
+
+    <div class="analogy-box">
+
+      <div class="superpowers-grid">
+
+        <div class="superpower-card sp-voltage">
+          <div class="sp-header">&#128267; 1. DC Voltage (V &#8213;)</div>
+          <div class="sp-row"><strong>What:</strong> Measures electrical "push" in Volts</div>
+          <div class="sp-row"><strong>Red probe jack:</strong> V/ohm</div>
+          <div class="sp-row"><strong>Connect:</strong> ACROSS the component (parallel)</div>
+          <div class="sp-row"><strong>Think:</strong> "How hard is the battery pushing here?"</div>
+        </div>
+
+        <div class="superpower-card sp-current">
+          <div class="sp-header">&#128166; 2. DC Current (A &#8213;)</div>
+          <div class="sp-row"><strong>What:</strong> Measures electrical "flow" in Amps or mA</div>
+          <div class="sp-row"><strong>Red probe jack:</strong> mA or A (NOT V/ohm!)</div>
+          <div class="sp-row"><strong>Connect:</strong> IN SERIES — break circuit, insert Wand</div>
+          <div class="sp-row"><strong>Think:</strong> "How much electricity is actually flowing?"</div>
+        </div>
+
+        <div class="superpower-card sp-resist">
+          <div class="sp-header">&#128683; 3. Resistance (&#937; horseshoe)</div>
+          <div class="sp-row"><strong>What:</strong> Measures how much something blocks flow</div>
+          <div class="sp-row"><strong>Red probe jack:</strong> V/ohm</div>
+          <div class="sp-row"><strong>Connect:</strong> ACROSS component — POWER OFF first!</div>
+          <div class="sp-row"><strong>Think:</strong> "How much does this block electricity?"</div>
+        </div>
+
+        <div class="superpower-card sp-cont">
+          <div class="sp-header">&#128276; 4. Continuity (speaker symbol)</div>
+          <div class="sp-row"><strong>What:</strong> BEEPS if electricity can flow through a path</div>
+          <div class="sp-row"><strong>Red probe jack:</strong> V/ohm</div>
+          <div class="sp-row"><strong>Connect:</strong> ACROSS the path — POWER OFF first!</div>
+          <div class="sp-row"><strong>Think:</strong> "Is this path connected or broken?"</div>
+        </div>
+
+      </div>
+
+      <div class="analogy-caption">Cut this out and tape it next to your workspace — it is your Wand cheat sheet!</div>
+
+    </div>
+
+    <!-- VOLTAGE DROPS DIAGRAM -->
+    <div class="section-title">
+      <span class="icon">&#128268;</span> Voltage Drops — The Numbers Always Add Up!
+    </div>
+
+    <div class="analogy-box">
+      <div class="probe-diagram">  Circuit: 9V battery ----[330&#937; resistor]----[LED]---- GND
+
+  Measurement A: Red on + rail, Black on - rail --------&gt; reads ~9.0 V   (full battery)
+  Measurement B: Red on + side of resistor, Black on - side --&gt; reads ~7.0 V   (resistor's share)
+  Measurement C: Red on LED anode (+), Black on cathode (-) ---&gt; reads ~2.0 V   (LED's share)
+
+  CHECK: 7V + 2V = 9V    &lt;--- Kirchhoff's Voltage Law! The drops always add up to the source!</div>
+      <div class="analogy-caption">Connect probes ACROSS (in parallel with) each component — circuit stays powered ON for voltage!</div>
+    </div>
+
+  </div><!-- end page-a -->
+
+
+  <!-- ======================================================
+       SIDE B (BACK)
+  ====================================================== -->
+  <div class="page page-b">
+    <div class="page-label">Side B — Back</div>
+
+    <!-- SIDE B MINI HEADER -->
+    <div class="side-b-header">
+      <div>
+        <div class="side-b-title">&#9889; Circuit Explorer Academy — Lesson 14</div>
+        <div class="side-b-sub">Using a Multimeter: The Deep Dive &nbsp;|&nbsp; Module 2: Building Simple Circuits</div>
+      </div>
+      <div class="side-b-xp">&#11088; 260 XP</div>
+    </div>
+
+    <!-- CIRCUIT ACTIVITY -->
+    <div class="section-title">
+      <span class="icon">&#128161;</span> My Activity Today — The Master Challenge!
+    </div>
+
+    <div class="circuit-box">
+
+      <div class="circuit-diagram">  DEBUGGING CIRCUIT:  9V ---[Resistor]---[LED 1]---[LED 2]--- GND
+
+  STEP 1 (Voltage mode):   Red probe to V/ohm jack. Measure across battery --&gt; should be ~9V
+  STEP 2 (Voltage mode):   Measure across each LED and resistor. Note the readings.
+  STEP 3 (Continuity mode): DISCONNECT battery. Test each wire and connection for beep.
+  STEP 4 (Resistance mode): Measure the resistor. Is it really 330&#937; or something else?
+  STEP 5 (Fix &amp; retest!):  Fix what you found, reconnect battery, and recheck.</div>
+
+      <div class="circuit-note">After measuring current, ALWAYS move the red probe back to the V/ohm jack — this is the #1 mistake to avoid!</div>
+
+      <div class="checklist-title">&#9989; Components I Used:</div>
+      <ul class="checklist">
+        <li><span class="check-box"></span>Multimeter (Wand)</li>
+        <li><span class="check-box"></span>9V battery + clip</li>
+        <li><span class="check-box"></span>Breadboard</li>
+        <li><span class="check-box"></span>Red LED</li>
+        <li><span class="check-box"></span>Green LED</li>
+        <li><span class="check-box"></span>330&#937; resistor</li>
+        <li><span class="check-box"></span>Jumper wires</li>
+        <li><span class="check-box"></span>Push button</li>
+        <li><span class="check-box"></span>Paper + pencil</li>
+      </ul>
+
+    </div>
+
+    <!-- QUIZ -->
+    <div class="section-title">
+      <span class="icon">&#129504;</span> Quiz Time! Fill in the blanks.
+    </div>
+
+    <div class="quiz-box">
+
+      <div class="quiz-item">
+        <div class="quiz-q">1. To measure current through an LED, the red probe must be in the ________________ jack.</div>
+        <span class="quiz-hint">hint: "mA or A"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item">
+        <div class="quiz-q">2. When measuring resistance, you must always turn the ________________ OFF and disconnect the battery first.</div>
+        <span class="quiz-hint">hint: "power"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item">
+        <div class="quiz-q">3. The continuity mode ________________ if the path is connected, and stays silent if it is broken.</div>
+        <span class="quiz-hint">hint: "beeps"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item bonus" style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed #f9a825;">
+        <div class="quiz-q">&#127381; BONUS: Multimeter reads OL in resistance mode. What does OL mean and what do you do?</div>
+        <span class="quiz-hint">hint: "Over Limit — switch to a higher range"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+    </div>
+
+    <!-- EXPERIMENTS -->
+    <div class="section-title">
+      <span class="icon">&#128300;</span> 4 Experiments You Did Today!
+    </div>
+
+    <div class="experiments-grid">
+
+      <div class="experiment-card exp-a">
+        <div class="exp-letter">A</div>
+        <div class="exp-body">
+          <div class="exp-title">Voltage Drop Hunt</div>
+          <div class="exp-do">Measure voltage across the resistor, then the LED, then the battery.</div>
+          <div class="exp-discover">The drops ADD UP to the battery voltage — Kirchhoff's Voltage Law!</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-b">
+        <div class="exp-letter">B</div>
+        <div class="exp-body">
+          <div class="exp-title">Current in Series</div>
+          <div class="exp-do">Move red probe to mA, break the circuit, insert Wand in the gap.</div>
+          <div class="exp-discover">About 20 mA flows — match it with Ohm's Law: I = V/R!</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-c">
+        <div class="exp-letter">C</div>
+        <div class="exp-body">
+          <div class="exp-title">Measure Your Body!</div>
+          <div class="exp-do">Set dial to resistance. Hold one probe in each hand. Grip tighter or dampen hands.</div>
+          <div class="exp-discover">Dry hands: ~1M&#937;. Damp hands: much lower — water conducts!</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-d">
+        <div class="exp-letter">D</div>
+        <div class="exp-body">
+          <div class="exp-title">Continuity Obstacle Course</div>
+          <div class="exp-do">With power OFF, trace a breadboard circuit step-by-step using the beep test.</div>
+          <div class="exp-discover">Beep = connected path! Follow the circuit like a treasure map!</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TRY AT HOME + TROUBLESHOOTING -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.1in; margin-bottom: 0.12in;">
+
+      <div class="lemon-box">
+        <div class="lemon-title">&#128300; Try at Home: Body Resistance Test!</div>
+        <div class="lemon-body">
+          Set your Wand to <strong>resistance mode</strong> and hold one probe in each hand.<br/><br/>
+          Try: dry hands, slightly damp hands, squeezing tight.<br/><br/>
+          Record your readings:<br/>
+          Dry: _______ &#937;<br/>
+          Damp: _______ &#937;<br/>
+          Tight grip: _______ &#937;<br/><br/>
+          <em>"More skin contact = less resistance. You are a conductor!"</em>
+        </div>
+      </div>
+
+      <div class="trouble-box">
+        <div class="trouble-title">&#128295; Troubleshooting Quick Guide</div>
+        <table class="trouble-table">
+          <thead>
+            <tr><th>Problem</th><th>Quick Fix</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Reads 0 in current mode</td><td>Move red probe to mA jack</td></tr>
+            <tr><td>Resistance shows OL</td><td>Switch to a higher range</td></tr>
+            <tr><td>No continuity beep</td><td>Check probe jacks; replace Wand battery</td></tr>
+            <tr><td>Voltage fluctuates</td><td>Press probes firmly; check breadboard</td></tr>
+            <tr><td>Negative reading (e.g. -7V)</td><td>Probes reversed — swap red and black</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- COMING UP NEXT -->
+    <div class="next-box">
+      <strong>Coming Up Next &#8594; Lesson 15: Power Sources — Batteries, Volts, and Energy! &#128267;</strong><br/>
+      You will measure 9V, AA, AAA, and coin cell batteries with your Wand. Discover what happens when you wire batteries in SERIES (voltage adds up!) and PARALLEL (capacity adds up!). Your Wand tests them all!
+    </div>
+
+  </div><!-- end page-b -->
+
+</body>
+</html>

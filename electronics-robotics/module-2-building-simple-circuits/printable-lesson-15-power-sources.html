@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 15: Power Sources — Circuit Explorer Academy</title>
+  <style>
+    /* =============================================
+       BASE RESET & TYPOGRAPHY
+    ============================================= */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, Arial, sans-serif;
+      font-size: 13px;
+      line-height: 1.45;
+      color: #1a1a2e;
+      background: #f0f4ff;
+    }
+
+    /* =============================================
+       PAGE LAYOUT
+    ============================================= */
+    .page {
+      width: 8.5in;
+      min-height: 11in;
+      margin: 0 auto 0.4in auto;
+      padding: 0.5in;
+      background: #fff;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-label {
+      position: absolute;
+      top: 0.18in;
+      right: 0.22in;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #aaa;
+    }
+
+    /* =============================================
+       SIDE A — HEADER
+    ============================================= */
+    .header {
+      text-align: center;
+      border-bottom: 3px solid #f4c430;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+      border-radius: 10px;
+      color: #fff;
+      padding: 0.22in 0.2in 0.18in 0.2in;
+      margin-bottom: 0.16in;
+    }
+
+    .header-course {
+      font-size: 19px;
+      font-weight: 900;
+      letter-spacing: 0.03em;
+      color: #f4c430;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+
+    .header-lesson {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      margin-top: 4px;
+    }
+
+    .header-module {
+      font-size: 11px;
+      color: #a8d8ea;
+      margin-top: 3px;
+      letter-spacing: 0.04em;
+    }
+
+    .header-xp {
+      display: inline-block;
+      margin-top: 8px;
+      background: #f4c430;
+      color: #1a1a2e;
+      font-weight: 900;
+      font-size: 12px;
+      padding: 3px 14px;
+      border-radius: 20px;
+      letter-spacing: 0.06em;
+    }
+
+    .spark-row {
+      text-align: center;
+      font-size: 16px;
+      letter-spacing: 0.25em;
+      margin: 0.1in 0 0.04in 0;
+      color: #f4c430;
+    }
+
+    /* =============================================
+       SECTION HEADINGS
+    ============================================= */
+    .section-title {
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #fff;
+      background: #0f3460;
+      padding: 5px 12px;
+      border-radius: 6px;
+      margin-bottom: 0.1in;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .section-title .icon {
+      font-size: 14px;
+    }
+
+    /* =============================================
+       VOCABULARY CARDS  (2x2 grid)
+    ============================================= */
+    .vocab-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.1in;
+      margin-bottom: 0.14in;
+    }
+
+    .vocab-card {
+      border-radius: 10px;
+      padding: 0.1in 0.12in;
+      border-top: 5px solid transparent;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .vocab-card::before {
+      content: '';
+      position: absolute;
+      top: -18px;
+      right: -18px;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      opacity: 0.13;
+      background: #fff;
+    }
+
+    .vocab-card.voltage  { background: #fff3e0; border-top-color: #ff9800; }
+    .vocab-card.current  { background: #e3f2fd; border-top-color: #2196f3; }
+    .vocab-card.resist   { background: #fce4ec; border-top-color: #e91e63; }
+    .vocab-card.circuit  { background: #e8f5e9; border-top-color: #43a047; }
+
+    .vocab-term {
+      font-size: 13px;
+      font-weight: 900;
+      margin-bottom: 2px;
+    }
+
+    .vocab-card.voltage  .vocab-term { color: #e65100; }
+    .vocab-card.current  .vocab-term { color: #0d47a1; }
+    .vocab-card.resist   .vocab-term { color: #880e4f; }
+    .vocab-card.circuit  .vocab-term { color: #1b5e20; }
+
+    .vocab-symbol {
+      font-size: 18px;
+      font-weight: 900;
+      float: right;
+      margin-top: -2px;
+      opacity: 0.55;
+    }
+
+    .vocab-def {
+      font-size: 11.5px;
+      color: #333;
+      line-height: 1.4;
+      margin-top: 2px;
+    }
+
+    .vocab-emoji {
+      font-size: 20px;
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    /* =============================================
+       MAIN CONCEPT BOX (Battery Types diagram)
+    ============================================= */
+    .analogy-box {
+      background: #e8f4fd;
+      border: 2px solid #90caf9;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.14in;
+    }
+
+    .analogy-caption {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: #0d47a1;
+      margin-top: 6px;
+    }
+
+    /* =============================================
+       BATTERY TYPES TABLE (ASCII diagram area)
+    ============================================= */
+    .circuit-diagram {
+      font-family: monospace;
+      font-size: 10.5px;
+      background: #1a1a2e;
+      color: #76ff03;
+      padding: 0.1in;
+      border-radius: 8px;
+      margin: 0.07in 0;
+      line-height: 1.6;
+      overflow: visible;
+      white-space: pre;
+    }
+
+    .circuit-diagram.amber {
+      color: #ffd740;
+    }
+
+    .circuit-diagram.cyan {
+      color: #80deea;
+    }
+
+    /* =============================================
+       SERIES / PARALLEL CONCEPT CARDS
+    ============================================= */
+    .acdc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.1in;
+      margin-bottom: 0.06in;
+    }
+
+    .acdc-card {
+      border-radius: 10px;
+      padding: 0.1in 0.12in;
+      border-top: 5px solid transparent;
+    }
+
+    .acdc-card.series-card {
+      background: #fff8e1;
+      border-top-color: #ffc107;
+    }
+
+    .acdc-card.parallel-card {
+      background: #f3e5f5;
+      border-top-color: #9c27b0;
+    }
+
+    .acdc-title {
+      font-size: 13px;
+      font-weight: 900;
+      margin-bottom: 4px;
+    }
+
+    .acdc-card.series-card   .acdc-title { color: #ff6f00; }
+    .acdc-card.parallel-card .acdc-title { color: #6a1b9a; }
+
+    .acdc-wave {
+      font-family: monospace;
+      font-size: 9.5px;
+      line-height: 1.4;
+      padding: 4px 6px;
+      border-radius: 5px;
+      margin: 5px 0;
+      white-space: pre;
+    }
+
+    .acdc-card.series-card   .acdc-wave { background: #fffde7; color: #f57f17; }
+    .acdc-card.parallel-card .acdc-wave { background: #f3e5f5; color: #6a1b9a; }
+
+    .acdc-fact {
+      font-size: 10.5px;
+      color: #444;
+      line-height: 1.4;
+    }
+
+    .acdc-fact strong { color: #333; }
+
+    .acdc-father {
+      font-size: 10px;
+      margin-top: 4px;
+      padding: 3px 7px;
+      border-radius: 12px;
+      display: inline-block;
+      font-weight: 700;
+    }
+
+    .acdc-card.series-card   .acdc-father { background: #ffc107; color: #4a2c00; }
+    .acdc-card.parallel-card .acdc-father { background: #9c27b0; color: #fff; }
+
+    /* =============================================
+       SIDE B — CIRCUIT BUILD BOX
+    ============================================= */
+    .circuit-box {
+      background: #f1f8e9;
+      border: 2px solid #aed581;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.13in;
+    }
+
+    .circuit-note {
+      font-size: 11px;
+      color: #33691e;
+      font-style: italic;
+      margin-top: 5px;
+      padding: 4px 8px;
+      background: #dcedc8;
+      border-radius: 5px;
+    }
+
+    .wiring-steps {
+      list-style: none;
+      margin: 6px 0 8px 0;
+      padding: 0;
+    }
+
+    .wiring-steps li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 11px;
+      color: #1a1a2e;
+      margin-bottom: 4px;
+      line-height: 1.4;
+    }
+
+    .step-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      background: #43a047;
+      color: #fff;
+      font-size: 9px;
+      font-weight: 900;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .checklist-title {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #2e7d32;
+      margin-top: 8px;
+      margin-bottom: 4px;
+    }
+
+    .checklist {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 3px 10px;
+      list-style: none;
+    }
+
+    .checklist li {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: #333;
+    }
+
+    .check-box {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid #43a047;
+      border-radius: 3px;
+      flex-shrink: 0;
+      background: #fff;
+    }
+
+    /* =============================================
+       QUIZ
+    ============================================= */
+    .quiz-box {
+      background: #fff9c4;
+      border: 2px solid #f9a825;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.13in;
+    }
+
+    .quiz-item {
+      margin-bottom: 0.08in;
+    }
+
+    .quiz-q {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 2px;
+    }
+
+    .quiz-blank {
+      display: block;
+      border-bottom: 1.5px solid #999;
+      width: 100%;
+      height: 20px;
+      margin-top: 2px;
+    }
+
+    .quiz-hint {
+      font-size: 9px;
+      color: #aaa;
+      font-style: italic;
+      float: right;
+      margin-top: 1px;
+    }
+
+    .quiz-item.bonus .quiz-q {
+      color: #e65100;
+    }
+
+    .quiz-item.bonus .quiz-blank {
+      border-bottom-color: #ff9800;
+    }
+
+    /* =============================================
+       XP TRACKER
+    ============================================= */
+    .xp-box {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.13in;
+      color: #fff;
+    }
+
+    .xp-title {
+      font-size: 13px;
+      font-weight: 900;
+      color: #f4c430;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .xp-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px 16px;
+    }
+
+    .xp-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 10.5px;
+      color: #e0e0e0;
+    }
+
+    .xp-check {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      border: 2px solid #f4c430;
+      border-radius: 4px;
+      flex-shrink: 0;
+      background: rgba(244,196,48,0.08);
+    }
+
+    .xp-pts {
+      margin-left: auto;
+      font-size: 10px;
+      font-weight: 700;
+      color: #f4c430;
+      white-space: nowrap;
+    }
+
+    .xp-total-row {
+      margin-top: 8px;
+      border-top: 1px solid rgba(255,255,255,0.2);
+      padding-top: 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      font-weight: 900;
+      color: #f4c430;
+    }
+
+    .xp-total-blank {
+      display: inline-block;
+      border-bottom: 2px solid #f4c430;
+      width: 60px;
+      height: 18px;
+      margin: 0 4px;
+    }
+
+    /* =============================================
+       BADGE
+    ============================================= */
+    .badge-box {
+      border: 4px dashed #f4c430;
+      border-radius: 14px;
+      background: #fffde7;
+      padding: 0.12in 0.16in;
+      text-align: center;
+      margin-bottom: 0.13in;
+      position: relative;
+    }
+
+    .badge-stars {
+      font-size: 20px;
+      letter-spacing: 0.1em;
+      color: #f4c430;
+    }
+
+    .badge-title {
+      font-size: 15px;
+      font-weight: 900;
+      color: #1a1a2e;
+      margin: 5px 0 4px 0;
+      letter-spacing: 0.04em;
+    }
+
+    .badge-skills {
+      list-style: none;
+      text-align: left;
+      display: inline-block;
+      margin-top: 4px;
+    }
+
+    .badge-skills li {
+      font-size: 11px;
+      color: #333;
+      margin-bottom: 3px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .badge-check {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      background: #43a047;
+      border-radius: 50%;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    .badge-corner {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #f4c430;
+      color: #1a1a2e;
+      font-size: 22px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    }
+
+    /* =============================================
+       COMING UP NEXT
+    ============================================= */
+    .next-box {
+      background: linear-gradient(90deg, #e3f2fd 0%, #f3e5f5 100%);
+      border-left: 5px solid #7c4dff;
+      border-radius: 0 10px 10px 0;
+      padding: 0.08in 0.14in;
+      font-size: 11.5px;
+      color: #1a1a2e;
+    }
+
+    .next-box strong {
+      color: #6a1b9a;
+    }
+
+    /* =============================================
+       SIDE B HEADER
+    ============================================= */
+    .side-b-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 3px solid #f4c430;
+      margin-bottom: 0.15in;
+      padding-bottom: 0.09in;
+    }
+
+    .side-b-title {
+      font-size: 14px;
+      font-weight: 900;
+      color: #0f3460;
+    }
+
+    .side-b-sub {
+      font-size: 10px;
+      color: #888;
+      margin-top: 1px;
+    }
+
+    .side-b-xp {
+      background: #f4c430;
+      color: #1a1a2e;
+      font-weight: 900;
+      font-size: 11px;
+      padding: 3px 12px;
+      border-radius: 20px;
+    }
+
+    /* =============================================
+       EXPERIMENTS GRID
+    ============================================= */
+    .experiments-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.08in;
+      margin-bottom: 0.12in;
+    }
+
+    .experiment-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      border-radius: 8px;
+      padding: 0.08in 0.1in;
+      border-left: 5px solid transparent;
+    }
+
+    .experiment-card.exp-a { background: #fff3e0; border-left-color: #ff9800; }
+    .experiment-card.exp-b { background: #e3f2fd; border-left-color: #2196f3; }
+    .experiment-card.exp-c { background: #fce4ec; border-left-color: #e91e63; }
+    .experiment-card.exp-d { background: #e8f5e9; border-left-color: #43a047; }
+
+    .exp-letter {
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1;
+      flex-shrink: 0;
+      width: 24px;
+      text-align: center;
+    }
+
+    .experiment-card.exp-a .exp-letter { color: #e65100; }
+    .experiment-card.exp-b .exp-letter { color: #0d47a1; }
+    .experiment-card.exp-c .exp-letter { color: #880e4f; }
+    .experiment-card.exp-d .exp-letter { color: #1b5e20; }
+
+    .exp-body { flex: 1; }
+
+    .exp-title {
+      font-size: 11.5px;
+      font-weight: 900;
+      margin-bottom: 2px;
+      color: #1a1a2e;
+    }
+
+    .exp-do {
+      font-size: 10.5px;
+      color: #444;
+      margin-bottom: 3px;
+    }
+
+    .exp-do::before {
+      content: "▶ Do: ";
+      font-weight: 700;
+      color: #555;
+    }
+
+    .exp-discover {
+      font-size: 10.5px;
+      color: #333;
+      font-style: italic;
+    }
+
+    /* =============================================
+       TRY AT HOME + TROUBLESHOOTING
+    ============================================= */
+    .lemon-box {
+      background: #f9fbe7;
+      border: 2px solid #c5e1a5;
+      border-radius: 10px;
+      padding: 0.09in 0.11in;
+    }
+
+    .lemon-title {
+      font-size: 12px;
+      font-weight: 900;
+      color: #33691e;
+      margin-bottom: 5px;
+    }
+
+    .lemon-body {
+      font-size: 10.5px;
+      color: #333;
+      line-height: 1.5;
+    }
+
+    .trouble-box {
+      background: #fafafa;
+      border: 2px solid #bdbdbd;
+      border-radius: 10px;
+      padding: 0.09in 0.11in;
+    }
+
+    .trouble-title {
+      font-size: 12px;
+      font-weight: 900;
+      color: #37474f;
+      margin-bottom: 5px;
+    }
+
+    .trouble-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9.5px;
+    }
+
+    .trouble-table thead th {
+      background: #37474f;
+      color: #fff;
+      padding: 3px 6px;
+      text-align: left;
+      font-weight: 700;
+    }
+
+    .trouble-table tbody tr:nth-child(even) {
+      background: #f5f5f5;
+    }
+
+    .trouble-table tbody td {
+      padding: 3px 6px;
+      color: #333;
+      border-bottom: 1px solid #e0e0e0;
+      vertical-align: top;
+    }
+
+    /* =============================================
+       PRINT STYLES
+    ============================================= */
+    @media print {
+      body {
+        background: #fff;
+        font-size: 12px;
+      }
+
+      .page {
+        width: 100%;
+        min-height: auto;
+        margin: 0;
+        box-shadow: none;
+        padding: 0.5in;
+      }
+
+      .page-a {
+        page-break-after: always;
+      }
+
+      .header {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .vocab-card,
+      .acdc-card,
+      .circuit-box,
+      .quiz-box,
+      .xp-box,
+      .badge-box,
+      .next-box,
+      .analogy-box,
+      .circuit-diagram,
+      .experiment-card,
+      .lemon-box,
+      .trouble-box,
+      .trouble-table thead th {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .vocab-card.voltage  { background: #fff !important; border: 2px solid #ff9800; border-top: 5px solid #ff9800; }
+      .vocab-card.current  { background: #fff !important; border: 2px solid #2196f3; border-top: 5px solid #2196f3; }
+      .vocab-card.resist   { background: #fff !important; border: 2px solid #e91e63; border-top: 5px solid #e91e63; }
+      .vocab-card.circuit  { background: #fff !important; border: 2px solid #43a047; border-top: 5px solid #43a047; }
+    }
+
+    @page {
+      size: A4;
+      margin: 12mm;
+    }
+
+    .clearfix::after {
+      content: '';
+      display: table;
+      clear: both;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ======================================================
+       SIDE A (FRONT)
+  ====================================================== -->
+  <div class="page page-a">
+    <div class="page-label">Side A &#8212; Front</div>
+
+    <!-- HEADER -->
+    <div class="header">
+      <div class="header-course">&#9889; Circuit Explorer Academy</div>
+      <div class="header-lesson">Lesson 15: Power Sources &#8212; Batteries, Volts, and Energy</div>
+      <div class="header-module">Module 2: Building Simple Circuits</div>
+      <div><span class="header-xp">&#11088; 210 XP Available</span></div>
+    </div>
+
+    <div class="spark-row" aria-hidden="true">&#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889;</div>
+
+    <!-- VOCABULARY -->
+    <div class="section-title">
+      <span class="icon">&#128218;</span> Key Words &#8212; Learn These!
+    </div>
+
+    <div class="vocab-grid">
+
+      <div class="vocab-card voltage">
+        <span class="vocab-emoji">&#128267;</span>
+        <span class="vocab-symbol">V</span>
+        <div class="vocab-term">Voltage (V)</div>
+        <div class="vocab-def">How hard the battery <strong>"pushes"</strong> electricity. A 9V battery pushes <strong>6x harder</strong> than a 1.5V AA battery!</div>
+      </div>
+
+      <div class="vocab-card current">
+        <span class="vocab-emoji">&#128166;</span>
+        <span class="vocab-symbol">mAh</span>
+        <div class="vocab-term">Capacity (mAh)</div>
+        <div class="vocab-def">How <strong>long</strong> a battery can keep pushing before it runs out. Like a fuel tank &#8212; bigger mAh = longer lasting!</div>
+      </div>
+
+      <div class="vocab-card resist">
+        <span class="vocab-emoji">&#128200;</span>
+        <span class="vocab-symbol">+</span>
+        <div class="vocab-term">Series</div>
+        <div class="vocab-def">Batteries wired <strong>end-to-end</strong> (+ to &#8722;). Voltages <strong>add up!</strong> 3 AA in series = 1.5 + 1.5 + 1.5 = <strong>4.5V</strong></div>
+      </div>
+
+      <div class="vocab-card circuit">
+        <span class="vocab-emoji">&#128260;</span>
+        <span class="vocab-symbol">&#8741;</span>
+        <div class="vocab-term">Parallel</div>
+        <div class="vocab-def">Batteries wired <strong>side by side</strong> (+ to +, &#8722; to &#8722;). Voltage <strong>stays the same</strong>, but the battery lasts much longer!</div>
+      </div>
+
+    </div>
+
+    <!-- BATTERY TYPES DIAGRAM -->
+    <div class="section-title">
+      <span class="icon">&#128267;</span> Battery Museum &#8212; Know Your Power Sources!
+    </div>
+
+    <div class="analogy-box">
+      <div class="circuit-diagram amber">  BATTERY MUSEUM
+  ===============================================
+
+  [  9V  ]   Voltage: 9.0 V    Capacity: ~500 mAh
+  |  /\  |   The SPRINTER: pushes hard, short distance
+  | /  \ |   Used in: smoke detectors, 9V circuits
+  +------+   Fresh = 9.0-9.6V | Tired = 7.0-8.9V
+
+  [ AA ] [AA]  Voltage: 1.5 V  Capacity: ~2500 mAh
+  |  +  ||  |  The MARATHON RUNNER: steady, lasts long
+  +-----++--+  Used in: remotes, toys, flashlights
+               Fresh = 1.5-1.6V | Tired = 1.2-1.4V
+
+  [AAA]  Voltage: 1.5 V    Capacity: ~1000 mAh
+  | + |  The JOGGER: same voltage as AA, less capacity
+  +---+  Used in: TV remotes, small devices
+
+  [CR2032]  Voltage: 3.0 V   Capacity: ~225 mAh
+  (  +  )   The SHORT WALK: powers watches, key fobs
+  (     )   Fresh = 3.0-3.3V | Tired = 2.5-2.9V</div>
+
+      <div class="analogy-caption">Size does NOT equal voltage! The tiny 9V battery pushes 6x harder than a big AA battery.</div>
+    </div>
+
+    <!-- SERIES vs PARALLEL -->
+    <div class="section-title">
+      <span class="icon">&#9889;</span> Two Ways to Wire Batteries
+    </div>
+
+    <div class="acdc-grid">
+
+      <div class="acdc-card series-card">
+        <div class="acdc-title">&#128200; SERIES &#8212; Voltage Stacks!</div>
+        <div class="acdc-wave">+ to - to + to - (end to end)
+
+[AA1:1.5V]--[AA2:1.5V]--[AA3:1.5V]
+  +    -      +    -      +    -
+
+Total = 1.5 + 1.5 + 1.5 = 4.5V!</div>
+        <div class="acdc-fact">
+          Each battery <strong>adds its voltage</strong> to the chain.<br/>
+          <strong>Used for:</strong> getting more push when 1 battery is not enough.<br/>
+          A 4-AA battery holder = 6V!
+        </div>
+        <div class="acdc-father">&#128267; 9V battery secret: 6 tiny 1.5V cells inside!</div>
+      </div>
+
+      <div class="acdc-card parallel-card">
+        <div class="acdc-title">&#8741; PARALLEL &#8212; Capacity Doubles!</div>
+        <div class="acdc-wave">+ to + and - to - (side by side)
+
+[AA1:1.5V] --+-- (+)
+[AA2:1.5V] --+       1.5V (same!)
+[AA3:1.5V] --+   BUT 7500 mAh (triple!)</div>
+        <div class="acdc-fact">
+          Voltage <strong>stays the same</strong>, but capacity multiplies!<br/>
+          <strong>Used for:</strong> making a battery pack last much longer.<br/>
+          Only use <strong>identical, same-age</strong> batteries in parallel!
+        </div>
+        <div class="acdc-father" style="background:#ce93d8; color:#1a1a2e;">&#9888;&#65039; Safety: never mix old + new in parallel</div>
+      </div>
+
+    </div><!-- end acdc-grid -->
+
+  </div><!-- end page-a -->
+
+
+  <!-- ======================================================
+       SIDE B (BACK)
+  ====================================================== -->
+  <div class="page page-b">
+    <div class="page-label">Side B &#8212; Back</div>
+
+    <!-- SIDE B MINI HEADER -->
+    <div class="side-b-header">
+      <div>
+        <div class="side-b-title">&#9889; Circuit Explorer Academy &#8212; Lesson 15</div>
+        <div class="side-b-sub">Power Sources: Batteries, Volts, and Energy &nbsp;|&nbsp; Module 2: Building Simple Circuits</div>
+      </div>
+      <div class="side-b-xp">&#11088; 210 XP</div>
+    </div>
+
+    <!-- BATTERY LAB ACTIVITY -->
+    <div class="section-title">
+      <span class="icon">&#128300;</span> My Battery Lab Today!
+    </div>
+
+    <div class="circuit-box">
+
+      <div class="circuit-diagram cyan">  BATTERY LAB DATA SHEET
+  Set Wand: DC Volts, 20V range | RED probe to (+) | BLACK probe to (-)
+
+  Battery Type  | Rated V | My Wand Reads | Fresh or Tired? | Notes
+  --------------|---------|---------------|-----------------|-------
+  9V (new)      | 9.0V    | ________V     |                 |
+  9V (old)      | 9.0V    | ________V     |                 |
+  AA (new)      | 1.5V    | ________V     |                 |
+  AAA           | 1.5V    | ________V     |                 |
+  CR2032        | 3.0V    | ________V     |                 |</div>
+
+      <div class="circuit-note">Tip: A 9V battery's + terminal is the SMALLER round snap. A AA's + is the BUMP on top. A coin cell's + is the FLAT FACE with writing!</div>
+
+      <ol class="wiring-steps">
+        <li><span class="step-num">1</span>Test each battery with the Wand. Write down every reading.</li>
+        <li><span class="step-num">2</span>Stack 2 AA batteries in series with alligator clips (+ to &#8722;). Measure total voltage.</li>
+        <li><span class="step-num">3</span>Add a 3rd AA in series. Predict the voltage, then measure to check!</li>
+        <li><span class="step-num">4</span>Connect 2 AA in parallel (+ to +, &#8722; to &#8722;). Notice voltage stays 1.5V!</li>
+        <li><span class="step-num">5</span>Use 2 AA in series (3V) + a 330&#937; resistor to light a red LED on the breadboard.</li>
+      </ol>
+
+      <div class="checklist-title">&#9989; Components I Used:</div>
+      <ul class="checklist">
+        <li><span class="check-box"></span>9V battery</li>
+        <li><span class="check-box"></span>AA batteries (x4)</li>
+        <li><span class="check-box"></span>CR2032 coin cell</li>
+        <li><span class="check-box"></span>Multimeter (Wand)</li>
+        <li><span class="check-box"></span>Alligator clips</li>
+        <li><span class="check-box"></span>LED + 330&#937; resistor</li>
+      </ul>
+
+    </div>
+
+    <!-- QUIZ -->
+    <div class="section-title">
+      <span class="icon">&#129504;</span> Quiz Time! Fill in the blanks.
+    </div>
+
+    <div class="quiz-box">
+
+      <div class="quiz-item">
+        <div class="quiz-q">1. A fresh AA battery measures about ________________ volts.</div>
+        <span class="quiz-hint">hint: "1.5V"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item">
+        <div class="quiz-q">2. Wire 3 AA batteries in series. The total voltage is ________________ volts.</div>
+        <span class="quiz-hint">hint: "1.5 x 3 = ?"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item">
+        <div class="quiz-q">3. Two identical batteries wired in parallel: voltage stays ________________ but capacity ________________.</div>
+        <span class="quiz-hint">hint: "same / doubles"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item bonus" style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed #f9a825;">
+        <div class="quiz-q">&#127381; BONUS (ages 10+): A 9V battery has 500 mAh. Your circuit draws 20 mA. How long will it last? (Time = Capacity &#247; Current)</div>
+        <span class="quiz-hint">hint: "500 &#247; 20 = ? hours"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+    </div>
+
+    <!-- EXPERIMENTS -->
+    <div class="section-title">
+      <span class="icon">&#128267;</span> 4 Experiments You Did Today!
+    </div>
+
+    <div class="experiments-grid">
+
+      <div class="experiment-card exp-a">
+        <div class="exp-letter">A</div>
+        <div class="exp-body">
+          <div class="exp-title">Battery Museum Test</div>
+          <div class="exp-do">Measure every battery with the Wand.</div>
+          <div class="exp-discover">The tiny 9V pushes harder than the big AA &#8212; size does NOT equal voltage!</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-b">
+        <div class="exp-letter">B</div>
+        <div class="exp-body">
+          <div class="exp-title">Series Voltage Stacking</div>
+          <div class="exp-do">Clip AA batteries end-to-end and measure.</div>
+          <div class="exp-discover">Each battery adds <strong>+1.5V</strong> &#8212; voltages truly stack in series!</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-c">
+        <div class="exp-letter">C</div>
+        <div class="exp-body">
+          <div class="exp-title">Parallel Stays the Same</div>
+          <div class="exp-do">Clip 2 AA batteries + to + and &#8722; to &#8722;.</div>
+          <div class="exp-discover">Voltage stays <strong>1.5V!</strong> Parallel adds capacity, not voltage &#8212; a bigger fuel tank!</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-d">
+        <div class="exp-letter">D</div>
+        <div class="exp-body">
+          <div class="exp-title">Light the LED with AA Batteries</div>
+          <div class="exp-do">Use 2 AA in series (3V) + resistor + LED.</div>
+          <div class="exp-discover">The LED lights up! One AA (1.5V) barely works, but <strong>two in series = just right!</strong></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TRY AT HOME + TROUBLESHOOTING -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.1in; margin-bottom: 0.12in;">
+
+      <div class="lemon-box">
+        <div class="lemon-title">&#127968; Try at Home: Battery Hunt!</div>
+        <div class="lemon-body">
+          Grab the Wand and go hunting around your house!<br/><br/>
+          Test batteries in every remote control, toy, and flashlight you can find.<br/><br/>
+          <strong>Fresh (AA):</strong> 1.5&#8211;1.6V<br/>
+          <strong>Tired (AA):</strong> 1.2&#8211;1.4V<br/>
+          <strong>Dead:</strong> Below 1.1V<br/><br/>
+          <em>How many dead batteries did you find? Report your findings!</em>
+        </div>
+      </div>
+
+      <div class="trouble-box">
+        <div class="trouble-title">&#128295; Troubleshooting Quick Guide</div>
+        <table class="trouble-table">
+          <thead>
+            <tr><th>Problem</th><th>Quick Fix</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Wand reads 0V</td><td>Press probe tips firmly against terminals</td></tr>
+            <tr><td>Wand shows negative</td><td>Swap probes: RED to (+), BLACK to (&#8722;)</td></tr>
+            <tr><td>Series total wrong</td><td>Check one battery is not reversed in the chain</td></tr>
+            <tr><td>LED won't light (2 AA)</td><td>Check breadboard connections and LED polarity</td></tr>
+            <tr><td>Battery gets hot</td><td>Disconnect! Short circuit &#8212; check bare wires</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- COMING UP NEXT -->
+    <div class="next-box">
+      <strong>Coming Up Next &#8594; Lesson 16: Project &#8212; The Lighthouse Circuit! &#128682;</strong><br/>
+      The Grand Finale of Module 2! You will build a working LIGHTHOUSE with a blinking LED, using everything you have learned: breadboarding, Ohm's Law, series and parallel circuits, voltage dividers, power sources, and your Magic Measurement Wand. This is going to be EPIC!
+    </div>
+
+  </div><!-- end page-b -->
+
+</body>
+</html>

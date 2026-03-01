@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 19: 555 Timer — One-Shot Mode — Circuit Explorer Academy</title>
+  <style>
+    /* =============================================
+       BASE RESET & TYPOGRAPHY
+    ============================================= */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, Arial, sans-serif;
+      font-size: 13px;
+      line-height: 1.45;
+      color: #1a1a2e;
+      background: #f0f4ff;
+    }
+
+    /* =============================================
+       PAGE LAYOUT
+    ============================================= */
+    .page {
+      width: 8.5in;
+      min-height: 11in;
+      margin: 0 auto 0.4in auto;
+      padding: 0.5in;
+      background: #fff;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-label {
+      position: absolute;
+      top: 0.18in;
+      right: 0.22in;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #aaa;
+    }
+
+    /* =============================================
+       SIDE A — HEADER
+    ============================================= */
+    .header {
+      text-align: center;
+      border-bottom: 3px solid #f4c430;
+      margin-bottom: 0.16in;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+      border-radius: 10px;
+      color: #fff;
+      padding: 0.22in 0.2in 0.18in 0.2in;
+    }
+
+    .header-course {
+      font-size: 19px;
+      font-weight: 900;
+      letter-spacing: 0.03em;
+      color: #f4c430;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+
+    .header-lesson {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      margin-top: 4px;
+    }
+
+    .header-module {
+      font-size: 11px;
+      color: #a8d8ea;
+      margin-top: 3px;
+      letter-spacing: 0.04em;
+    }
+
+    .header-xp {
+      display: inline-block;
+      margin-top: 8px;
+      background: #f4c430;
+      color: #1a1a2e;
+      font-weight: 900;
+      font-size: 12px;
+      padding: 3px 14px;
+      border-radius: 20px;
+      letter-spacing: 0.06em;
+    }
+
+    .spark-row {
+      text-align: center;
+      font-size: 16px;
+      letter-spacing: 0.25em;
+      margin: 0.1in 0 0.04in 0;
+      color: #f4c430;
+    }
+
+    /* =============================================
+       SECTION HEADINGS
+    ============================================= */
+    .section-title {
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #fff;
+      background: #0f3460;
+      padding: 5px 12px;
+      border-radius: 6px;
+      margin-bottom: 0.1in;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .section-title .icon {
+      font-size: 14px;
+    }
+
+    /* =============================================
+       VOCABULARY CARDS  (2x2 grid)
+    ============================================= */
+    .vocab-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.1in;
+      margin-bottom: 0.14in;
+    }
+
+    .vocab-card {
+      border-radius: 10px;
+      padding: 0.1in 0.12in;
+      border-top: 5px solid transparent;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .vocab-card::before {
+      content: '';
+      position: absolute;
+      top: -18px;
+      right: -18px;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      opacity: 0.13;
+      background: #fff;
+    }
+
+    .vocab-card.voltage  { background: #fff3e0; border-top-color: #ff9800; }
+    .vocab-card.current  { background: #e3f2fd; border-top-color: #2196f3; }
+    .vocab-card.resist   { background: #fce4ec; border-top-color: #e91e63; }
+    .vocab-card.circuit  { background: #e8f5e9; border-top-color: #43a047; }
+
+    .vocab-term {
+      font-size: 13px;
+      font-weight: 900;
+      margin-bottom: 2px;
+    }
+
+    .vocab-card.voltage  .vocab-term { color: #e65100; }
+    .vocab-card.current  .vocab-term { color: #0d47a1; }
+    .vocab-card.resist   .vocab-term { color: #880e4f; }
+    .vocab-card.circuit  .vocab-term { color: #1b5e20; }
+
+    .vocab-symbol {
+      font-size: 18px;
+      font-weight: 900;
+      float: right;
+      margin-top: -2px;
+      opacity: 0.55;
+    }
+
+    .vocab-def {
+      font-size: 11.5px;
+      color: #333;
+      line-height: 1.4;
+      margin-top: 2px;
+    }
+
+    .vocab-emoji {
+      font-size: 20px;
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    /* =============================================
+       CONCEPT / ANALOGY BOX
+    ============================================= */
+    .analogy-box {
+      background: #e8f4fd;
+      border: 2px solid #90caf9;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.14in;
+    }
+
+    .analogy-caption {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: #0d47a1;
+      margin-top: 6px;
+    }
+
+    /* =============================================
+       AC / DC / MODE BOXES
+    ============================================= */
+    .acdc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.1in;
+      margin-bottom: 0.06in;
+    }
+
+    .acdc-card {
+      border-radius: 10px;
+      padding: 0.1in 0.12in;
+      border-top: 5px solid transparent;
+    }
+
+    .acdc-card.dc {
+      background: #fff8e1;
+      border-top-color: #ffc107;
+    }
+
+    .acdc-card.ac {
+      background: #f3e5f5;
+      border-top-color: #9c27b0;
+    }
+
+    .acdc-title {
+      font-size: 13px;
+      font-weight: 900;
+      margin-bottom: 4px;
+    }
+
+    .acdc-card.dc .acdc-title { color: #ff6f00; }
+    .acdc-card.ac .acdc-title { color: #6a1b9a; }
+
+    .acdc-wave {
+      font-family: monospace;
+      font-size: 9.5px;
+      line-height: 1.3;
+      padding: 4px 6px;
+      border-radius: 5px;
+      margin: 5px 0;
+      white-space: pre;
+    }
+
+    .acdc-card.dc .acdc-wave {
+      background: #fffde7;
+      color: #f57f17;
+    }
+
+    .acdc-card.ac .acdc-wave {
+      background: #f3e5f5;
+      color: #6a1b9a;
+    }
+
+    .acdc-fact {
+      font-size: 10.5px;
+      color: #444;
+      line-height: 1.4;
+    }
+
+    .acdc-fact strong {
+      color: #333;
+    }
+
+    /* =============================================
+       SIDE B — CIRCUIT BUILD
+    ============================================= */
+    .circuit-box {
+      background: #f1f8e9;
+      border: 2px solid #aed581;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.13in;
+    }
+
+    .circuit-diagram {
+      font-family: monospace;
+      font-size: 10.5px;
+      background: #1a1a2e;
+      color: #76ff03;
+      padding: 0.1in;
+      border-radius: 8px;
+      margin: 0.07in 0;
+      line-height: 1.6;
+      overflow: visible;
+      white-space: pre;
+    }
+
+    .circuit-note {
+      font-size: 11px;
+      color: #33691e;
+      font-style: italic;
+      margin-top: 5px;
+      padding: 4px 8px;
+      background: #dcedc8;
+      border-radius: 5px;
+    }
+
+    .checklist-title {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #2e7d32;
+      margin-top: 8px;
+      margin-bottom: 4px;
+    }
+
+    .checklist {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 3px 10px;
+      list-style: none;
+    }
+
+    .checklist li {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: #333;
+    }
+
+    .check-box {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid #43a047;
+      border-radius: 3px;
+      flex-shrink: 0;
+      background: #fff;
+    }
+
+    /* =============================================
+       WIRING STEPS
+    ============================================= */
+    .wiring-steps {
+      list-style: none;
+      margin: 6px 0 8px 0;
+      padding: 0;
+    }
+
+    .wiring-steps li {
+      font-size: 10.5px;
+      color: #1a1a2e;
+      padding: 3px 0 3px 24px;
+      position: relative;
+      border-bottom: 1px dotted #c8e6c9;
+      line-height: 1.4;
+    }
+
+    .wiring-steps li:last-child {
+      border-bottom: none;
+    }
+
+    .wiring-steps li::before {
+      content: attr(data-step);
+      position: absolute;
+      left: 0;
+      top: 3px;
+      width: 18px;
+      height: 18px;
+      background: #2e7d32;
+      color: #fff;
+      font-size: 9px;
+      font-weight: 900;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      line-height: 18px;
+    }
+
+    /* =============================================
+       QUIZ
+    ============================================= */
+    .quiz-box {
+      background: #fff9c4;
+      border: 2px solid #f9a825;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.13in;
+    }
+
+    .quiz-item {
+      margin-bottom: 0.08in;
+    }
+
+    .quiz-q {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 2px;
+    }
+
+    .quiz-blank {
+      display: block;
+      border-bottom: 1.5px solid #999;
+      width: 100%;
+      height: 20px;
+      margin-top: 2px;
+    }
+
+    .quiz-hint {
+      font-size: 9px;
+      color: #aaa;
+      font-style: italic;
+      float: right;
+      margin-top: 1px;
+    }
+
+    .quiz-item.bonus .quiz-q {
+      color: #e65100;
+    }
+
+    .quiz-item.bonus .quiz-blank {
+      border-bottom-color: #ff9800;
+    }
+
+    /* =============================================
+       EXPERIMENTS GRID
+    ============================================= */
+    .experiments-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.08in;
+      margin-bottom: 0.12in;
+    }
+
+    .experiment-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      border-radius: 8px;
+      padding: 0.08in 0.1in;
+      border-left: 5px solid transparent;
+    }
+
+    .experiment-card.exp-a { background: #fff3e0; border-left-color: #ff9800; }
+    .experiment-card.exp-b { background: #e3f2fd; border-left-color: #2196f3; }
+    .experiment-card.exp-c { background: #fce4ec; border-left-color: #e91e63; }
+    .experiment-card.exp-d { background: #e8f5e9; border-left-color: #43a047; }
+
+    .exp-letter {
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1;
+      flex-shrink: 0;
+      width: 24px;
+      text-align: center;
+    }
+
+    .experiment-card.exp-a .exp-letter { color: #e65100; }
+    .experiment-card.exp-b .exp-letter { color: #0d47a1; }
+    .experiment-card.exp-c .exp-letter { color: #880e4f; }
+    .experiment-card.exp-d .exp-letter { color: #1b5e20; }
+
+    .exp-body { flex: 1; }
+
+    .exp-title {
+      font-size: 11.5px;
+      font-weight: 900;
+      margin-bottom: 2px;
+      color: #1a1a2e;
+    }
+
+    .exp-do {
+      font-size: 10.5px;
+      color: #444;
+      margin-bottom: 3px;
+    }
+
+    .exp-do::before {
+      content: "▶ Do: ";
+      font-weight: 700;
+      color: #555;
+    }
+
+    .exp-discover {
+      font-size: 10.5px;
+      color: #333;
+      font-style: italic;
+    }
+
+    /* =============================================
+       TRY AT HOME + TROUBLESHOOTING
+    ============================================= */
+    .lemon-box {
+      background: #f9fbe7;
+      border: 2px solid #c5e1a5;
+      border-radius: 10px;
+      padding: 0.09in 0.11in;
+    }
+
+    .lemon-title {
+      font-size: 12px;
+      font-weight: 900;
+      color: #33691e;
+      margin-bottom: 5px;
+    }
+
+    .lemon-body {
+      font-size: 10.5px;
+      color: #333;
+      line-height: 1.5;
+    }
+
+    .trouble-box {
+      background: #fafafa;
+      border: 2px solid #bdbdbd;
+      border-radius: 10px;
+      padding: 0.09in 0.11in;
+    }
+
+    .trouble-title {
+      font-size: 12px;
+      font-weight: 900;
+      color: #37474f;
+      margin-bottom: 5px;
+    }
+
+    .trouble-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9.5px;
+    }
+
+    .trouble-table thead th {
+      background: #37474f;
+      color: #fff;
+      padding: 3px 6px;
+      text-align: left;
+      font-weight: 700;
+    }
+
+    .trouble-table tbody tr:nth-child(even) {
+      background: #f5f5f5;
+    }
+
+    .trouble-table tbody td {
+      padding: 3px 6px;
+      color: #333;
+      border-bottom: 1px solid #e0e0e0;
+      vertical-align: top;
+    }
+
+    /* =============================================
+       SIDE B HEADER
+    ============================================= */
+    .side-b-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 3px solid #f4c430;
+      margin-bottom: 0.15in;
+      padding-bottom: 0.09in;
+    }
+
+    .side-b-title {
+      font-size: 14px;
+      font-weight: 900;
+      color: #0f3460;
+    }
+
+    .side-b-sub {
+      font-size: 10px;
+      color: #888;
+      margin-top: 1px;
+    }
+
+    .side-b-xp {
+      background: #f4c430;
+      color: #1a1a2e;
+      font-weight: 900;
+      font-size: 11px;
+      padding: 3px 12px;
+      border-radius: 20px;
+    }
+
+    /* =============================================
+       COMING UP NEXT
+    ============================================= */
+    .next-box {
+      background: linear-gradient(90deg, #e3f2fd 0%, #f3e5f5 100%);
+      border-left: 5px solid #7c4dff;
+      border-radius: 0 10px 10px 0;
+      padding: 0.08in 0.14in;
+      font-size: 11.5px;
+      color: #1a1a2e;
+    }
+
+    .next-box strong {
+      color: #6a1b9a;
+    }
+
+    /* =============================================
+       TIMING FORMULA BOX
+    ============================================= */
+    .formula-box {
+      background: #1a1a2e;
+      border-radius: 8px;
+      padding: 0.09in 0.12in;
+      margin: 0.07in 0;
+      text-align: center;
+    }
+
+    .formula-main {
+      font-family: monospace;
+      font-size: 14px;
+      font-weight: 900;
+      color: #f4c430;
+      letter-spacing: 0.05em;
+    }
+
+    .formula-example {
+      font-family: monospace;
+      font-size: 10px;
+      color: #76ff03;
+      margin-top: 4px;
+      line-height: 1.5;
+    }
+
+    /* =============================================
+       PULSE DIAGRAM
+    ============================================= */
+    .pulse-diagram {
+      font-family: monospace;
+      font-size: 10px;
+      background: #1a1a2e;
+      color: #76ff03;
+      padding: 0.09in 0.12in;
+      border-radius: 8px;
+      margin: 0.07in 0 0.05in 0;
+      line-height: 1.55;
+      white-space: pre;
+    }
+
+    /* =============================================
+       PRINT STYLES
+    ============================================= */
+    @media print {
+      body {
+        background: #fff;
+        font-size: 12px;
+      }
+
+      .page {
+        width: 100%;
+        min-height: auto;
+        margin: 0;
+        box-shadow: none;
+        padding: 0.5in;
+      }
+
+      .page-a {
+        page-break-after: always;
+      }
+
+      .header {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .vocab-card,
+      .acdc-card,
+      .circuit-box,
+      .quiz-box,
+      .next-box,
+      .analogy-box,
+      .circuit-diagram,
+      .pulse-diagram,
+      .formula-box,
+      .experiment-card,
+      .lemon-box,
+      .trouble-box,
+      .trouble-table thead th {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .vocab-card.voltage  { background: #fff !important; border: 2px solid #ff9800; border-top: 5px solid #ff9800; }
+      .vocab-card.current  { background: #fff !important; border: 2px solid #2196f3; border-top: 5px solid #2196f3; }
+      .vocab-card.resist   { background: #fff !important; border: 2px solid #e91e63; border-top: 5px solid #e91e63; }
+      .vocab-card.circuit  { background: #fff !important; border: 2px solid #43a047; border-top: 5px solid #43a047; }
+    }
+
+    @page {
+      size: A4;
+      margin: 12mm;
+    }
+
+    .clearfix::after {
+      content: '';
+      display: table;
+      clear: both;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ======================================================
+       SIDE A (FRONT)
+  ====================================================== -->
+  <div class="page page-a">
+    <div class="page-label">Side A &mdash; Front</div>
+
+    <!-- HEADER -->
+    <div class="header">
+      <div class="header-course">&#9889; Circuit Explorer Academy</div>
+      <div class="header-lesson">Lesson 19: The 555 Timer &mdash; One-Shot Mode (Monostable)</div>
+      <div class="header-module">Module 3: Integrated Circuits (ICs)</div>
+      <div><span class="header-xp">&#11088; 280 XP Available</span></div>
+    </div>
+
+    <div class="spark-row" aria-hidden="true">&#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889;</div>
+
+    <!-- VOCABULARY -->
+    <div class="section-title">
+      <span class="icon">&#128218;</span> Key Words &mdash; Learn These!
+    </div>
+
+    <div class="vocab-grid">
+
+      <div class="vocab-card voltage">
+        <span class="vocab-emoji">&#9202;</span>
+        <span class="vocab-symbol">1x</span>
+        <div class="vocab-term">Monostable</div>
+        <div class="vocab-def"><strong>"Mono" = one, "stable" = steady.</strong> The 555 fires ONE pulse when triggered, stays on for a set time, then returns to its resting state until triggered again.</div>
+      </div>
+
+      <div class="vocab-card current">
+        <span class="vocab-emoji">&#128161;</span>
+        <span class="vocab-symbol">T</span>
+        <div class="vocab-term">Pulse Duration</div>
+        <div class="vocab-def">How <strong>long</strong> the output stays HIGH (LED on). Controlled by resistor R and capacitor C using the formula <strong>T = 1.1 &times; R &times; C</strong>.</div>
+      </div>
+
+      <div class="vocab-card resist">
+        <span class="vocab-emoji">&#128268;</span>
+        <span class="vocab-symbol">2</span>
+        <div class="vocab-term">Trigger (Pin 2)</div>
+        <div class="vocab-def">The 555's <strong>start button</strong>. When Pin 2 drops below 1/3 of VCC (by pressing the push button), the one-shot pulse begins!</div>
+      </div>
+
+      <div class="vocab-card circuit">
+        <span class="vocab-emoji">&#9651;</span>
+        <span class="vocab-symbol">C</span>
+        <div class="vocab-term">Threshold (Pin 6)</div>
+        <div class="vocab-def">The <strong>timer's finish line</strong>. When the capacitor charges up to 2/3 of VCC, Pin 6 detects it and tells the 555 &mdash; time's up, turn off!</div>
+      </div>
+
+    </div>
+
+    <!-- EGG TIMER ANALOGY -->
+    <div class="section-title">
+      <span class="icon">&#9202;</span> The Egg Timer Analogy &mdash; How One-Shot Works!
+    </div>
+
+    <div class="analogy-box">
+      <div style="font-size: 11.5px; color: #1a1a2e; margin-bottom: 6px; font-weight: 700;">Think of an egg timer. Here is what each part matches:</div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 6px; margin-bottom: 8px;">
+
+        <div style="background: #fff; border: 2px solid #ff9800; border-radius: 8px; padding: 6px 7px; text-align: center;">
+          <div style="font-size: 18px;">&#128267;</div>
+          <div style="font-size: 9.5px; font-weight: 900; color: #e65100;">PUSH BUTTON</div>
+          <div style="font-size: 8.5px; color: #555; margin-top: 2px; font-style: italic;">= Twist the timer knob</div>
+        </div>
+
+        <div style="background: #fff; border: 2px solid #2196f3; border-radius: 8px; padding: 6px 7px; text-align: center;">
+          <div style="font-size: 18px;">&#128309;</div>
+          <div style="font-size: 9.5px; font-weight: 900; color: #0d47a1;">CAPACITOR</div>
+          <div style="font-size: 8.5px; color: #555; margin-top: 2px; font-style: italic;">= Sand falling through</div>
+        </div>
+
+        <div style="background: #fff; border: 2px solid #e91e63; border-radius: 8px; padding: 6px 7px; text-align: center;">
+          <div style="font-size: 18px;">&#127344;</div>
+          <div style="font-size: 9.5px; font-weight: 900; color: #880e4f;">RESISTOR (R)</div>
+          <div style="font-size: 8.5px; color: #555; margin-top: 2px; font-style: italic;">= Size of the hole</div>
+        </div>
+
+        <div style="background: #fff; border: 2px solid #43a047; border-radius: 8px; padding: 6px 7px; text-align: center;">
+          <div style="font-size: 18px;">&#128276;</div>
+          <div style="font-size: 9.5px; font-weight: 900; color: #1b5e20;">OUTPUT (Pin 3)</div>
+          <div style="font-size: 8.5px; color: #555; margin-top: 2px; font-style: italic;">= The DING bell</div>
+        </div>
+
+      </div>
+
+      <!-- Pulse shape ASCII diagram -->
+      <div class="pulse-diagram">  Press button         Time's up! LED off
+       |                         |
+  HIGH |    _____________________|
+       |   |                     |
+  LOW  |___|                     |___________
+       |
+       +-----------------------------------> Time
+            &lt;----- T = 1.1 x R x C ------&gt;</div>
+
+      <div class="analogy-caption">Press once &rarr; LED turns ON &rarr; capacitor charges up &rarr; LED turns OFF automatically. Press again to restart!</div>
+    </div>
+
+    <!-- THE TIMING FORMULA -->
+    <div class="section-title">
+      <span class="icon">&#128300;</span> The Magic Timing Formula
+    </div>
+
+    <div class="acdc-grid">
+
+      <div class="acdc-card dc">
+        <div class="acdc-title">&#9201; Formula: T = 1.1 &times; R &times; C</div>
+        <div class="acdc-wave">T = time ON (in seconds)
+R = resistor (in Ohms)
+C = capacitor (in Farads)
+
+Bigger R = longer time
+Bigger C = longer time</div>
+        <div class="acdc-fact">
+          <strong>Example with R=100k, C=47&#956;F:</strong><br/>
+          T = 1.1 &times; 100,000 &times; 0.000047<br/>
+          T = <strong>5.17 seconds</strong> &mdash; about 5 sec!<br/><br/>
+          Double the capacitor &rarr; time doubles!
+        </div>
+      </div>
+
+      <div class="acdc-card ac">
+        <div class="acdc-title">&#128202; Timing Table &mdash; Try These!</div>
+        <div class="acdc-wave" style="font-size: 9px;">R Value  | C Value  | ON Time
+---------|----------|---------
+100k     | 47uF     | ~5 sec
+ 47k     | 47uF     | ~2.4 sec
+100k     | 100uF    | ~11 sec
+ 47k     | 100uF    | ~5.2 sec</div>
+        <div class="acdc-fact">
+          Use your <strong>stopwatch</strong> to measure the real ON time after you press the button.<br/><br/>
+          How close is your measured time to the calculated time?
+        </div>
+      </div>
+
+    </div>
+
+  </div><!-- end page-a -->
+
+
+  <!-- ======================================================
+       SIDE B (BACK)
+  ====================================================== -->
+  <div class="page page-b">
+    <div class="page-label">Side B &mdash; Back</div>
+
+    <!-- SIDE B MINI HEADER -->
+    <div class="side-b-header">
+      <div>
+        <div class="side-b-title">&#9889; Circuit Explorer Academy &mdash; Lesson 19</div>
+        <div class="side-b-sub">555 Timer: One-Shot Mode (Monostable) &nbsp;|&nbsp; Module 3: Integrated Circuits</div>
+      </div>
+      <div class="side-b-xp">&#11088; 280 XP</div>
+    </div>
+
+    <!-- CIRCUIT BUILD -->
+    <div class="section-title">
+      <span class="icon">&#128161;</span> My Activity Today &mdash; Build the One-Shot Circuit!
+    </div>
+
+    <div class="circuit-box">
+
+      <div class="circuit-diagram">  +9V ----+----[10k pull-up]----+---- Pin 2 (Trigger)
+          |                    |
+         [R] 100k           [Button] ---> GND (press to trigger!)
+          |
+          +---------- Pin 6 (Threshold) + Pin 7 (Discharge)
+          |
+         [C] 47uF (long leg + to Pin 6/7 side!)
+          |
+         GND
+
+  Pin 8 (VCC) ---- +9V       Pin 1 (GND) ---- GND
+  Pin 4 (Reset) -- +9V       Pin 5 (Control) -[0.01uF]- GND
+  Pin 3 (Output) --[330&#937;]-- LED (+) --> LED (-) --> GND</div>
+
+      <div class="circuit-note">When you press the button, Pin 2 drops to GND. The 555 wakes up, turns on the LED, and starts charging the capacitor. When the cap hits 6V (2/3 of 9V), the 555 turns the LED off automatically!</div>
+
+      <div class="checklist-title">&#9989; Wiring Steps &mdash; Check Each One:</div>
+      <ol class="wiring-steps">
+        <li data-step="1">Place 555 IC across the center gap, notch facing UP</li>
+        <li data-step="2">Pin 1 (GND) &rarr; negative rail &nbsp;|&nbsp; Pin 8 (VCC) &rarr; positive rail &nbsp;|&nbsp; Pin 4 (Reset) &rarr; positive rail</li>
+        <li data-step="3">100k&#937; resistor: between positive rail and the Pin 7 row</li>
+        <li data-step="4">Short jumper wire connecting Pin 6 to Pin 7 (they share the same node)</li>
+        <li data-step="5">47&#956;F capacitor: long leg (+) to Pin 6/7 row, short leg (&minus;) to negative rail</li>
+        <li data-step="6">0.01&#956;F ceramic cap: Pin 5 to negative rail (noise filter)</li>
+        <li data-step="7">Trigger: 10k&#937; pull-up from positive rail to Pin 2, then push button from Pin 2 to negative rail</li>
+        <li data-step="8">LED + 330&#937;: Pin 3 &rarr; 330&#937; &rarr; LED (+leg) &rarr; LED (&minus;leg) &rarr; negative rail</li>
+        <li data-step="9">Connect 9V battery. Press button &mdash; LED should glow for about 5 seconds then turn off!</li>
+      </ol>
+
+      <div class="checklist-title">&#128230; Components I Used:</div>
+      <ul class="checklist">
+        <li><span class="check-box"></span>555 timer IC</li>
+        <li><span class="check-box"></span>100k&#937; resistor</li>
+        <li><span class="check-box"></span>47&#956;F capacitor</li>
+        <li><span class="check-box"></span>10k&#937; pull-up resistor</li>
+        <li><span class="check-box"></span>0.01&#956;F ceramic cap</li>
+        <li><span class="check-box"></span>Push button</li>
+        <li><span class="check-box"></span>LED (any color)</li>
+        <li><span class="check-box"></span>330&#937; LED resistor</li>
+        <li><span class="check-box"></span>9V battery + clip</li>
+      </ul>
+
+    </div>
+
+    <!-- QUIZ -->
+    <div class="section-title">
+      <span class="icon">&#129504;</span> Quiz Time! Fill in the blanks.
+    </div>
+
+    <div class="quiz-box">
+
+      <div class="quiz-item">
+        <div class="quiz-q">1. "Monostable" means <span style="text-decoration: underline;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> stable state &mdash; the circuit fires once, stays on for a set time, then ________________.</div>
+        <span class="quiz-hint">hint: "one" / "returns to resting state"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item">
+        <div class="quiz-q">2. Using the formula T = 1.1 &times; R &times; C, if you DOUBLE the capacitor value, the ON time will ________________.</div>
+        <span class="quiz-hint">hint: "double"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item">
+        <div class="quiz-q">3. The 555 triggers when Pin 2 drops below ________ of VCC. With a 9V battery, that means Pin 2 must drop below ________ volts.</div>
+        <span class="quiz-hint">hint: "1/3" / "3V"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item bonus" style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed #f9a825;">
+        <div class="quiz-q">&#127381; BONUS: What do hand dryers in bathrooms, hallway auto-lights, and alarms all have in common with your circuit today?</div>
+        <span class="quiz-hint">hint: "they all use monostable / one-shot timing"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+    </div>
+
+    <!-- EXPERIMENTS -->
+    <div class="section-title">
+      <span class="icon">&#128300;</span> 4 Experiments You Did Today!
+    </div>
+
+    <div class="experiments-grid">
+
+      <div class="experiment-card exp-a">
+        <div class="exp-letter">A</div>
+        <div class="exp-body">
+          <div class="exp-title">The 5-Second One-Shot</div>
+          <div class="exp-do">Press the button and let go. Use your stopwatch to time the LED.</div>
+          <div class="exp-discover">LED stays on for about 5 seconds then turns itself off &mdash; just like a hallway light!</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-b">
+        <div class="exp-letter">B</div>
+        <div class="exp-body">
+          <div class="exp-title">Swap the Resistor (47k)</div>
+          <div class="exp-do">Replace 100k&#937; with 47k&#937; and time the pulse again.</div>
+          <div class="exp-discover">Smaller R = shorter time (~2.4 sec). Half the resistance &rarr; roughly half the wait!</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-c">
+        <div class="exp-letter">C</div>
+        <div class="exp-body">
+          <div class="exp-title">Swap the Capacitor (100&#956;F)</div>
+          <div class="exp-do">Replace 47&#956;F with 100&#956;F. Time the new pulse duration.</div>
+          <div class="exp-discover">Bigger C = longer time (~11 sec). Bigger bucket takes longer to fill!</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-d">
+        <div class="exp-letter">D</div>
+        <div class="exp-body">
+          <div class="exp-title">Wand Check: Watch the Capacitor Charge</div>
+          <div class="exp-do">Red probe on capacitor (+) leg. Press button and watch the Wand display.</div>
+          <div class="exp-discover">Voltage slowly climbs 0V &rarr; 6V (2/3 of 9V), then drops back fast when the timer resets!</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TRY AT HOME + TROUBLESHOOTING -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.1in; margin-bottom: 0.12in;">
+
+      <div class="lemon-box">
+        <div class="lemon-title">&#127968; Try at Home: Build a 10-Second Timer!</div>
+        <div class="lemon-body">
+          Using the formula <strong>T = 1.1 &times; R &times; C</strong>, find a combination that gives you <strong>exactly 10 seconds</strong>.<br/><br/>
+          <em>Hint: Try R = 100k&#937; and C = 100&#956;F.</em><br/>
+          T = 1.1 &times; 100,000 &times; 0.0001 = <strong>11 sec</strong> &mdash; close!<br/><br/>
+          Can you get <em>even closer</em> to 10 seconds by trying different values? Use your stopwatch to check your math!<br/><br/>
+          In <strong>Lesson 20</strong> you will explore Logic Gates &mdash; the building blocks of every computer!
+        </div>
+      </div>
+
+      <div class="trouble-box">
+        <div class="trouble-title">&#128295; Troubleshooting Quick Guide</div>
+        <table class="trouble-table">
+          <thead>
+            <tr><th>Problem</th><th>Quick Fix</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>LED stays on permanently</td><td>Add 10k pull-up resistor to Pin 2</td></tr>
+            <tr><td>LED never turns on</td><td>Check button: it should connect Pin 2 to GND when pressed</td></tr>
+            <tr><td>LED turns on then off instantly</td><td>Try a bigger R or C value</td></tr>
+            <tr><td>Timer is way off</td><td>Measure battery voltage &mdash; low battery affects timing</td></tr>
+            <tr><td>Button does nothing</td><td>Test button with Wand continuity mode</td></tr>
+            <tr><td>IC gets hot</td><td>Check for short circuits in wiring</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- COMING UP NEXT -->
+    <div class="next-box">
+      <strong>Coming Up Next &rarr; Lesson 20: Logic Gates &mdash; AND, OR, NOT! &#128268;</strong><br/>
+      You will learn about AND, OR, and NOT gates &mdash; the building blocks of every computer ever made. Two switches both ON lights the LED. Either switch ON lights the LED. These simple rules power the entire digital world!
+    </div>
+
+  </div><!-- end page-b -->
+
+</body>
+</html>

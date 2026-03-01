@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 34: Digital Piano Project — Circuit Explorer Academy</title>
+  <style>
+    /* =============================================
+       BASE RESET & TYPOGRAPHY
+    ============================================= */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, Arial, sans-serif;
+      font-size: 13px;
+      line-height: 1.45;
+      color: #1a1a2e;
+      background: #f0f4ff;
+    }
+
+    /* =============================================
+       PAGE LAYOUT
+    ============================================= */
+    .page {
+      width: 8.5in;
+      min-height: 11in;
+      margin: 0 auto 0.4in auto;
+      padding: 0.5in;
+      background: #fff;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-label {
+      position: absolute;
+      top: 0.18in;
+      right: 0.22in;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #aaa;
+    }
+
+    /* =============================================
+       SIDE A — HEADER
+    ============================================= */
+    .header {
+      text-align: center;
+      border-bottom: 3px solid #f4c430;
+      margin-bottom: 0.16in;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+      border-radius: 10px;
+      color: #fff;
+      padding: 0.22in 0.2in 0.18in 0.2in;
+    }
+
+    .header-course {
+      font-size: 19px;
+      font-weight: 900;
+      letter-spacing: 0.03em;
+      color: #f4c430;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+
+    .header-lesson {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      margin-top: 4px;
+    }
+
+    .header-module {
+      font-size: 11px;
+      color: #a8d8ea;
+      margin-top: 3px;
+      letter-spacing: 0.04em;
+    }
+
+    .header-badges {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+
+    .header-xp {
+      display: inline-block;
+      background: #f4c430;
+      color: #1a1a2e;
+      font-weight: 900;
+      font-size: 12px;
+      padding: 3px 14px;
+      border-radius: 20px;
+      letter-spacing: 0.06em;
+    }
+
+    .header-project-badge {
+      display: inline-block;
+      background: #e91e63;
+      color: #fff;
+      font-weight: 900;
+      font-size: 11px;
+      padding: 3px 12px;
+      border-radius: 20px;
+      letter-spacing: 0.04em;
+    }
+
+    .header-finale-badge {
+      display: inline-block;
+      background: #43a047;
+      color: #fff;
+      font-weight: 900;
+      font-size: 11px;
+      padding: 3px 12px;
+      border-radius: 20px;
+      letter-spacing: 0.04em;
+    }
+
+    .spark-row {
+      text-align: center;
+      font-size: 16px;
+      letter-spacing: 0.25em;
+      margin: 0.1in 0 0.04in 0;
+      color: #f4c430;
+    }
+
+    /* =============================================
+       SECTION HEADINGS
+    ============================================= */
+    .section-title {
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #fff;
+      background: #0f3460;
+      padding: 5px 12px;
+      border-radius: 6px;
+      margin-bottom: 0.1in;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .section-title .icon {
+      font-size: 14px;
+    }
+
+    /* =============================================
+       VOCABULARY CARDS  (2x2 grid)
+    ============================================= */
+    .vocab-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.1in;
+      margin-bottom: 0.14in;
+    }
+
+    .vocab-card {
+      border-radius: 10px;
+      padding: 0.1in 0.12in;
+      border-top: 5px solid transparent;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .vocab-card::before {
+      content: '';
+      position: absolute;
+      top: -18px;
+      right: -18px;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      opacity: 0.13;
+      background: #fff;
+    }
+
+    .vocab-card.voltage  { background: #fff3e0; border-top-color: #ff9800; }
+    .vocab-card.current  { background: #e3f2fd; border-top-color: #2196f3; }
+    .vocab-card.resist   { background: #fce4ec; border-top-color: #e91e63; }
+    .vocab-card.circuit  { background: #e8f5e9; border-top-color: #43a047; }
+
+    .vocab-term {
+      font-size: 13px;
+      font-weight: 900;
+      margin-bottom: 2px;
+    }
+
+    .vocab-card.voltage  .vocab-term { color: #e65100; }
+    .vocab-card.current  .vocab-term { color: #0d47a1; }
+    .vocab-card.resist   .vocab-term { color: #880e4f; }
+    .vocab-card.circuit  .vocab-term { color: #1b5e20; }
+
+    .vocab-symbol {
+      font-size: 18px;
+      font-weight: 900;
+      float: right;
+      margin-top: -2px;
+      opacity: 0.55;
+    }
+
+    .vocab-def {
+      font-size: 11.5px;
+      color: #333;
+      line-height: 1.4;
+      margin-top: 2px;
+    }
+
+    .vocab-emoji {
+      font-size: 20px;
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    /* =============================================
+       PIANO DIAGRAM BOX
+    ============================================= */
+    .analogy-box {
+      background: #e8f4fd;
+      border: 2px solid #90caf9;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.14in;
+    }
+
+    .circuit-diagram {
+      font-family: monospace;
+      font-size: 10.5px;
+      background: #1a1a2e;
+      color: #76ff03;
+      padding: 0.1in;
+      border-radius: 8px;
+      margin: 0.07in 0;
+      line-height: 1.6;
+      white-space: pre;
+      overflow: visible;
+    }
+
+    .code-block {
+      font-family: monospace;
+      font-size: 9.5px;
+      background: #1a1a2e;
+      color: #e0e0ff;
+      padding: 0.1in;
+      border-radius: 8px;
+      margin: 0.07in 0;
+      line-height: 1.55;
+      white-space: pre;
+      overflow: visible;
+    }
+
+    .code-block .kw  { color: #80cbc4; }
+    .code-block .fn  { color: #ffe082; }
+    .code-block .cm  { color: #78909c; }
+    .code-block .st  { color: #a5d6a7; }
+    .code-block .nu  { color: #ef9a9a; }
+
+    .analogy-caption {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: #0d47a1;
+      margin-top: 4px;
+    }
+
+    /* =============================================
+       MODULE MASTERY SUMMARY
+    ============================================= */
+    .mastery-box {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.12in;
+      color: #fff;
+    }
+
+    .mastery-title {
+      font-size: 13px;
+      font-weight: 900;
+      color: #f4c430;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .mastery-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3px 16px;
+    }
+
+    .mastery-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 10.5px;
+      color: #e0e0e0;
+    }
+
+    .mastery-check {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      background: #43a047;
+      border-radius: 50%;
+      color: #fff;
+      font-size: 9px;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    /* =============================================
+       SIDE B — CIRCUIT BUILD
+    ============================================= */
+    .circuit-box {
+      background: #f1f8e9;
+      border: 2px solid #aed581;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.13in;
+    }
+
+    .build-steps {
+      margin: 0.06in 0 0.06in 0;
+      padding-left: 0;
+      list-style: none;
+    }
+
+    .build-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 11px;
+      color: #333;
+      margin-bottom: 5px;
+      line-height: 1.4;
+    }
+
+    .step-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      background: #0f3460;
+      color: #fff;
+      border-radius: 50%;
+      font-size: 9px;
+      font-weight: 900;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .circuit-note {
+      font-size: 11px;
+      color: #33691e;
+      font-style: italic;
+      margin-top: 5px;
+      padding: 4px 8px;
+      background: #dcedc8;
+      border-radius: 5px;
+    }
+
+    .checklist-title {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #2e7d32;
+      margin-top: 8px;
+      margin-bottom: 4px;
+    }
+
+    .checklist {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 3px 10px;
+      list-style: none;
+    }
+
+    .checklist li {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: #333;
+    }
+
+    .check-box {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid #43a047;
+      border-radius: 3px;
+      flex-shrink: 0;
+      background: #fff;
+    }
+
+    /* =============================================
+       QUIZ
+    ============================================= */
+    .quiz-box {
+      background: #fff9c4;
+      border: 2px solid #f9a825;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.13in;
+    }
+
+    .quiz-item {
+      margin-bottom: 0.08in;
+    }
+
+    .quiz-q {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 2px;
+    }
+
+    .quiz-blank {
+      display: block;
+      border-bottom: 1.5px solid #999;
+      width: 100%;
+      height: 20px;
+      margin-top: 2px;
+    }
+
+    .quiz-hint {
+      font-size: 9px;
+      color: #aaa;
+      font-style: italic;
+      float: right;
+      margin-top: 1px;
+    }
+
+    .quiz-item.bonus .quiz-q {
+      color: #e65100;
+    }
+
+    .quiz-item.bonus .quiz-blank {
+      border-bottom-color: #ff9800;
+    }
+
+    /* =============================================
+       EXPERIMENTS GRID
+    ============================================= */
+    .experiments-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.08in;
+      margin-bottom: 0.12in;
+    }
+
+    .experiment-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      border-radius: 8px;
+      padding: 0.08in 0.1in;
+      border-left: 5px solid transparent;
+    }
+
+    .experiment-card.exp-a { background: #fff3e0; border-left-color: #ff9800; }
+    .experiment-card.exp-b { background: #e3f2fd; border-left-color: #2196f3; }
+    .experiment-card.exp-c { background: #fce4ec; border-left-color: #e91e63; }
+    .experiment-card.exp-d { background: #e8f5e9; border-left-color: #43a047; }
+
+    .exp-letter {
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1;
+      flex-shrink: 0;
+      width: 24px;
+      text-align: center;
+    }
+
+    .experiment-card.exp-a .exp-letter { color: #e65100; }
+    .experiment-card.exp-b .exp-letter { color: #0d47a1; }
+    .experiment-card.exp-c .exp-letter { color: #880e4f; }
+    .experiment-card.exp-d .exp-letter { color: #1b5e20; }
+
+    .exp-body { flex: 1; }
+
+    .exp-title {
+      font-size: 11.5px;
+      font-weight: 900;
+      margin-bottom: 2px;
+      color: #1a1a2e;
+    }
+
+    .exp-do {
+      font-size: 10.5px;
+      color: #444;
+      margin-bottom: 3px;
+    }
+
+    .exp-do::before {
+      content: "▶ Try: ";
+      font-weight: 700;
+      color: #555;
+    }
+
+    .exp-discover {
+      font-size: 10.5px;
+      color: #333;
+      font-style: italic;
+    }
+
+    /* =============================================
+       TRY AT HOME + TROUBLESHOOTING
+    ============================================= */
+    .lemon-box {
+      background: #f9fbe7;
+      border: 2px solid #c5e1a5;
+      border-radius: 10px;
+      padding: 0.09in 0.11in;
+    }
+
+    .lemon-title {
+      font-size: 12px;
+      font-weight: 900;
+      color: #33691e;
+      margin-bottom: 5px;
+    }
+
+    .lemon-body {
+      font-size: 10.5px;
+      color: #333;
+      line-height: 1.5;
+    }
+
+    .trouble-box {
+      background: #fafafa;
+      border: 2px solid #bdbdbd;
+      border-radius: 10px;
+      padding: 0.09in 0.11in;
+    }
+
+    .trouble-title {
+      font-size: 12px;
+      font-weight: 900;
+      color: #37474f;
+      margin-bottom: 5px;
+    }
+
+    .trouble-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9.5px;
+    }
+
+    .trouble-table thead th {
+      background: #37474f;
+      color: #fff;
+      padding: 3px 6px;
+      text-align: left;
+      font-weight: 700;
+    }
+
+    .trouble-table tbody tr:nth-child(even) {
+      background: #f5f5f5;
+    }
+
+    .trouble-table tbody td {
+      padding: 3px 6px;
+      color: #333;
+      border-bottom: 1px solid #e0e0e0;
+      vertical-align: top;
+    }
+
+    /* =============================================
+       MODULE COMPLETE / BADGE BOX
+    ============================================= */
+    .module-complete-box {
+      border: 4px dashed #f4c430;
+      border-radius: 14px;
+      background: #fffde7;
+      padding: 0.12in 0.16in;
+      text-align: center;
+      margin-bottom: 0.13in;
+      position: relative;
+    }
+
+    .badge-corner {
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #f4c430;
+      color: #1a1a2e;
+      font-size: 20px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    }
+
+    .badge-stars {
+      font-size: 20px;
+      letter-spacing: 0.1em;
+      color: #f4c430;
+      margin-top: 14px;
+    }
+
+    .badge-title {
+      font-size: 16px;
+      font-weight: 900;
+      color: #1a1a2e;
+      margin: 6px 0 4px 0;
+      letter-spacing: 0.04em;
+    }
+
+    .badge-subtitle {
+      font-size: 11px;
+      color: #555;
+      margin-bottom: 6px;
+    }
+
+    .badge-name-line {
+      font-size: 12px;
+      color: #37474f;
+      margin-bottom: 8px;
+    }
+
+    .badge-name-blank {
+      display: inline-block;
+      border-bottom: 2px solid #0f3460;
+      min-width: 2in;
+      height: 18px;
+    }
+
+    .badge-lessons-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px 20px;
+      text-align: left;
+      display: inline-grid;
+      margin: 0 auto;
+    }
+
+    .badge-lesson-item {
+      font-size: 10.5px;
+      color: #333;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .badge-check {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 15px;
+      height: 15px;
+      background: #43a047;
+      border-radius: 50%;
+      color: #fff;
+      font-size: 9px;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    /* =============================================
+       XP RANK TABLE
+    ============================================= */
+    .xp-rank-box {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      border-radius: 10px;
+      padding: 0.09in 0.14in;
+      margin-bottom: 0.12in;
+      color: #fff;
+    }
+
+    .xp-rank-title {
+      font-size: 12px;
+      font-weight: 900;
+      color: #f4c430;
+      margin-bottom: 6px;
+    }
+
+    .xp-rank-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 10px;
+    }
+
+    .xp-rank-table th {
+      background: rgba(244,196,48,0.2);
+      color: #f4c430;
+      padding: 3px 8px;
+      text-align: left;
+      font-weight: 700;
+      font-size: 9.5px;
+    }
+
+    .xp-rank-table td {
+      padding: 3px 8px;
+      color: #e0e0e0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .xp-rank-table tr:last-child td {
+      color: #f4c430;
+      font-weight: 700;
+    }
+
+    .xp-my-score {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #f4c430;
+    }
+
+    .xp-score-blank {
+      display: inline-block;
+      border-bottom: 2px solid #f4c430;
+      width: 60px;
+      height: 16px;
+    }
+
+    /* =============================================
+       COMING UP NEXT
+    ============================================= */
+    .next-box {
+      background: linear-gradient(90deg, #e3f2fd 0%, #f3e5f5 100%);
+      border-left: 5px solid #7c4dff;
+      border-radius: 0 10px 10px 0;
+      padding: 0.08in 0.14in;
+      font-size: 11.5px;
+      color: #1a1a2e;
+    }
+
+    .next-box strong {
+      color: #6a1b9a;
+    }
+
+    /* =============================================
+       SIDE B HEADER
+    ============================================= */
+    .side-b-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 3px solid #f4c430;
+      margin-bottom: 0.15in;
+      padding-bottom: 0.09in;
+    }
+
+    .side-b-title {
+      font-size: 14px;
+      font-weight: 900;
+      color: #0f3460;
+    }
+
+    .side-b-sub {
+      font-size: 10px;
+      color: #888;
+      margin-top: 1px;
+    }
+
+    .side-b-xp {
+      background: #f4c430;
+      color: #1a1a2e;
+      font-weight: 900;
+      font-size: 11px;
+      padding: 3px 12px;
+      border-radius: 20px;
+    }
+
+    /* =============================================
+       PRINT STYLES
+    ============================================= */
+    @media print {
+      body {
+        background: #fff;
+        font-size: 12px;
+      }
+
+      .page {
+        width: 100%;
+        min-height: auto;
+        margin: 0;
+        box-shadow: none;
+        padding: 0.5in;
+      }
+
+      .page-a {
+        page-break-after: always;
+      }
+
+      .header,
+      .mastery-box,
+      .xp-rank-box,
+      .vocab-card,
+      .circuit-box,
+      .quiz-box,
+      .module-complete-box,
+      .next-box,
+      .analogy-box,
+      .circuit-diagram,
+      .code-block {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .experiment-card,
+      .lemon-box,
+      .trouble-box,
+      .trouble-table thead th {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      /* B&W fallback borders */
+      .vocab-card.voltage  { background: #fff !important; border: 2px solid #ff9800; border-top: 5px solid #ff9800; }
+      .vocab-card.current  { background: #fff !important; border: 2px solid #2196f3; border-top: 5px solid #2196f3; }
+      .vocab-card.resist   { background: #fff !important; border: 2px solid #e91e63; border-top: 5px solid #e91e63; }
+      .vocab-card.circuit  { background: #fff !important; border: 2px solid #43a047; border-top: 5px solid #43a047; }
+    }
+
+    @page {
+      size: A4;
+      margin: 12mm;
+    }
+
+    .clearfix::after {
+      content: '';
+      display: table;
+      clear: both;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ======================================================
+       SIDE A (FRONT)
+  ====================================================== -->
+  <div class="page page-a">
+    <div class="page-label">Side A &mdash; Front</div>
+
+    <!-- HEADER -->
+    <div class="header">
+      <div class="header-course">&#9889; Circuit Explorer Academy</div>
+      <div class="header-lesson">Lesson 34: Digital Piano + Display &mdash; Module 4 Grand Finale!</div>
+      <div class="header-module">Module 4: Arduino Microcontroller &nbsp;|&nbsp; Final Project &nbsp;|&nbsp; Ages 6&ndash;12 &nbsp;|&nbsp; 60&ndash;75 min</div>
+      <div class="header-badges">
+        <span class="header-xp">&#11088; 500 XP Available</span>
+        <span class="header-project-badge">&#127381; CAPSTONE PROJECT</span>
+        <span class="header-finale-badge">&#127942; Module 4 Final</span>
+      </div>
+    </div>
+
+    <div class="spark-row" aria-hidden="true">&#9889; &#10022; &#9834; &#10022; &#9889; &#10022; &#9834; &#10022; &#9889; &#10022; &#9834; &#10022; &#9889; &#10022; &#9834;</div>
+
+    <!-- VOCABULARY -->
+    <div class="section-title">
+      <span class="icon">&#128218;</span> Key Words &mdash; Learn These!
+    </div>
+
+    <div class="vocab-grid">
+
+      <div class="vocab-card voltage">
+        <span class="vocab-emoji">&#127925;</span>
+        <span class="vocab-symbol">Hz</span>
+        <div class="vocab-term">Frequency (Hz)</div>
+        <div class="vocab-def">How many times per second a sound wave vibrates. <strong>Higher Hz = higher note!</strong> Middle C = 262 Hz. Top C = 523 Hz. Double the Hz, double the pitch!</div>
+      </div>
+
+      <div class="vocab-card current">
+        <span class="vocab-emoji">&#128200;</span>
+        <span class="vocab-symbol">[ ]</span>
+        <div class="vocab-term">Array</div>
+        <div class="vocab-def">A <strong>list of values</strong> stored together in one variable. Like a numbered mailbox row: <code>notes[0]</code> = C4, <code>notes[1]</code> = D4, and so on!</div>
+      </div>
+
+      <div class="vocab-card resist">
+        <span class="vocab-emoji">&#128192;</span>
+        <span class="vocab-symbol">I2C</span>
+        <div class="vocab-term">I2C Protocol</div>
+        <div class="vocab-def">A way to talk to the LCD using only <strong>2 wires</strong> (SDA + SCL). The Arduino sends messages and the LCD listens. Saves lots of wiring pins!</div>
+      </div>
+
+      <div class="vocab-card circuit">
+        <span class="vocab-emoji">&#127959;</span>
+        <span class="vocab-symbol">PWM~</span>
+        <div class="vocab-term">INPUT_PULLUP</div>
+        <div class="vocab-def">A built-in Arduino trick that <strong>pulls button pins HIGH</strong> by default using internal resistors. Button pressed = LOW. No external resistors needed!</div>
+      </div>
+
+    </div>
+
+    <!-- PIANO WIRING DIAGRAM -->
+    <div class="section-title">
+      <span class="icon">&#127929;</span> How the Digital Piano is Wired
+    </div>
+
+    <div class="analogy-box">
+      <div class="circuit-diagram">  DIGITAL PIANO CIRCUIT OVERVIEW
+  ================================
+
+  [Arduino Uno]
+       |
+       |-- Pin 2  ---[BUTTON 1]--- GND   (plays C4 = 262 Hz)
+       |-- Pin 3  ---[BUTTON 2]--- GND   (plays D4 = 294 Hz)
+       |-- Pin 4  ---[BUTTON 3]--- GND   (plays E4 = 330 Hz)
+       |-- Pin 5  ---[BUTTON 4]--- GND   (plays F4 = 349 Hz)
+       |-- Pin 6  ---[BUTTON 5]--- GND   (plays G4 = 392 Hz)
+       |-- Pin 7  ---[BUTTON 6]--- GND   (plays A4 = 440 Hz)
+       |-- Pin 12 ---[BUTTON 7]--- GND   (plays B4 = 494 Hz)
+       |-- Pin 13 ---[BUTTON 8]--- GND   (plays C5 = 523 Hz)
+       |
+       |-- Pin 8  ---[BUZZER+]---[BUZZER-]--- GND
+       |-- Pin 9  ---[330ohm]---[LED Red]---  GND   (C,D,E = low)
+       |-- Pin 10 ---[330ohm]---[LED Green]-- GND   (F,G   = mid)
+       |-- Pin 11 ---[330ohm]---[LED Blue]--- GND   (A,B,C5= high)
+       |-- A4  ---[LCD SDA]         5V ---[LCD VCC]
+       |-- A5  ---[LCD SCL]        GND ---[LCD GND]</div>
+      <div class="analogy-caption">Press a button &rarr; buzzer plays the note &rarr; LED lights up &rarr; LCD shows the note name and frequency!</div>
+    </div>
+
+    <!-- CODE SNIPPET -->
+    <div class="section-title">
+      <span class="icon">&#128187;</span> Key Code Patterns
+    </div>
+
+    <div class="analogy-box" style="background:#f3e5f5; border-color:#ce93d8;">
+      <div class="code-block"><span class="cm">// Arrays hold all 8 note frequencies and names</span>
+<span class="kw">int</span>    noteFreqs[] = {<span class="nu">262</span>, <span class="nu">294</span>, <span class="nu">330</span>, <span class="nu">349</span>, <span class="nu">392</span>, <span class="nu">440</span>, <span class="nu">494</span>, <span class="nu">523</span>};
+String noteNames[] = {<span class="st">"C4"</span>, <span class="st">"D4"</span>, <span class="st">"E4"</span>, <span class="st">"F4"</span>, <span class="st">"G4"</span>, <span class="st">"A4"</span>, <span class="st">"B4"</span>, <span class="st">"C5"</span>};
+
+<span class="cm">// In loop(): scan every button with a for loop</span>
+<span class="kw">for</span> (<span class="kw">int</span> i = <span class="nu">0</span>; i &lt; numButtons; i++) {
+  <span class="kw">if</span> (<span class="fn">digitalRead</span>(buttonPins[i]) == LOW) {
+    <span class="fn">tone</span>(buzzerPin, noteFreqs[i]);   <span class="cm">// play the note</span>
+    lcd.<span class="fn">print</span>(noteNames[i]);          <span class="cm">// show on screen</span>
+  }
+}
+<span class="kw">if</span> (!anyPressed) <span class="fn">noTone</span>(buzzerPin); <span class="cm">// stop when released</span></div>
+      <div class="circuit-note" style="background:#e1bee7; color:#4a148c;">The for loop scans all 8 buttons automatically &mdash; one loop does the job of 8 separate if statements!</div>
+    </div>
+
+    <!-- MODULE 4 COMPONENT MASTERY -->
+    <div class="section-title">
+      <span class="icon">&#127942;</span> Module 4 Component Mastery &mdash; You Learned All This!
+    </div>
+
+    <div class="mastery-box">
+      <div class="mastery-title">&#9989; Skills Unlocked in Module 4: Arduino Microcontroller</div>
+      <div class="mastery-grid">
+        <div class="mastery-item"><span class="mastery-check">&#10003;</span> What is a Microcontroller (L25)</div>
+        <div class="mastery-item"><span class="mastery-check">&#10003;</span> For Loops and Arrays (L31)</div>
+        <div class="mastery-item"><span class="mastery-check">&#10003;</span> First Sketch: Blink (L26)</div>
+        <div class="mastery-item"><span class="mastery-check">&#10003;</span> Piezo Buzzer + tone() (L32)</div>
+        <div class="mastery-item"><span class="mastery-check">&#10003;</span> Variables + Serial Monitor (L27)</div>
+        <div class="mastery-item"><span class="mastery-check">&#10003;</span> LCD Display 16x2 + I2C (L33)</div>
+        <div class="mastery-item"><span class="mastery-check">&#10003;</span> Digital Inputs: Buttons (L28)</div>
+        <div class="mastery-item"><span class="mastery-check">&#10003;</span> Digital Piano Project (L34) &#9834;</div>
+        <div class="mastery-item"><span class="mastery-check">&#10003;</span> Analog Inputs + ADC (L29)</div>
+        <div class="mastery-item"><span class="mastery-check">&#10003;</span> Multimeter Wand Debugging</div>
+        <div class="mastery-item"><span class="mastery-check">&#10003;</span> PWM: Dimming LEDs (L30)</div>
+        <div class="mastery-item"><span class="mastery-check">&#10003;</span> Complex multi-component wiring</div>
+      </div>
+    </div>
+
+  </div><!-- end page-a -->
+
+
+  <!-- ======================================================
+       SIDE B (BACK)
+  ====================================================== -->
+  <div class="page page-b">
+    <div class="page-label">Side B &mdash; Back</div>
+
+    <!-- SIDE B MINI HEADER -->
+    <div class="side-b-header">
+      <div>
+        <div class="side-b-title">&#9889; Circuit Explorer Academy &mdash; Lesson 34</div>
+        <div class="side-b-sub">Digital Piano + Display &nbsp;|&nbsp; Module 4: Arduino Microcontroller &nbsp;|&nbsp; Final Project</div>
+      </div>
+      <div class="side-b-xp">&#11088; 500 XP</div>
+    </div>
+
+    <!-- MY ACTIVITY TODAY -->
+    <div class="section-title">
+      <span class="icon">&#127381;</span> My Activity Today &mdash; Build the Digital Piano!
+    </div>
+
+    <div class="circuit-box">
+
+      <div class="circuit-diagram">  PHASES AT A GLANCE
+  ==================
+  Phase 1 (5min)   Plan the 8-note piano layout (+20 XP)
+  Phase 2 (15min)  Wire 8 buttons using INPUT_PULLUP (+40 XP)
+  Phase 3 (5min)   Wire piezo buzzer to pin 8 (+10 XP)
+  Phase 4 (5min)   Wire LCD via I2C (A4=SDA, A5=SCL) (+10 XP)
+  Phase 5 (10min)  Wire 3 indicator LEDs (pins 9,10,11) (+20 XP)
+  Phase 6 (15min)  Upload full piano code &amp; play! (+60 XP)
+  Phase 7 (5min)   Debug with Multimeter Wand (+40 XP)
+  Phase 8 (bonus)  Extra challenges (+30 XP bonus)</div>
+
+      <ol class="build-steps">
+        <li class="build-step"><span class="step-num">1</span><span>Set up buttons in a row across the breadboard center gap. Connect each button to its Arduino pin (2,3,4,5,6,7,12,13) and the other side to GND rail.</span></li>
+        <li class="build-step"><span class="step-num">2</span><span>Buzzer: pin 8 &rarr; buzzer (+) &rarr; buzzer (-) &rarr; GND. LEDs: pin 9,10,11 &rarr; 330&ohm; resistor &rarr; LED &rarr; GND.</span></li>
+        <li class="build-step"><span class="step-num">3</span><span>LCD: 5V &rarr; VCC, GND &rarr; GND, A4 &rarr; SDA, A5 &rarr; SCL. Include LiquidCrystal_I2C library in your sketch.</span></li>
+        <li class="build-step"><span class="step-num">4</span><span>Upload the piano sketch. Press each button &mdash; you should hear a note, see an LED glow, and see the note name + Hz on the LCD!</span></li>
+        <li class="build-step"><span class="step-num">5</span><span>Use the Multimeter Wand to measure: 5V pin, button pins when pressed/released, buzzer pin while playing, LED pins when active.</span></li>
+      </ol>
+
+      <div class="circuit-note">Test each button one at a time BEFORE uploading the full piano code. Fix wiring issues early &mdash; it is much easier!</div>
+
+      <div class="checklist-title">&#9989; Components I Used Today:</div>
+      <ul class="checklist">
+        <li><span class="check-box"></span>Arduino Uno</li>
+        <li><span class="check-box"></span>8x push buttons</li>
+        <li><span class="check-box"></span>Piezo buzzer</li>
+        <li><span class="check-box"></span>3x LEDs (RGB)</li>
+        <li><span class="check-box"></span>3x 330&ohm; resistors</li>
+        <li><span class="check-box"></span>16x2 LCD + I2C</li>
+        <li><span class="check-box"></span>Breadboard</li>
+        <li><span class="check-box"></span>25+ jumper wires</li>
+        <li><span class="check-box"></span>Multimeter Wand</li>
+      </ul>
+
+    </div>
+
+    <!-- QUIZ -->
+    <div class="section-title">
+      <span class="icon">&#129504;</span> Quiz Time! Fill in the blanks.
+    </div>
+
+    <div class="quiz-box">
+
+      <div class="quiz-item">
+        <div class="quiz-q">1. The Arduino function that plays a sound on the buzzer is called <span style="font-family:monospace;">________________()</span>.</div>
+        <span class="quiz-hint">hint: "tone"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item">
+        <div class="quiz-q">2. A list of values stored together in one variable is called an <span style="font-family:monospace;">________________</span>.</div>
+        <span class="quiz-hint">hint: "array"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item">
+        <div class="quiz-q">3. When <code>INPUT_PULLUP</code> is used, a button pin reads <span style="font-family:monospace;">________________</span> when the button is pressed.</div>
+        <span class="quiz-hint">hint: "LOW"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item bonus" style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed #f9a825;">
+        <div class="quiz-q">&#127381; BONUS: The LCD uses only 2 data wires. What is the name of this communication protocol?</div>
+        <span class="quiz-hint">hint: "I2C"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+    </div>
+
+    <!-- BUILD CHALLENGES GRID -->
+    <div class="section-title">
+      <span class="icon">&#128300;</span> 4 Things You Built and Tested Today!
+    </div>
+
+    <div class="experiments-grid">
+
+      <div class="experiment-card exp-a">
+        <div class="exp-letter">A</div>
+        <div class="exp-body">
+          <div class="exp-title">8-Button Input Grid</div>
+          <div class="exp-do">Wire all 8 buttons to pins 2&ndash;7, 12, 13 using INPUT_PULLUP.</div>
+          <div class="exp-discover">Each button pin reads ~5V idle and ~0V when pressed &mdash; you can scan them all in one for loop!</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-b">
+        <div class="exp-letter">B</div>
+        <div class="exp-body">
+          <div class="exp-title">Buzzer + Frequency Arrays</div>
+          <div class="exp-do">Use <code>tone(pin, noteFreqs[i])</code> inside the for loop.</div>
+          <div class="exp-discover">Double the frequency = double the pitch! C5 (523 Hz) sounds exactly one octave higher than C4 (262 Hz)!</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-c">
+        <div class="exp-letter">C</div>
+        <div class="exp-body">
+          <div class="exp-title">LCD Note Display</div>
+          <div class="exp-do">Show <code>noteNames[i]</code> and <code>noteFreqs[i]</code> on the LCD screen.</div>
+          <div class="exp-discover">The LCD updates instantly as you press different buttons &mdash; it is a real-time instrument display!</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-d">
+        <div class="exp-letter">D</div>
+        <div class="exp-body">
+          <div class="exp-title">Wand Debugging Session</div>
+          <div class="exp-do">Measure button pins, buzzer pin, LED pins, and 5V rail with the multimeter.</div>
+          <div class="exp-discover">Buzzer pin shows ~2.5V average while playing &mdash; that is PWM! Your wand can see the tone happening!</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TRY AT HOME + TROUBLESHOOTING -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.1in; margin-bottom: 0.11in;">
+
+      <div class="lemon-box">
+        <div class="lemon-title">&#127968; Try at Home: Play a Song!</div>
+        <div class="lemon-body">
+          Use your Digital Piano to play <strong>Mary Had a Little Lamb</strong>:<br/>
+          <strong>E D C D E E E</strong> (pins: 3,2,1,2,3,3,3)<br/>
+          <strong>D D D / E G G</strong><br/><br/>
+          Can you play the whole song? &#127925;<br/>
+          <em>Challenge: program the song into an array so it plays automatically!</em><br/><br/>
+          <strong>Bonus:</strong> Teach a family member to play a tune on your piano &mdash; then explain how every part works!
+        </div>
+      </div>
+
+      <div class="trouble-box">
+        <div class="trouble-title">&#128295; Troubleshooting Quick Guide</div>
+        <table class="trouble-table">
+          <thead>
+            <tr><th>Problem</th><th>Quick Fix</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>No sound at all</td><td>Check buzzer polarity and pin 8 wiring</td></tr>
+            <tr><td>Button not registering</td><td>Measure the pin &mdash; should read ~5V idle</td></tr>
+            <tr><td>LCD blank / no text</td><td>Run I2C scanner sketch to find the LCD address</td></tr>
+            <tr><td>Wrong notes playing</td><td>Check buttonPins[] array order matches wiring</td></tr>
+            <tr><td>LED stays on always</td><td>Check the noTone / LED-off block in the code</td></tr>
+            <tr><td>Code won&#39;t compile</td><td>Install LiquidCrystal_I2C library in IDE</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- MODULE COMPLETE / BADGE -->
+    <div class="module-complete-box">
+      <div class="badge-corner">&#127942;</div>
+      <div class="badge-stars">&#11088; &#11088; &#11088; &#11088; &#11088;</div>
+      <div class="badge-title">MODULE 4 CHAMPION BADGE UNLOCKED!</div>
+      <div class="badge-subtitle">Arduino Microcontroller &mdash; All 10 Lessons Complete</div>
+      <div class="badge-name-line">Awarded to: <span class="badge-name-blank"></span></div>
+      <div class="badge-lessons-grid">
+        <div class="badge-lesson-item"><span class="badge-check">&#10003;</span> Microcontroller Explorer (L25)</div>
+        <div class="badge-lesson-item"><span class="badge-check">&#10003;</span> Loop Legend (L31)</div>
+        <div class="badge-lesson-item"><span class="badge-check">&#10003;</span> Blink Master (L26)</div>
+        <div class="badge-lesson-item"><span class="badge-check">&#10003;</span> Melody Maker (L32)</div>
+        <div class="badge-lesson-item"><span class="badge-check">&#10003;</span> Variable Wizard (L27)</div>
+        <div class="badge-lesson-item"><span class="badge-check">&#10003;</span> Display Commander (L33)</div>
+        <div class="badge-lesson-item"><span class="badge-check">&#10003;</span> Input Handler (L28)</div>
+        <div class="badge-lesson-item"><span class="badge-check">&#10003;</span> Module 4 Champion (L34) &#9834;</div>
+        <div class="badge-lesson-item"><span class="badge-check">&#10003;</span> Analog Adventurer (L29)</div>
+        <div class="badge-lesson-item"><span class="badge-check">&#10003;</span> Total Module XP: 2,750</div>
+        <div class="badge-lesson-item"><span class="badge-check">&#10003;</span> PWM Wizard (L30)</div>
+        <div class="badge-lesson-item"><span class="badge-check">&#10003;</span> My Score: _______ / 2,750</div>
+      </div>
+    </div>
+
+    <!-- XP RANK -->
+    <div class="xp-rank-box">
+      <div class="xp-rank-title">&#127942; Module 4 XP Ranks &mdash; Where Did You Land?</div>
+      <table class="xp-rank-table">
+        <thead>
+          <tr><th>XP Range</th><th>Rank Title</th><th>XP Range</th><th>Rank Title</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>0 &ndash; 600 XP</td><td>Arduino Apprentice</td><td>1,801 &ndash; 2,400 XP</td><td>Arduino Engineer</td></tr>
+          <tr><td>601 &ndash; 1,200 XP</td><td>Arduino Explorer</td><td>2,401 &ndash; 2,750 XP</td><td>Arduino Champion! &#127942;</td></tr>
+          <tr><td>1,201 &ndash; 1,800 XP</td><td>Arduino Builder</td><td colspan="2">My Rank: _______________________</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- COMING UP NEXT -->
+    <div class="next-box">
+      <strong>Module 5 Coming Up &rarr; Sensors and Actuators! &#127775;</strong><br/>
+      Now you can program an Arduino and control LEDs, buttons, buzzers, and displays! In Module 5 you will connect SENSORS &mdash; temperature sensors, light sensors, distance sensors (ultrasonic), motion detectors, and MOTORS. You will build gadgets that automatically react to the real world. Get ready for Arduino that can <em>see, feel, and move!</em>
+    </div>
+
+  </div><!-- end page-b -->
+
+</body>
+</html>

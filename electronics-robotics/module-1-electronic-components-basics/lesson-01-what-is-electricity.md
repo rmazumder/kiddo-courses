@@ -2,7 +2,7 @@
 
 **Module:** 1 -- Electronic Components Basics
 **Difficulty:** Star-1 Beginner
-**Session Time:** 40--45 minutes
+**Session Time:** 45--53 minutes
 **Age:** 6--12 years
 **XP Available:** 250 XP
 
@@ -178,7 +178,73 @@ Remove one wire and have the kid hold both bare ends together with their fingers
 
 ---
 
-### Step 5: Sneak Peek -- The Magic Measurement Wand (2 min)
+### Step 5: Two Kinds of Electricity -- AC and DC (5--8 min)
+
+Now that you have built a circuit with a battery, here is a cool secret: **there are actually TWO kinds of electricity!**
+
+**Kind 1: DC -- Direct Current**
+
+Remember our water analogy? Your battery is like a pump that pushes water in ONE direction, all the time. It never stops. It never reverses. That is **Direct Current** -- or **DC** for short.
+
+> "The battery you just used makes DC. The electrons march in one direction, like a line of ants carrying crumbs back to the nest -- always the same way!"
+
+> 🤯 **Fun Fact:** The “Father of DC electricity” is generally considered to be: **⚡ Thomas Edison** 
+
+---
+
+**Kind 2: AC -- Alternating Current**
+
+Now imagine a different kind of pump. Instead of pushing water one way, it pushes forward... then pulls backward... then pushes forward... then pulls backward -- over and over, really fast! The water sloshes back and forth inside the pipe.
+
+That is **Alternating Current** -- or **AC**. The electricity in your wall outlets at home is AC!
+
+> "How fast does it switch? About **60 times every single second!** (In some countries, 50 times per second.) That is so fast you could never see it -- but your lights and appliances do not mind at all!"
+
+> 🤯 **Fun Fact:** The “Father of AC (Alternating Current)” is generally considered to be: **⚡ Nikola Tesla** 
+
+---
+
+![DC vs AC Comparison](images/lesson-01-ac-dc-comparison.png)
+
+Here is what DC and AC look like if you could see them:
+
+```
+  DC (Direct Current) -- Steady, like a calm river
+
+  Voltage
+    |
+    |  ______________________________
+    |
+    |________________________________ Time
+
+
+  AC (Alternating Current) -- Back and forth, like ocean waves!
+
+  Voltage
+    |      /\      /\      /\
+    |     /  \    /  \    /  \
+    |    /    \  /    \  /    \
+    |---/------\/------\/------\--- Time
+```
+
+**So why do we use BOTH?**
+
+- **DC** is great for small electronics: batteries, LEDs, phones, tablets, robots, Arduino boards -- basically everything you will build in this course! DC is steady and easy to control.
+- **AC** is what power stations send through wires to your house. Why? Because AC is much easier to send over really long distances without losing energy. Think of it like this: AC is better for the long road trip, but DC is better once you arrive home.
+
+> "That phone charger plugged into the wall? It is secretly a converter! It takes the AC from the wall and turns it into DC for your phone. Cool, right?"
+
+**Connect it to YOUR circuit:**
+
+> "The battery you just used makes DC -- that is why we can control it so safely! The electrons in your circuit are flowing one direction, nice and steady, through the resistor and the LED. You are a DC expert now!"
+
+**Award: +20 XP for learning about AC and DC!**
+
+> **Parent/Instructor Safety Note:** Reinforce electrical safety here. Remind kids: "We ONLY experiment with batteries and low-voltage DC in this course. **Never** touch, open, or put anything into a wall outlet -- wall outlets carry AC at high voltage (120V or 230V), which is very dangerous. Only a grown-up should handle anything plugged into the wall."
+
+---
+
+### Step 6: Sneak Peek -- The Magic Measurement Wand (2 min)
 
 If you have a multimeter handy, hold it up:
 
@@ -190,7 +256,7 @@ If you have a multimeter handy, hold it up:
 
 ---
 
-### Step 6: Wrap Up and Quiz (5 min)
+### Step 7: Wrap Up and Quiz (5 min)
 
 Ask these questions out loud (not a written test -- keep it fun):
 
@@ -246,10 +312,11 @@ Stick a copper coin and a zinc nail into a lemon. Can it light the LED?
 | Water analogy questions | 20 |
 | Build first circuit | 50 |
 | Experiments (3 of 4) | 30 |
+| AC vs DC | 20 |
 | Wand sneak peek | 10 |
 | Quiz (3 questions) | 60 |
 | Bonus question | 30 |
-| **TOTAL POSSIBLE** | **220** |
+| **TOTAL POSSIBLE** | **240** |
 
 ---
 

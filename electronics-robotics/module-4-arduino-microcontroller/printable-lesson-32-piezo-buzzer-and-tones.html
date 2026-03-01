@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 32: Piezo Buzzer and Tones &#8212; Circuit Explorer Academy</title>
+  <style>
+    /* =============================================
+       BASE RESET & TYPOGRAPHY
+    ============================================= */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, Arial, sans-serif;
+      font-size: 13px;
+      line-height: 1.45;
+      color: #1a1a2e;
+      background: #f0f4ff;
+    }
+
+    /* =============================================
+       PAGE LAYOUT
+    ============================================= */
+    .page {
+      width: 8.5in;
+      min-height: 11in;
+      margin: 0 auto 0.4in auto;
+      padding: 0.5in;
+      background: #fff;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-label {
+      position: absolute;
+      top: 0.18in;
+      right: 0.22in;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #aaa;
+    }
+
+    /* =============================================
+       HEADER
+    ============================================= */
+    .header {
+      text-align: center;
+      border-bottom: 3px solid #f4c430;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+      border-radius: 10px;
+      color: #fff;
+      padding: 0.22in 0.2in 0.18in 0.2in;
+      margin-bottom: 0.16in;
+    }
+
+    .header-course {
+      font-size: 19px;
+      font-weight: 900;
+      letter-spacing: 0.03em;
+      color: #f4c430;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+
+    .header-lesson {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      margin-top: 4px;
+    }
+
+    .header-module {
+      font-size: 11px;
+      color: #a8d8ea;
+      margin-top: 3px;
+      letter-spacing: 0.04em;
+    }
+
+    .header-xp {
+      display: inline-block;
+      margin-top: 8px;
+      background: #f4c430;
+      color: #1a1a2e;
+      font-weight: 900;
+      font-size: 12px;
+      padding: 3px 14px;
+      border-radius: 20px;
+      letter-spacing: 0.06em;
+    }
+
+    .spark-row {
+      text-align: center;
+      font-size: 16px;
+      letter-spacing: 0.25em;
+      margin: 0.1in 0 0.04in 0;
+      color: #f4c430;
+    }
+
+    /* =============================================
+       SECTION HEADINGS
+    ============================================= */
+    .section-title {
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #fff;
+      background: #0f3460;
+      padding: 5px 12px;
+      border-radius: 6px;
+      margin-bottom: 0.1in;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .section-title .icon {
+      font-size: 14px;
+    }
+
+    /* =============================================
+       VOCABULARY CARDS (2x2 grid)
+    ============================================= */
+    .vocab-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.1in;
+      margin-bottom: 0.14in;
+    }
+
+    .vocab-card {
+      border-radius: 10px;
+      padding: 0.1in 0.12in;
+      border-top: 5px solid transparent;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .vocab-card::before {
+      content: '';
+      position: absolute;
+      top: -18px;
+      right: -18px;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      opacity: 0.13;
+      background: #fff;
+    }
+
+    .vocab-card.voltage { background: #fff3e0; border-top-color: #ff9800; }
+    .vocab-card.current { background: #e3f2fd; border-top-color: #2196f3; }
+    .vocab-card.resist  { background: #fce4ec; border-top-color: #e91e63; }
+    .vocab-card.circuit { background: #e8f5e9; border-top-color: #43a047; }
+
+    .vocab-term {
+      font-size: 13px;
+      font-weight: 900;
+      margin-bottom: 2px;
+    }
+
+    .vocab-card.voltage .vocab-term { color: #e65100; }
+    .vocab-card.current .vocab-term { color: #0d47a1; }
+    .vocab-card.resist  .vocab-term { color: #880e4f; }
+    .vocab-card.circuit .vocab-term { color: #1b5e20; }
+
+    .vocab-symbol {
+      font-size: 18px;
+      font-weight: 900;
+      float: right;
+      margin-top: -2px;
+      opacity: 0.55;
+    }
+
+    .vocab-def {
+      font-size: 11.5px;
+      color: #333;
+      line-height: 1.4;
+      margin-top: 2px;
+    }
+
+    .vocab-emoji {
+      font-size: 20px;
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    /* =============================================
+       ANALOGY / CONCEPT BOX
+    ============================================= */
+    .analogy-box {
+      background: #e8f4fd;
+      border: 2px solid #90caf9;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.14in;
+    }
+
+    .analogy-caption {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: #0d47a1;
+      margin-top: 6px;
+    }
+
+    /* =============================================
+       CODE / ASCII DIAGRAM BLOCKS
+    ============================================= */
+    .circuit-diagram {
+      font-family: monospace;
+      font-size: 10px;
+      background: #1a1a2e;
+      color: #76ff03;
+      padding: 0.1in;
+      border-radius: 8px;
+      margin: 0.07in 0;
+      line-height: 1.6;
+      white-space: pre;
+    }
+
+    /* =============================================
+       TWO-COLUMN CARD GRID (wiring / command)
+    ============================================= */
+    .acdc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.1in;
+      margin-bottom: 0.1in;
+    }
+
+    .acdc-card {
+      border-radius: 10px;
+      padding: 0.1in 0.12in;
+      border-top: 5px solid transparent;
+    }
+
+    .acdc-card.dc { background: #fff8e1; border-top-color: #ffc107; }
+    .acdc-card.ac { background: #f3e5f5; border-top-color: #9c27b0; }
+
+    .acdc-title {
+      font-size: 13px;
+      font-weight: 900;
+      margin-bottom: 4px;
+    }
+
+    .acdc-card.dc .acdc-title { color: #ff6f00; }
+    .acdc-card.ac .acdc-title { color: #6a1b9a; }
+
+    .acdc-wave {
+      font-family: monospace;
+      font-size: 9.5px;
+      line-height: 1.3;
+      padding: 4px 6px;
+      border-radius: 5px;
+      margin: 5px 0;
+      white-space: pre;
+    }
+
+    .acdc-card.dc .acdc-wave { background: #fffde7; color: #f57f17; }
+    .acdc-card.ac .acdc-wave { background: #f3e5f5; color: #6a1b9a; }
+
+    .acdc-fact {
+      font-size: 10.5px;
+      color: #444;
+      line-height: 1.4;
+    }
+
+    .acdc-fact strong { color: #333; }
+
+    .acdc-father {
+      font-size: 10px;
+      margin-top: 4px;
+      padding: 3px 7px;
+      border-radius: 12px;
+      display: inline-block;
+      font-weight: 700;
+    }
+
+    .acdc-card.dc .acdc-father { background: #ffc107; color: #4a2c00; }
+    .acdc-card.ac .acdc-father { background: #9c27b0; color: #fff; }
+
+    /* NOTE FREQUENCY MINI GRID */
+    .note-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.06in 0.1in;
+      margin: 0.07in 0 0.04in 0;
+    }
+
+    .note-row {
+      font-family: monospace;
+      font-size: 10px;
+      background: #1a1a2e;
+      color: #76ff03;
+      padding: 6px 8px;
+      border-radius: 6px;
+      line-height: 1.65;
+      white-space: pre;
+    }
+
+    /* =============================================
+       SIDE B — CIRCUIT / ACTIVITY BOX
+    ============================================= */
+    .circuit-box {
+      background: #f1f8e9;
+      border: 2px solid #aed581;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.13in;
+    }
+
+    .circuit-note {
+      font-size: 11px;
+      color: #33691e;
+      font-style: italic;
+      margin-top: 5px;
+      padding: 4px 8px;
+      background: #dcedc8;
+      border-radius: 5px;
+    }
+
+    .checklist-title {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #2e7d32;
+      margin-top: 8px;
+      margin-bottom: 4px;
+    }
+
+    .checklist {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 3px 10px;
+      list-style: none;
+    }
+
+    .checklist li {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: #333;
+    }
+
+    .check-box {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid #43a047;
+      border-radius: 3px;
+      flex-shrink: 0;
+      background: #fff;
+    }
+
+    /* Wiring step list */
+    .steps-list {
+      list-style: none;
+      margin: 0.05in 0 0.07in 0;
+    }
+
+    .steps-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 11px;
+      color: #333;
+      margin-bottom: 4px;
+      line-height: 1.4;
+    }
+
+    .step-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      background: #2e7d32;
+      color: #fff;
+      border-radius: 50%;
+      font-size: 9px;
+      font-weight: 900;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* =============================================
+       QUIZ
+    ============================================= */
+    .quiz-box {
+      background: #fff9c4;
+      border: 2px solid #f9a825;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.13in;
+    }
+
+    .quiz-item {
+      margin-bottom: 0.08in;
+    }
+
+    .quiz-q {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 2px;
+    }
+
+    .quiz-blank {
+      display: block;
+      border-bottom: 1.5px solid #999;
+      width: 100%;
+      height: 20px;
+      margin-top: 2px;
+    }
+
+    .quiz-hint {
+      font-size: 9px;
+      color: #aaa;
+      font-style: italic;
+      float: right;
+      margin-top: 1px;
+    }
+
+    .quiz-item.bonus .quiz-q { color: #e65100; }
+    .quiz-item.bonus .quiz-blank { border-bottom-color: #ff9800; }
+
+    /* =============================================
+       EXPERIMENTS GRID
+    ============================================= */
+    .experiments-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.08in;
+      margin-bottom: 0.12in;
+    }
+
+    .experiment-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      border-radius: 8px;
+      padding: 0.08in 0.1in;
+      border-left: 5px solid transparent;
+    }
+
+    .experiment-card.exp-a { background: #fff3e0; border-left-color: #ff9800; }
+    .experiment-card.exp-b { background: #e3f2fd; border-left-color: #2196f3; }
+    .experiment-card.exp-c { background: #fce4ec; border-left-color: #e91e63; }
+    .experiment-card.exp-d { background: #e8f5e9; border-left-color: #43a047; }
+
+    .exp-letter {
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1;
+      flex-shrink: 0;
+      width: 24px;
+      text-align: center;
+    }
+
+    .experiment-card.exp-a .exp-letter { color: #e65100; }
+    .experiment-card.exp-b .exp-letter { color: #0d47a1; }
+    .experiment-card.exp-c .exp-letter { color: #880e4f; }
+    .experiment-card.exp-d .exp-letter { color: #1b5e20; }
+
+    .exp-body { flex: 1; }
+
+    .exp-title {
+      font-size: 11.5px;
+      font-weight: 900;
+      margin-bottom: 2px;
+      color: #1a1a2e;
+    }
+
+    .exp-do {
+      font-size: 10.5px;
+      color: #444;
+      margin-bottom: 3px;
+    }
+
+    .exp-do::before {
+      content: "\25B6 Do: ";
+      font-weight: 700;
+      color: #555;
+    }
+
+    .exp-discover {
+      font-size: 10.5px;
+      color: #333;
+      font-style: italic;
+    }
+
+    /* =============================================
+       TRY AT HOME + TROUBLESHOOTING
+    ============================================= */
+    .lemon-box {
+      background: #f9fbe7;
+      border: 2px solid #c5e1a5;
+      border-radius: 10px;
+      padding: 0.09in 0.11in;
+    }
+
+    .lemon-title {
+      font-size: 12px;
+      font-weight: 900;
+      color: #33691e;
+      margin-bottom: 5px;
+    }
+
+    .lemon-body {
+      font-size: 10.5px;
+      color: #333;
+      line-height: 1.5;
+    }
+
+    .trouble-box {
+      background: #fafafa;
+      border: 2px solid #bdbdbd;
+      border-radius: 10px;
+      padding: 0.09in 0.11in;
+    }
+
+    .trouble-title {
+      font-size: 12px;
+      font-weight: 900;
+      color: #37474f;
+      margin-bottom: 5px;
+    }
+
+    .trouble-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9.5px;
+    }
+
+    .trouble-table thead th {
+      background: #37474f;
+      color: #fff;
+      padding: 3px 6px;
+      text-align: left;
+      font-weight: 700;
+    }
+
+    .trouble-table tbody tr:nth-child(even) {
+      background: #f5f5f5;
+    }
+
+    .trouble-table tbody td {
+      padding: 3px 6px;
+      color: #333;
+      border-bottom: 1px solid #e0e0e0;
+      vertical-align: top;
+    }
+
+    /* =============================================
+       COMING UP NEXT
+    ============================================= */
+    .next-box {
+      background: linear-gradient(90deg, #e3f2fd 0%, #f3e5f5 100%);
+      border-left: 5px solid #7c4dff;
+      border-radius: 0 10px 10px 0;
+      padding: 0.08in 0.14in;
+      font-size: 11.5px;
+      color: #1a1a2e;
+    }
+
+    .next-box strong { color: #6a1b9a; }
+
+    /* =============================================
+       SIDE B MINI HEADER
+    ============================================= */
+    .side-b-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 3px solid #f4c430;
+      margin-bottom: 0.15in;
+      padding-bottom: 0.09in;
+    }
+
+    .side-b-title {
+      font-size: 14px;
+      font-weight: 900;
+      color: #0f3460;
+    }
+
+    .side-b-sub {
+      font-size: 10px;
+      color: #888;
+      margin-top: 1px;
+    }
+
+    .side-b-xp {
+      background: #f4c430;
+      color: #1a1a2e;
+      font-weight: 900;
+      font-size: 11px;
+      padding: 3px 12px;
+      border-radius: 20px;
+    }
+
+    /* =============================================
+       PRINT STYLES
+    ============================================= */
+    @media print {
+      body {
+        background: #fff;
+        font-size: 12px;
+      }
+
+      .page {
+        width: 100%;
+        min-height: auto;
+        margin: 0;
+        box-shadow: none;
+        padding: 0.5in;
+      }
+
+      .page-a {
+        page-break-after: always;
+      }
+
+      .header,
+      .vocab-card,
+      .analogy-box,
+      .acdc-card,
+      .circuit-box,
+      .quiz-box,
+      .next-box,
+      .circuit-diagram,
+      .note-row,
+      .experiment-card,
+      .lemon-box,
+      .trouble-box,
+      .trouble-table thead th {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .vocab-card.voltage { background: #fff !important; border: 2px solid #ff9800; border-top: 5px solid #ff9800; }
+      .vocab-card.current { background: #fff !important; border: 2px solid #2196f3; border-top: 5px solid #2196f3; }
+      .vocab-card.resist  { background: #fff !important; border: 2px solid #e91e63; border-top: 5px solid #e91e63; }
+      .vocab-card.circuit { background: #fff !important; border: 2px solid #43a047; border-top: 5px solid #43a047; }
+    }
+
+    @page {
+      size: A4;
+      margin: 12mm;
+    }
+
+    .clearfix::after {
+      content: '';
+      display: table;
+      clear: both;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ======================================================
+       SIDE A (FRONT)
+  ====================================================== -->
+  <div class="page page-a">
+    <div class="page-label">Side A &#8212; Front</div>
+
+    <!-- HEADER -->
+    <div class="header">
+      <div class="header-course">&#9889; Circuit Explorer Academy</div>
+      <div class="header-lesson">Lesson 32: Piezo Buzzer and Tones &#8212; Give Your Arduino a Musical Voice</div>
+      <div class="header-module">Module 4: Arduino Microcontroller</div>
+      <div><span class="header-xp">&#11088; 250 XP Available</span></div>
+    </div>
+
+    <div class="spark-row" aria-hidden="true">&#9834; &#9835; &#9834; &#9835; &#9834; &#9835; &#9834; &#9835; &#9834; &#9835; &#9834; &#9835; &#9834; &#9835; &#9834;</div>
+
+    <!-- VOCABULARY -->
+    <div class="section-title">
+      <span class="icon">&#128218;</span> Key Words &#8212; Learn These!
+    </div>
+
+    <div class="vocab-grid">
+
+      <div class="vocab-card voltage">
+        <span class="vocab-emoji">&#128266;</span>
+        <span class="vocab-symbol">Hz</span>
+        <div class="vocab-term">Frequency (Hz)</div>
+        <div class="vocab-def">How many times per second something <strong>vibrates</strong>. Measured in Hertz (Hz). More vibrations per second = higher pitch sound!</div>
+      </div>
+
+      <div class="vocab-card current">
+        <span class="vocab-emoji">&#127926;</span>
+        <span class="vocab-symbol">~</span>
+        <div class="vocab-term">Passive Buzzer</div>
+        <div class="vocab-def">A buzzer that <strong>needs a signal</strong> from the Arduino to make sound. We control the pitch with <code>tone()</code>. Not the same as an active buzzer!</div>
+      </div>
+
+      <div class="vocab-card resist">
+        <span class="vocab-emoji">&#127929;</span>
+        <span class="vocab-symbol">&#9835;</span>
+        <div class="vocab-term">tone() Function</div>
+        <div class="vocab-def">The Arduino command that makes a buzzer <strong>vibrate at a chosen frequency</strong>. Format: <code>tone(pin, Hz, ms)</code>. Use <code>noTone()</code> to stop.</div>
+      </div>
+
+      <div class="vocab-card circuit">
+        <span class="vocab-emoji">&#127925;</span>
+        <span class="vocab-symbol">8va</span>
+        <div class="vocab-term">Octave</div>
+        <div class="vocab-def">When you <strong>double</strong> a frequency you go up one octave. C4 = 262 Hz, C5 = 524 Hz &#8212; same note letter, but one step higher in pitch!</div>
+      </div>
+
+    </div>
+
+    <!-- HOW SOUND WORKS -->
+    <div class="section-title">
+      <span class="icon">&#128266;</span> How Sound Works &#8212; It&#39;s All About Vibration!
+    </div>
+
+    <div class="analogy-box">
+      <div class="circuit-diagram">  Put your hand on your throat and HUM. Feel that vibration?
+  That is exactly how a buzzer works!
+
+  Your Throat (Humming)        Piezo Buzzer on Arduino
+  +----------------------+     +------------------------+
+  | Vocal cords vibrate  |     | Tiny disc vibrates     |
+  | FAST --> HIGH pitch  |     | FAST Hz --> HIGH sound |
+  | SLOW --> LOW  pitch  |     | SLOW Hz --> LOW  sound |
+  +----------------------+     +------------------------+
+           |                              |
+           v                              v
+     Air molecules shake          Air molecules shake
+     Ears hear SOUND!             Speaker hears SOUND!
+
+  Arduino pin 8 switches: 5V --- 0V --- 5V --- 0V ...
+  At 440 Hz: switches 440 times per second = note A!</div>
+      <div class="analogy-caption">Higher frequency = faster vibration = higher pitch. Lower frequency = slower vibration = lower pitch.</div>
+    </div>
+
+    <!-- WIRING + TONE() COMMAND -->
+    <div class="section-title">
+      <span class="icon">&#9878;</span> Wire the Buzzer + The tone() Command
+    </div>
+
+    <div class="acdc-grid">
+
+      <div class="acdc-card dc">
+        <div class="acdc-title">&#128267; Buzzer Wiring (Step 2)</div>
+        <div class="acdc-wave">Arduino Uno      Breadboard
++-----------+
+| Pin 8     |--[wire]--> (+) longer leg
+|           |
+| GND       |--[wire]--> (-) shorter leg
++-----------+
+
+Buzzer legs:
+  (+) longer leg / marked with +
+  (-) shorter leg
+
+Use a PASSIVE buzzer!
+Active buzzers have a fixed pitch.</div>
+        <div class="acdc-fact">
+          <strong>Passive</strong> buzzer = needs Arduino signal to vibrate.<br/>
+          <strong>Active</strong> buzzer = has its own oscillator, pitch is fixed.<br/>
+          We want passive so <em>we</em> control the pitch!
+        </div>
+        <div class="acdc-father">&#9733; Pin 8 (+) and GND (-)</div>
+      </div>
+
+      <div class="acdc-card ac">
+        <div class="acdc-title">&#127929; The tone() Command (Step 3)</div>
+        <div class="acdc-wave">// Play a tone:
+tone(pin, frequency, duration);
+
+  pin       = buzzer pin (8)
+  frequency = Hz value  (440)
+  duration  = ms length (1000)
+
+// Stop a tone:
+noTone(pin);
+
+// Example -- note A for 1 second:
+tone(8, 440, 1000);
+delay(1050);
+noTone(8);</div>
+        <div class="acdc-fact">
+          <strong>440 Hz</strong> = note A4 &#8212; the pitch orchestras use to tune!<br/>
+          Add a small <code>delay()</code> after each note so they don&#39;t blend together.
+        </div>
+        <div class="acdc-father" style="background:#9c27b0;color:#fff;">&#9835; tone(8, 440, 1000)</div>
+      </div>
+
+    </div>
+
+    <!-- NOTE FREQUENCY CHART -->
+    <div class="section-title">
+      <span class="icon">&#127926;</span> Musical Note Frequencies &#8212; 4th Octave
+    </div>
+
+    <div class="analogy-box">
+      <div class="note-grid">
+        <div class="note-row">C4  = 262 Hz   C#4 = 277 Hz
+D4  = 294 Hz   D#4 = 311 Hz
+E4  = 330 Hz
+F4  = 349 Hz   F#4 = 370 Hz</div>
+        <div class="note-row">G4  = 392 Hz   G#4 = 415 Hz
+A4  = 440 Hz   A#4 = 466 Hz
+B4  = 494 Hz
+C5  = 523 Hz  (one octave up!)</div>
+      </div>
+      <div class="analogy-caption">Higher numbers = higher pitch. C5 (523) is exactly double C4 (262) &#8212; that is what "one octave" means!</div>
+    </div>
+
+  </div><!-- end page-a -->
+
+
+  <!-- ======================================================
+       SIDE B (BACK)
+  ====================================================== -->
+  <div class="page page-b">
+    <div class="page-label">Side B &#8212; Back</div>
+
+    <!-- SIDE B MINI HEADER -->
+    <div class="side-b-header">
+      <div>
+        <div class="side-b-title">&#9834; Circuit Explorer Academy &#8212; Lesson 32</div>
+        <div class="side-b-sub">Piezo Buzzer and Tones &nbsp;|&nbsp; Module 4: Arduino Microcontroller</div>
+      </div>
+      <div class="side-b-xp">&#11088; 250 XP</div>
+    </div>
+
+    <!-- MY ACTIVITY TODAY -->
+    <div class="section-title">
+      <span class="icon">&#128161;</span> My Activity Today &#8212; Build a Melody Machine!
+    </div>
+
+    <div class="circuit-box">
+
+      <div class="circuit-diagram">// Twinkle Twinkle Little Star -- Full Melody Code (Step 5)
+int buzzerPin = 8;
+int C4=262, D4=294, E4=330, F4=349, G4=392, A4=440;
+
+int melody[]        = {C4,C4,G4,G4,A4,A4,G4, F4,F4,E4,E4,D4,D4,C4};
+int noteDurations[] = {400,400,400,400,400,400,800, 400,400,400,400,400,400,800};
+int numNotes = 14;
+
+void setup() {
+  for (int i = 0; i &lt; numNotes; i++) {
+    tone(buzzerPin, melody[i], noteDurations[i]);
+    delay(noteDurations[i] + 50);  // small gap between notes
+    noTone(buzzerPin);
+  }
+}
+void loop() { /* plays once in setup */ }</div>
+
+      <div class="circuit-note">The melody[] array holds the notes, noteDurations[] holds how long each plays, and the for loop steps through them one by one. Arrays + loops = a real song!</div>
+
+      <div class="checklist-title">&#9989; Wiring Steps &amp; Components I Used:</div>
+      <ul class="steps-list">
+        <li><span class="step-num">1</span> Place the passive piezo buzzer on the breadboard.</li>
+        <li><span class="step-num">2</span> Connect the <strong>positive leg</strong> (+, longer) to <strong>Arduino Pin 8</strong>.</li>
+        <li><span class="step-num">3</span> Connect the <strong>negative leg</strong> (-) to <strong>Arduino GND</strong>.</li>
+        <li><span class="step-num">4</span> Upload the Twinkle Twinkle code &#8212; listen for the melody!</li>
+      </ul>
+      <ul class="checklist">
+        <li><span class="check-box"></span>Arduino Uno</li>
+        <li><span class="check-box"></span>Breadboard</li>
+        <li><span class="check-box"></span>Passive buzzer</li>
+        <li><span class="check-box"></span>Push button</li>
+        <li><span class="check-box"></span>4 jumper wires</li>
+        <li><span class="check-box"></span>USB cable</li>
+      </ul>
+
+    </div>
+
+    <!-- QUIZ -->
+    <div class="section-title">
+      <span class="icon">&#129504;</span> Quiz Time! Fill in the blanks.
+    </div>
+
+    <div class="quiz-box">
+
+      <div class="quiz-item">
+        <div class="quiz-q">1. The <code>tone()</code> function makes a buzzer vibrate at a specific ________________.</div>
+        <span class="quiz-hint">hint: "frequency"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item">
+        <div class="quiz-q">2. The note A4 has a frequency of 440 Hz. Hz stands for ________________ per second.</div>
+        <span class="quiz-hint">hint: "vibrations"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item">
+        <div class="quiz-q">3. To play a higher-pitched note you use a ________________ frequency number.</div>
+        <span class="quiz-hint">hint: "higher"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item bonus" style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed #f9a825;">
+        <div class="quiz-q">&#127381; BONUS: C4 = 262 Hz. What frequency is C5 (one octave higher)? ________________ Hz</div>
+        <span class="quiz-hint">hint: "double it!"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+    </div>
+
+    <!-- EXPERIMENTS -->
+    <div class="section-title">
+      <span class="icon">&#128300;</span> 4 Experiments You Did Today!
+    </div>
+
+    <div class="experiments-grid">
+
+      <div class="experiment-card exp-a">
+        <div class="exp-letter">A</div>
+        <div class="exp-body">
+          <div class="exp-title">First Tone &#8212; Note A</div>
+          <div class="exp-do">Upload <code>tone(8, 440, 1000);</code> in setup().</div>
+          <div class="exp-discover">You hear a single beeeep at 440 Hz &#8212; the same note orchestras tune to!</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-b">
+        <div class="exp-letter">B</div>
+        <div class="exp-body">
+          <div class="exp-title">High vs. Low Pitch</div>
+          <div class="exp-do">Try <code>tone(8, 262)</code> then <code>tone(8, 1000)</code>.</div>
+          <div class="exp-discover">262 Hz sounds low and deep; 1000 Hz sounds high and sharp &#8212; bigger number = higher sound!</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-c">
+        <div class="exp-letter">C</div>
+        <div class="exp-body">
+          <div class="exp-title">Twinkle Twinkle Melody</div>
+          <div class="exp-do">Upload the full melody code with the for loop.</div>
+          <div class="exp-discover">Arrays + for loops play a real song! Each array slot is one note in the melody.</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-d">
+        <div class="exp-letter">D</div>
+        <div class="exp-body">
+          <div class="exp-title">Button Sound Effect</div>
+          <div class="exp-do">Add a button on Pin 2 with <code>INPUT_PULLUP</code> and play a jingle on press.</div>
+          <div class="exp-discover">Press the button and hear a victory jingle &#8212; just like a video game power-up sound!</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TRY AT HOME + TROUBLESHOOTING -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.1in; margin-bottom: 0.12in;">
+
+      <div class="lemon-box">
+        <div class="lemon-title">&#127925; Try at Home: Compose Your Own Song!</div>
+        <div class="lemon-body">
+          Look up the note frequencies for <strong>Happy Birthday</strong>:<br/>
+          C4-C4-D4-C4-F4-E4 for the first line!<br/><br/>
+          Change the <code>melody[]</code> array to match, upload, and play it for someone special.<br/><br/>
+          <em>Tip: 800 ms = a long note, 400 ms = a short note. Try mixing durations to make it sound right!</em><br/><br/>
+          In <strong>Lesson 33</strong> you will add an LCD screen so your Arduino can display the song title as it plays!
+        </div>
+      </div>
+
+      <div class="trouble-box">
+        <div class="trouble-title">&#128295; Troubleshooting Quick Guide</div>
+        <table class="trouble-table">
+          <thead>
+            <tr><th>Problem</th><th>Quick Fix</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>No sound at all</td><td>Use PASSIVE buzzer; check polarity</td></tr>
+            <tr><td>Sound very quiet</td><td>Hold buzzer closer; try another one</td></tr>
+            <tr><td>Wrong notes</td><td>Check frequency values in melody[]</td></tr>
+            <tr><td>tone() error</td><td>Pass 2 or 3 args: pin, freq, duration</td></tr>
+            <tr><td>Buzzer won&#39;t stop</td><td>Add <code>noTone(buzzerPin);</code> at end</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- COMING UP NEXT -->
+    <div class="next-box">
+      <strong>Coming Up Next &#8594; Lesson 33: LCD Display (16x2) &#8212; Give Your Arduino a Screen! &#128250;</strong><br/>
+      No more relying on the Serial Monitor &#8212; your gadget will have its own display. You will wire up a 16x2 LCD and program it to show text, numbers, and messages. Get ready to see "Hello World!" on a real screen!
+    </div>
+
+  </div><!-- end page-b -->
+
+</body>
+</html>

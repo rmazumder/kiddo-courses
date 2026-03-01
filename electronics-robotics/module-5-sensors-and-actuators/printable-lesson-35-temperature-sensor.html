@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 35: Temperature Sensor — Circuit Explorer Academy</title>
+  <style>
+    /* =============================================
+       BASE RESET & TYPOGRAPHY
+    ============================================= */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, Arial, sans-serif;
+      font-size: 13px;
+      line-height: 1.45;
+      color: #1a1a2e;
+      background: #f0f4ff;
+    }
+
+    /* =============================================
+       PAGE LAYOUT
+    ============================================= */
+    .page {
+      width: 8.5in;
+      min-height: 11in;
+      margin: 0 auto 0.4in auto;
+      padding: 0.5in;
+      background: #fff;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-label {
+      position: absolute;
+      top: 0.18in;
+      right: 0.22in;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #aaa;
+    }
+
+    /* =============================================
+       SIDE A — HEADER
+    ============================================= */
+    .header {
+      text-align: center;
+      border-bottom: 3px solid #f4c430;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+      border-radius: 10px;
+      color: #fff;
+      padding: 0.22in 0.2in 0.18in 0.2in;
+      margin-bottom: 0.16in;
+    }
+
+    .header-course {
+      font-size: 19px;
+      font-weight: 900;
+      letter-spacing: 0.03em;
+      color: #f4c430;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+
+    .header-lesson {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      margin-top: 4px;
+    }
+
+    .header-module {
+      font-size: 11px;
+      color: #a8d8ea;
+      margin-top: 3px;
+      letter-spacing: 0.04em;
+    }
+
+    .header-xp {
+      display: inline-block;
+      margin-top: 8px;
+      background: #f4c430;
+      color: #1a1a2e;
+      font-weight: 900;
+      font-size: 12px;
+      padding: 3px 14px;
+      border-radius: 20px;
+      letter-spacing: 0.06em;
+    }
+
+    .spark-row {
+      text-align: center;
+      font-size: 16px;
+      letter-spacing: 0.25em;
+      margin: 0.1in 0 0.04in 0;
+      color: #f4c430;
+    }
+
+    /* =============================================
+       SECTION HEADINGS
+    ============================================= */
+    .section-title {
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #fff;
+      background: #0f3460;
+      padding: 5px 12px;
+      border-radius: 6px;
+      margin-bottom: 0.1in;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .section-title .icon {
+      font-size: 14px;
+    }
+
+    /* =============================================
+       VOCABULARY CARDS  (2x2 grid)
+    ============================================= */
+    .vocab-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.1in;
+      margin-bottom: 0.14in;
+    }
+
+    .vocab-card {
+      border-radius: 10px;
+      padding: 0.1in 0.12in;
+      border-top: 5px solid transparent;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .vocab-card::before {
+      content: '';
+      position: absolute;
+      top: -18px;
+      right: -18px;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      opacity: 0.13;
+      background: #fff;
+    }
+
+    .vocab-card.voltage  { background: #fff3e0; border-top-color: #ff9800; }
+    .vocab-card.current  { background: #e3f2fd; border-top-color: #2196f3; }
+    .vocab-card.resist   { background: #fce4ec; border-top-color: #e91e63; }
+    .vocab-card.circuit  { background: #e8f5e9; border-top-color: #43a047; }
+
+    .vocab-term {
+      font-size: 13px;
+      font-weight: 900;
+      margin-bottom: 2px;
+    }
+
+    .vocab-card.voltage  .vocab-term { color: #e65100; }
+    .vocab-card.current  .vocab-term { color: #0d47a1; }
+    .vocab-card.resist   .vocab-term { color: #880e4f; }
+    .vocab-card.circuit  .vocab-term { color: #1b5e20; }
+
+    .vocab-symbol {
+      font-size: 18px;
+      font-weight: 900;
+      float: right;
+      margin-top: -2px;
+      opacity: 0.55;
+    }
+
+    .vocab-def {
+      font-size: 11.5px;
+      color: #333;
+      line-height: 1.4;
+      margin-top: 2px;
+    }
+
+    .vocab-emoji {
+      font-size: 20px;
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    /* =============================================
+       MAIN CONCEPT BOX (replaces analogy-box)
+    ============================================= */
+    .analogy-box {
+      background: #e8f4fd;
+      border: 2px solid #90caf9;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.14in;
+    }
+
+    .analogy-caption {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: #0d47a1;
+      margin-top: 6px;
+    }
+
+    /* =============================================
+       CODE / ASCII DIAGRAM BLOCK
+    ============================================= */
+    .circuit-diagram {
+      font-family: monospace;
+      font-size: 10.5px;
+      background: #1a1a2e;
+      color: #76ff03;
+      padding: 0.1in;
+      border-radius: 8px;
+      margin: 0.07in 0;
+      line-height: 1.6;
+      overflow: visible;
+      white-space: pre;
+    }
+
+    .circuit-diagram.code-blue {
+      color: #64b5f6;
+    }
+
+    /* =============================================
+       SECONDARY CONCEPT BOX (replaces acdc-grid)
+    ============================================= */
+    .acdc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.1in;
+      margin-bottom: 0.06in;
+    }
+
+    .acdc-card {
+      border-radius: 10px;
+      padding: 0.1in 0.12in;
+      border-top: 5px solid transparent;
+    }
+
+    .acdc-card.dc {
+      background: #fff8e1;
+      border-top-color: #ffc107;
+    }
+
+    .acdc-card.ac {
+      background: #f3e5f5;
+      border-top-color: #9c27b0;
+    }
+
+    .acdc-title {
+      font-size: 13px;
+      font-weight: 900;
+      margin-bottom: 4px;
+    }
+
+    .acdc-card.dc .acdc-title { color: #ff6f00; }
+    .acdc-card.ac .acdc-title { color: #6a1b9a; }
+
+    .acdc-wave {
+      font-family: monospace;
+      font-size: 9.5px;
+      line-height: 1.3;
+      padding: 4px 6px;
+      border-radius: 5px;
+      margin: 5px 0;
+      white-space: pre;
+    }
+
+    .acdc-card.dc .acdc-wave {
+      background: #fffde7;
+      color: #f57f17;
+    }
+
+    .acdc-card.ac .acdc-wave {
+      background: #f3e5f5;
+      color: #6a1b9a;
+    }
+
+    .acdc-fact {
+      font-size: 10.5px;
+      color: #444;
+      line-height: 1.4;
+    }
+
+    .acdc-fact strong {
+      color: #333;
+    }
+
+    .acdc-father {
+      font-size: 10px;
+      margin-top: 4px;
+      padding: 3px 7px;
+      border-radius: 12px;
+      display: inline-block;
+      font-weight: 700;
+    }
+
+    .acdc-card.dc .acdc-father { background: #ffc107; color: #4a2c00; }
+    .acdc-card.ac .acdc-father { background: #9c27b0; color: #fff; }
+
+    /* =============================================
+       SIDE B — CIRCUIT BUILD
+    ============================================= */
+    .circuit-box {
+      background: #f1f8e9;
+      border: 2px solid #aed581;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.13in;
+    }
+
+    .circuit-note {
+      font-size: 11px;
+      color: #33691e;
+      font-style: italic;
+      margin-top: 5px;
+      padding: 4px 8px;
+      background: #dcedc8;
+      border-radius: 5px;
+    }
+
+    .checklist-title {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #2e7d32;
+      margin-top: 8px;
+      margin-bottom: 4px;
+    }
+
+    .checklist {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 3px 10px;
+      list-style: none;
+    }
+
+    .checklist li {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: #333;
+    }
+
+    .check-box {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid #43a047;
+      border-radius: 3px;
+      flex-shrink: 0;
+      background: #fff;
+    }
+
+    /* WIRING STEPS */
+    .wiring-steps {
+      list-style: none;
+      margin: 6px 0 4px 0;
+      padding: 0;
+    }
+
+    .wiring-steps li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 11px;
+      color: #1a1a2e;
+      margin-bottom: 4px;
+      line-height: 1.4;
+    }
+
+    .step-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      background: #0f3460;
+      color: #f4c430;
+      font-size: 9px;
+      font-weight: 900;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* =============================================
+       QUIZ
+    ============================================= */
+    .quiz-box {
+      background: #fff9c4;
+      border: 2px solid #f9a825;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.13in;
+    }
+
+    .quiz-item {
+      margin-bottom: 0.08in;
+    }
+
+    .quiz-q {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 2px;
+    }
+
+    .quiz-blank {
+      display: block;
+      border-bottom: 1.5px solid #999;
+      width: 100%;
+      height: 20px;
+      margin-top: 2px;
+    }
+
+    .quiz-hint {
+      font-size: 9px;
+      color: #aaa;
+      font-style: italic;
+      float: right;
+      margin-top: 1px;
+    }
+
+    .quiz-item.bonus .quiz-q {
+      color: #e65100;
+    }
+
+    .quiz-item.bonus .quiz-blank {
+      border-bottom-color: #ff9800;
+    }
+
+    /* =============================================
+       EXPERIMENTS GRID
+    ============================================= */
+    .experiments-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.08in;
+      margin-bottom: 0.12in;
+    }
+
+    .experiment-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      border-radius: 8px;
+      padding: 0.08in 0.1in;
+      border-left: 5px solid transparent;
+    }
+
+    .experiment-card.exp-a { background: #fff3e0; border-left-color: #ff9800; }
+    .experiment-card.exp-b { background: #e3f2fd; border-left-color: #2196f3; }
+    .experiment-card.exp-c { background: #fce4ec; border-left-color: #e91e63; }
+    .experiment-card.exp-d { background: #e8f5e9; border-left-color: #43a047; }
+
+    .exp-letter {
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1;
+      flex-shrink: 0;
+      width: 24px;
+      text-align: center;
+    }
+
+    .experiment-card.exp-a .exp-letter { color: #e65100; }
+    .experiment-card.exp-b .exp-letter { color: #0d47a1; }
+    .experiment-card.exp-c .exp-letter { color: #880e4f; }
+    .experiment-card.exp-d .exp-letter { color: #1b5e20; }
+
+    .exp-body { flex: 1; }
+
+    .exp-title {
+      font-size: 11.5px;
+      font-weight: 900;
+      margin-bottom: 2px;
+      color: #1a1a2e;
+    }
+
+    .exp-do {
+      font-size: 10.5px;
+      color: #444;
+      margin-bottom: 3px;
+    }
+
+    .exp-do::before {
+      content: "▶ Do: ";
+      font-weight: 700;
+      color: #555;
+    }
+
+    .exp-discover {
+      font-size: 10.5px;
+      color: #333;
+      font-style: italic;
+    }
+
+    /* =============================================
+       TRY AT HOME + TROUBLESHOOTING
+    ============================================= */
+    .lemon-box {
+      background: #f9fbe7;
+      border: 2px solid #c5e1a5;
+      border-radius: 10px;
+      padding: 0.09in 0.11in;
+    }
+
+    .lemon-title {
+      font-size: 12px;
+      font-weight: 900;
+      color: #33691e;
+      margin-bottom: 5px;
+    }
+
+    .lemon-body {
+      font-size: 10.5px;
+      color: #333;
+      line-height: 1.5;
+    }
+
+    .trouble-box {
+      background: #fafafa;
+      border: 2px solid #bdbdbd;
+      border-radius: 10px;
+      padding: 0.09in 0.11in;
+    }
+
+    .trouble-title {
+      font-size: 12px;
+      font-weight: 900;
+      color: #37474f;
+      margin-bottom: 5px;
+    }
+
+    .trouble-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9.5px;
+    }
+
+    .trouble-table thead th {
+      background: #37474f;
+      color: #fff;
+      padding: 3px 6px;
+      text-align: left;
+      font-weight: 700;
+    }
+
+    .trouble-table tbody tr:nth-child(even) {
+      background: #f5f5f5;
+    }
+
+    .trouble-table tbody td {
+      padding: 3px 6px;
+      color: #333;
+      border-bottom: 1px solid #e0e0e0;
+      vertical-align: top;
+    }
+
+    /* =============================================
+       COMING UP NEXT
+    ============================================= */
+    .next-box {
+      background: linear-gradient(90deg, #e3f2fd 0%, #f3e5f5 100%);
+      border-left: 5px solid #7c4dff;
+      border-radius: 0 10px 10px 0;
+      padding: 0.08in 0.14in;
+      font-size: 11.5px;
+      color: #1a1a2e;
+    }
+
+    .next-box strong {
+      color: #6a1b9a;
+    }
+
+    /* =============================================
+       SIDE B HEADER
+    ============================================= */
+    .side-b-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 3px solid #f4c430;
+      margin-bottom: 0.15in;
+      padding-bottom: 0.09in;
+    }
+
+    .side-b-title {
+      font-size: 14px;
+      font-weight: 900;
+      color: #0f3460;
+    }
+
+    .side-b-sub {
+      font-size: 10px;
+      color: #888;
+      margin-top: 1px;
+    }
+
+    .side-b-xp {
+      background: #f4c430;
+      color: #1a1a2e;
+      font-weight: 900;
+      font-size: 11px;
+      padding: 3px 12px;
+      border-radius: 20px;
+    }
+
+    /* =============================================
+       PRINT STYLES
+    ============================================= */
+    @media print {
+      body {
+        background: #fff;
+        font-size: 12px;
+      }
+
+      .page {
+        width: 100%;
+        min-height: auto;
+        margin: 0;
+        box-shadow: none;
+        padding: 0.5in;
+      }
+
+      .page-a {
+        page-break-after: always;
+      }
+
+      .header {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .vocab-card,
+      .acdc-card,
+      .circuit-box,
+      .quiz-box,
+      .next-box,
+      .analogy-box,
+      .circuit-diagram,
+      .experiment-card,
+      .lemon-box,
+      .trouble-box,
+      .trouble-table thead th {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .vocab-card.voltage  { background: #fff !important; border: 2px solid #ff9800; border-top: 5px solid #ff9800; }
+      .vocab-card.current  { background: #fff !important; border: 2px solid #2196f3; border-top: 5px solid #2196f3; }
+      .vocab-card.resist   { background: #fff !important; border: 2px solid #e91e63; border-top: 5px solid #e91e63; }
+      .vocab-card.circuit  { background: #fff !important; border: 2px solid #43a047; border-top: 5px solid #43a047; }
+    }
+
+    @page {
+      size: A4;
+      margin: 12mm;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ======================================================
+       SIDE A (FRONT)
+  ====================================================== -->
+  <div class="page page-a">
+    <div class="page-label">Side A &#8212; Front</div>
+
+    <!-- HEADER -->
+    <div class="header">
+      <div class="header-course">&#9889; Circuit Explorer Academy</div>
+      <div class="header-lesson">Lesson 35: Temperature Sensor &#8212; Your Arduino's Thermometer</div>
+      <div class="header-module">Module 5: Sensors and Actuators &nbsp;|&nbsp; DHT11 / DHT22</div>
+      <div><span class="header-xp">&#11088; 275 XP Available</span></div>
+    </div>
+
+    <div class="spark-row" aria-hidden="true">&#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889;</div>
+
+    <!-- VOCABULARY -->
+    <div class="section-title">
+      <span class="icon">&#128218;</span> Key Words &#8212; Learn These!
+    </div>
+
+    <div class="vocab-grid">
+
+      <div class="vocab-card voltage">
+        <span class="vocab-emoji">&#127777;</span>
+        <span class="vocab-symbol">S</span>
+        <div class="vocab-term">Sensor</div>
+        <div class="vocab-def">A device that <strong>detects</strong> something in the real world (heat, light, movement) and converts it into an electrical signal your Arduino can read.</div>
+      </div>
+
+      <div class="vocab-card current">
+        <span class="vocab-emoji">&#128165;</span>
+        <span class="vocab-symbol">D</span>
+        <div class="vocab-term">DHT11</div>
+        <div class="vocab-def">A <strong>digital temperature and humidity sensor</strong>. Measures 0&#8211;50&#176;C and 20&#8211;90% humidity. Sends its data as a digital signal.</div>
+      </div>
+
+      <div class="vocab-card resist">
+        <span class="vocab-emoji">&#128167;</span>
+        <span class="vocab-symbol">H</span>
+        <div class="vocab-term">Humidity</div>
+        <div class="vocab-def">How much <strong>invisible water vapor</strong> is in the air. 100% = rainforest-muggy. 20% = desert-dry. Your breath raises it!</div>
+      </div>
+
+      <div class="vocab-card circuit">
+        <span class="vocab-emoji">&#128196;</span>
+        <span class="vocab-symbol">R</span>
+        <div class="vocab-term">Pull-up Resistor</div>
+        <div class="vocab-def">A resistor that keeps a signal wire at a <strong>steady HIGH voltage</strong> when the sensor is not talking &#8212; stops the wire from floating around like a balloon!</div>
+      </div>
+
+    </div>
+
+    <!-- DHT11 PINOUT DIAGRAM -->
+    <div class="section-title">
+      <span class="icon">&#128268;</span> DHT11 Sensor &#8212; Pinout &amp; Wiring Diagram
+    </div>
+
+    <div class="analogy-box">
+
+      <div class="circuit-diagram">  DHT11 MODULE (front view)      ARDUINO WIRING
+  +-------+-------+-------+
+  |  SIG  |  VCC  |  GND  |      Arduino 5V  --------> DHT11 VCC  (middle)
+  | (data)|       |       |      Arduino GND --------> DHT11 GND  (right)
+  +-------+-------+-------+      Arduino Pin 2 ------> DHT11 SIG  (left)
+      |       |       |
+      |       |       +----  BLACK wire -> GND rail
+      |       +------------  RED wire   -> 5V rail
+      +--------------------  DATA wire  -> Pin 2
+
+  Pull-up resistor (10k&#937;):  between SIG pin and 5V
+      SIG pin ----[10k&#937;]---- 5V
+  (Many 3-pin PCB modules already have this built in!)</div>
+
+      <div class="analogy-caption">The 10k&#937; pull-up keeps the signal line at HIGH when the sensor is idle &#8212; without it, Arduino gets confused!</div>
+    </div>
+
+    <!-- CODE SNIPPET -->
+    <div class="section-title">
+      <span class="icon">&#128187;</span> Your First Temperature Reading &#8212; The Code
+    </div>
+
+    <div class="analogy-box" style="background: #e8eaf6; border-color: #9fa8da;">
+
+      <div class="circuit-diagram code-blue">#include &lt;DHT.h&gt;
+
+#define DHTPIN 2       // Data wire on pin 2
+#define DHTTYPE DHT11  // We are using DHT11
+
+DHT dht(DHTPIN, DHTTYPE);
+
+void setup() {
+  Serial.begin(9600);
+  dht.begin();          // Wake up the sensor
+}
+
+void loop() {
+  delay(2000);          // DHT11 reads once per 2 seconds
+
+  float temperature = dht.readTemperature();  // Celsius
+  float humidity    = dht.readHumidity();
+
+  if (isnan(temperature) || isnan(humidity)) {
+    Serial.println("ERROR: Could not read sensor!");
+    return;             // isnan() = "Is Not A Number" check
+  }
+
+  Serial.print("Temp: ");   Serial.print(temperature);  Serial.print(" C   ");
+  Serial.print("Humid: ");  Serial.print(humidity);     Serial.println(" %");
+}</div>
+
+      <div class="analogy-caption">Install the library first: Sketch &gt; Include Library &gt; Manage Libraries &gt; search "DHT sensor library" by Adafruit &gt; Install All</div>
+    </div>
+
+    <!-- DHT11 vs DHT22 COMPARISON -->
+    <div class="section-title">
+      <span class="icon">&#128202;</span> DHT11 vs DHT22 &#8212; Which One Are You Using?
+    </div>
+
+    <div class="acdc-grid">
+
+      <div class="acdc-card dc">
+        <div class="acdc-title">&#127777; DHT11 &#8212; Starter Wand</div>
+        <div class="acdc-wave">Range: 0 to 50 degrees C
+Humidity: 20 to 90 %
+Accuracy: +/- 2 degrees C
+Speed: 1 reading / second</div>
+        <div class="acdc-fact"><strong>Great for beginners!</strong> Very cheap, works perfectly for classroom projects. Already on most starter kits.<br/>Think of it as the "learner" thermometer.</div>
+        <div class="acdc-father">&#127771; Perfect for indoor rooms</div>
+      </div>
+
+      <div class="acdc-card ac">
+        <div class="acdc-title">&#127775; DHT22 &#8212; Pro Upgrade</div>
+        <div class="acdc-wave">Range: -40 to 80 degrees C
+Humidity: 0 to 100 %
+Accuracy: +/- 0.5 degrees C
+Speed: 1 reading / 2 seconds</div>
+        <div class="acdc-fact"><strong>More accurate and wider range</strong> &#8212; measures freezing temperatures too! Costs a bit more but worth it for weather stations.<br/>Same code, just change DHT11 to DHT22.</div>
+        <div class="acdc-father">&#9924; Can measure outdoor cold!</div>
+      </div>
+
+    </div>
+
+  </div><!-- end page-a -->
+
+
+  <!-- ======================================================
+       SIDE B (BACK)
+  ====================================================== -->
+  <div class="page page-b">
+    <div class="page-label">Side B &#8212; Back</div>
+
+    <!-- SIDE B MINI HEADER -->
+    <div class="side-b-header">
+      <div>
+        <div class="side-b-title">&#9889; Circuit Explorer Academy &#8212; Lesson 35</div>
+        <div class="side-b-sub">Temperature Sensor (DHT11/DHT22) &nbsp;|&nbsp; Module 5: Sensors and Actuators</div>
+      </div>
+      <div class="side-b-xp">&#11088; 275 XP</div>
+    </div>
+
+    <!-- ACTIVITY / CIRCUIT BUILD -->
+    <div class="section-title">
+      <span class="icon">&#127777;</span> My Activity Today &#8212; Weather Station Build!
+    </div>
+
+    <div class="circuit-box">
+
+      <div class="circuit-diagram">Arduino Weather Station &#8212; full wiring:
+
+  Arduino 5V  ----[RED wire]----> DHT11 VCC   (middle pin)
+  Arduino GND ----[BLK wire]----> DHT11 GND   (right pin)
+  Arduino Pin 2 --[YEL wire]----> DHT11 SIG   (left pin)
+                                     |
+                                  [10k&#937;]  (pull-up, SIG to 5V)
+                                     |
+                                  Arduino 5V
+
+  LCD upgrade (I2C backpack):
+  Arduino 5V  --> LCD VCC   |   Arduino GND --> LCD GND
+  Arduino A4  --> LCD SDA   |   Arduino A5  --> LCD SCL
+
+  LED alert on Pin 13:
+  Arduino Pin 13 --> [330&#937;] --> LED(+) --> LED(-) --> GND</div>
+
+      <div class="circuit-note">Open Serial Monitor at 9600 baud to see live readings! Try breathing on the sensor &#8212; watch humidity jump up!</div>
+
+      <div class="checklist-title">&#9989; Wiring Steps:</div>
+      <ul class="wiring-steps">
+        <li><span class="step-num">1</span>Connect DHT11 VCC to Arduino 5V (red wire)</li>
+        <li><span class="step-num">2</span>Connect DHT11 GND to Arduino GND (black wire)</li>
+        <li><span class="step-num">3</span>Connect DHT11 Signal to Arduino Pin 2 (yellow wire)</li>
+        <li><span class="step-num">4</span>Add 10k&#937; pull-up resistor between Signal and 5V (skip if module has it built in)</li>
+        <li><span class="step-num">5</span>Upload sketch, open Serial Monitor &#8212; readings appear every 2 seconds!</li>
+      </ul>
+
+      <div class="checklist-title">&#9989; Components I Used:</div>
+      <ul class="checklist">
+        <li><span class="check-box"></span>Arduino Uno</li>
+        <li><span class="check-box"></span>DHT11 sensor</li>
+        <li><span class="check-box"></span>10k&#937; resistor</li>
+        <li><span class="check-box"></span>Breadboard</li>
+        <li><span class="check-box"></span>Jumper wires</li>
+        <li><span class="check-box"></span>USB cable</li>
+        <li><span class="check-box"></span>16x2 LCD (bonus)</li>
+        <li><span class="check-box"></span>LED (alert bonus)</li>
+        <li><span class="check-box"></span>330&#937; resistor</li>
+      </ul>
+
+    </div>
+
+    <!-- QUIZ -->
+    <div class="section-title">
+      <span class="icon">&#129504;</span> Quiz Time! Fill in the blanks.
+    </div>
+
+    <div class="quiz-box">
+
+      <div class="quiz-item">
+        <div class="quiz-q">1. The DHT11 measures two things: ________________ and ________________.</div>
+        <span class="quiz-hint">hint: "temperature" and "humidity"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item">
+        <div class="quiz-q">2. We use a pull-up resistor to keep the signal line at a steady ________________ voltage.</div>
+        <span class="quiz-hint">hint: "HIGH"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item">
+        <div class="quiz-q">3. The <code>isnan()</code> function checks if a reading is "Not A ________________" &#8212; which means it failed.</div>
+        <span class="quiz-hint">hint: "Number"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item bonus" style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed #f9a825;">
+        <div class="quiz-q">&#127381; BONUS: If you breathe on the DHT11, which readings go UP &#8212; temperature, humidity, or both?</div>
+        <span class="quiz-hint">hint: "both &#8212; your breath is warm AND moist!"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+    </div>
+
+    <!-- EXPERIMENTS -->
+    <div class="section-title">
+      <span class="icon">&#128300;</span> 4 Experiments You Did Today!
+    </div>
+
+    <div class="experiments-grid">
+
+      <div class="experiment-card exp-a">
+        <div class="exp-letter">A</div>
+        <div class="exp-body">
+          <div class="exp-title">Breathe on the Sensor</div>
+          <div class="exp-do">Breathe slowly onto the DHT11.</div>
+          <div class="exp-discover">Humidity spikes upward! Your warm, moist breath changes BOTH readings.</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-b">
+        <div class="exp-letter">B</div>
+        <div class="exp-body">
+          <div class="exp-title">Body Heat Test</div>
+          <div class="exp-do">Hold the sensor gently in your palm.</div>
+          <div class="exp-discover">Temperature slowly rises &#8212; your body heat (37&#176;C!) warms the sensor.</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-c">
+        <div class="exp-letter">C</div>
+        <div class="exp-body">
+          <div class="exp-title">Window Check</div>
+          <div class="exp-do">Hold the sensor near a window or cold surface.</div>
+          <div class="exp-discover">Temperature drops! Cold air really is colder &#8212; and your sensor proves it!</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-d">
+        <div class="exp-letter">D</div>
+        <div class="exp-body">
+          <div class="exp-title">Temperature Alert LED</div>
+          <div class="exp-do">Add the LED alert code &#8212; warm the sensor with your hand.</div>
+          <div class="exp-discover">When temp exceeds 28&#176;C, the LED lights up &#8212; Arduino is now REACTING to the world!</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TRY AT HOME + TROUBLESHOOTING -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.1in; margin-bottom: 0.12in;">
+
+      <div class="lemon-box">
+        <div class="lemon-title">&#127968; Try at Home: Room Weather Log!</div>
+        <div class="lemon-body">
+          Set up your DHT11 on the Arduino and leave it running for 10 minutes.<br/><br/>
+          Every 2 minutes, write down the temperature and humidity reading from the Serial Monitor:<br/><br/>
+          <strong>Time 0 min:</strong> ______&#176;C / _____%<br/>
+          <strong>Time 2 min:</strong> ______&#176;C / _____%<br/>
+          <strong>Time 4 min:</strong> ______&#176;C / _____%<br/><br/>
+          <em>"Does the temperature change when you open a window?"</em><br/><br/>
+          In <strong>Lesson 36</strong> you will add a light sensor and build an even smarter weather + light station!
+        </div>
+      </div>
+
+      <div class="trouble-box">
+        <div class="trouble-title">&#128295; Troubleshooting Quick Guide</div>
+        <table class="trouble-table">
+          <thead>
+            <tr><th>Problem</th><th>Quick Fix</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Serial shows "ERROR"</td><td>Check data wire on pin 2; add pull-up resistor</td></tr>
+            <tr><td>Reads 0 or NaN</td><td>Install both DHT + Adafruit Unified Sensor libraries</td></tr>
+            <tr><td>LCD shows nothing</td><td>Try address 0x3F instead of 0x27 in the code</td></tr>
+            <tr><td>Temperature wrong</td><td>DHT11 is &#177;2&#176;C accuracy &#8212; that is normal!</td></tr>
+            <tr><td>Wand reads 0V on VCC</td><td>Trace 5V wire from Arduino to sensor &#8212; loose connection</td></tr>
+            <tr><td>Updates very slowly</td><td>DHT11 max speed is 1 reading/sec &#8212; 2-sec delay is correct</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- COMING UP NEXT -->
+    <div class="next-box">
+      <strong>Coming Up Next &#8594; Lesson 36: Light Sensor &#8212; The Eye of Your Arduino (LDR)! &#128064;</strong><br/>
+      You will meet the <strong>Light Dependent Resistor (LDR)</strong> &#8212; a component that changes its resistance based on brightness. Build an automatic night light that turns on by itself when lights go out. Your Magic Measurement Wand will show the resistance changing in real time as you cover and uncover the LDR!
+    </div>
+
+  </div><!-- end page-b -->
+
+</body>
+</html>

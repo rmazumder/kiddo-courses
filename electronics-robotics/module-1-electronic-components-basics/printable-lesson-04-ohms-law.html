@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 4: Ohm's Law — Circuit Explorer Academy</title>
+  <style>
+    /* =============================================
+       BASE RESET & TYPOGRAPHY
+    ============================================= */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, Arial, sans-serif;
+      font-size: 13px;
+      line-height: 1.45;
+      color: #1a1a2e;
+      background: #f0f4ff;
+    }
+
+    /* =============================================
+       PAGE LAYOUT
+    ============================================= */
+    .page {
+      width: 8.5in;
+      min-height: 11in;
+      margin: 0 auto 0.4in auto;
+      padding: 0.5in;
+      background: #fff;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-label {
+      position: absolute;
+      top: 0.18in;
+      right: 0.22in;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #aaa;
+    }
+
+    /* =============================================
+       SIDE A — HEADER
+    ============================================= */
+    .header {
+      text-align: center;
+      border-bottom: 3px solid #f4c430;
+      margin-bottom: 0.16in;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+      border-radius: 10px;
+      color: #fff;
+      padding: 0.22in 0.2in 0.18in 0.2in;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .header-course {
+      font-size: 19px;
+      font-weight: 900;
+      letter-spacing: 0.03em;
+      color: #f4c430;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+
+    .header-lesson {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      margin-top: 4px;
+    }
+
+    .header-module {
+      font-size: 11px;
+      color: #a8d8ea;
+      margin-top: 3px;
+      letter-spacing: 0.04em;
+    }
+
+    .header-xp {
+      display: inline-block;
+      margin-top: 8px;
+      background: #f4c430;
+      color: #1a1a2e;
+      font-weight: 900;
+      font-size: 12px;
+      padding: 3px 14px;
+      border-radius: 20px;
+      letter-spacing: 0.06em;
+    }
+
+    .spark-row {
+      text-align: center;
+      font-size: 16px;
+      letter-spacing: 0.25em;
+      margin: 0.1in 0 0.04in 0;
+      color: #f4c430;
+    }
+
+    /* =============================================
+       SECTION HEADINGS
+    ============================================= */
+    .section-title {
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #fff;
+      background: #0f3460;
+      padding: 5px 12px;
+      border-radius: 6px;
+      margin-bottom: 0.1in;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .section-title .icon {
+      font-size: 14px;
+    }
+
+    /* =============================================
+       VOCABULARY CARDS  (2x2 grid)
+    ============================================= */
+    .vocab-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.1in;
+      margin-bottom: 0.14in;
+    }
+
+    .vocab-card {
+      border-radius: 10px;
+      padding: 0.1in 0.12in;
+      border-top: 5px solid transparent;
+      position: relative;
+      overflow: hidden;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .vocab-card::before {
+      content: '';
+      position: absolute;
+      top: -18px;
+      right: -18px;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      opacity: 0.13;
+      background: #fff;
+    }
+
+    /* Ohm's Law vocab color assignments */
+    .vocab-card.ohmslaw  { background: #fff3e0; border-top-color: #ff9800; }
+    .vocab-card.voltage  { background: #e3f2fd; border-top-color: #2196f3; }
+    .vocab-card.current  { background: #fce4ec; border-top-color: #e91e63; }
+    .vocab-card.resist   { background: #e8f5e9; border-top-color: #43a047; }
+
+    .vocab-term {
+      font-size: 13px;
+      font-weight: 900;
+      margin-bottom: 2px;
+    }
+
+    .vocab-card.ohmslaw  .vocab-term { color: #e65100; }
+    .vocab-card.voltage  .vocab-term { color: #0d47a1; }
+    .vocab-card.current  .vocab-term { color: #880e4f; }
+    .vocab-card.resist   .vocab-term { color: #1b5e20; }
+
+    .vocab-symbol {
+      font-size: 18px;
+      font-weight: 900;
+      float: right;
+      margin-top: -2px;
+      opacity: 0.55;
+    }
+
+    .vocab-def {
+      font-size: 11.5px;
+      color: #333;
+      line-height: 1.4;
+      margin-top: 2px;
+    }
+
+    .vocab-emoji {
+      font-size: 20px;
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    /* =============================================
+       TRIANGLE CONCEPT BOX (Side A main concept)
+    ============================================= */
+    .concept-box {
+      background: #fff8e1;
+      border: 2px solid #ffcc02;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.14in;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .concept-box.blue-theme {
+      background: #e8f4fd;
+      border-color: #90caf9;
+    }
+
+    .concept-header {
+      font-size: 13px;
+      font-weight: 900;
+      color: #e65100;
+      margin-bottom: 0.07in;
+    }
+
+    .concept-box.blue-theme .concept-header {
+      color: #0d47a1;
+    }
+
+    .formula-big {
+      font-family: 'Courier New', monospace;
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-align: center;
+      color: #1a1a2e;
+      background: #fffde7;
+      border: 3px solid #f4c430;
+      border-radius: 8px;
+      padding: 8px 0;
+      margin: 6px 0 8px 0;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .triangle-container {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.14in;
+    }
+
+    .triangle-css {
+      flex-shrink: 0;
+      text-align: center;
+      padding: 4px 0;
+    }
+
+    /* CSS triangle shape */
+    .tri-shape {
+      width: 90px;
+      height: 78px;
+      position: relative;
+      margin: 0 auto 4px auto;
+    }
+
+    /* Outer triangle border via clip-path */
+    .tri-outer {
+      width: 90px;
+      height: 78px;
+      background: #ff9800;
+      clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+      position: absolute;
+      top: 0;
+      left: 0;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    /* Inner top half (V) */
+    .tri-top {
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 22px;
+      font-weight: 900;
+      color: #fff;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+      z-index: 2;
+    }
+
+    /* Dividing line */
+    .tri-divider {
+      position: absolute;
+      top: 39px;
+      left: 12px;
+      right: 12px;
+      height: 2px;
+      background: rgba(255,255,255,0.7);
+      z-index: 2;
+    }
+
+    /* Bottom left (I) */
+    .tri-bot-left {
+      position: absolute;
+      bottom: 9px;
+      left: 18px;
+      font-size: 19px;
+      font-weight: 900;
+      color: #fff;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+      z-index: 2;
+    }
+
+    /* Bottom right (R) */
+    .tri-bot-right {
+      position: absolute;
+      bottom: 9px;
+      right: 18px;
+      font-size: 19px;
+      font-weight: 900;
+      color: #fff;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+      z-index: 2;
+    }
+
+    /* Vertical divider inside bottom */
+    .tri-vert {
+      position: absolute;
+      top: 41px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      height: 30px;
+      background: rgba(255,255,255,0.7);
+      z-index: 2;
+    }
+
+    .tri-hint {
+      font-size: 9px;
+      color: #e65100;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .triangle-forms {
+      flex: 1;
+    }
+
+    .tri-form-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 5px;
+      font-size: 11px;
+    }
+
+    .tri-cover {
+      display: inline-block;
+      background: #ff9800;
+      color: #fff;
+      font-weight: 900;
+      font-size: 12px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 22px;
+      flex-shrink: 0;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .tri-formula {
+      font-family: 'Courier New', monospace;
+      font-weight: 900;
+      font-size: 12px;
+      color: #1a1a2e;
+      background: #ffe0b2;
+      padding: 2px 7px;
+      border-radius: 4px;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .tri-words {
+      color: #555;
+      font-size: 10px;
+    }
+
+    /* =============================================
+       PARAMETER EFFECTS TABLE
+    ============================================= */
+    .param-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 10.5px;
+      margin-top: 6px;
+    }
+
+    .param-table thead th {
+      background: #0f3460;
+      color: #fff;
+      padding: 4px 8px;
+      text-align: left;
+      font-weight: 700;
+      font-size: 10px;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .param-table tbody tr:nth-child(odd) {
+      background: #f5f5f5;
+    }
+
+    .param-table tbody tr:nth-child(even) {
+      background: #fff;
+    }
+
+    .param-table tbody td {
+      padding: 4px 8px;
+      color: #333;
+      border-bottom: 1px solid #e0e0e0;
+      vertical-align: middle;
+    }
+
+    .param-up   { color: #1b5e20; font-weight: 900; }
+    .param-down { color: #b71c1c; font-weight: 900; }
+    .param-same { color: #e65100; font-weight: 900; }
+
+    /* =============================================
+       CIRCUIT BOX (Side B activity)
+    ============================================= */
+    .circuit-box {
+      background: #f1f8e9;
+      border: 2px solid #aed581;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.13in;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .circuit-diagram {
+      font-family: monospace;
+      font-size: 10.5px;
+      background: #1a1a2e;
+      color: #76ff03;
+      padding: 0.1in;
+      border-radius: 8px;
+      margin: 0.07in 0;
+      line-height: 1.6;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .circuit-note {
+      font-size: 11px;
+      color: #33691e;
+      font-style: italic;
+      margin-top: 5px;
+      padding: 4px 8px;
+      background: #dcedc8;
+      border-radius: 5px;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .checklist-title {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #2e7d32;
+      margin-top: 8px;
+      margin-bottom: 4px;
+    }
+
+    .checklist {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 3px 10px;
+      list-style: none;
+    }
+
+    .checklist li {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: #333;
+    }
+
+    .check-box {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid #43a047;
+      border-radius: 3px;
+      flex-shrink: 0;
+      background: #fff;
+    }
+
+    /* =============================================
+       EXPERIMENT TABLE (Resistor Swap)
+    ============================================= */
+    .exp-table-wrap {
+      margin: 6px 0 4px 0;
+    }
+
+    .exp-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 10px;
+    }
+
+    .exp-table thead th {
+      background: #1a1a2e;
+      color: #76ff03;
+      padding: 3px 6px;
+      text-align: left;
+      font-size: 9.5px;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .exp-table tbody tr:nth-child(even) {
+      background: #f5f5f5;
+    }
+
+    .exp-table tbody td {
+      padding: 4px 6px;
+      border-bottom: 1px solid #ddd;
+      color: #333;
+    }
+
+    .exp-table .blank-cell {
+      border-bottom: 1.5px solid #999;
+      min-width: 60px;
+    }
+
+    /* =============================================
+       QUIZ
+    ============================================= */
+    .quiz-box {
+      background: #fff9c4;
+      border: 2px solid #f9a825;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.13in;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .quiz-item {
+      margin-bottom: 0.08in;
+    }
+
+    .quiz-q {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 2px;
+    }
+
+    .quiz-blank {
+      display: block;
+      border-bottom: 1.5px solid #999;
+      width: 100%;
+      height: 20px;
+      margin-top: 2px;
+    }
+
+    .quiz-hint {
+      font-size: 9px;
+      color: #aaa;
+      font-style: italic;
+      float: right;
+      margin-top: 1px;
+    }
+
+    .quiz-item.bonus .quiz-q {
+      color: #e65100;
+    }
+
+    .quiz-item.bonus .quiz-blank {
+      border-bottom-color: #ff9800;
+    }
+
+    /* =============================================
+       EXPERIMENTS GRID
+    ============================================= */
+    .experiments-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.08in;
+      margin-bottom: 0.12in;
+    }
+
+    .experiment-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      border-radius: 8px;
+      padding: 0.08in 0.1in;
+      border-left: 5px solid transparent;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .experiment-card.exp-a { background: #fff3e0; border-left-color: #ff9800; }
+    .experiment-card.exp-b { background: #e3f2fd; border-left-color: #2196f3; }
+    .experiment-card.exp-c { background: #fce4ec; border-left-color: #e91e63; }
+    .experiment-card.exp-d { background: #e8f5e9; border-left-color: #43a047; }
+
+    .exp-letter {
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1;
+      flex-shrink: 0;
+      width: 24px;
+      text-align: center;
+    }
+
+    .experiment-card.exp-a .exp-letter { color: #e65100; }
+    .experiment-card.exp-b .exp-letter { color: #0d47a1; }
+    .experiment-card.exp-c .exp-letter { color: #880e4f; }
+    .experiment-card.exp-d .exp-letter { color: #1b5e20; }
+
+    .exp-body { flex: 1; }
+
+    .exp-title {
+      font-size: 11.5px;
+      font-weight: 900;
+      margin-bottom: 2px;
+      color: #1a1a2e;
+    }
+
+    .exp-do {
+      font-size: 10.5px;
+      color: #444;
+      margin-bottom: 3px;
+    }
+
+    .exp-do::before {
+      content: "▶ Do: ";
+      font-weight: 700;
+      color: #555;
+    }
+
+    .exp-discover {
+      font-size: 10.5px;
+      color: #333;
+      font-style: italic;
+    }
+
+    /* =============================================
+       TRY AT HOME + TROUBLESHOOTING
+    ============================================= */
+    .lemon-box {
+      background: #f9fbe7;
+      border: 2px solid #c5e1a5;
+      border-radius: 10px;
+      padding: 0.09in 0.11in;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .lemon-title {
+      font-size: 12px;
+      font-weight: 900;
+      color: #33691e;
+      margin-bottom: 5px;
+    }
+
+    .lemon-body {
+      font-size: 10.5px;
+      color: #333;
+      line-height: 1.5;
+    }
+
+    .trouble-box {
+      background: #fafafa;
+      border: 2px solid #bdbdbd;
+      border-radius: 10px;
+      padding: 0.09in 0.11in;
+    }
+
+    .trouble-title {
+      font-size: 12px;
+      font-weight: 900;
+      color: #37474f;
+      margin-bottom: 5px;
+    }
+
+    .trouble-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9.5px;
+    }
+
+    .trouble-table thead th {
+      background: #37474f;
+      color: #fff;
+      padding: 3px 6px;
+      text-align: left;
+      font-weight: 700;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .trouble-table tbody tr:nth-child(even) {
+      background: #f5f5f5;
+    }
+
+    .trouble-table tbody td {
+      padding: 3px 6px;
+      color: #333;
+      border-bottom: 1px solid #e0e0e0;
+      vertical-align: top;
+    }
+
+    /* =============================================
+       COMING UP NEXT
+    ============================================= */
+    .next-box {
+      background: linear-gradient(90deg, #e3f2fd 0%, #f3e5f5 100%);
+      border-left: 5px solid #7c4dff;
+      border-radius: 0 10px 10px 0;
+      padding: 0.08in 0.14in;
+      font-size: 11.5px;
+      color: #1a1a2e;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .next-box strong {
+      color: #6a1b9a;
+    }
+
+    /* =============================================
+       SIDE B HEADER
+    ============================================= */
+    .side-b-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 3px solid #f4c430;
+      margin-bottom: 0.15in;
+      padding-bottom: 0.09in;
+    }
+
+    .side-b-title {
+      font-size: 14px;
+      font-weight: 900;
+      color: #0f3460;
+    }
+
+    .side-b-sub {
+      font-size: 10px;
+      color: #888;
+      margin-top: 1px;
+    }
+
+    .side-b-xp {
+      background: #f4c430;
+      color: #1a1a2e;
+      font-weight: 900;
+      font-size: 11px;
+      padding: 3px 12px;
+      border-radius: 20px;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    /* =============================================
+       LESSON IMAGE HELPERS
+    ============================================= */
+    .lesson-img {
+      display: block;
+      border-radius: 7px;
+      object-fit: contain;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .img-float-right {
+      float: right;
+      margin: 0 0 6px 12px;
+      max-height: 110px;
+      max-width: 160px;
+    }
+
+    .img-centered {
+      margin: 6px auto 0 auto;
+      max-height: 110px;
+      width: auto;
+    }
+
+    .img-side-b {
+      max-height: 130px;
+      max-width: 100%;
+      margin: 6px auto 0 auto;
+      display: block;
+    }
+
+    .clearfix::after {
+      content: '';
+      display: table;
+      clear: both;
+    }
+
+    /* =============================================
+       PRINT STYLES
+    ============================================= */
+    @media print {
+      body {
+        background: #fff;
+        font-size: 12px;
+      }
+
+      .page {
+        width: 100%;
+        min-height: auto;
+        margin: 0;
+        box-shadow: none;
+        padding: 0.5in;
+      }
+
+      .page-a {
+        page-break-after: always;
+      }
+
+      .header,
+      .vocab-card,
+      .concept-box,
+      .formula-big,
+      .tri-cover,
+      .tri-formula,
+      .tri-outer,
+      .param-table thead th,
+      .circuit-box,
+      .circuit-diagram,
+      .circuit-note,
+      .quiz-box,
+      .next-box,
+      .lemon-box,
+      .experiment-card,
+      .trouble-table thead th,
+      .side-b-xp,
+      .section-title,
+      .exp-table thead th,
+      .lesson-img {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      /* B&W fallback borders for vocab cards */
+      .vocab-card.ohmslaw { background: #fff !important; border: 2px solid #ff9800; border-top: 5px solid #ff9800; }
+      .vocab-card.voltage { background: #fff !important; border: 2px solid #2196f3; border-top: 5px solid #2196f3; }
+      .vocab-card.current { background: #fff !important; border: 2px solid #e91e63; border-top: 5px solid #e91e63; }
+      .vocab-card.resist  { background: #fff !important; border: 2px solid #43a047; border-top: 5px solid #43a047; }
+    }
+
+    @page {
+      size: A4;
+      margin: 12mm;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ======================================================
+       SIDE A (FRONT)
+  ====================================================== -->
+  <div class="page page-a">
+    <div class="page-label">Side A — Front</div>
+
+    <!-- HEADER -->
+    <div class="header">
+      <div class="header-course">&#9889; Circuit Explorer Academy</div>
+      <div class="header-lesson">Lesson 4: Ohm's Law — The Magic Triangle</div>
+      <div class="header-module">Module 1: Electronic Components Basics</div>
+      <div><span class="header-xp">&#11088; 300 XP Available</span></div>
+    </div>
+
+    <div class="spark-row" aria-hidden="true">&#9889; &#10022; &#9651; &#10022; &#9889; &#10022; &#9651; &#10022; &#9889; &#10022; &#9651; &#10022; &#9889; &#10022; &#9651; &#10022; &#9889;</div>
+
+    <!-- VOCABULARY -->
+    <div class="section-title">
+      <span class="icon">&#128218;</span> Key Words — Learn These!
+    </div>
+
+    <div class="vocab-grid">
+
+      <div class="vocab-card ohmslaw">
+        <span class="vocab-emoji">&#128302;</span>
+        <span class="vocab-symbol">=</span>
+        <div class="vocab-term">Ohm's Law</div>
+        <div class="vocab-def">The rule that <strong>connects</strong> voltage, current, and resistance. One formula to rule them all: <strong>V = I x R</strong></div>
+      </div>
+
+      <div class="vocab-card voltage">
+        <span class="vocab-emoji">&#128261;</span>
+        <span class="vocab-symbol">V</span>
+        <div class="vocab-term">Voltage (V)</div>
+        <div class="vocab-def">The <strong>push</strong> — like water pressure from a pump. More voltage = bigger push = more current flows!</div>
+      </div>
+
+      <div class="vocab-card current">
+        <span class="vocab-emoji">&#128166;</span>
+        <span class="vocab-symbol">I</span>
+        <div class="vocab-term">Current (I)</div>
+        <div class="vocab-def">The <strong>flow</strong> — like how much water moves through the pipe every second. Measured in Amps (A).</div>
+      </div>
+
+      <div class="vocab-card resist">
+        <span class="vocab-emoji">&#128683;</span>
+        <span class="vocab-symbol">R</span>
+        <div class="vocab-term">Resistance (R)</div>
+        <div class="vocab-def">The <strong>block</strong> — like how narrow the pipe is. More resistance = less current = dimmer LED!</div>
+      </div>
+
+    </div>
+
+    <!-- MAIN CONCEPT: THE MAGIC TRIANGLE -->
+    <div class="section-title">
+      <span class="icon">&#9651;</span> The Magic Triangle — V = I x R
+    </div>
+
+    <div class="concept-box clearfix">
+
+      <img src="images/lesson-04-ohms-law-triangle.png"
+           alt="Ohm's Law V=IR triangle diagram"
+           class="lesson-img img-float-right" />
+
+      <div class="formula-big">V &nbsp;=&nbsp; I &nbsp;&#215;&nbsp; R</div>
+
+      <p style="font-size: 11px; color: #444; margin-bottom: 8px;">
+        <strong>Voltage = Current &times; Resistance.</strong>
+        This is the most famous formula in electronics! Cover any letter with your finger to find the formula for that value.
+      </p>
+
+      <div class="triangle-container">
+
+        <!-- CSS Triangle visual -->
+        <div class="triangle-css">
+          <div class="tri-shape">
+            <div class="tri-outer"></div>
+            <div class="tri-top">V</div>
+            <div class="tri-divider"></div>
+            <div class="tri-vert"></div>
+            <div class="tri-bot-left">I</div>
+            <div class="tri-bot-right">R</div>
+          </div>
+          <div class="tri-hint">Cover a letter<br/>with your finger!</div>
+        </div>
+
+        <!-- Three formula forms -->
+        <div class="triangle-forms">
+          <div class="tri-form-row">
+            <span class="tri-cover">V</span>
+            Cover <strong>V</strong> &rarr;
+            <span class="tri-formula">V = I &times; R</span>
+            <span class="tri-words">Voltage = Current times Resistance</span>
+          </div>
+          <div class="tri-form-row">
+            <span class="tri-cover">I</span>
+            Cover <strong>I</strong> &rarr;
+            <span class="tri-formula">I = V &divide; R</span>
+            <span class="tri-words">Current = Voltage &divide; Resistance</span>
+          </div>
+          <div class="tri-form-row">
+            <span class="tri-cover">R</span>
+            Cover <strong>R</strong> &rarr;
+            <span class="tri-formula">R = V &divide; I</span>
+            <span class="tri-words">Resistance = Voltage &divide; Current</span>
+          </div>
+          <div style="margin-top: 7px; font-size: 10.5px; color: #555; background: #ffe0b2; border-radius: 5px; padding: 4px 8px;">
+            <strong>Example:</strong> 9V battery + 1,000&#937; resistor &rarr;
+            I = 9 &divide; 1000 = <strong>0.009 A (9 milliamps)</strong>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- SECONDARY CONCEPT: WATER ANALOGY -->
+    <div class="section-title">
+      <span class="icon">&#128167;</span> Why it Works — The Water Analogy
+    </div>
+
+    <div class="concept-box blue-theme clearfix">
+
+      <img src="images/lesson-04-ohms-law-water.png"
+           alt="Water analogy for Ohm's Law showing pump, pipe and water wheel"
+           class="lesson-img img-float-right" />
+
+      <p style="font-size: 11.5px; color: #1a1a2e; margin-bottom: 7px; font-weight: 700;">
+        Electricity is just like water in a pipe system!
+      </p>
+
+      <table style="font-size: 10.5px; border-collapse: collapse; width: 100%;">
+        <thead>
+          <tr>
+            <th style="background:#0d47a1; color:#fff; padding:3px 8px; text-align:left; border-radius:4px 0 0 0; -webkit-print-color-adjust:exact; print-color-adjust:exact;">Water System</th>
+            <th style="background:#0d47a1; color:#fff; padding:3px 8px; text-align:left; -webkit-print-color-adjust:exact; print-color-adjust:exact;">Electrical Circuit</th>
+            <th style="background:#0d47a1; color:#fff; padding:3px 8px; text-align:left; border-radius:0 4px 0 0; -webkit-print-color-adjust:exact; print-color-adjust:exact;">What changes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="background:#f5f5f5;">
+            <td style="padding:3px 8px; border-bottom:1px solid #ddd;">Pump pressure</td>
+            <td style="padding:3px 8px; border-bottom:1px solid #ddd;"><strong>Voltage (V)</strong></td>
+            <td style="padding:3px 8px; border-bottom:1px solid #ddd;">How hard electricity is pushed</td>
+          </tr>
+          <tr>
+            <td style="padding:3px 8px; border-bottom:1px solid #ddd;">Water flow rate</td>
+            <td style="padding:3px 8px; border-bottom:1px solid #ddd;"><strong>Current (I)</strong></td>
+            <td style="padding:3px 8px; border-bottom:1px solid #ddd;">How much electricity flows</td>
+          </tr>
+          <tr style="background:#f5f5f5;">
+            <td style="padding:3px 8px;">Narrow pipe</td>
+            <td style="padding:3px 8px;"><strong>Resistance (R)</strong></td>
+            <td style="padding:3px 8px;">How much the flow is blocked</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div style="margin-top: 7px; font-size: 10.5px; color: #0d47a1; font-style: italic;">
+        Voltage <strong>pushes</strong> current. Resistance <strong>blocks</strong> current. They work against each other — and Ohm's Law tells you exactly how they balance out!
+      </div>
+
+    </div>
+
+  </div><!-- end page-a -->
+
+
+  <!-- ======================================================
+       SIDE B (BACK)
+  ====================================================== -->
+  <div class="page page-b">
+    <div class="page-label">Side B — Back</div>
+
+    <!-- SIDE B MINI HEADER -->
+    <div class="side-b-header">
+      <div>
+        <div class="side-b-title">&#9889; Circuit Explorer Academy — Lesson 4</div>
+        <div class="side-b-sub">Ohm's Law — The Magic Triangle &nbsp;|&nbsp; Module 1: Electronic Components Basics</div>
+      </div>
+      <div class="side-b-xp">&#11088; 300 XP</div>
+    </div>
+
+    <!-- MY ACTIVITY TODAY -->
+    <div class="section-title">
+      <span class="icon">&#128161;</span> My Activity Today — The Resistor Swap
+    </div>
+
+    <div class="circuit-box">
+
+      <div class="circuit-diagram">Circuit: 9V (+) &#10132; [RESISTOR] &#10132; LED (+leg) &#10132; LED (&#8722;leg) &#10132; 9V (&#8722;)
+
+  Keep the voltage the same — swap resistors — watch what changes!</div>
+
+      <img src="images/lesson-04-ohms-law-experiments.png"
+           alt="Ohm's Law resistor swap experiments with multimeter readings"
+           class="lesson-img img-side-b" />
+
+      <div class="circuit-note">Use your Magic Measurement Wand (multimeter) in DCV mode to measure the voltage across each resistor, then calculate the current using I = V &#247; R!</div>
+
+      <div class="exp-table-wrap">
+        <table class="exp-table">
+          <thead>
+            <tr>
+              <th>Resistor</th>
+              <th>Brightness (1–5)</th>
+              <th>Voltage Across Resistor</th>
+              <th>Calculated Current (I = V/R)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>100 &#937;</td>  <td class="blank-cell">&nbsp;</td><td class="blank-cell">&nbsp;</td><td class="blank-cell">&nbsp;</td></tr>
+            <tr><td>330 &#937;</td>  <td class="blank-cell">&nbsp;</td><td class="blank-cell">&nbsp;</td><td class="blank-cell">&nbsp;</td></tr>
+            <tr><td>1,000 &#937;</td><td class="blank-cell">&nbsp;</td><td class="blank-cell">&nbsp;</td><td class="blank-cell">&nbsp;</td></tr>
+            <tr><td>10,000 &#937;</td><td class="blank-cell">&nbsp;</td><td class="blank-cell">&nbsp;</td><td class="blank-cell">&nbsp;</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="checklist-title">&#9989; Components I Used:</div>
+      <ul class="checklist">
+        <li><span class="check-box"></span>9V battery</li>
+        <li><span class="check-box"></span>Breadboard</li>
+        <li><span class="check-box"></span>LED</li>
+        <li><span class="check-box"></span>100&#937; resistor</li>
+        <li><span class="check-box"></span>330&#937; resistor</li>
+        <li><span class="check-box"></span>1k&#937; resistor</li>
+        <li><span class="check-box"></span>10k&#937; resistor</li>
+        <li><span class="check-box"></span>Multimeter</li>
+        <li><span class="check-box"></span>Jumper wires</li>
+      </ul>
+
+    </div>
+
+    <!-- QUIZ -->
+    <div class="section-title">
+      <span class="icon">&#129504;</span> Quiz Time! Fill in the blanks.
+    </div>
+
+    <div class="quiz-box">
+
+      <div class="quiz-item">
+        <div class="quiz-q">1. Ohm's Law says: V = ________________ &times; R &nbsp; &nbsp;(What goes in the blank?)</div>
+        <span class="quiz-hint">hint: the letter for current</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item">
+        <div class="quiz-q">2. If you increase the resistance but keep the voltage the same, the current goes ________________.</div>
+        <span class="quiz-hint">hint: "UP" or "DOWN"?</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item">
+        <div class="quiz-q">3. A 9V battery pushes through a 1,000&#937; resistor. Using I = V &divide; R, the current is ________________ amps.</div>
+        <span class="quiz-hint">hint: 9 &divide; 1000 = ?</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item bonus" style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed #f9a825;">
+        <div class="quiz-q">&#127381; BONUS: Your LED is too bright! It has 8.5V across a 100&#937; resistor. How much current is flowing? Is that safe for an LED rated at 20 milliamps max?</div>
+        <span class="quiz-hint">hint: I = 8.5 &divide; 100 = ? — most LEDs max at 0.020 A</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+    </div>
+
+    <!-- EXPERIMENTS / ACTIVITIES -->
+    <div class="section-title">
+      <span class="icon">&#128300;</span> 4 Activities You Did Today!
+    </div>
+
+    <div class="experiments-grid">
+
+      <div class="experiment-card exp-a">
+        <div class="exp-letter">A</div>
+        <div class="exp-body">
+          <div class="exp-title">Resistor Swap (Exp. 1)</div>
+          <div class="exp-do">Swap 100&#937;, 330&#937;, 1k&#937;, 10k&#937; resistors one at a time.</div>
+          <div class="exp-discover">Higher resistance = less current = <strong>dimmer LED</strong>. Ohm's Law in action!</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-b">
+        <div class="exp-letter">B</div>
+        <div class="exp-body">
+          <div class="exp-title">Predict Before You Build (Exp. 2)</div>
+          <div class="exp-do">Calculate which resistor gives ~20 mA using R = V &divide; I.</div>
+          <div class="exp-discover">R = 7V &divide; 0.02A = 350&#937; &rarr; use <strong>330&#937;</strong>. Then verify with your Wand!</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-c">
+        <div class="exp-letter">C</div>
+        <div class="exp-body">
+          <div class="exp-title">Ohm's Law Detective (Exp. 3)</div>
+          <div class="exp-do">Cover V, I, or R in your triangle and solve for the missing value.</div>
+          <div class="exp-discover">Same triangle, different letter covered — <strong>three formulas in one!</strong></div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-d">
+        <div class="exp-letter">D</div>
+        <div class="exp-body">
+          <div class="exp-title">Parameter Effects Cheat Sheet</div>
+          <div class="exp-do">Draw the cheat sheet: V up = brighter, R up = dimmer, both up = same!</div>
+          <div class="exp-discover">Voltage <strong>pushes</strong>. Resistance <strong>blocks</strong>. Together they balance — just like Ohm's Law says!</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TRY AT HOME + TROUBLESHOOTING -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.1in; margin-bottom: 0.12in;">
+
+      <div class="lemon-box">
+        <div class="lemon-title">&#127968; Try at Home: Be the Engineer!</div>
+        <div class="lemon-body">
+          You want a <strong>very dim</strong> LED — about 5 milliamps.<br/>
+          Your battery gives 7V across the resistor.<br/><br/>
+          Use the Magic Triangle: R = V &divide; I<br/>
+          <strong>R = 7 &divide; 0.005 = 1,400 &#937;</strong><br/><br/>
+          The closest standard value is <strong>1k&#937;</strong>. Try it and see how dim it glows! Draw your result here:<br/>
+          <span style="display:block; border-bottom: 1.5px solid #aaa; margin-top: 8px; height: 18px;"></span>
+        </div>
+      </div>
+
+      <div class="trouble-box">
+        <div class="trouble-title">&#128295; Troubleshooting Quick Guide</div>
+        <table class="trouble-table">
+          <thead>
+            <tr><th>Problem</th><th>Quick Fix</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>LED won&#39;t light</td><td>Check polarity — long leg to (+) side</td></tr>
+            <tr><td>Wand reads 0V</td><td>Is the battery connected and powered?</td></tr>
+            <tr><td>Wand reads full 9V</td><td>LED may be burned out — try a new one</td></tr>
+            <tr><td>Current seems off</td><td>Real LEDs aren&#39;t perfect — small differences are normal</td></tr>
+            <tr><td>LED burns out</td><td>Always start with higher resistance (1k&#937;) and work down</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- COMING UP NEXT -->
+    <div class="next-box">
+      <strong>Coming Up Next &#8594; Lesson 5: Capacitors — The Tiny Energy Tanks! &#128267;</strong><br/>
+      You will charge up a component that <em>stores</em> electricity and then release it all at once to flash an LED. Watch your Magic Measurement Wand as the voltage slowly drains away — like watching a bathtub empty! Get ready!
+    </div>
+
+  </div><!-- end page-b -->
+
+</body>
+</html>

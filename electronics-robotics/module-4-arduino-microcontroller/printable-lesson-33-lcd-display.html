@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 33: LCD Display (16x2) — Circuit Explorer Academy</title>
+  <style>
+    /* =============================================
+       BASE RESET & TYPOGRAPHY
+    ============================================= */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, Arial, sans-serif;
+      font-size: 13px;
+      line-height: 1.45;
+      color: #1a1a2e;
+      background: #f0f4ff;
+    }
+
+    /* =============================================
+       PAGE LAYOUT
+    ============================================= */
+    .page {
+      width: 8.5in;
+      min-height: 11in;
+      margin: 0 auto 0.4in auto;
+      padding: 0.5in;
+      background: #fff;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-label {
+      position: absolute;
+      top: 0.18in;
+      right: 0.22in;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #aaa;
+    }
+
+    /* =============================================
+       SIDE A — HEADER
+    ============================================= */
+    .header {
+      text-align: center;
+      border-bottom: 3px solid #f4c430;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+      border-radius: 10px;
+      color: #fff;
+      padding: 0.22in 0.2in 0.18in 0.2in;
+      margin-bottom: 0.16in;
+    }
+
+    .header-course {
+      font-size: 19px;
+      font-weight: 900;
+      letter-spacing: 0.03em;
+      color: #f4c430;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+
+    .header-lesson {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      margin-top: 4px;
+    }
+
+    .header-module {
+      font-size: 11px;
+      color: #a8d8ea;
+      margin-top: 3px;
+      letter-spacing: 0.04em;
+    }
+
+    .header-xp {
+      display: inline-block;
+      margin-top: 8px;
+      background: #f4c430;
+      color: #1a1a2e;
+      font-weight: 900;
+      font-size: 12px;
+      padding: 3px 14px;
+      border-radius: 20px;
+      letter-spacing: 0.06em;
+    }
+
+    .spark-row {
+      text-align: center;
+      font-size: 16px;
+      letter-spacing: 0.25em;
+      margin: 0.1in 0 0.04in 0;
+      color: #f4c430;
+    }
+
+    /* =============================================
+       SECTION HEADINGS
+    ============================================= */
+    .section-title {
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #fff;
+      background: #0f3460;
+      padding: 5px 12px;
+      border-radius: 6px;
+      margin-bottom: 0.1in;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .section-title .icon {
+      font-size: 14px;
+    }
+
+    /* =============================================
+       VOCABULARY CARDS (2x2 grid)
+    ============================================= */
+    .vocab-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.1in;
+      margin-bottom: 0.14in;
+    }
+
+    .vocab-card {
+      border-radius: 10px;
+      padding: 0.1in 0.12in;
+      border-top: 5px solid transparent;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .vocab-card::before {
+      content: '';
+      position: absolute;
+      top: -18px;
+      right: -18px;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      opacity: 0.13;
+      background: #fff;
+    }
+
+    .vocab-card.voltage  { background: #fff3e0; border-top-color: #ff9800; }
+    .vocab-card.current  { background: #e3f2fd; border-top-color: #2196f3; }
+    .vocab-card.resist   { background: #fce4ec; border-top-color: #e91e63; }
+    .vocab-card.circuit  { background: #e8f5e9; border-top-color: #43a047; }
+
+    .vocab-term {
+      font-size: 13px;
+      font-weight: 900;
+      margin-bottom: 2px;
+    }
+
+    .vocab-card.voltage  .vocab-term { color: #e65100; }
+    .vocab-card.current  .vocab-term { color: #0d47a1; }
+    .vocab-card.resist   .vocab-term { color: #880e4f; }
+    .vocab-card.circuit  .vocab-term { color: #1b5e20; }
+
+    .vocab-symbol {
+      font-size: 18px;
+      font-weight: 900;
+      float: right;
+      margin-top: -2px;
+      opacity: 0.55;
+    }
+
+    .vocab-def {
+      font-size: 11.5px;
+      color: #333;
+      line-height: 1.4;
+      margin-top: 2px;
+    }
+
+    .vocab-emoji {
+      font-size: 20px;
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    /* =============================================
+       LCD CONCEPT BOX
+    ============================================= */
+    .analogy-box {
+      background: #e8f4fd;
+      border: 2px solid #90caf9;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.14in;
+    }
+
+    .analogy-caption {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: #0d47a1;
+      margin-top: 6px;
+    }
+
+    /* =============================================
+       CODE BLOCK
+    ============================================= */
+    .code-block {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 9.5px;
+      background: #1a1a2e;
+      color: #76ff03;
+      padding: 0.1in;
+      border-radius: 8px;
+      margin: 0.07in 0;
+      line-height: 1.6;
+      white-space: pre;
+      overflow: visible;
+    }
+
+    .code-comment { color: #78909c; }
+    .code-keyword { color: #80cbc4; }
+    .code-string  { color: #f9a825; }
+    .code-fn      { color: #ce93d8; }
+
+    /* =============================================
+       LCD ASCII DIAGRAM BOX
+    ============================================= */
+    .lcd-diagram-wrap {
+      margin: 0.08in 0 0.06in 0;
+    }
+
+    .lcd-screen {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 11px;
+      background: #1a1a2e;
+      color: #00e5ff;
+      padding: 0.1in 0.14in;
+      border-radius: 8px;
+      line-height: 1.7;
+      white-space: pre;
+      border: 3px solid #0d47a1;
+      margin: 0.06in 0;
+    }
+
+    .lcd-label-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 9.5px;
+      color: #555;
+      font-style: italic;
+      margin-top: 3px;
+    }
+
+    /* =============================================
+       I2C WIRING BOX
+    ============================================= */
+    .wiring-box {
+      background: #e8f5e9;
+      border: 2px solid #a5d6a7;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.14in;
+    }
+
+    .wiring-diagram {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 10px;
+      background: #1a1a2e;
+      color: #76ff03;
+      padding: 0.1in;
+      border-radius: 8px;
+      margin: 0.06in 0;
+      line-height: 1.65;
+      white-space: pre;
+    }
+
+    .wiring-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 10.5px;
+      margin-top: 0.06in;
+    }
+
+    .wiring-table thead th {
+      background: #0f3460;
+      color: #fff;
+      padding: 4px 8px;
+      text-align: left;
+      font-weight: 700;
+    }
+
+    .wiring-table tbody tr:nth-child(even) {
+      background: #f1f8f1;
+    }
+
+    .wiring-table tbody td {
+      padding: 4px 8px;
+      color: #222;
+      border-bottom: 1px solid #c8e6c9;
+      vertical-align: top;
+    }
+
+    .wire-vcc  { color: #c62828; font-weight: 700; }
+    .wire-gnd  { color: #1b5e20; font-weight: 700; }
+    .wire-sda  { color: #0d47a1; font-weight: 700; }
+    .wire-scl  { color: #f57f17; font-weight: 700; }
+
+    /* =============================================
+       SIDE B — CIRCUIT BUILD BOX
+    ============================================= */
+    .circuit-box {
+      background: #f1f8e9;
+      border: 2px solid #aed581;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.13in;
+    }
+
+    .circuit-diagram {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 10.5px;
+      background: #1a1a2e;
+      color: #76ff03;
+      padding: 0.1in;
+      border-radius: 8px;
+      margin: 0.07in 0;
+      line-height: 1.6;
+      white-space: pre;
+      overflow: visible;
+    }
+
+    .circuit-note {
+      font-size: 11px;
+      color: #33691e;
+      font-style: italic;
+      margin-top: 5px;
+      padding: 4px 8px;
+      background: #dcedc8;
+      border-radius: 5px;
+    }
+
+    .checklist-title {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #2e7d32;
+      margin-top: 8px;
+      margin-bottom: 4px;
+    }
+
+    .checklist {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 3px 10px;
+      list-style: none;
+    }
+
+    .checklist li {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: #333;
+    }
+
+    .check-box {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid #43a047;
+      border-radius: 3px;
+      flex-shrink: 0;
+      background: #fff;
+    }
+
+    /* =============================================
+       QUIZ
+    ============================================= */
+    .quiz-box {
+      background: #fff9c4;
+      border: 2px solid #f9a825;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.13in;
+    }
+
+    .quiz-item {
+      margin-bottom: 0.08in;
+    }
+
+    .quiz-q {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 2px;
+    }
+
+    .quiz-blank {
+      display: block;
+      border-bottom: 1.5px solid #999;
+      width: 100%;
+      height: 20px;
+      margin-top: 2px;
+    }
+
+    .quiz-hint {
+      font-size: 9px;
+      color: #aaa;
+      font-style: italic;
+      float: right;
+      margin-top: 1px;
+    }
+
+    .quiz-item.bonus .quiz-q {
+      color: #e65100;
+    }
+
+    .quiz-item.bonus .quiz-blank {
+      border-bottom-color: #ff9800;
+    }
+
+    /* =============================================
+       EXPERIMENTS GRID
+    ============================================= */
+    .experiments-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.08in;
+      margin-bottom: 0.12in;
+    }
+
+    .experiment-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      border-radius: 8px;
+      padding: 0.08in 0.1in;
+      border-left: 5px solid transparent;
+    }
+
+    .experiment-card.exp-a { background: #fff3e0; border-left-color: #ff9800; }
+    .experiment-card.exp-b { background: #e3f2fd; border-left-color: #2196f3; }
+    .experiment-card.exp-c { background: #fce4ec; border-left-color: #e91e63; }
+    .experiment-card.exp-d { background: #e8f5e9; border-left-color: #43a047; }
+
+    .exp-letter {
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1;
+      flex-shrink: 0;
+      width: 24px;
+      text-align: center;
+    }
+
+    .experiment-card.exp-a .exp-letter { color: #e65100; }
+    .experiment-card.exp-b .exp-letter { color: #0d47a1; }
+    .experiment-card.exp-c .exp-letter { color: #880e4f; }
+    .experiment-card.exp-d .exp-letter { color: #1b5e20; }
+
+    .exp-body { flex: 1; }
+
+    .exp-title {
+      font-size: 11.5px;
+      font-weight: 900;
+      margin-bottom: 2px;
+      color: #1a1a2e;
+    }
+
+    .exp-do {
+      font-size: 10.5px;
+      color: #444;
+      margin-bottom: 3px;
+    }
+
+    .exp-do::before {
+      content: "▶ Do: ";
+      font-weight: 700;
+      color: #555;
+    }
+
+    .exp-discover {
+      font-size: 10.5px;
+      color: #333;
+      font-style: italic;
+    }
+
+    /* =============================================
+       TRY AT HOME + TROUBLESHOOTING
+    ============================================= */
+    .lemon-box {
+      background: #f9fbe7;
+      border: 2px solid #c5e1a5;
+      border-radius: 10px;
+      padding: 0.09in 0.11in;
+    }
+
+    .lemon-title {
+      font-size: 12px;
+      font-weight: 900;
+      color: #33691e;
+      margin-bottom: 5px;
+    }
+
+    .lemon-body {
+      font-size: 10.5px;
+      color: #333;
+      line-height: 1.5;
+    }
+
+    .trouble-box {
+      background: #fafafa;
+      border: 2px solid #bdbdbd;
+      border-radius: 10px;
+      padding: 0.09in 0.11in;
+    }
+
+    .trouble-title {
+      font-size: 12px;
+      font-weight: 900;
+      color: #37474f;
+      margin-bottom: 5px;
+    }
+
+    .trouble-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9.5px;
+    }
+
+    .trouble-table thead th {
+      background: #37474f;
+      color: #fff;
+      padding: 3px 6px;
+      text-align: left;
+      font-weight: 700;
+    }
+
+    .trouble-table tbody tr:nth-child(even) {
+      background: #f5f5f5;
+    }
+
+    .trouble-table tbody td {
+      padding: 3px 6px;
+      color: #333;
+      border-bottom: 1px solid #e0e0e0;
+      vertical-align: top;
+    }
+
+    /* =============================================
+       COMING UP NEXT
+    ============================================= */
+    .next-box {
+      background: linear-gradient(90deg, #e3f2fd 0%, #f3e5f5 100%);
+      border-left: 5px solid #7c4dff;
+      border-radius: 0 10px 10px 0;
+      padding: 0.08in 0.14in;
+      font-size: 11.5px;
+      color: #1a1a2e;
+    }
+
+    .next-box strong {
+      color: #6a1b9a;
+    }
+
+    /* =============================================
+       SIDE B HEADER
+    ============================================= */
+    .side-b-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 3px solid #f4c430;
+      margin-bottom: 0.15in;
+      padding-bottom: 0.09in;
+    }
+
+    .side-b-title {
+      font-size: 14px;
+      font-weight: 900;
+      color: #0f3460;
+    }
+
+    .side-b-sub {
+      font-size: 10px;
+      color: #888;
+      margin-top: 1px;
+    }
+
+    .side-b-xp {
+      background: #f4c430;
+      color: #1a1a2e;
+      font-weight: 900;
+      font-size: 11px;
+      padding: 3px 12px;
+      border-radius: 20px;
+    }
+
+    /* =============================================
+       STEP LIST
+    ============================================= */
+    .step-list {
+      list-style: none;
+      margin: 0.05in 0 0.08in 0;
+    }
+
+    .step-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 11px;
+      color: #222;
+      margin-bottom: 5px;
+      line-height: 1.4;
+    }
+
+    .step-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      background: #0f3460;
+      color: #fff;
+      border-radius: 50%;
+      font-size: 9px;
+      font-weight: 900;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* =============================================
+       PRINT STYLES
+    ============================================= */
+    @media print {
+      body {
+        background: #fff;
+        font-size: 12px;
+      }
+
+      .page {
+        width: 100%;
+        min-height: auto;
+        margin: 0;
+        box-shadow: none;
+        padding: 0.5in;
+      }
+
+      .page-a {
+        page-break-after: always;
+      }
+
+      .header,
+      .vocab-card,
+      .analogy-box,
+      .wiring-box,
+      .wiring-diagram,
+      .circuit-box,
+      .circuit-diagram,
+      .code-block,
+      .lcd-screen,
+      .quiz-box,
+      .next-box,
+      .experiment-card,
+      .lemon-box,
+      .trouble-box,
+      .trouble-table thead th,
+      .wiring-table thead th {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .vocab-card.voltage  { background: #fff !important; border: 2px solid #ff9800; border-top: 5px solid #ff9800; }
+      .vocab-card.current  { background: #fff !important; border: 2px solid #2196f3; border-top: 5px solid #2196f3; }
+      .vocab-card.resist   { background: #fff !important; border: 2px solid #e91e63; border-top: 5px solid #e91e63; }
+      .vocab-card.circuit  { background: #fff !important; border: 2px solid #43a047; border-top: 5px solid #43a047; }
+    }
+
+    @page {
+      size: A4;
+      margin: 12mm;
+    }
+
+    .clearfix::after {
+      content: '';
+      display: table;
+      clear: both;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ======================================================
+       SIDE A (FRONT)
+  ====================================================== -->
+  <div class="page page-a">
+    <div class="page-label">Side A &mdash; Front</div>
+
+    <!-- HEADER -->
+    <div class="header">
+      <div class="header-course">&#9889; Circuit Explorer Academy</div>
+      <div class="header-lesson">Lesson 33: LCD Display (16x2) &mdash; Give Your Arduino a Screen!</div>
+      <div class="header-module">Module 4: Arduino Microcontroller</div>
+      <div><span class="header-xp">&#11088; 250 XP Available</span></div>
+    </div>
+
+    <div class="spark-row" aria-hidden="true">&#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889;</div>
+
+    <!-- VOCABULARY -->
+    <div class="section-title">
+      <span class="icon">&#128218;</span> Key Words &mdash; Learn These!
+    </div>
+
+    <div class="vocab-grid">
+
+      <div class="vocab-card voltage">
+        <span class="vocab-emoji">&#128250;</span>
+        <span class="vocab-symbol">LCD</span>
+        <div class="vocab-term">LCD</div>
+        <div class="vocab-def"><strong>Liquid Crystal Display</strong> &mdash; a tiny screen that shows letters and numbers. A 16x2 LCD has <strong>16 columns</strong> and <strong>2 rows</strong> = 32 characters total!</div>
+      </div>
+
+      <div class="vocab-card current">
+        <span class="vocab-emoji">&#128279;</span>
+        <span class="vocab-symbol">I2C</span>
+        <div class="vocab-term">I2C Protocol</div>
+        <div class="vocab-def">A <strong>communication language</strong> that lets devices talk over just <strong>2 data wires</strong>. The I2C backpack shrinks 12+ LCD wires down to only 4!</div>
+      </div>
+
+      <div class="vocab-card resist">
+        <span class="vocab-emoji">&#128196;</span>
+        <span class="vocab-symbol">lib</span>
+        <div class="vocab-term">Library</div>
+        <div class="vocab-def">A <strong>recipe book</strong> of pre-written code. Instead of writing hundreds of lines, you install <strong>LiquidCrystal_I2C</strong> and use it instantly!</div>
+      </div>
+
+      <div class="vocab-card circuit">
+        <span class="vocab-emoji">&#127981;</span>
+        <span class="vocab-symbol">&#8862;</span>
+        <div class="vocab-term">setCursor(col, row)</div>
+        <div class="vocab-def">Tells the LCD <strong>where to start writing</strong>. <code style="font-size:10px; background:#c8e6c9; padding:1px 3px; border-radius:3px;">setCursor(0,0)</code> is the <strong>top-left corner</strong>. Row 0 = top, Row 1 = bottom.</div>
+      </div>
+
+    </div>
+
+    <!-- LCD DIAGRAM -->
+    <div class="section-title">
+      <span class="icon">&#128250;</span> What Does a 16x2 LCD Look Like?
+    </div>
+
+    <div class="analogy-box">
+      <div style="font-size:11.5px; color:#0d47a1; font-weight:700; margin-bottom:6px;">The LCD screen has 2 rows of 16 character slots each:</div>
+
+      <div class="lcd-screen">+------------------+
+| C o l :  0 1 2 3 4 5 6 7 8 9 ...  |  &larr; Row 0 (top)
+| H e l l o   W o r l d !           |
+| A r d u i n o   R o c k s !       |  &larr; Row 1 (bottom)
++------------------+
+
+  setCursor(0,0) &rarr; top-left     setCursor(0,1) &rarr; bottom-left
+  setCursor(8,0) &rarr; middle-top   lcd.clear()   &rarr; erase screen</div>
+
+      <div class="lcd-label-row">
+        <span>Each box = 1 character slot (letter, number, or symbol)</span>
+        <span>Total: 16 cols x 2 rows = 32 characters</span>
+      </div>
+      <div class="analogy-caption">Think of it like a tiny chalkboard your Arduino can write on &mdash; and erase &mdash; whenever it wants!</div>
+    </div>
+
+    <!-- I2C WIRING -->
+    <div class="section-title">
+      <span class="icon">&#128268;</span> I2C Wiring &mdash; Only 4 Wires!
+    </div>
+
+    <div class="wiring-box">
+      <div style="font-size:11.5px; color:#1b5e20; font-weight:700; margin-bottom:6px;">The I2C backpack cuts wiring from 12+ wires down to just 4:</div>
+
+      <div class="wiring-diagram">  Arduino Uno                    LCD (I2C backpack)
+  +---------+                    +----------+
+  | 5V      |----[RED wire]----->| VCC      |  &larr; Power
+  | GND     |----[BLACK wire]--->| GND      |  &larr; Ground
+  | A4 (SDA)|----[BLUE wire]---->| SDA      |  &larr; Data
+  | A5 (SCL)|----[YELLOW wire]-->| SCL      |  &larr; Clock
+  +---------+                    +----------+
+
+  SDA = Serial DAta line   |   SCL = Serial CLock line
+  Address: 0x27 (try 0x3F if screen stays blank!)</div>
+
+      <table class="wiring-table">
+        <thead>
+          <tr>
+            <th>LCD I2C Pin</th>
+            <th>Arduino Pin</th>
+            <th>Wire Color</th>
+            <th>What It Does</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="wire-vcc">VCC</span></td>
+            <td>5V</td>
+            <td>Red</td>
+            <td>Provides power to the LCD</td>
+          </tr>
+          <tr>
+            <td><span class="wire-gnd">GND</span></td>
+            <td>GND</td>
+            <td>Black</td>
+            <td>Completes the circuit (ground)</td>
+          </tr>
+          <tr>
+            <td><span class="wire-sda">SDA</span></td>
+            <td>A4</td>
+            <td>Blue</td>
+            <td>Carries data (letters, numbers)</td>
+          </tr>
+          <tr>
+            <td><span class="wire-scl">SCL</span></td>
+            <td>A5</td>
+            <td>Yellow</td>
+            <td>Clock keeps data in sync</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- HELLO WORLD CODE -->
+    <div class="section-title">
+      <span class="icon">&#128187;</span> Hello World Code &mdash; Your First LCD Message!
+    </div>
+
+    <div class="analogy-box" style="background:#e8eaf6; border-color:#9fa8da;">
+      <div style="font-size:11px; color:#283593; font-weight:700; margin-bottom:5px;">Step 1: Install Library &mdash; Sketch &rarr; Include Library &rarr; Manage Libraries &rarr; search "LiquidCrystal I2C" &rarr; Install</div>
+
+      <div class="code-block"><span class="code-comment">// Lesson 33: LCD Hello World</span>
+<span class="code-keyword">#include</span> &lt;LiquidCrystal_I2C.h&gt;
+
+<span class="code-comment">// Create LCD: address 0x27, 16 columns, 2 rows</span>
+LiquidCrystal_I2C <span class="code-fn">lcd</span>(0x27, 16, 2);
+
+<span class="code-keyword">void</span> <span class="code-fn">setup</span>() {
+  lcd.<span class="code-fn">init</span>();          <span class="code-comment">// Start up the LCD</span>
+  lcd.<span class="code-fn">backlight</span>();     <span class="code-comment">// Turn on the light</span>
+
+  lcd.<span class="code-fn">setCursor</span>(0, 0); <span class="code-comment">// Column 0, Row 0 (top-left)</span>
+  lcd.<span class="code-fn">print</span>(<span class="code-string">"Hello World!"</span>);
+
+  lcd.<span class="code-fn">setCursor</span>(0, 1); <span class="code-comment">// Column 0, Row 1 (bottom)</span>
+  lcd.<span class="code-fn">print</span>(<span class="code-string">"Arduino Rocks!"</span>);
+}
+
+<span class="code-keyword">void</span> <span class="code-fn">loop</span>() {
+  <span class="code-comment">// Message stays on screen forever</span>
+}</div>
+
+      <div class="analogy-caption">Upload and watch your Arduino speak its first words on screen!</div>
+    </div>
+
+  </div><!-- end page-a -->
+
+
+  <!-- ======================================================
+       SIDE B (BACK)
+  ====================================================== -->
+  <div class="page page-b">
+    <div class="page-label">Side B &mdash; Back</div>
+
+    <!-- SIDE B MINI HEADER -->
+    <div class="side-b-header">
+      <div>
+        <div class="side-b-title">&#9889; Circuit Explorer Academy &mdash; Lesson 33</div>
+        <div class="side-b-sub">LCD Display (16x2) &nbsp;|&nbsp; Module 4: Arduino Microcontroller</div>
+      </div>
+      <div class="side-b-xp">&#11088; 250 XP</div>
+    </div>
+
+    <!-- ACTIVITY: WIRING + CODING STEPS -->
+    <div class="section-title">
+      <span class="icon">&#128161;</span> My Activity Today &mdash; Wire It + Code It!
+    </div>
+
+    <div class="circuit-box">
+
+      <div class="circuit-diagram">  WIRING STEPS (4 wires only!):
+  1. LCD VCC  &rarr; Arduino 5V         (red wire)
+  2. LCD GND  &rarr; Arduino GND        (black wire)
+  3. LCD SDA  &rarr; Arduino A4         (blue wire)
+  4. LCD SCL  &rarr; Arduino A5         (yellow wire)
+
+  COUNTDOWN TIMER CODE SNIPPET:
+  for (int i = 10; i &gt;= 0; i--) {
+    lcd.clear();
+    lcd.setCursor(3, 0);  lcd.print("COUNTDOWN!");
+    lcd.setCursor(7, 1);  lcd.print(i);
+    delay(1000);
+  }
+  lcd.clear();
+  lcd.setCursor(2, 0);  lcd.print("** LIFTOFF! **");
+  lcd.setCursor(3, 1);  lcd.print("We have GO!");</div>
+
+      <div class="circuit-note">Tip: If the screen has backlight but no text, change address 0x27 to 0x3F in the code!</div>
+
+      <div class="checklist-title">&#9989; Components I Used:</div>
+      <ul class="checklist">
+        <li><span class="check-box"></span>Arduino Uno</li>
+        <li><span class="check-box"></span>USB cable</li>
+        <li><span class="check-box"></span>16x2 LCD + I2C</li>
+        <li><span class="check-box"></span>4 jumper wires</li>
+        <li><span class="check-box"></span>Arduino IDE</li>
+        <li><span class="check-box"></span>LiquidCrystal lib</li>
+      </ul>
+
+    </div>
+
+    <!-- QUIZ -->
+    <div class="section-title">
+      <span class="icon">&#129504;</span> Quiz Time! Fill in the blanks.
+    </div>
+
+    <div class="quiz-box">
+
+      <div class="quiz-item">
+        <div class="quiz-q">1. A 16x2 LCD can show _______ characters wide and _______ rows tall.</div>
+        <span class="quiz-hint">hint: "16" and "2"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item">
+        <div class="quiz-q">2. The I2C adapter reduces LCD wiring from 12+ wires down to just _______ wires.</div>
+        <span class="quiz-hint">hint: "4"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item">
+        <div class="quiz-q">3. <code style="background:#f0f0f0; padding:1px 4px; border-radius:3px;">lcd.setCursor(5, 1)</code> moves the cursor to column _____, row _____ (which is the _______ row).</div>
+        <span class="quiz-hint">hint: "5, 1, second (bottom)"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item bonus" style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed #f9a825;">
+        <div class="quiz-q">&#127381; BONUS: What Arduino pins do SDA and SCL connect to, and what do each do?</div>
+        <span class="quiz-hint">hint: "A4=data, A5=clock"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+    </div>
+
+    <!-- EXPERIMENTS GRID -->
+    <div class="section-title">
+      <span class="icon">&#128300;</span> 4 Challenges You Tried Today!
+    </div>
+
+    <div class="experiments-grid">
+
+      <div class="experiment-card exp-a">
+        <div class="exp-letter">A</div>
+        <div class="exp-body">
+          <div class="exp-title">Hello World Display</div>
+          <div class="exp-do">Upload the Hello World sketch.</div>
+          <div class="exp-discover">Your Arduino writes its own message on the screen &mdash; no computer monitor needed!</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-b">
+        <div class="exp-letter">B</div>
+        <div class="exp-body">
+          <div class="exp-title">Live Counter</div>
+          <div class="exp-do">Run the counter sketch with delay(1000).</div>
+          <div class="exp-discover">The LCD counts up every second, showing <strong>dynamic data</strong> that changes in real time!</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-c">
+        <div class="exp-letter">C</div>
+        <div class="exp-body">
+          <div class="exp-title">Potentiometer Voltage Reader</div>
+          <div class="exp-do">Twist the potentiometer while the volt reader sketch runs.</div>
+          <div class="exp-discover">Watch live voltage and raw readings on screen &mdash; the LCD is now a real instrument!</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-d">
+        <div class="exp-letter">D</div>
+        <div class="exp-body">
+          <div class="exp-title">Countdown Timer Liftoff!</div>
+          <div class="exp-do">Upload the countdown sketch and watch the display.</div>
+          <div class="exp-discover">10... 9... 8... LIFTOFF! You built a real launch control display just like a rocket mission!</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TRY AT HOME + TROUBLESHOOTING -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.1in; margin-bottom: 0.12in;">
+
+      <div class="lemon-box">
+        <div class="lemon-title">&#127968; Try at Home: Custom Message Board!</div>
+        <div class="lemon-body">
+          Change the text in <code style="background:#dcedc8; padding:1px 3px; border-radius:3px;">lcd.print()</code> to show <strong>your name</strong>, a <strong>joke</strong>, or a <strong>secret message</strong>.<br/><br/>
+          Challenge: Can you make the LCD show a <strong>blinking message</strong>? Use <code style="background:#dcedc8; padding:1px 3px; border-radius:3px;">lcd.noBacklight()</code> and <code style="background:#dcedc8; padding:1px 3px; border-radius:3px;">lcd.backlight()</code> with delays!<br/><br/>
+          In <strong>Lesson 34</strong> the LCD will show note names as you play a <strong>Digital Piano</strong> &mdash; the grand finale!
+        </div>
+      </div>
+
+      <div class="trouble-box">
+        <div class="trouble-title">&#128295; Troubleshooting Quick Guide</div>
+        <table class="trouble-table">
+          <thead>
+            <tr><th>Problem</th><th>Quick Fix</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>No backlight at all</td><td>Check VCC&rarr;5V and GND&rarr;GND wires</td></tr>
+            <tr><td>Backlight but no text</td><td>Change 0x27 to 0x3F in code</td></tr>
+            <tr><td>Garbled characters</td><td>Check SDA=A4 and SCL=A5 (not swapped)</td></tr>
+            <tr><td>Library not found</td><td>Re-open Library Manager, search "LiquidCrystal I2C"</td></tr>
+            <tr><td>Text won&#39;t clear</td><td>Use lcd.clear() or print 16 spaces over old text</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- COMING UP NEXT -->
+    <div class="next-box">
+      <strong>Coming Up Next &rarr; Lesson 34: Module 4 Grand Finale &mdash; Digital Piano + Display! &#127925;</strong><br/>
+      You will combine EVERYTHING &mdash; buttons play musical notes, the LCD shows the note name, and LEDs light up as you play. Gather all your components and get ready for the ultimate Arduino project!
+    </div>
+
+  </div><!-- end page-b -->
+
+</body>
+</html>

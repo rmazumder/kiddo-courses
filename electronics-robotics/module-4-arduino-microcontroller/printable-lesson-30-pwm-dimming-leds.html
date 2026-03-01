@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 30: PWM — Dimming LEDs — Circuit Explorer Academy</title>
+  <style>
+    /* =============================================
+       BASE RESET & TYPOGRAPHY
+    ============================================= */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, Arial, sans-serif;
+      font-size: 13px;
+      line-height: 1.45;
+      color: #1a1a2e;
+      background: #f0f4ff;
+    }
+
+    /* =============================================
+       PAGE LAYOUT
+    ============================================= */
+    .page {
+      width: 8.5in;
+      min-height: 11in;
+      margin: 0 auto 0.4in auto;
+      padding: 0.5in;
+      background: #fff;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-label {
+      position: absolute;
+      top: 0.18in;
+      right: 0.22in;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #aaa;
+    }
+
+    /* =============================================
+       SIDE A — HEADER
+    ============================================= */
+    .header {
+      text-align: center;
+      border-bottom: 3px solid #f4c430;
+      margin-bottom: 0.16in;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+      border-radius: 10px;
+      color: #fff;
+      padding: 0.22in 0.2in 0.18in 0.2in;
+    }
+
+    .header-course {
+      font-size: 19px;
+      font-weight: 900;
+      letter-spacing: 0.03em;
+      color: #f4c430;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+
+    .header-lesson {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      margin-top: 4px;
+    }
+
+    .header-module {
+      font-size: 11px;
+      color: #a8d8ea;
+      margin-top: 3px;
+      letter-spacing: 0.04em;
+    }
+
+    .header-xp {
+      display: inline-block;
+      margin-top: 8px;
+      background: #f4c430;
+      color: #1a1a2e;
+      font-weight: 900;
+      font-size: 12px;
+      padding: 3px 14px;
+      border-radius: 20px;
+      letter-spacing: 0.06em;
+    }
+
+    .spark-row {
+      text-align: center;
+      font-size: 16px;
+      letter-spacing: 0.25em;
+      margin: 0.1in 0 0.04in 0;
+      color: #f4c430;
+    }
+
+    /* =============================================
+       SECTION HEADINGS
+    ============================================= */
+    .section-title {
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #fff;
+      background: #0f3460;
+      padding: 5px 12px;
+      border-radius: 6px;
+      margin-bottom: 0.1in;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .section-title .icon {
+      font-size: 14px;
+    }
+
+    /* =============================================
+       VOCABULARY CARDS  (2x2 grid)
+    ============================================= */
+    .vocab-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.1in;
+      margin-bottom: 0.14in;
+    }
+
+    .vocab-card {
+      border-radius: 10px;
+      padding: 0.1in 0.12in;
+      border-top: 5px solid transparent;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .vocab-card::before {
+      content: '';
+      position: absolute;
+      top: -18px;
+      right: -18px;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      opacity: 0.13;
+      background: #fff;
+    }
+
+    .vocab-card.voltage  { background: #fff3e0; border-top-color: #ff9800; }
+    .vocab-card.current  { background: #e3f2fd; border-top-color: #2196f3; }
+    .vocab-card.resist   { background: #fce4ec; border-top-color: #e91e63; }
+    .vocab-card.circuit  { background: #e8f5e9; border-top-color: #43a047; }
+
+    .vocab-term {
+      font-size: 13px;
+      font-weight: 900;
+      margin-bottom: 2px;
+    }
+
+    .vocab-card.voltage  .vocab-term { color: #e65100; }
+    .vocab-card.current  .vocab-term { color: #0d47a1; }
+    .vocab-card.resist   .vocab-term { color: #880e4f; }
+    .vocab-card.circuit  .vocab-term { color: #1b5e20; }
+
+    .vocab-symbol {
+      font-size: 18px;
+      font-weight: 900;
+      float: right;
+      margin-top: -2px;
+      opacity: 0.55;
+    }
+
+    .vocab-def {
+      font-size: 11.5px;
+      color: #333;
+      line-height: 1.4;
+      margin-top: 2px;
+    }
+
+    .vocab-emoji {
+      font-size: 20px;
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    /* =============================================
+       PWM DIAGRAM BOX
+    ============================================= */
+    .analogy-box {
+      background: #e8f4fd;
+      border: 2px solid #90caf9;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.14in;
+    }
+
+    .analogy-caption {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: #0d47a1;
+      margin-top: 4px;
+    }
+
+    /* =============================================
+       CODE BLOCK
+    ============================================= */
+    .code-block {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 9.5px;
+      background: #1a1a2e;
+      color: #76ff03;
+      padding: 0.1in 0.12in;
+      border-radius: 8px;
+      margin: 0.07in 0 0.04in 0;
+      line-height: 1.6;
+      white-space: pre;
+      overflow: visible;
+    }
+
+    .code-block .kw  { color: #f4c430; }
+    .code-block .cm  { color: #888; font-style: italic; }
+    .code-block .fn  { color: #40c4ff; }
+    .code-block .num { color: #ff9800; }
+    .code-block .str { color: #ff6b9d; }
+
+    /* =============================================
+       PWM LEVELS CARDS (2-col)
+    ============================================= */
+    .acdc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.1in;
+      margin-bottom: 0.06in;
+    }
+
+    .acdc-card {
+      border-radius: 10px;
+      padding: 0.1in 0.12in;
+      border-top: 5px solid transparent;
+    }
+
+    .acdc-card.dc {
+      background: #fff8e1;
+      border-top-color: #ffc107;
+    }
+
+    .acdc-card.ac {
+      background: #f3e5f5;
+      border-top-color: #9c27b0;
+    }
+
+    .acdc-title {
+      font-size: 13px;
+      font-weight: 900;
+      margin-bottom: 4px;
+    }
+
+    .acdc-card.dc .acdc-title { color: #ff6f00; }
+    .acdc-card.ac .acdc-title { color: #6a1b9a; }
+
+    .acdc-wave {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 9px;
+      line-height: 1.35;
+      padding: 5px 7px;
+      border-radius: 5px;
+      margin: 5px 0;
+      white-space: pre;
+    }
+
+    .acdc-card.dc .acdc-wave {
+      background: #1a1a2e;
+      color: #f4c430;
+    }
+
+    .acdc-card.ac .acdc-wave {
+      background: #1a1a2e;
+      color: #40c4ff;
+    }
+
+    .acdc-fact {
+      font-size: 10.5px;
+      color: #444;
+      line-height: 1.4;
+    }
+
+    .acdc-fact strong {
+      color: #333;
+    }
+
+    /* =============================================
+       SIDE B — CIRCUIT BUILD
+    ============================================= */
+    .circuit-box {
+      background: #f1f8e9;
+      border: 2px solid #aed581;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.13in;
+    }
+
+    .circuit-diagram {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 10.5px;
+      background: #1a1a2e;
+      color: #76ff03;
+      padding: 0.1in;
+      border-radius: 8px;
+      margin: 0.07in 0;
+      line-height: 1.6;
+      overflow: visible;
+      white-space: pre;
+    }
+
+    .circuit-note {
+      font-size: 11px;
+      color: #33691e;
+      font-style: italic;
+      margin-top: 5px;
+      padding: 4px 8px;
+      background: #dcedc8;
+      border-radius: 5px;
+    }
+
+    .checklist-title {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #2e7d32;
+      margin-top: 8px;
+      margin-bottom: 4px;
+    }
+
+    .checklist {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 3px 10px;
+      list-style: none;
+    }
+
+    .checklist li {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: #333;
+    }
+
+    .check-box {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid #43a047;
+      border-radius: 3px;
+      flex-shrink: 0;
+      background: #fff;
+    }
+
+    /* =============================================
+       WIRING STEPS
+    ============================================= */
+    .steps-list {
+      list-style: none;
+      margin: 6px 0 0 0;
+      padding: 0;
+    }
+
+    .steps-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 11px;
+      color: #1a1a2e;
+      margin-bottom: 4px;
+      line-height: 1.4;
+    }
+
+    .step-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      background: #43a047;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 900;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* =============================================
+       QUIZ
+    ============================================= */
+    .quiz-box {
+      background: #fff9c4;
+      border: 2px solid #f9a825;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.13in;
+    }
+
+    .quiz-item {
+      margin-bottom: 0.08in;
+    }
+
+    .quiz-q {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 2px;
+    }
+
+    .quiz-blank {
+      display: block;
+      border-bottom: 1.5px solid #999;
+      width: 100%;
+      height: 20px;
+      margin-top: 2px;
+    }
+
+    .quiz-hint {
+      font-size: 9px;
+      color: #aaa;
+      font-style: italic;
+      float: right;
+      margin-top: 1px;
+    }
+
+    .quiz-item.bonus .quiz-q {
+      color: #e65100;
+    }
+
+    .quiz-item.bonus .quiz-blank {
+      border-bottom-color: #ff9800;
+    }
+
+    /* =============================================
+       EXPERIMENTS GRID
+    ============================================= */
+    .experiments-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.08in;
+      margin-bottom: 0.12in;
+    }
+
+    .experiment-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      border-radius: 8px;
+      padding: 0.08in 0.1in;
+      border-left: 5px solid transparent;
+    }
+
+    .experiment-card.exp-a { background: #fff3e0; border-left-color: #ff9800; }
+    .experiment-card.exp-b { background: #e3f2fd; border-left-color: #2196f3; }
+    .experiment-card.exp-c { background: #fce4ec; border-left-color: #e91e63; }
+    .experiment-card.exp-d { background: #e8f5e9; border-left-color: #43a047; }
+
+    .exp-letter {
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1;
+      flex-shrink: 0;
+      width: 24px;
+      text-align: center;
+    }
+
+    .experiment-card.exp-a .exp-letter { color: #e65100; }
+    .experiment-card.exp-b .exp-letter { color: #0d47a1; }
+    .experiment-card.exp-c .exp-letter { color: #880e4f; }
+    .experiment-card.exp-d .exp-letter { color: #1b5e20; }
+
+    .exp-body { flex: 1; }
+
+    .exp-title {
+      font-size: 11.5px;
+      font-weight: 900;
+      margin-bottom: 2px;
+      color: #1a1a2e;
+    }
+
+    .exp-do {
+      font-size: 10.5px;
+      color: #444;
+      margin-bottom: 3px;
+    }
+
+    .exp-do::before {
+      content: "▶ Do: ";
+      font-weight: 700;
+      color: #555;
+    }
+
+    .exp-discover {
+      font-size: 10.5px;
+      color: #333;
+      font-style: italic;
+    }
+
+    /* =============================================
+       TRY AT HOME + TROUBLESHOOTING
+    ============================================= */
+    .lemon-box {
+      background: #f9fbe7;
+      border: 2px solid #c5e1a5;
+      border-radius: 10px;
+      padding: 0.09in 0.11in;
+    }
+
+    .lemon-title {
+      font-size: 12px;
+      font-weight: 900;
+      color: #33691e;
+      margin-bottom: 5px;
+    }
+
+    .lemon-body {
+      font-size: 10.5px;
+      color: #333;
+      line-height: 1.5;
+    }
+
+    .trouble-box {
+      background: #fafafa;
+      border: 2px solid #bdbdbd;
+      border-radius: 10px;
+      padding: 0.09in 0.11in;
+    }
+
+    .trouble-title {
+      font-size: 12px;
+      font-weight: 900;
+      color: #37474f;
+      margin-bottom: 5px;
+    }
+
+    .trouble-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9.5px;
+    }
+
+    .trouble-table thead th {
+      background: #37474f;
+      color: #fff;
+      padding: 3px 6px;
+      text-align: left;
+      font-weight: 700;
+    }
+
+    .trouble-table tbody tr:nth-child(even) {
+      background: #f5f5f5;
+    }
+
+    .trouble-table tbody td {
+      padding: 3px 6px;
+      color: #333;
+      border-bottom: 1px solid #e0e0e0;
+      vertical-align: top;
+    }
+
+    /* =============================================
+       SIDE B HEADER
+    ============================================= */
+    .side-b-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 3px solid #f4c430;
+      margin-bottom: 0.15in;
+      padding-bottom: 0.09in;
+    }
+
+    .side-b-title {
+      font-size: 14px;
+      font-weight: 900;
+      color: #0f3460;
+    }
+
+    .side-b-sub {
+      font-size: 10px;
+      color: #888;
+      margin-top: 1px;
+    }
+
+    .side-b-xp {
+      background: #f4c430;
+      color: #1a1a2e;
+      font-weight: 900;
+      font-size: 11px;
+      padding: 3px 12px;
+      border-radius: 20px;
+    }
+
+    /* =============================================
+       COMING UP NEXT
+    ============================================= */
+    .next-box {
+      background: linear-gradient(90deg, #e3f2fd 0%, #f3e5f5 100%);
+      border-left: 5px solid #7c4dff;
+      border-radius: 0 10px 10px 0;
+      padding: 0.08in 0.14in;
+      font-size: 11.5px;
+      color: #1a1a2e;
+    }
+
+    .next-box strong {
+      color: #6a1b9a;
+    }
+
+    /* =============================================
+       PRINT STYLES
+    ============================================= */
+    @media print {
+      body {
+        background: #fff;
+        font-size: 12px;
+      }
+
+      .page {
+        width: 100%;
+        min-height: auto;
+        margin: 0;
+        box-shadow: none;
+        padding: 0.5in;
+      }
+
+      .page-a {
+        page-break-after: always;
+      }
+
+      .header {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .vocab-card,
+      .analogy-box,
+      .acdc-card,
+      .circuit-box,
+      .quiz-box,
+      .next-box,
+      .code-block,
+      .circuit-diagram,
+      .acdc-wave {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .vocab-card.voltage  { background: #fff !important; border: 2px solid #ff9800; border-top: 5px solid #ff9800; }
+      .vocab-card.current  { background: #fff !important; border: 2px solid #2196f3; border-top: 5px solid #2196f3; }
+      .vocab-card.resist   { background: #fff !important; border: 2px solid #e91e63; border-top: 5px solid #e91e63; }
+      .vocab-card.circuit  { background: #fff !important; border: 2px solid #43a047; border-top: 5px solid #43a047; }
+
+      .experiment-card,
+      .lemon-box,
+      .trouble-box,
+      .trouble-table thead th {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+
+    @page {
+      size: A4;
+      margin: 12mm;
+    }
+
+    .clearfix::after {
+      content: '';
+      display: table;
+      clear: both;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ======================================================
+       SIDE A (FRONT)
+  ====================================================== -->
+  <div class="page page-a">
+    <div class="page-label">Side A &mdash; Front</div>
+
+    <!-- HEADER -->
+    <div class="header">
+      <div class="header-course">&#9889; Circuit Explorer Academy</div>
+      <div class="header-lesson">Lesson 30: PWM &mdash; Dimming LEDs and Controlling Speed</div>
+      <div class="header-module">Module 4: Arduino Microcontroller</div>
+      <div><span class="header-xp">&#11088; 250 XP Available</span></div>
+    </div>
+
+    <div class="spark-row" aria-hidden="true">&#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889;</div>
+
+    <!-- VOCABULARY -->
+    <div class="section-title">
+      <span class="icon">&#128218;</span> Key Words &mdash; Learn These!
+    </div>
+
+    <div class="vocab-grid">
+
+      <div class="vocab-card voltage">
+        <span class="vocab-emoji">&#128261;</span>
+        <span class="vocab-symbol">~</span>
+        <div class="vocab-term">PWM (Pulse Width Modulation)</div>
+        <div class="vocab-def">The Arduino's trick of switching a pin <strong>ON and OFF hundreds of times per second</strong> so fast your eyes see it as dimmer. Like a super-fast light switch!</div>
+      </div>
+
+      <div class="vocab-card current">
+        <span class="vocab-emoji">&#128256;</span>
+        <span class="vocab-symbol">%</span>
+        <div class="vocab-term">Duty Cycle</div>
+        <div class="vocab-def">How much time the pin spends <strong>ON</strong> vs OFF in each blink. 50% duty cycle = on half the time = half brightness. More ON time = brighter!</div>
+      </div>
+
+      <div class="vocab-card resist">
+        <span class="vocab-emoji">&#128397;</span>
+        <span class="vocab-symbol">~</span>
+        <div class="vocab-term">analogWrite()</div>
+        <div class="vocab-def">The Arduino command that sets PWM brightness. Range: <strong>0</strong> (always off) to <strong>255</strong> (always on). Only works on pins marked with ~!</div>
+      </div>
+
+      <div class="vocab-card circuit">
+        <span class="vocab-emoji">&#128307;</span>
+        <span class="vocab-symbol">V</span>
+        <div class="vocab-term">Average Voltage</div>
+        <div class="vocab-def">PWM never truly outputs 2.5V &mdash; it flips between 0V and 5V. Your multimeter <strong>averages</strong> the pulses. analogWrite(127) &rarr; about 2.5V average!</div>
+      </div>
+
+    </div>
+
+    <!-- PWM CONCEPT DIAGRAM -->
+    <div class="section-title">
+      <span class="icon">&#9889;</span> The PWM Trick &mdash; How One Pin Fakes a Dimmer!
+    </div>
+
+    <div class="analogy-box">
+      <div style="font-size: 11.5px; font-weight: 700; color: #0d47a1; margin-bottom: 6px;">
+        The LED is never truly dim &mdash; it blinks 490 times per second. Your eyes blur the flashes together!
+      </div>
+
+      <div class="code-block">  Full brightness (255):  [ON ][ON ][ON ][ON ][ON ][ON ][ON ][ON ]   = 100% ON
+  Half brightness (127):  [ON ][OFF][ON ][OFF][ON ][OFF][ON ][OFF]   =  50% ON
+  Quarter bright  ( 64):  [ON ][OFF][OFF][OFF][ON ][OFF][OFF][OFF]   =  25% ON
+  Off             (  0):  [OFF][OFF][OFF][OFF][OFF][OFF][OFF][OFF]   =   0% ON
+
+  analogWrite(pin, 127):  5V__   __   __   __   __   __
+                             |  | |  | |  | |  | |  | |
+                          0V |__| |__| |__| |__| |__| |
+                             &lt;------490x per second------&gt;
+                          Wand reads: ~2.5V average</div>
+
+      <div class="analogy-caption">Average voltage = (analogWrite value &divide; 255) &times; 5V &nbsp;|&nbsp; Example: 127 &divide; 255 &times; 5V = 2.49V</div>
+    </div>
+
+    <!-- PWM PINS + FADE CODE -->
+    <div class="section-title">
+      <span class="icon">&#128187;</span> PWM Pins and the Fade Code
+    </div>
+
+    <div class="acdc-grid">
+
+      <div class="acdc-card dc">
+        <div class="acdc-title">&#127381; PWM Pins on Arduino Uno</div>
+        <div class="acdc-wave">  Arduino Uno board:
+
+  ~3   ~5   ~6   ~9   ~10  ~11
+
+  Look for the ~ (tilde) symbol!
+  Only these 6 pins can use
+  analogWrite().</div>
+        <div class="acdc-fact">
+          Today we use <strong>pin ~9</strong>. Move your LED wire from pin 7 to pin 9 to unlock fade control!<br/>
+          The other digital pins can only do <strong>HIGH or LOW</strong> &mdash; no dimming possible.
+        </div>
+      </div>
+
+      <div class="acdc-card ac">
+        <div class="acdc-title">&#128161; The Smooth Fade Loop</div>
+        <div class="acdc-wave"><span style="color:#f4c430;">int</span> ledPin = 9;
+
+<span style="color:#f4c430;">void</span> loop() {
+  <span style="color:#888;">// Fade IN: dark to bright</span>
+  <span style="color:#f4c430;">for</span> (int b=0; b&lt;=255; b++) {
+    analogWrite(ledPin, b);
+    delay(10);
+  }
+  <span style="color:#888;">// Fade OUT: bright to dark</span>
+  <span style="color:#f4c430;">for</span> (int b=255; b&gt;=0; b--) {
+    analogWrite(ledPin, b);
+    delay(10);
+  }
+}</div>
+        <div class="acdc-fact">
+          The <strong>for loop</strong> counts brightness from 0 to 255 one step at a time &mdash; like a counter that adds 1 each round until it reaches the goal!
+        </div>
+      </div>
+
+    </div>
+
+  </div><!-- end page-a -->
+
+
+  <!-- ======================================================
+       SIDE B (BACK)
+  ====================================================== -->
+  <div class="page page-b">
+    <div class="page-label">Side B &mdash; Back</div>
+
+    <!-- SIDE B MINI HEADER -->
+    <div class="side-b-header">
+      <div>
+        <div class="side-b-title">&#9889; Circuit Explorer Academy &mdash; Lesson 30</div>
+        <div class="side-b-sub">PWM: Dimming LEDs &amp; Controlling Speed &nbsp;|&nbsp; Module 4: Arduino Microcontroller</div>
+      </div>
+      <div class="side-b-xp">&#11088; 250 XP</div>
+    </div>
+
+    <!-- ACTIVITY + CHECKLIST -->
+    <div class="section-title">
+      <span class="icon">&#128161;</span> My Activity Today
+    </div>
+
+    <div class="circuit-box">
+
+      <div class="circuit-diagram">  Arduino Uno                        Breadboard
+  +-----------+
+  |  Pin ~9   |---[wire]---[330&#937;]---LED(+long)---LED(-short)---GND
+  |           |
+  |  Pin A0   |---Pot(middle pin)     Pot(left)---5V   Pot(right)---GND
+  +-----------+
+
+  Wand Check: Black probe = GND  |  Red probe = Pin ~9
+  analogWrite(255) -&gt; Wand shows ~5.0V
+  analogWrite(127) -&gt; Wand shows ~2.5V
+  analogWrite(  0) -&gt; Wand shows  0.0V</div>
+
+      <div class="circuit-note">The pin is NOT actually putting out 2.5V &mdash; it is switching 5V on and off so fast the Wand just averages it!</div>
+
+      <div class="checklist-title">Steps I completed:</div>
+      <ul class="steps-list">
+        <li><span class="step-num">1</span>Moved LED wire from pin 7 to <strong>pin ~9</strong> (the PWM pin)</li>
+        <li><span class="step-num">2</span>Uploaded the smooth fade code and watched the LED fade in and out like a sunrise/sunset</li>
+        <li><span class="step-num">3</span>Added the potentiometer to A0 and controlled brightness by turning the knob</li>
+        <li><span class="step-num">4</span>Used the Wand to measure average voltage at 5 different potentiometer positions</li>
+      </ul>
+
+      <div class="checklist-title">&#9989; Components I Used:</div>
+      <ul class="checklist">
+        <li><span class="check-box"></span>Arduino Uno</li>
+        <li><span class="check-box"></span>USB cable</li>
+        <li><span class="check-box"></span>Breadboard</li>
+        <li><span class="check-box"></span>LED (any color)</li>
+        <li><span class="check-box"></span>330&#937; resistor</li>
+        <li><span class="check-box"></span>10k&#937; potentiometer</li>
+        <li><span class="check-box"></span>Jumper wires (x5)</li>
+        <li><span class="check-box"></span>Multimeter (Wand)</li>
+      </ul>
+
+    </div>
+
+    <!-- QUIZ -->
+    <div class="section-title">
+      <span class="icon">&#129504;</span> Quiz Time! Fill in the blanks.
+    </div>
+
+    <div class="quiz-box">
+
+      <div class="quiz-item">
+        <div class="quiz-q">1. PWM stands for Pulse ________________ Modulation.</div>
+        <span class="quiz-hint">hint: "Width"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item">
+        <div class="quiz-q">2. The range of <code>analogWrite()</code> is 0 to ________________.</div>
+        <span class="quiz-hint">hint: "255"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item">
+        <div class="quiz-q">3. If you set <code>analogWrite(pin, 127)</code>, the Wand shows about ________________ volts average.</div>
+        <span class="quiz-hint">hint: "2.5V"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item bonus" style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed #f9a825;">
+        <div class="quiz-q">&#127381; BONUS: Why do we divide the potentiometer reading by 4 before sending it to analogWrite?</div>
+        <span class="quiz-hint">hint: "analogRead = 0-1023, analogWrite = 0-255, divide by 4 to scale"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+    </div>
+
+    <!-- EXPERIMENTS -->
+    <div class="section-title">
+      <span class="icon">&#128300;</span> 4 Experiments You Did Today!
+    </div>
+
+    <div class="experiments-grid">
+
+      <div class="experiment-card exp-a">
+        <div class="exp-letter">A</div>
+        <div class="exp-body">
+          <div class="exp-title">Freeze the Blink</div>
+          <div class="exp-do">Set analogWrite to 5 or 10, take a video with your phone slow-mo camera.</div>
+          <div class="exp-discover">At very low brightness you can see the LED actually blinking &mdash; the trick is revealed!</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-b">
+        <div class="exp-letter">B</div>
+        <div class="exp-body">
+          <div class="exp-title">Wand at 5 Levels</div>
+          <div class="exp-do">Turn the pot to 0, 1/4, 1/2, 3/4, and max while measuring pin ~9.</div>
+          <div class="exp-discover">Average voltage rises smoothly &mdash; 0V, ~1.25V, ~2.5V, ~3.75V, ~5V!</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-c">
+        <div class="exp-letter">C</div>
+        <div class="exp-body">
+          <div class="exp-title">Sunrise Alarm</div>
+          <div class="exp-do">Change the delay inside the fade loop from 10ms to 30ms.</div>
+          <div class="exp-discover">The fade is now much slower &mdash; a gentle, dreamy sunrise! Change the speed by changing one number.</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-d">
+        <div class="exp-letter">D</div>
+        <div class="exp-body">
+          <div class="exp-title">The Wrong Pin Test</div>
+          <div class="exp-do">Move the LED wire back to pin 7, then run the fade code again.</div>
+          <div class="exp-discover">It just stays full ON or OFF &mdash; non-PWM pins can only do HIGH or LOW, no in-between!</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TRY AT HOME + TROUBLESHOOTING -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.1in; margin-bottom: 0.12in;">
+
+      <div class="lemon-box">
+        <div class="lemon-title">&#127968; Try at Home: Phone Screen Dimmer!</div>
+        <div class="lemon-body">
+          Look at your phone or tablet screen brightness settings. Slide it slowly from dark to bright and back.<br/><br/>
+          Your phone screen uses the <strong>exact same PWM trick</strong> as your Arduino! The backlight LEDs blink on and off hundreds of times per second.<br/><br/>
+          In <strong>Lesson 31</strong> you will control <em>6 LEDs at once</em> with a Knight Rider chaser &mdash; get 6 LEDs ready!
+        </div>
+      </div>
+
+      <div class="trouble-box">
+        <div class="trouble-title">&#128295; Troubleshooting Quick Guide</div>
+        <table class="trouble-table">
+          <thead>
+            <tr><th>Problem</th><th>Quick Fix</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>LED stays on/off, no fade</td><td>Check LED is on pin 9 (~), not pin 7</td></tr>
+            <tr><td>Fade is jerky</td><td>Reduce delay to 5ms in the for loop</td></tr>
+            <tr><td>Pot dimmer not working</td><td>Check pot middle pin goes to A0</td></tr>
+            <tr><td>Wand shows jumping numbers</td><td>Normal! PWM is fast. Let Wand settle</td></tr>
+            <tr><td>analogWrite value wrong</td><td>Divide analogRead by 4: 1023/4 = 255</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- COMING UP NEXT -->
+    <div class="next-box">
+      <strong>Coming Up Next &rarr; Lesson 31: For Loops and Arrays &mdash; Control an LED Army! &#128248;</strong><br/>
+      You will learn powerful programming tools &mdash; for loops and arrays &mdash; that let you control 6 LEDs with just a few lines of code. You will build a <strong>Knight Rider</strong> LED chaser that scans back and forth. Get your 6 LEDs ready!
+    </div>
+
+  </div><!-- end page-b -->
+
+</body>
+</html>

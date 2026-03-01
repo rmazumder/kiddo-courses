@@ -2,7 +2,7 @@
 
 **Module:** Electronic Components Basics (Lessons 1–10)
 **Images folder:** `module-1-electronic-components-basics/images/`
-**Total images:** 27
+**Total images:** 28
 
 ---
 
@@ -13,6 +13,7 @@
 | 1 | `lesson-01-water-pump-loop.png` | Water pump analogy for voltage, current, resistance |
 | 1 | `lesson-01-breadboard-first-circuit.png` | First breadboard circuit with LED |
 | 1 | `lesson-01-break-restore-circuit.png` | Breaking and restoring a circuit |
+| 1 | `lesson-01-ac-dc-comparison.png` | DC vs AC comparison with water analogies |
 | 2 | `lesson-02-magic-wand-multimeter.png` | Multimeter as a magic wand with 3 superpowers |
 | 2 | `lesson-02-multimeter-parts-labeled.png` | Labeled multimeter parts diagram |
 | 2 | `lesson-02-conductor-detective-game.png` | Testing materials for conductivity |
@@ -66,6 +67,15 @@ Bright, colorful flat-design illustration for kids ages 6-12. Friendly cartoon s
 
 **Prompt:**
 Bright, colorful flat-design illustration for kids ages 6-12. Friendly cartoon style, no dark or scary elements. A two-panel side-by-side comparison: on the left panel labeled "Circuit Broken," a breadboard circuit has a wire pulled out with a visible gap, the LED is dark and has a sad face drawn on it, and the blue current-flow arrows stop at the gap with a red X. On the right panel labeled "Circuit Restored," the same wire is plugged back in, the LED glows brightly with a happy face, and blue arrows flow in a complete loop. A cheerful cartoon kid holds the disconnected wire in the left panel and plugs it back in on the right. Labels point to the gap: "No Path = No Flow!" and the complete loop: "Complete Path = Current Flows!"
+
+---
+
+### Filename: `lesson-01-ac-dc-comparison.png`
+
+**Place in lesson:** Before the ASCII diagram comparing DC (flat line) and AC (wave) in Step 5: Two Kinds of Electricity -- AC and DC.
+
+**Prompt:**
+Bright, colorful flat-design illustration for kids ages 6-12. Friendly cartoon style, no dark or scary elements. A split-panel comparison of DC and AC electricity using water analogies. Left panel labeled "DC -- Direct Current": a red/orange battery at the top connects to a transparent pipe where calm blue water flows steadily in ONE direction (shown with uniform blue arrows all pointing the same way), the pipe forms a simple loop, and the water flows past a happy glowing LED. A label reads "Steady flow, one direction -- like a calm river!" A small cartoon kid gives a thumbs-up. Right panel labeled "AC -- Alternating Current": a wall outlet/socket at the top (drawn safely, no exposed prongs) connects to a transparent tube where blue water visibly sloshes back and forth with alternating blue arrows pointing left and right, wavy motion lines show the oscillation, and a label reads "Back and forth, 60 times per second -- like ocean waves!" A small sine wave icon appears above the tube. Between both panels, a friendly cartoon robot holds a sign reading "Two kinds of electricity!" Color coding throughout: red/orange for power sources, blue for current/electron flow, green for ground connections. All labels are short and directly on the image, no paragraph text.
 
 ---
 

@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 9: Buzzers and Sound — Circuit Explorer Academy</title>
+  <style>
+    /* =============================================
+       BASE RESET & TYPOGRAPHY
+    ============================================= */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, Arial, sans-serif;
+      font-size: 13px;
+      line-height: 1.45;
+      color: #1a1a2e;
+      background: #f0f4ff;
+    }
+
+    /* =============================================
+       PAGE LAYOUT
+    ============================================= */
+    .page {
+      width: 8.5in;
+      min-height: 11in;
+      margin: 0 auto 0.4in auto;
+      padding: 0.5in;
+      background: #fff;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-label {
+      position: absolute;
+      top: 0.18in;
+      right: 0.22in;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #aaa;
+    }
+
+    /* =============================================
+       SIDE A — HEADER
+    ============================================= */
+    .header {
+      text-align: center;
+      border-bottom: 3px solid #f4c430;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+      border-radius: 10px;
+      color: #fff;
+      padding: 0.22in 0.2in 0.18in 0.2in;
+      margin-bottom: 0.16in;
+    }
+
+    .header-course {
+      font-size: 19px;
+      font-weight: 900;
+      letter-spacing: 0.03em;
+      color: #f4c430;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+
+    .header-lesson {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      margin-top: 4px;
+    }
+
+    .header-module {
+      font-size: 11px;
+      color: #a8d8ea;
+      margin-top: 3px;
+      letter-spacing: 0.04em;
+    }
+
+    .header-xp {
+      display: inline-block;
+      margin-top: 8px;
+      background: #f4c430;
+      color: #1a1a2e;
+      font-weight: 900;
+      font-size: 12px;
+      padding: 3px 14px;
+      border-radius: 20px;
+      letter-spacing: 0.06em;
+    }
+
+    .spark-row {
+      text-align: center;
+      font-size: 16px;
+      letter-spacing: 0.25em;
+      margin: 0.1in 0 0.04in 0;
+      color: #f4c430;
+    }
+
+    /* =============================================
+       SECTION HEADINGS
+    ============================================= */
+    .section-title {
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #fff;
+      background: #0f3460;
+      padding: 5px 12px;
+      border-radius: 6px;
+      margin-bottom: 0.1in;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .section-title .icon {
+      font-size: 14px;
+    }
+
+    /* =============================================
+       VOCABULARY CARDS  (2x2 grid)
+    ============================================= */
+    .vocab-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.1in;
+      margin-bottom: 0.14in;
+    }
+
+    .vocab-card {
+      border-radius: 10px;
+      padding: 0.1in 0.12in;
+      border-top: 5px solid transparent;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .vocab-card::before {
+      content: '';
+      position: absolute;
+      top: -18px;
+      right: -18px;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      opacity: 0.13;
+      background: #fff;
+    }
+
+    .vocab-card.vibration    { background: #fff3e0; border-top-color: #ff9800; }
+    .vocab-card.active-buz   { background: #e3f2fd; border-top-color: #2196f3; }
+    .vocab-card.passive-buz  { background: #fce4ec; border-top-color: #e91e63; }
+    .vocab-card.continuity   { background: #e8f5e9; border-top-color: #43a047; }
+
+    .vocab-term {
+      font-size: 13px;
+      font-weight: 900;
+      margin-bottom: 2px;
+    }
+
+    .vocab-card.vibration   .vocab-term { color: #e65100; }
+    .vocab-card.active-buz  .vocab-term { color: #0d47a1; }
+    .vocab-card.passive-buz .vocab-term { color: #880e4f; }
+    .vocab-card.continuity  .vocab-term { color: #1b5e20; }
+
+    .vocab-symbol {
+      font-size: 18px;
+      font-weight: 900;
+      float: right;
+      margin-top: -2px;
+      opacity: 0.55;
+    }
+
+    .vocab-def {
+      font-size: 11.5px;
+      color: #333;
+      line-height: 1.4;
+      margin-top: 2px;
+    }
+
+    .vocab-emoji {
+      font-size: 20px;
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    /* =============================================
+       BUZZER DIAGRAM BOX
+    ============================================= */
+    .analogy-box {
+      background: #fff3e0;
+      border: 2px solid #ffcc80;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.14in;
+    }
+
+    .buzzer-diagram {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.1in;
+      margin: 0.08in 0 0.06in 0;
+      flex-wrap: wrap;
+    }
+
+    .buz-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .buz-shape {
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 1.3;
+      text-align: center;
+      padding: 5px 7px;
+      border: 2px solid transparent;
+      min-width: 66px;
+      min-height: 44px;
+    }
+
+    .buz-shape.battery  { background: #ff9800; color: #fff; border-color: #e65100; }
+    .buz-shape.button   { background: #7c4dff; color: #fff; border-color: #4527a0; }
+    .buz-shape.buzzer   { background: #e91e63; color: #fff; border-color: #880e4f; }
+    .buz-shape.sound    {
+      background: #1a1a2e;
+      color: #76ff03;
+      border-color: #43a047;
+      font-family: monospace;
+      font-size: 9px;
+      letter-spacing: 0.02em;
+      min-width: 72px;
+    }
+
+    .buz-label {
+      font-size: 8.5px;
+      color: #555;
+      text-align: center;
+      font-style: italic;
+    }
+
+    .buz-arrow {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0 2px;
+      gap: 1px;
+      margin-bottom: 18px;
+    }
+
+    .buz-arrow-line {
+      display: flex;
+      align-items: center;
+      gap: 1px;
+    }
+
+    .arrow-body {
+      width: 22px;
+      height: 3px;
+      background: #ff9800;
+    }
+
+    .arrow-head {
+      width: 0;
+      height: 0;
+      border-top: 6px solid transparent;
+      border-bottom: 6px solid transparent;
+      border-left: 8px solid #ff9800;
+    }
+
+    .arrow-lbl {
+      font-size: 8px;
+      color: #e65100;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    /* Vibration wave visual */
+    .vibration-wave {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      justify-content: center;
+      margin: 4px 0 2px 0;
+    }
+
+    .wave-bar {
+      width: 4px;
+      border-radius: 2px;
+      background: #76ff03;
+    }
+
+    .analogy-caption {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: #e65100;
+      margin-top: 4px;
+    }
+
+    /* =============================================
+       ACTIVE vs PASSIVE COMPARISON
+    ============================================= */
+    .acdc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.1in;
+      margin-bottom: 0.06in;
+    }
+
+    .acdc-card {
+      border-radius: 10px;
+      padding: 0.1in 0.12in;
+      border-top: 5px solid transparent;
+    }
+
+    .acdc-card.active {
+      background: #fff8e1;
+      border-top-color: #ffc107;
+    }
+
+    .acdc-card.passive {
+      background: #f3e5f5;
+      border-top-color: #9c27b0;
+    }
+
+    .acdc-title {
+      font-size: 13px;
+      font-weight: 900;
+      margin-bottom: 4px;
+    }
+
+    .acdc-card.active  .acdc-title { color: #ff6f00; }
+    .acdc-card.passive .acdc-title { color: #6a1b9a; }
+
+    .acdc-wave {
+      font-family: monospace;
+      font-size: 9.5px;
+      line-height: 1.3;
+      padding: 4px 6px;
+      border-radius: 5px;
+      margin: 5px 0;
+      white-space: pre;
+    }
+
+    .acdc-card.active  .acdc-wave { background: #fffde7; color: #f57f17; }
+    .acdc-card.passive .acdc-wave { background: #f3e5f5; color: #6a1b9a; }
+
+    .acdc-fact {
+      font-size: 10.5px;
+      color: #444;
+      line-height: 1.4;
+    }
+
+    .acdc-fact strong { color: #333; }
+
+    .acdc-tag {
+      font-size: 10px;
+      margin-top: 4px;
+      padding: 3px 7px;
+      border-radius: 12px;
+      display: inline-block;
+      font-weight: 700;
+    }
+
+    .acdc-card.active  .acdc-tag { background: #ffc107; color: #4a2c00; }
+    .acdc-card.passive .acdc-tag { background: #9c27b0; color: #fff; }
+
+    /* =============================================
+       SIDE B — CIRCUIT BUILD / ACTIVITY
+    ============================================= */
+    .circuit-box {
+      background: #f1f8e9;
+      border: 2px solid #aed581;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.13in;
+    }
+
+    .circuit-diagram {
+      font-family: monospace;
+      font-size: 10.5px;
+      background: #1a1a2e;
+      color: #76ff03;
+      padding: 0.1in;
+      border-radius: 8px;
+      margin: 0.07in 0;
+      line-height: 1.6;
+      white-space: pre;
+    }
+
+    .circuit-note {
+      font-size: 11px;
+      color: #33691e;
+      font-style: italic;
+      margin-top: 5px;
+      padding: 4px 8px;
+      background: #dcedc8;
+      border-radius: 5px;
+    }
+
+    .checklist-title {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #2e7d32;
+      margin-top: 8px;
+      margin-bottom: 4px;
+    }
+
+    .checklist {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 3px 10px;
+      list-style: none;
+    }
+
+    .checklist li {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: #333;
+    }
+
+    .check-box {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid #43a047;
+      border-radius: 3px;
+      flex-shrink: 0;
+      background: #fff;
+    }
+
+    /* Steps list */
+    .steps-list {
+      list-style: none;
+      margin: 0.06in 0 0.06in 0;
+      padding: 0;
+    }
+
+    .steps-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 11px;
+      color: #333;
+      margin-bottom: 4px;
+      line-height: 1.4;
+    }
+
+    .step-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      background: #43a047;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 900;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* =============================================
+       QUIZ
+    ============================================= */
+    .quiz-box {
+      background: #fff9c4;
+      border: 2px solid #f9a825;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.13in;
+    }
+
+    .quiz-item {
+      margin-bottom: 0.08in;
+    }
+
+    .quiz-q {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 2px;
+    }
+
+    .quiz-blank {
+      display: block;
+      border-bottom: 1.5px solid #999;
+      width: 100%;
+      height: 20px;
+      margin-top: 2px;
+    }
+
+    .quiz-hint {
+      font-size: 9px;
+      color: #aaa;
+      font-style: italic;
+      float: right;
+      margin-top: 1px;
+    }
+
+    .quiz-item.bonus .quiz-q {
+      color: #e65100;
+    }
+
+    .quiz-item.bonus .quiz-blank {
+      border-bottom-color: #ff9800;
+    }
+
+    /* =============================================
+       EXPERIMENTS GRID
+    ============================================= */
+    .experiments-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.08in;
+      margin-bottom: 0.12in;
+    }
+
+    .experiment-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      border-radius: 8px;
+      padding: 0.08in 0.1in;
+      border-left: 5px solid transparent;
+    }
+
+    .experiment-card.exp-a { background: #fff3e0; border-left-color: #ff9800; }
+    .experiment-card.exp-b { background: #e3f2fd; border-left-color: #2196f3; }
+    .experiment-card.exp-c { background: #fce4ec; border-left-color: #e91e63; }
+    .experiment-card.exp-d { background: #e8f5e9; border-left-color: #43a047; }
+
+    .exp-letter {
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1;
+      flex-shrink: 0;
+      width: 24px;
+      text-align: center;
+    }
+
+    .experiment-card.exp-a .exp-letter { color: #e65100; }
+    .experiment-card.exp-b .exp-letter { color: #0d47a1; }
+    .experiment-card.exp-c .exp-letter { color: #880e4f; }
+    .experiment-card.exp-d .exp-letter { color: #1b5e20; }
+
+    .exp-body { flex: 1; }
+
+    .exp-title {
+      font-size: 11.5px;
+      font-weight: 900;
+      margin-bottom: 2px;
+      color: #1a1a2e;
+    }
+
+    .exp-do {
+      font-size: 10.5px;
+      color: #444;
+      margin-bottom: 3px;
+    }
+
+    .exp-do::before {
+      content: "▶ Do: ";
+      font-weight: 700;
+      color: #555;
+    }
+
+    .exp-discover {
+      font-size: 10.5px;
+      color: #333;
+      font-style: italic;
+    }
+
+    /* =============================================
+       TRY AT HOME + TROUBLESHOOTING
+    ============================================= */
+    .lemon-box {
+      background: #fce4ec;
+      border: 2px solid #f48fb1;
+      border-radius: 10px;
+      padding: 0.09in 0.11in;
+    }
+
+    .lemon-title {
+      font-size: 12px;
+      font-weight: 900;
+      color: #880e4f;
+      margin-bottom: 5px;
+    }
+
+    .lemon-body {
+      font-size: 10.5px;
+      color: #333;
+      line-height: 1.5;
+    }
+
+    .trouble-box {
+      background: #fafafa;
+      border: 2px solid #bdbdbd;
+      border-radius: 10px;
+      padding: 0.09in 0.11in;
+    }
+
+    .trouble-title {
+      font-size: 12px;
+      font-weight: 900;
+      color: #37474f;
+      margin-bottom: 5px;
+    }
+
+    .trouble-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9.5px;
+    }
+
+    .trouble-table thead th {
+      background: #37474f;
+      color: #fff;
+      padding: 3px 6px;
+      text-align: left;
+      font-weight: 700;
+    }
+
+    .trouble-table tbody tr:nth-child(even) {
+      background: #f5f5f5;
+    }
+
+    .trouble-table tbody td {
+      padding: 3px 6px;
+      color: #333;
+      border-bottom: 1px solid #e0e0e0;
+      vertical-align: top;
+    }
+
+    /* =============================================
+       COMING UP NEXT
+    ============================================= */
+    .next-box {
+      background: linear-gradient(90deg, #e3f2fd 0%, #f3e5f5 100%);
+      border-left: 5px solid #7c4dff;
+      border-radius: 0 10px 10px 0;
+      padding: 0.08in 0.14in;
+      font-size: 11.5px;
+      color: #1a1a2e;
+    }
+
+    .next-box strong {
+      color: #6a1b9a;
+    }
+
+    /* =============================================
+       SIDE B HEADER
+    ============================================= */
+    .side-b-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 3px solid #f4c430;
+      margin-bottom: 0.15in;
+      padding-bottom: 0.09in;
+    }
+
+    .side-b-title {
+      font-size: 14px;
+      font-weight: 900;
+      color: #0f3460;
+    }
+
+    .side-b-sub {
+      font-size: 10px;
+      color: #888;
+      margin-top: 1px;
+    }
+
+    .side-b-xp {
+      background: #f4c430;
+      color: #1a1a2e;
+      font-weight: 900;
+      font-size: 11px;
+      padding: 3px 12px;
+      border-radius: 20px;
+    }
+
+    /* =============================================
+       BADGE BOX
+    ============================================= */
+    .badge-box {
+      border: 4px dashed #f4c430;
+      border-radius: 14px;
+      background: #fffde7;
+      padding: 0.1in 0.16in;
+      text-align: center;
+      margin-bottom: 0.1in;
+      position: relative;
+    }
+
+    .badge-stars {
+      font-size: 20px;
+      letter-spacing: 0.1em;
+      color: #f4c430;
+    }
+
+    .badge-title {
+      font-size: 15px;
+      font-weight: 900;
+      color: #1a1a2e;
+      margin: 5px 0 4px 0;
+      letter-spacing: 0.04em;
+    }
+
+    .badge-skills {
+      list-style: none;
+      text-align: left;
+      display: inline-block;
+      margin-top: 4px;
+    }
+
+    .badge-skills li {
+      font-size: 11px;
+      color: #333;
+      margin-bottom: 3px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .badge-check {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      background: #43a047;
+      border-radius: 50%;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    .badge-corner {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #f4c430;
+      color: #1a1a2e;
+      font-size: 22px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    }
+
+    /* =============================================
+       PRINT STYLES
+    ============================================= */
+    @media print {
+      body {
+        background: #fff;
+        font-size: 12px;
+      }
+
+      .page {
+        width: 100%;
+        min-height: auto;
+        margin: 0;
+        box-shadow: none;
+        padding: 0.5in;
+      }
+
+      .page-a {
+        page-break-after: always;
+      }
+
+      .header,
+      .vocab-card,
+      .acdc-card,
+      .circuit-box,
+      .quiz-box,
+      .badge-box,
+      .next-box,
+      .analogy-box,
+      .circuit-diagram,
+      .experiment-card,
+      .lemon-box,
+      .trouble-box,
+      .trouble-table thead th {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      /* B&W fallback — borders carry the visual weight */
+      .vocab-card.vibration   { background: #fff !important; border: 2px solid #ff9800; border-top: 5px solid #ff9800; }
+      .vocab-card.active-buz  { background: #fff !important; border: 2px solid #2196f3; border-top: 5px solid #2196f3; }
+      .vocab-card.passive-buz { background: #fff !important; border: 2px solid #e91e63; border-top: 5px solid #e91e63; }
+      .vocab-card.continuity  { background: #fff !important; border: 2px solid #43a047; border-top: 5px solid #43a047; }
+    }
+
+    @page {
+      size: A4;
+      margin: 12mm;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ======================================================
+       SIDE A (FRONT)
+  ====================================================== -->
+  <div class="page page-a">
+    <div class="page-label">Side A &#8212; Front</div>
+
+    <!-- HEADER -->
+    <div class="header">
+      <div class="header-course">&#9889; Circuit Explorer Academy</div>
+      <div class="header-lesson">Lesson 9: Buzzers and Sound &#8212; Make Some Noise!</div>
+      <div class="header-module">Module 1: Electronic Components Basics</div>
+      <div><span class="header-xp">&#11088; 260 XP Available</span></div>
+    </div>
+
+    <div class="spark-row" aria-hidden="true">&#128266; &#10022; &#9889; &#10022; &#128276; &#10022; &#9889; &#10022; &#128266; &#10022; &#9889; &#10022; &#128276; &#10022; &#9889;</div>
+
+    <!-- VOCABULARY -->
+    <div class="section-title">
+      <span class="icon">&#128218;</span> Key Words &#8212; Learn These!
+    </div>
+
+    <div class="vocab-grid">
+
+      <div class="vocab-card vibration">
+        <span class="vocab-emoji">&#128247;</span>
+        <span class="vocab-symbol">~</span>
+        <div class="vocab-term">Vibration</div>
+        <div class="vocab-def">Super-fast <strong>back-and-forth shaking</strong>. Sound IS vibration! Feel your throat when you say &#8220;Ahhh&#8221; &#8212; that&#39;s your vocal cords vibrating.</div>
+      </div>
+
+      <div class="vocab-card active-buz">
+        <span class="vocab-emoji">&#128276;</span>
+        <span class="vocab-symbol">&#9654;</span>
+        <div class="vocab-term">Active Buzzer</div>
+        <div class="vocab-def">A buzzer with a <strong>built-in circuit</strong> (oscillator). Just give it power and it BEEPS! Like a music box in a can.</div>
+      </div>
+
+      <div class="vocab-card passive-buz">
+        <span class="vocab-emoji">&#128266;</span>
+        <span class="vocab-symbol">&#9836;</span>
+        <div class="vocab-term">Passive Buzzer</div>
+        <div class="vocab-def">A buzzer that <strong>needs a changing signal</strong> to make sound. Like a speaker &#8212; it can play tunes when connected to an Arduino!</div>
+      </div>
+
+      <div class="vocab-card continuity">
+        <span class="vocab-emoji">&#128270;</span>
+        <span class="vocab-symbol">&#9654;</span>
+        <div class="vocab-term">Continuity Mode</div>
+        <div class="vocab-def">A <strong>Wand (multimeter) setting</strong> that BEEPS when a circuit path is connected. Test circuits before powering them &#8212; like checking a road on a map!</div>
+      </div>
+
+    </div>
+
+    <!-- HOW A BUZZER WORKS -->
+    <div class="section-title">
+      <span class="icon">&#128266;</span> How Does a Buzzer Make Sound?
+    </div>
+
+    <div class="analogy-box">
+
+      <!-- CSS circuit diagram showing signal flow -->
+      <div class="buzzer-diagram">
+
+        <div class="buz-step">
+          <div class="buz-shape battery">&#128267;<br/>9V Battery</div>
+          <div class="buz-label">Power source</div>
+        </div>
+
+        <div class="buz-arrow">
+          <div class="buz-arrow-line">
+            <div class="arrow-body"></div>
+            <div class="arrow-head"></div>
+          </div>
+          <div class="arrow-lbl">electricity</div>
+        </div>
+
+        <div class="buz-step">
+          <div class="buz-shape button">&#128274;<br/>Button<br/>(press me!)</div>
+          <div class="buz-label">Switch / trigger</div>
+        </div>
+
+        <div class="buz-arrow">
+          <div class="buz-arrow-line">
+            <div class="arrow-body"></div>
+            <div class="arrow-head"></div>
+          </div>
+          <div class="arrow-lbl">flows in</div>
+        </div>
+
+        <div class="buz-step">
+          <div class="buz-shape buzzer">&#128276;<br/>Active<br/>Buzzer</div>
+          <div class="buz-label">Piezo disc inside</div>
+        </div>
+
+        <div class="buz-arrow">
+          <div class="buz-arrow-line">
+            <div class="arrow-body"></div>
+            <div class="arrow-head"></div>
+          </div>
+          <div class="arrow-lbl">vibrates!</div>
+        </div>
+
+        <div class="buz-step">
+          <div class="buz-shape sound">&#126;2,400 Hz&#126;
+BEEP!
+&#126; &#126; &#126; &#126; &#126;</div>
+          <div class="buz-label">Sound waves to your ears</div>
+        </div>
+
+      </div>
+
+      <div class="analogy-caption">
+        Inside the buzzer is a <strong>piezoelectric disc</strong> &#8212; a special crystal that physically changes shape when electricity flows through it. It vibrates 2,400 times per second!
+      </div>
+
+    </div>
+
+    <!-- ACTIVE vs PASSIVE -->
+    <div class="section-title">
+      <span class="icon">&#9889;</span> Active vs Passive Buzzers &#8212; What&#39;s the Difference?
+    </div>
+
+    <div class="acdc-grid">
+
+      <div class="acdc-card active">
+        <div class="acdc-title">&#127534; Active Buzzer</div>
+        <div class="acdc-wave">Inside: circuit + piezo disc
+Touch to 9V battery:
+&#9654;&#9654;  STEADY TONE!  &#9654;&#9654;
+
+Usually has a (+) marking</div>
+        <div class="acdc-fact">Has a <strong>built-in oscillator circuit</strong> &#8212; the circuit generates the signal itself. Just supply power and it beeps without any extra help!<br/>
+          <strong>We use this one today.</strong>
+        </div>
+        <div class="acdc-tag">&#9989; Easy &#8212; just add power!</div>
+      </div>
+
+      <div class="acdc-card passive">
+        <div class="acdc-title">&#127740; Passive Buzzer</div>
+        <div class="acdc-wave">Inside: piezo disc only
+Touch to 9V battery:
+&#8212;  just a quiet click  &#8212;
+
+Needs a rapid ON/OFF signal</div>
+        <div class="acdc-fact">Just a <strong>piezo disc</strong> &#8212; like a tiny speaker. Needs a rapidly changing signal (from Arduino) to vibrate at a specific pitch. Can play actual <strong>TUNES!</strong><br/>
+          <strong>We&#39;ll use this with Arduino later!</strong>
+        </div>
+        <div class="acdc-tag">&#127926; Can play music with Arduino!</div>
+      </div>
+
+    </div>
+
+    <!-- Sound Science note at bottom of Side A -->
+    <div style="background:#e8eaf6; border:2px solid #9fa8da; border-radius:8px; padding:6px 12px; font-size:10.5px; color:#283593; margin-top:0.06in;">
+      <strong>&#127908; Sound Science:</strong>
+      Human hearing: <strong>20 Hz &#8594; 20,000 Hz</strong> &nbsp;|&nbsp;
+      Active buzzer: <strong>&#126;2,400 Hz</strong> (super annoying on purpose!) &nbsp;|&nbsp;
+      Dog whistle: <strong>23,000 Hz</strong> &#8212; dogs hear it, humans don&#39;t! &nbsp;|&nbsp;
+      Hz = vibrations per second
+    </div>
+
+  </div><!-- end page-a -->
+
+
+  <!-- ======================================================
+       SIDE B (BACK)
+  ====================================================== -->
+  <div class="page page-b">
+    <div class="page-label">Side B &#8212; Back</div>
+
+    <!-- SIDE B MINI HEADER -->
+    <div class="side-b-header">
+      <div>
+        <div class="side-b-title">&#9889; Circuit Explorer Academy &#8212; Lesson 9</div>
+        <div class="side-b-sub">Buzzers and Sound &#8212; Make Some Noise! &nbsp;|&nbsp; Module 1: Electronic Components Basics</div>
+      </div>
+      <div class="side-b-xp">&#11088; 260 XP</div>
+    </div>
+
+    <!-- MY ACTIVITY TODAY -->
+    <div class="section-title">
+      <span class="icon">&#128295;</span> My Activity Today &#8212; What I Built!
+    </div>
+
+    <div class="circuit-box">
+
+      <div style="font-size:11.5px; font-weight:700; color:#2e7d32; margin-bottom:5px;">&#127381; Mission: Build a Button-Triggered Alarm with LED!</div>
+
+      <ol class="steps-list">
+        <li><span class="step-num">1</span> <span>Hold the buzzer, touch battery terminals to it &#8212; feel the <strong>vibration</strong> in your fingertips! (+10 XP)</span></li>
+        <li><span class="step-num">2</span> <span>Compare Active vs Passive buzzers &#8212; touch each to 9V and listen for the difference! (+10 XP)</span></li>
+        <li><span class="step-num">3</span> <span>Set Wand to <strong>continuity mode</strong> (&#9835; symbol). Build the alarm circuit WITHOUT the battery and run all 4 continuity tests! (+40 XP)</span></li>
+        <li><span class="step-num">4</span> <span>Connect the battery. Press the button &#8212; <strong>BEEP!</strong> You just built a doorbell! (+30 XP)</span></li>
+        <li><span class="step-num">5</span> <span>Add an LED in parallel &#8212; now pressing the button triggers <strong>sound AND light</strong> at the same time!</span></li>
+      </ol>
+
+      <div class="circuit-diagram">DOORBELL CIRCUIT:
+9V (+) &#10132; [BUTTON] &#10132; BUZZER (+) &#10132; BUZZER (-) &#10132; GND
+                &#8627; [330&#937;] &#10132; LED (+) &#10132; LED (-) &#10132; GND
+(Same button triggers BOTH buzzer AND LED &#128161; &#128276;)</div>
+
+      <div class="circuit-note">The LED helps people who cannot hear &#8212; the doorbell works for EVERYONE! &#128100;</div>
+
+      <div class="checklist-title">&#9989; Components I Used:</div>
+      <ul class="checklist">
+        <li><span class="check-box"></span>Active buzzer</li>
+        <li><span class="check-box"></span>Push button</li>
+        <li><span class="check-box"></span>9V battery</li>
+        <li><span class="check-box"></span>100&#937; resistor</li>
+        <li><span class="check-box"></span>LED (red)</li>
+        <li><span class="check-box"></span>330&#937; resistor</li>
+        <li><span class="check-box"></span>Breadboard</li>
+        <li><span class="check-box"></span>Jumper wires</li>
+        <li><span class="check-box"></span>Multimeter Wand</li>
+      </ul>
+
+    </div>
+
+    <!-- QUIZ -->
+    <div class="section-title">
+      <span class="icon">&#129504;</span> Quiz Time! Fill in the blanks.
+    </div>
+
+    <div class="quiz-box">
+
+      <div class="quiz-item">
+        <div class="quiz-q">1. Sound is just ________________ in the air. A buzzer makes sound by using electricity to vibrate a tiny disc inside.</div>
+        <span class="quiz-hint">hint: "vibrations"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item">
+        <div class="quiz-q">2. An ________________ buzzer has a built-in circuit and just needs power to beep. A passive buzzer needs a rapidly changing signal.</div>
+        <span class="quiz-hint">hint: "active"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item">
+        <div class="quiz-q">3. You set the Wand to ________________ mode to test a circuit path BEFORE connecting the battery. It beeps when the path is complete!</div>
+        <span class="quiz-hint">hint: "continuity"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item bonus" style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed #f9a825;">
+        <div class="quiz-q">&#127381; BONUS: In Morse code, SOS is &#8220;dot dot dot, dash dash dash, dot dot dot.&#8221; Tap SOS on your buzzer &#8212; what kind of circuit controls each beep?</div>
+        <span class="quiz-hint">hint: "a button (open/close circuit)"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+    </div>
+
+    <!-- EXPERIMENTS -->
+    <div class="section-title">
+      <span class="icon">&#128300;</span> 4 Things I Tried Today!
+    </div>
+
+    <div class="experiments-grid">
+
+      <div class="experiment-card exp-a">
+        <div class="exp-letter">A</div>
+        <div class="exp-body">
+          <div class="exp-title">Feel the Vibration!</div>
+          <div class="exp-do">Hold buzzer, touch 9V battery to it.</div>
+          <div class="exp-discover">Felt it buzzing in your fingers &#8212; that&#39;s the piezo disc vibrating 2,400 times per second!</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-b">
+        <div class="exp-letter">B</div>
+        <div class="exp-body">
+          <div class="exp-title">Wand Continuity Tests</div>
+          <div class="exp-do">Touch probes across each part of the circuit (button open, button pressed).</div>
+          <div class="exp-discover">Wand beeps when path is complete &#8212; you tested the whole circuit <strong>before</strong> turning it on!</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-c">
+        <div class="exp-letter">C</div>
+        <div class="exp-body">
+          <div class="exp-title">Build the Doorbell</div>
+          <div class="exp-do">Connect battery. Press the button.</div>
+          <div class="exp-discover">BEEP and LED lights up at the same time &#8212; your alarm works for everyone!</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-d">
+        <div class="exp-letter">D</div>
+        <div class="exp-body">
+          <div class="exp-title">Door Alarm Concept</div>
+          <div class="exp-do">Use two pieces of aluminum foil as a switch on a door frame.</div>
+          <div class="exp-discover">Foil touches = circuit complete = buzzer sounds! Now you know how security alarms work!</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TRY AT HOME + TROUBLESHOOTING -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.1in; margin-bottom: 0.1in;">
+
+      <div class="lemon-box">
+        <div class="lemon-title">&#127399; Try at Home: Morse Code Tapper!</div>
+        <div class="lemon-body">
+          Get a buzzer, a button, and a battery. Try tapping <strong>SOS</strong> in Morse code:<br/><br/>
+          <strong>S = . . .</strong> (3 short taps)<br/>
+          <strong>O = &#8212; &#8212; &#8212;</strong> (3 long holds)<br/>
+          <strong>SOS = . . . &#8212; &#8212; &#8212; . . .</strong><br/><br/>
+          <em>The Titanic used this exact kind of on/off circuit to send distress signals by radio!</em>
+        </div>
+      </div>
+
+      <div class="trouble-box">
+        <div class="trouble-title">&#128295; Troubleshooting Quick Guide</div>
+        <table class="trouble-table">
+          <thead>
+            <tr><th>Problem</th><th>Quick Fix</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Buzzer won&#39;t beep</td><td>Check polarity &#8212; buzzer has a (+) pin!</td></tr>
+            <tr><td>Buzzer beeps without button</td><td>Button wires in wrong breadboard row</td></tr>
+            <tr><td>LED doesn&#39;t light up</td><td>Flip LED &#8212; long leg to (+) side</td></tr>
+            <tr><td>Wand won&#39;t beep</td><td>Make sure it&#39;s set to continuity (&#9835;) mode</td></tr>
+            <tr><td>Foil alarm silent</td><td>Test each foil strip with Wand first!</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- BADGE -->
+    <div class="badge-box">
+      <div class="badge-corner">&#128276;</div>
+      <div class="badge-stars">&#11088; &#11088; &#11088;</div>
+      <div class="badge-title">&#127942; SOUND ENGINEER BADGE UNLOCKED!</div>
+      <ul class="badge-skills">
+        <li><span class="badge-check">&#10003;</span> Built a buzzer alarm with LED</li>
+        <li><span class="badge-check">&#10003;</span> Used continuity mode like a circuit detective</li>
+        <li><span class="badge-check">&#10003;</span> Tested circuits BEFORE powering them on</li>
+        <li><span class="badge-check">&#10003;</span> Know active vs passive buzzers</li>
+      </ul>
+    </div>
+
+    <!-- COMING UP NEXT -->
+    <div class="next-box">
+      <strong>Coming Up Next &#8594; Lesson 10: The Quiz Board Project! &#127381;</strong><br/>
+      The <strong>FINAL lesson of Module 1!</strong> You put EVERYTHING together and build a <strong>Quiz Board game</strong> where correct answers light up an LED and your Magic Measurement Wand helps you debug any problems. A real, working game you can play with friends and family &#8212; get ready!
+    </div>
+
+  </div><!-- end page-b -->
+
+</body>
+</html>

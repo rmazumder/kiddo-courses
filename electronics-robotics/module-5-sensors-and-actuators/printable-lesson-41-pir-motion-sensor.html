@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 41: PIR Motion Sensor — Circuit Explorer Academy</title>
+  <style>
+    /* =============================================
+       BASE RESET & TYPOGRAPHY
+    ============================================= */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, Arial, sans-serif;
+      font-size: 13px;
+      line-height: 1.45;
+      color: #1a1a2e;
+      background: #f0f4ff;
+    }
+
+    /* =============================================
+       PAGE LAYOUT
+    ============================================= */
+    .page {
+      width: 8.5in;
+      min-height: 11in;
+      margin: 0 auto 0.4in auto;
+      padding: 0.5in;
+      background: #fff;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-label {
+      position: absolute;
+      top: 0.18in;
+      right: 0.22in;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #aaa;
+    }
+
+    /* =============================================
+       SIDE A — HEADER
+    ============================================= */
+    .header {
+      text-align: center;
+      border-bottom: 3px solid #f4c430;
+      margin-bottom: 0.16in;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+      border-radius: 10px;
+      color: #fff;
+      padding: 0.22in 0.2in 0.18in 0.2in;
+    }
+
+    .header-course {
+      font-size: 19px;
+      font-weight: 900;
+      letter-spacing: 0.03em;
+      color: #f4c430;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+
+    .header-lesson {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      margin-top: 4px;
+    }
+
+    .header-module {
+      font-size: 11px;
+      color: #a8d8ea;
+      margin-top: 3px;
+      letter-spacing: 0.04em;
+    }
+
+    .header-xp {
+      display: inline-block;
+      margin-top: 8px;
+      background: #f4c430;
+      color: #1a1a2e;
+      font-weight: 900;
+      font-size: 12px;
+      padding: 3px 14px;
+      border-radius: 20px;
+      letter-spacing: 0.06em;
+    }
+
+    .spark-row {
+      text-align: center;
+      font-size: 16px;
+      letter-spacing: 0.25em;
+      margin: 0.1in 0 0.04in 0;
+      color: #f4c430;
+    }
+
+    /* =============================================
+       SECTION HEADINGS
+    ============================================= */
+    .section-title {
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #fff;
+      background: #0f3460;
+      padding: 5px 12px;
+      border-radius: 6px;
+      margin-bottom: 0.1in;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .section-title .icon {
+      font-size: 14px;
+    }
+
+    /* =============================================
+       VOCABULARY CARDS  (2x2 grid)
+    ============================================= */
+    .vocab-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.1in;
+      margin-bottom: 0.14in;
+    }
+
+    .vocab-card {
+      border-radius: 10px;
+      padding: 0.1in 0.12in;
+      border-top: 5px solid transparent;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .vocab-card::before {
+      content: '';
+      position: absolute;
+      top: -18px;
+      right: -18px;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      opacity: 0.13;
+      background: #fff;
+    }
+
+    .vocab-card.voltage  { background: #fff3e0; border-top-color: #ff9800; }
+    .vocab-card.current  { background: #e3f2fd; border-top-color: #2196f3; }
+    .vocab-card.resist   { background: #fce4ec; border-top-color: #e91e63; }
+    .vocab-card.circuit  { background: #e8f5e9; border-top-color: #43a047; }
+
+    .vocab-term {
+      font-size: 13px;
+      font-weight: 900;
+      margin-bottom: 2px;
+    }
+
+    .vocab-card.voltage  .vocab-term { color: #e65100; }
+    .vocab-card.current  .vocab-term { color: #0d47a1; }
+    .vocab-card.resist   .vocab-term { color: #880e4f; }
+    .vocab-card.circuit  .vocab-term { color: #1b5e20; }
+
+    .vocab-symbol {
+      font-size: 18px;
+      font-weight: 900;
+      float: right;
+      margin-top: -2px;
+      opacity: 0.55;
+    }
+
+    .vocab-def {
+      font-size: 11.5px;
+      color: #333;
+      line-height: 1.4;
+      margin-top: 2px;
+    }
+
+    .vocab-emoji {
+      font-size: 20px;
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    /* =============================================
+       MAIN CONCEPT — PIR DIAGRAM BOX
+    ============================================= */
+    .analogy-box {
+      background: #e8f4fd;
+      border: 2px solid #90caf9;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.14in;
+    }
+
+    .analogy-box .analogy-caption {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: #0d47a1;
+      margin-top: 6px;
+    }
+
+    .pir-diagram {
+      font-family: monospace;
+      font-size: 10px;
+      background: #1a1a2e;
+      color: #76ff03;
+      padding: 0.09in 0.12in;
+      border-radius: 8px;
+      margin: 0.07in 0 0.06in 0;
+      line-height: 1.65;
+      white-space: pre;
+      overflow: visible;
+    }
+
+    /* =============================================
+       CODE SNIPPET
+    ============================================= */
+    .code-box {
+      font-family: monospace;
+      font-size: 9.5px;
+      background: #1a1a2e;
+      color: #80deea;
+      padding: 0.09in 0.12in;
+      border-radius: 8px;
+      margin: 0.06in 0;
+      line-height: 1.6;
+      white-space: pre;
+      overflow: visible;
+    }
+
+    .code-comment { color: #546e7a; }
+    .code-keyword { color: #f4c430; }
+    .code-func    { color: #76ff03; }
+    .code-num     { color: #ff8a65; }
+    .code-string  { color: #ce93d8; }
+
+    /* =============================================
+       ACDC-STYLE CONCEPT CARDS (wiring + smart light)
+    ============================================= */
+    .acdc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.1in;
+      margin-bottom: 0.06in;
+    }
+
+    .acdc-card {
+      border-radius: 10px;
+      padding: 0.1in 0.12in;
+      border-top: 5px solid transparent;
+    }
+
+    .acdc-card.dc {
+      background: #fff8e1;
+      border-top-color: #ffc107;
+    }
+
+    .acdc-card.ac {
+      background: #f3e5f5;
+      border-top-color: #9c27b0;
+    }
+
+    .acdc-title {
+      font-size: 13px;
+      font-weight: 900;
+      margin-bottom: 4px;
+    }
+
+    .acdc-card.dc .acdc-title { color: #ff6f00; }
+    .acdc-card.ac .acdc-title { color: #6a1b9a; }
+
+    .acdc-wave {
+      font-family: monospace;
+      font-size: 9.5px;
+      line-height: 1.3;
+      padding: 4px 6px;
+      border-radius: 5px;
+      margin: 5px 0;
+      white-space: pre;
+    }
+
+    .acdc-card.dc .acdc-wave {
+      background: #fffde7;
+      color: #f57f17;
+    }
+
+    .acdc-card.ac .acdc-wave {
+      background: #f3e5f5;
+      color: #6a1b9a;
+    }
+
+    .acdc-fact {
+      font-size: 10.5px;
+      color: #444;
+      line-height: 1.4;
+    }
+
+    .acdc-fact strong { color: #333; }
+
+    /* =============================================
+       SIDE B — CIRCUIT BUILD
+    ============================================= */
+    .circuit-box {
+      background: #f1f8e9;
+      border: 2px solid #aed581;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.13in;
+    }
+
+    .circuit-diagram {
+      font-family: monospace;
+      font-size: 10px;
+      background: #1a1a2e;
+      color: #76ff03;
+      padding: 0.1in;
+      border-radius: 8px;
+      margin: 0.07in 0;
+      line-height: 1.6;
+      white-space: pre;
+      overflow: visible;
+    }
+
+    .circuit-note {
+      font-size: 11px;
+      color: #33691e;
+      font-style: italic;
+      margin-top: 5px;
+      padding: 4px 8px;
+      background: #dcedc8;
+      border-radius: 5px;
+    }
+
+    .checklist-title {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #2e7d32;
+      margin-top: 8px;
+      margin-bottom: 4px;
+    }
+
+    .checklist {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 3px 10px;
+      list-style: none;
+    }
+
+    .checklist li {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: #333;
+    }
+
+    .check-box {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid #43a047;
+      border-radius: 3px;
+      flex-shrink: 0;
+      background: #fff;
+    }
+
+    /* =============================================
+       QUIZ
+    ============================================= */
+    .quiz-box {
+      background: #fff9c4;
+      border: 2px solid #f9a825;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.13in;
+    }
+
+    .quiz-item {
+      margin-bottom: 0.08in;
+    }
+
+    .quiz-q {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 2px;
+    }
+
+    .quiz-blank {
+      display: block;
+      border-bottom: 1.5px solid #999;
+      width: 100%;
+      height: 20px;
+      margin-top: 2px;
+    }
+
+    .quiz-hint {
+      font-size: 9px;
+      color: #aaa;
+      font-style: italic;
+      float: right;
+      margin-top: 1px;
+    }
+
+    .quiz-item.bonus .quiz-q {
+      color: #e65100;
+    }
+
+    .quiz-item.bonus .quiz-blank {
+      border-bottom-color: #ff9800;
+    }
+
+    /* =============================================
+       EXPERIMENTS GRID
+    ============================================= */
+    .experiments-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.08in;
+      margin-bottom: 0.12in;
+    }
+
+    .experiment-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      border-radius: 8px;
+      padding: 0.08in 0.1in;
+      border-left: 5px solid transparent;
+    }
+
+    .experiment-card.exp-a { background: #fff3e0; border-left-color: #ff9800; }
+    .experiment-card.exp-b { background: #e3f2fd; border-left-color: #2196f3; }
+    .experiment-card.exp-c { background: #fce4ec; border-left-color: #e91e63; }
+    .experiment-card.exp-d { background: #e8f5e9; border-left-color: #43a047; }
+
+    .exp-letter {
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1;
+      flex-shrink: 0;
+      width: 24px;
+      text-align: center;
+    }
+
+    .experiment-card.exp-a .exp-letter { color: #e65100; }
+    .experiment-card.exp-b .exp-letter { color: #0d47a1; }
+    .experiment-card.exp-c .exp-letter { color: #880e4f; }
+    .experiment-card.exp-d .exp-letter { color: #1b5e20; }
+
+    .exp-body { flex: 1; }
+
+    .exp-title {
+      font-size: 11.5px;
+      font-weight: 900;
+      margin-bottom: 2px;
+      color: #1a1a2e;
+    }
+
+    .exp-do {
+      font-size: 10.5px;
+      color: #444;
+      margin-bottom: 3px;
+    }
+
+    .exp-do::before {
+      content: "▶ Do: ";
+      font-weight: 700;
+      color: #555;
+    }
+
+    .exp-discover {
+      font-size: 10.5px;
+      color: #333;
+      font-style: italic;
+    }
+
+    /* =============================================
+       TRY AT HOME + TROUBLESHOOTING
+    ============================================= */
+    .lemon-box {
+      background: #f9fbe7;
+      border: 2px solid #c5e1a5;
+      border-radius: 10px;
+      padding: 0.09in 0.11in;
+    }
+
+    .lemon-title {
+      font-size: 12px;
+      font-weight: 900;
+      color: #33691e;
+      margin-bottom: 5px;
+    }
+
+    .lemon-body {
+      font-size: 10.5px;
+      color: #333;
+      line-height: 1.5;
+    }
+
+    .trouble-box {
+      background: #fafafa;
+      border: 2px solid #bdbdbd;
+      border-radius: 10px;
+      padding: 0.09in 0.11in;
+    }
+
+    .trouble-title {
+      font-size: 12px;
+      font-weight: 900;
+      color: #37474f;
+      margin-bottom: 5px;
+    }
+
+    .trouble-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9.5px;
+    }
+
+    .trouble-table thead th {
+      background: #37474f;
+      color: #fff;
+      padding: 3px 6px;
+      text-align: left;
+      font-weight: 700;
+    }
+
+    .trouble-table tbody tr:nth-child(even) {
+      background: #f5f5f5;
+    }
+
+    .trouble-table tbody td {
+      padding: 3px 6px;
+      color: #333;
+      border-bottom: 1px solid #e0e0e0;
+      vertical-align: top;
+    }
+
+    /* =============================================
+       COMING UP NEXT
+    ============================================= */
+    .next-box {
+      background: linear-gradient(90deg, #e3f2fd 0%, #f3e5f5 100%);
+      border-left: 5px solid #7c4dff;
+      border-radius: 0 10px 10px 0;
+      padding: 0.08in 0.14in;
+      font-size: 11.5px;
+      color: #1a1a2e;
+    }
+
+    .next-box strong { color: #6a1b9a; }
+
+    /* =============================================
+       SIDE B HEADER
+    ============================================= */
+    .side-b-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 3px solid #f4c430;
+      margin-bottom: 0.15in;
+      padding-bottom: 0.09in;
+    }
+
+    .side-b-title {
+      font-size: 14px;
+      font-weight: 900;
+      color: #0f3460;
+    }
+
+    .side-b-sub {
+      font-size: 10px;
+      color: #888;
+      margin-top: 1px;
+    }
+
+    .side-b-xp {
+      background: #f4c430;
+      color: #1a1a2e;
+      font-weight: 900;
+      font-size: 11px;
+      padding: 3px 12px;
+      border-radius: 20px;
+    }
+
+    /* =============================================
+       PRINT STYLES
+    ============================================= */
+    @media print {
+      body {
+        background: #fff;
+        font-size: 12px;
+      }
+
+      .page {
+        width: 100%;
+        min-height: auto;
+        margin: 0;
+        box-shadow: none;
+        padding: 0.5in;
+      }
+
+      .page-a {
+        page-break-after: always;
+      }
+
+      .header {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .vocab-card,
+      .analogy-box,
+      .acdc-card,
+      .circuit-box,
+      .quiz-box,
+      .next-box,
+      .pir-diagram,
+      .circuit-diagram,
+      .code-box,
+      .experiment-card,
+      .lemon-box,
+      .trouble-box,
+      .trouble-table thead th {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .vocab-card.voltage  { background: #fff !important; border: 2px solid #ff9800; border-top: 5px solid #ff9800; }
+      .vocab-card.current  { background: #fff !important; border: 2px solid #2196f3; border-top: 5px solid #2196f3; }
+      .vocab-card.resist   { background: #fff !important; border: 2px solid #e91e63; border-top: 5px solid #e91e63; }
+      .vocab-card.circuit  { background: #fff !important; border: 2px solid #43a047; border-top: 5px solid #43a047; }
+    }
+
+    @page {
+      size: A4;
+      margin: 12mm;
+    }
+
+    .clearfix::after {
+      content: '';
+      display: table;
+      clear: both;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ======================================================
+       SIDE A (FRONT)
+  ====================================================== -->
+  <div class="page page-a">
+    <div class="page-label">Side A &#8212; Front</div>
+
+    <!-- HEADER -->
+    <div class="header">
+      <div class="header-course">&#9889; Circuit Explorer Academy</div>
+      <div class="header-lesson">Lesson 41: PIR Motion Sensor &#8212; Your Arduino&#39;s Security Guard</div>
+      <div class="header-module">Module 5: Sensors and Actuators</div>
+      <div><span class="header-xp">&#11088; 275 XP Available</span></div>
+    </div>
+
+    <div class="spark-row" aria-hidden="true">&#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889;</div>
+
+    <!-- VOCABULARY -->
+    <div class="section-title">
+      <span class="icon">&#128218;</span> Key Words &#8212; Learn These!
+    </div>
+
+    <div class="vocab-grid">
+
+      <div class="vocab-card voltage">
+        <span class="vocab-emoji">&#128065;</span>
+        <span class="vocab-symbol">PIR</span>
+        <div class="vocab-term">PIR (Passive Infrared)</div>
+        <div class="vocab-def">Detects <strong>infrared heat</strong> from warm bodies. &#8220;Passive&#8221; means it never sends anything out &#8212; it only <strong>watches and receives</strong>.</div>
+      </div>
+
+      <div class="vocab-card current">
+        <span class="vocab-emoji">&#127775;</span>
+        <span class="vocab-symbol">IR</span>
+        <div class="vocab-term">Fresnel Lens</div>
+        <div class="vocab-def">The <strong>white plastic dome</strong> on top of the PIR. Splits its view into many zones &#8212; motion triggers when a warm body crosses from one zone to another.</div>
+      </div>
+
+      <div class="vocab-card resist">
+        <span class="vocab-emoji">&#128276;</span>
+        <span class="vocab-symbol">HIGH</span>
+        <div class="vocab-term">Output Pin (HIGH/LOW)</div>
+        <div class="vocab-def">Goes <strong>HIGH (~3.3V)</strong> when motion is detected, <strong>LOW (0V)</strong> when nothing moves. A clean digital signal &#8212; no in-between!</div>
+      </div>
+
+      <div class="vocab-card circuit">
+        <span class="vocab-emoji">&#9201;</span>
+        <span class="vocab-symbol">ms</span>
+        <div class="vocab-term">Time Delay (millis)</div>
+        <div class="vocab-def">How long the light <strong>stays on</strong> after detecting motion. Adjusted by a tiny pot on the HC-SR501 module &#8212; from 3 seconds up to 5 minutes!</div>
+      </div>
+
+    </div>
+
+    <!-- PIR MODULE DIAGRAM -->
+    <div class="section-title">
+      <span class="icon">&#128269;</span> How the HC-SR501 PIR Module Works
+    </div>
+
+    <div class="analogy-box">
+      <div class="pir-diagram">  HC-SR501 PIR SENSOR &#8212; BOTTOM VIEW          DETECTION ZONES (top view)
+  +&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;+      Fresnel Lens splits view:
+  |                               |      +&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;+
+  |  [Sensitivity]  [Time Delay]  |      | Z1 | Z2 | Z3 | Z4 |
+  |   left pot       right pot    |      +&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;+
+  |   3m &#8212; 7m      3s &#8212; 300s  |       Warm body crosses Z2&#8594;Z3?
+  |                               |       =&gt; MOTION DETECTED! HIGH!
+  |   VCC     OUT     GND         |
+  |    |       |       |          |      Still in same zone?
+  +&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;+       =&gt; No trigger. LOW.
+       |       |       |
+      5V    pin 7    GND  &#8592;&#8212; connect to Arduino</div>
+      <div class="analogy-caption">The Fresnel lens is like a spy-movie laser grid &#8212; cross from one zone to another and the alarm fires!</div>
+    </div>
+
+    <!-- WIRING + BASIC CODE -->
+    <div class="section-title">
+      <span class="icon">&#9881;</span> Wire It Up + Your First Motion Detection Code
+    </div>
+
+    <div class="acdc-grid">
+
+      <div class="acdc-card dc">
+        <div class="acdc-title">&#128268; 3-Wire Connection</div>
+        <div class="acdc-wave">PIR Sensor    Arduino
+&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;    &#8212;&#8212;&#8212;&#8212;&#8212;&#8212;
+VCC  &#8212;&#8212;&#8212;&#8212;&#8212;&gt;  5V
+OUT  &#8212;&#8212;&#8212;&#8212;&#8212;&gt;  Pin 7
+GND  &#8212;&#8212;&#8212;&#8212;&#8212;&gt;  GND</div>
+        <div class="acdc-fact">Just <strong>3 wires</strong> &#8212; one of the simplest sensors to connect!<br/>
+          <strong>Important:</strong> After powering on, stay very still for <strong>30&#8211;60 seconds</strong> while the PIR calibrates its baseline infrared level. Then it is ready!
+        </div>
+      </div>
+
+      <div class="acdc-card ac">
+        <div class="acdc-title">&#128161; Smart Night Light Logic</div>
+        <div class="acdc-wave">PIR detects motion?   YES
+LDR reads dark?       YES
+&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;
+BOTH true? &#8594; LED ON!
+Only one true? &#8594; LED OFF</div>
+        <div class="acdc-fact">Combine the PIR with an <strong>LDR (light sensor)</strong> so the light only activates when there is motion <strong>AND</strong> it is dark. This is how real smart homes save electricity!
+        </div>
+      </div>
+
+    </div>
+
+    <!-- BASIC CODE SNIPPET -->
+    <div class="pir-diagram" style="font-size:9px; margin-top: 0; margin-bottom: 0;">int pirPin = 7;   int ledPin = 13;                   <span style="color:#546e7a;">// PIR on pin 7, LED on pin 13</span>
+
+void setup() {
+  pinMode(pirPin, INPUT);   pinMode(ledPin, OUTPUT);
+  Serial.begin(9600);
+  Serial.println("Warming up 30 sec &#8212; stay still!");
+  delay(30000);             Serial.println("PIR READY!");   <span style="color:#546e7a;">// 30s calibration</span>
+}
+void loop() {
+  int motion = digitalRead(pirPin);                        <span style="color:#546e7a;">// Read PIR: HIGH or LOW</span>
+  if (motion == HIGH) { digitalWrite(ledPin, HIGH);   Serial.println("*** MOTION! ***"); }
+  else                { digitalWrite(ledPin, LOW);    Serial.println("All clear..."); }
+  delay(200);
+}</div>
+
+  </div><!-- end page-a -->
+
+
+  <!-- ======================================================
+       SIDE B (BACK)
+  ====================================================== -->
+  <div class="page page-b">
+    <div class="page-label">Side B &#8212; Back</div>
+
+    <!-- SIDE B MINI HEADER -->
+    <div class="side-b-header">
+      <div>
+        <div class="side-b-title">&#9889; Circuit Explorer Academy &#8212; Lesson 41</div>
+        <div class="side-b-sub">PIR Motion Sensor &#8212; Your Arduino&#39;s Security Guard &nbsp;|&nbsp; Module 5: Sensors and Actuators</div>
+      </div>
+      <div class="side-b-xp">&#11088; 275 XP</div>
+    </div>
+
+    <!-- ACTIVITY + WIRING STEPS -->
+    <div class="section-title">
+      <span class="icon">&#128161;</span> My Activity Today &#8212; Build the Security Light System!
+    </div>
+
+    <div class="circuit-box">
+
+      <div class="circuit-diagram">WIRING STEPS:
+1. PIR VCC  &#8594; Arduino 5V      (red wire)
+2. PIR GND  &#8594; Arduino GND     (black wire)
+3. PIR OUT  &#8594; Arduino Pin 7   (yellow wire)
+4. LED (+)  &#8594; 330&#937; resistor &#8594; Arduino Pin 9
+5. LED (-)  &#8594; Arduino GND
+6. Buzzer + &#8594; Arduino Pin 8   (optional alarm!)
+7. Power on &#8594; stay still 30 sec for calibration
+8. Wave your hand &#8594; LED lights up + "MOTION!" in Serial Monitor
+
+SECURITY LIGHT TIMER: change lightDuration = 10000 to adjust (ms)
+ALARM MODE:           set alarmMode = true  for buzzer alert</div>
+
+      <div class="circuit-note">The PIR needs 30&#8211;60 seconds to &#8220;learn&#8221; the room&#39;s baseline heat before it can detect changes &#8212; like your eyes adjusting to the dark!</div>
+
+      <div class="checklist-title">&#9989; Components I Used:</div>
+      <ul class="checklist">
+        <li><span class="check-box"></span>Arduino Uno</li>
+        <li><span class="check-box"></span>HC-SR501 PIR</li>
+        <li><span class="check-box"></span>2 LEDs</li>
+        <li><span class="check-box"></span>2 x 330&#937; resistors</li>
+        <li><span class="check-box"></span>Active buzzer</li>
+        <li><span class="check-box"></span>LDR + 10k&#937;</li>
+        <li><span class="check-box"></span>Breadboard</li>
+        <li><span class="check-box"></span>Jumper wires</li>
+        <li><span class="check-box"></span>Multimeter (Wand)</li>
+      </ul>
+
+    </div>
+
+    <!-- QUIZ -->
+    <div class="section-title">
+      <span class="icon">&#129504;</span> Quiz Time! Fill in the blanks.
+    </div>
+
+    <div class="quiz-box">
+
+      <div class="quiz-item">
+        <div class="quiz-q">1. PIR stands for &#8220;Passive ________________&#8221; &#8212; it detects heat from warm objects without sending anything out.</div>
+        <span class="quiz-hint">hint: &#8220;Infrared&#8221;</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item">
+        <div class="quiz-q">2. The PIR output pin goes ________________ (~3.3V) when it detects motion, and LOW (0V) when nothing moves.</div>
+        <span class="quiz-hint">hint: &#8220;HIGH&#8221;</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item">
+        <div class="quiz-q">3. The PIR needs a ________________-second warm-up so it can learn the baseline infrared level of the room first.</div>
+        <span class="quiz-hint">hint: &#8220;30&#8221;</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item bonus" style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed #f9a825;">
+        <div class="quiz-q">&#127381; BONUS: In the smart night light, the LED only turns on when TWO things are true: motion is detected AND it is ________________.</div>
+        <span class="quiz-hint">hint: &#8220;dark&#8221; (LDR reads below darkThreshold)</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+    </div>
+
+    <!-- EXPERIMENTS -->
+    <div class="section-title">
+      <span class="icon">&#128300;</span> 4 Experiments You Did Today!
+    </div>
+
+    <div class="experiments-grid">
+
+      <div class="experiment-card exp-a">
+        <div class="exp-letter">A</div>
+        <div class="exp-body">
+          <div class="exp-title">Walk Across the Room</div>
+          <div class="exp-do">Walk slowly across the room at different distances from the sensor.</div>
+          <div class="exp-discover">The PIR has a range of 3&#8211;7m &#8212; adjust the sensitivity pot to change how far it can see!</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-b">
+        <div class="exp-letter">B</div>
+        <div class="exp-body">
+          <div class="exp-title">Hot Cup Test</div>
+          <div class="exp-do">Place a warm cup of water in front of the sensor. Then move it slowly past.</div>
+          <div class="exp-discover">The PIR detects <strong>any warm object</strong> &#8212; not just people. Movement is what triggers it, not just heat!</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-c">
+        <div class="exp-letter">C</div>
+        <div class="exp-body">
+          <div class="exp-title">Wand Check &#8212; HIGH vs LOW</div>
+          <div class="exp-do">Set Wand to DC Volts. Red probe to PIR OUT (pin 7), black to GND. Wave hand, then freeze.</div>
+          <div class="exp-discover">Voltage snaps from <strong>0V to 3.3V</strong> instantly &#8212; a clean digital signal unlike analog sensors!</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-d">
+        <div class="exp-letter">D</div>
+        <div class="exp-body">
+          <div class="exp-title">Smart Night Light</div>
+          <div class="exp-do">Add the LDR. Cover the LDR with your hand (simulating dark) then wave in front of the PIR.</div>
+          <div class="exp-discover">LED only fires when BOTH conditions are met &#8212; this is real smart-home logic at work!</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TRY AT HOME + TROUBLESHOOTING -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.1in; margin-bottom: 0.12in;">
+
+      <div class="lemon-box">
+        <div class="lemon-title">&#127968; Try at Home: Haunted Hallway!</div>
+        <div class="lemon-body">
+          Mount your PIR sensor at the entrance to your bedroom doorway.<br/><br/>
+          When someone walks in, the light (or buzzer) activates automatically!<br/><br/>
+          <em>Try setting <strong>alarmMode = true</strong> for a buzzer surprise &#8212; can you sneak past your own security system?</em><br/><br/>
+          In <strong>Lesson 42</strong> you will combine the PIR with temperature, distance, and motor control for a full Smart Room!
+        </div>
+      </div>
+
+      <div class="trouble-box">
+        <div class="trouble-title">&#128295; Troubleshooting Quick Guide</div>
+        <table class="trouble-table">
+          <thead>
+            <tr><th>Problem</th><th>Quick Fix</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>False triggers randomly</td><td>Wait full 60s warm-up; keep away from heaters and air vents</td></tr>
+            <tr><td>No detection at all</td><td>Check wiring; confirm Fresnel dome is on top; turn sensitivity pot up</td></tr>
+            <tr><td>LED stays on forever</td><td>Time delay pot is at max &#8212; turn counter-clockwise for shorter delay</td></tr>
+            <tr><td>Night light never fires</td><td>Print lightLevel to Serial Monitor and adjust darkThreshold</td></tr>
+            <tr><td>Wand reads 5V not 3.3V</td><td>Some modules output 5V &#8212; both values read as HIGH on Arduino</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- COMING UP NEXT -->
+    <div class="next-box">
+      <strong>Coming Up Next &#8594; Lesson 42: Module 5 Grand Finale &#8212; The Smart Room System! &#127968;</strong><br/>
+      You will combine EVERYTHING from this module &#8212; temperature monitoring, automatic lights, PIR motion detection, distance sensing, and motor control &#8212; all working together in one epic project. The biggest build yet!
+    </div>
+
+  </div><!-- end page-b -->
+
+</body>
+</html>

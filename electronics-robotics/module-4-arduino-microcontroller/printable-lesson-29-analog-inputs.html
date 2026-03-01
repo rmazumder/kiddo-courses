@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 29: Analog Inputs — Circuit Explorer Academy</title>
+  <style>
+    /* =============================================
+       BASE RESET & TYPOGRAPHY
+    ============================================= */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, Arial, sans-serif;
+      font-size: 13px;
+      line-height: 1.45;
+      color: #1a1a2e;
+      background: #f0f4ff;
+    }
+
+    /* =============================================
+       PAGE LAYOUT
+    ============================================= */
+    .page {
+      width: 8.5in;
+      min-height: 11in;
+      margin: 0 auto 0.4in auto;
+      padding: 0.5in;
+      background: #fff;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-label {
+      position: absolute;
+      top: 0.18in;
+      right: 0.22in;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #aaa;
+    }
+
+    /* =============================================
+       SIDE A — HEADER
+    ============================================= */
+    .header {
+      text-align: center;
+      border-bottom: 3px solid #f4c430;
+      margin-bottom: 0.16in;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+      border-radius: 10px;
+      color: #fff;
+      padding: 0.22in 0.2in 0.18in 0.2in;
+    }
+
+    .header-course {
+      font-size: 19px;
+      font-weight: 900;
+      letter-spacing: 0.03em;
+      color: #f4c430;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+
+    .header-lesson {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      margin-top: 4px;
+    }
+
+    .header-module {
+      font-size: 11px;
+      color: #a8d8ea;
+      margin-top: 3px;
+      letter-spacing: 0.04em;
+    }
+
+    .header-xp {
+      display: inline-block;
+      margin-top: 8px;
+      background: #f4c430;
+      color: #1a1a2e;
+      font-weight: 900;
+      font-size: 12px;
+      padding: 3px 14px;
+      border-radius: 20px;
+      letter-spacing: 0.06em;
+    }
+
+    .spark-row {
+      text-align: center;
+      font-size: 16px;
+      letter-spacing: 0.25em;
+      margin: 0.1in 0 0.04in 0;
+      color: #f4c430;
+    }
+
+    /* =============================================
+       SECTION HEADINGS
+    ============================================= */
+    .section-title {
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #fff;
+      background: #0f3460;
+      padding: 5px 12px;
+      border-radius: 6px;
+      margin-bottom: 0.1in;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .section-title .icon {
+      font-size: 14px;
+    }
+
+    /* =============================================
+       VOCABULARY CARDS  (2x2 grid)
+    ============================================= */
+    .vocab-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.1in;
+      margin-bottom: 0.14in;
+    }
+
+    .vocab-card {
+      border-radius: 10px;
+      padding: 0.1in 0.12in;
+      border-top: 5px solid transparent;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .vocab-card::before {
+      content: '';
+      position: absolute;
+      top: -18px;
+      right: -18px;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      opacity: 0.13;
+      background: #fff;
+    }
+
+    .vocab-card.voltage  { background: #fff3e0; border-top-color: #ff9800; }
+    .vocab-card.current  { background: #e3f2fd; border-top-color: #2196f3; }
+    .vocab-card.resist   { background: #fce4ec; border-top-color: #e91e63; }
+    .vocab-card.circuit  { background: #e8f5e9; border-top-color: #43a047; }
+
+    .vocab-term {
+      font-size: 13px;
+      font-weight: 900;
+      margin-bottom: 2px;
+    }
+
+    .vocab-card.voltage  .vocab-term { color: #e65100; }
+    .vocab-card.current  .vocab-term { color: #0d47a1; }
+    .vocab-card.resist   .vocab-term { color: #880e4f; }
+    .vocab-card.circuit  .vocab-term { color: #1b5e20; }
+
+    .vocab-symbol {
+      font-size: 18px;
+      font-weight: 900;
+      float: right;
+      margin-top: -2px;
+      opacity: 0.55;
+    }
+
+    .vocab-def {
+      font-size: 11.5px;
+      color: #333;
+      line-height: 1.4;
+      margin-top: 2px;
+    }
+
+    .vocab-emoji {
+      font-size: 20px;
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    /* =============================================
+       CONCEPT BOXES (analogy-box style)
+    ============================================= */
+    .analogy-box {
+      background: #e8f4fd;
+      border: 2px solid #90caf9;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.14in;
+    }
+
+    .analogy-caption {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: #0d47a1;
+      margin-top: 4px;
+    }
+
+    /* =============================================
+       DIGITAL vs ANALOG COMPARISON
+    ============================================= */
+    .digana-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.1in;
+      margin-bottom: 0.06in;
+    }
+
+    .digana-card {
+      border-radius: 10px;
+      padding: 0.1in 0.12in;
+      border-top: 5px solid transparent;
+    }
+
+    .digana-card.digital {
+      background: #fff8e1;
+      border-top-color: #ffc107;
+    }
+
+    .digana-card.analog {
+      background: #f3e5f5;
+      border-top-color: #9c27b0;
+    }
+
+    .digana-title {
+      font-size: 13px;
+      font-weight: 900;
+      margin-bottom: 4px;
+    }
+
+    .digana-card.digital .digana-title { color: #ff6f00; }
+    .digana-card.analog  .digana-title { color: #6a1b9a; }
+
+    .digana-wave {
+      font-family: monospace;
+      font-size: 9.5px;
+      line-height: 1.3;
+      padding: 4px 6px;
+      border-radius: 5px;
+      margin: 5px 0;
+      white-space: pre;
+    }
+
+    .digana-card.digital .digana-wave {
+      background: #fffde7;
+      color: #f57f17;
+    }
+
+    .digana-card.analog .digana-wave {
+      background: #f3e5f5;
+      color: #6a1b9a;
+    }
+
+    .digana-fact {
+      font-size: 10.5px;
+      color: #444;
+      line-height: 1.4;
+    }
+
+    .digana-fact strong {
+      color: #333;
+    }
+
+    .digana-tag {
+      font-size: 10px;
+      margin-top: 4px;
+      padding: 3px 7px;
+      border-radius: 12px;
+      display: inline-block;
+      font-weight: 700;
+    }
+
+    .digana-card.digital .digana-tag { background: #ffc107; color: #4a2c00; }
+    .digana-card.analog  .digana-tag { background: #9c27b0; color: #fff; }
+
+    /* =============================================
+       SIDE B — CIRCUIT BUILD BOX
+    ============================================= */
+    .circuit-box {
+      background: #f1f8e9;
+      border: 2px solid #aed581;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.13in;
+    }
+
+    .circuit-diagram {
+      font-family: monospace;
+      font-size: 10px;
+      background: #1a1a2e;
+      color: #76ff03;
+      padding: 0.1in;
+      border-radius: 8px;
+      margin: 0.07in 0;
+      line-height: 1.6;
+      white-space: pre;
+      overflow: visible;
+    }
+
+    .circuit-note {
+      font-size: 11px;
+      color: #33691e;
+      font-style: italic;
+      margin-top: 5px;
+      padding: 4px 8px;
+      background: #dcedc8;
+      border-radius: 5px;
+    }
+
+    .wiring-steps {
+      list-style: none;
+      margin: 7px 0 6px 0;
+    }
+
+    .wiring-steps li {
+      font-size: 11px;
+      color: #1a2e1a;
+      margin-bottom: 3px;
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+    }
+
+    .wiring-steps li .step-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      background: #43a047;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 900;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .checklist-title {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #2e7d32;
+      margin-top: 8px;
+      margin-bottom: 4px;
+    }
+
+    .checklist {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 3px 10px;
+      list-style: none;
+    }
+
+    .checklist li {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: #333;
+    }
+
+    .check-box {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid #43a047;
+      border-radius: 3px;
+      flex-shrink: 0;
+      background: #fff;
+    }
+
+    /* =============================================
+       CODE SNIPPET BLOCK
+    ============================================= */
+    .code-block {
+      font-family: monospace;
+      font-size: 9.5px;
+      background: #1a1a2e;
+      color: #80cbc4;
+      padding: 0.09in 0.12in;
+      border-radius: 8px;
+      margin: 0.07in 0;
+      line-height: 1.65;
+      white-space: pre;
+      overflow: visible;
+    }
+
+    .code-block .c-comment { color: #546e7a; }
+    .code-block .c-keyword { color: #f48fb1; }
+    .code-block .c-fn      { color: #80cbc4; }
+    .code-block .c-num     { color: #f4c430; }
+    .code-block .c-string  { color: #a5d6a7; }
+
+    .code-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: #0f3460;
+      background: #dce8ff;
+      padding: 2px 8px;
+      border-radius: 4px 4px 0 0;
+      display: inline-block;
+      margin-bottom: -1px;
+    }
+
+    /* =============================================
+       QUIZ
+    ============================================= */
+    .quiz-box {
+      background: #fff9c4;
+      border: 2px solid #f9a825;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.13in;
+    }
+
+    .quiz-item {
+      margin-bottom: 0.08in;
+    }
+
+    .quiz-q {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 2px;
+    }
+
+    .quiz-blank {
+      display: block;
+      border-bottom: 1.5px solid #999;
+      width: 100%;
+      height: 20px;
+      margin-top: 2px;
+    }
+
+    .quiz-hint {
+      font-size: 9px;
+      color: #aaa;
+      font-style: italic;
+      float: right;
+      margin-top: 1px;
+    }
+
+    .quiz-item.bonus .quiz-q {
+      color: #e65100;
+    }
+
+    .quiz-item.bonus .quiz-blank {
+      border-bottom-color: #ff9800;
+    }
+
+    /* =============================================
+       EXPERIMENTS GRID
+    ============================================= */
+    .experiments-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.08in;
+      margin-bottom: 0.12in;
+    }
+
+    .experiment-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      border-radius: 8px;
+      padding: 0.08in 0.1in;
+      border-left: 5px solid transparent;
+    }
+
+    .experiment-card.exp-a { background: #fff3e0; border-left-color: #ff9800; }
+    .experiment-card.exp-b { background: #e3f2fd; border-left-color: #2196f3; }
+    .experiment-card.exp-c { background: #fce4ec; border-left-color: #e91e63; }
+    .experiment-card.exp-d { background: #e8f5e9; border-left-color: #43a047; }
+
+    .exp-letter {
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1;
+      flex-shrink: 0;
+      width: 24px;
+      text-align: center;
+    }
+
+    .experiment-card.exp-a .exp-letter { color: #e65100; }
+    .experiment-card.exp-b .exp-letter { color: #0d47a1; }
+    .experiment-card.exp-c .exp-letter { color: #880e4f; }
+    .experiment-card.exp-d .exp-letter { color: #1b5e20; }
+
+    .exp-body { flex: 1; }
+
+    .exp-title {
+      font-size: 11.5px;
+      font-weight: 900;
+      margin-bottom: 2px;
+      color: #1a1a2e;
+    }
+
+    .exp-do {
+      font-size: 10.5px;
+      color: #444;
+      margin-bottom: 3px;
+    }
+
+    .exp-do::before {
+      content: "▶ Do: ";
+      font-weight: 700;
+      color: #555;
+    }
+
+    .exp-discover {
+      font-size: 10.5px;
+      color: #333;
+      font-style: italic;
+    }
+
+    /* =============================================
+       TRY AT HOME + TROUBLESHOOTING
+    ============================================= */
+    .lemon-box {
+      background: #f9fbe7;
+      border: 2px solid #c5e1a5;
+      border-radius: 10px;
+      padding: 0.09in 0.11in;
+    }
+
+    .lemon-title {
+      font-size: 12px;
+      font-weight: 900;
+      color: #33691e;
+      margin-bottom: 5px;
+    }
+
+    .lemon-body {
+      font-size: 10.5px;
+      color: #333;
+      line-height: 1.5;
+    }
+
+    .trouble-box {
+      background: #fafafa;
+      border: 2px solid #bdbdbd;
+      border-radius: 10px;
+      padding: 0.09in 0.11in;
+    }
+
+    .trouble-title {
+      font-size: 12px;
+      font-weight: 900;
+      color: #37474f;
+      margin-bottom: 5px;
+    }
+
+    .trouble-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9.5px;
+    }
+
+    .trouble-table thead th {
+      background: #37474f;
+      color: #fff;
+      padding: 3px 6px;
+      text-align: left;
+      font-weight: 700;
+    }
+
+    .trouble-table tbody tr:nth-child(even) {
+      background: #f5f5f5;
+    }
+
+    .trouble-table tbody td {
+      padding: 3px 6px;
+      color: #333;
+      border-bottom: 1px solid #e0e0e0;
+      vertical-align: top;
+    }
+
+    /* =============================================
+       COMING UP NEXT
+    ============================================= */
+    .next-box {
+      background: linear-gradient(90deg, #e3f2fd 0%, #f3e5f5 100%);
+      border-left: 5px solid #7c4dff;
+      border-radius: 0 10px 10px 0;
+      padding: 0.08in 0.14in;
+      font-size: 11.5px;
+      color: #1a1a2e;
+    }
+
+    .next-box strong {
+      color: #6a1b9a;
+    }
+
+    /* =============================================
+       SIDE B HEADER
+    ============================================= */
+    .side-b-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 3px solid #f4c430;
+      margin-bottom: 0.15in;
+      padding-bottom: 0.09in;
+    }
+
+    .side-b-title {
+      font-size: 14px;
+      font-weight: 900;
+      color: #0f3460;
+    }
+
+    .side-b-sub {
+      font-size: 10px;
+      color: #888;
+      margin-top: 1px;
+    }
+
+    .side-b-xp {
+      background: #f4c430;
+      color: #1a1a2e;
+      font-weight: 900;
+      font-size: 11px;
+      padding: 3px 12px;
+      border-radius: 20px;
+    }
+
+    /* =============================================
+       SERIAL MONITOR DISPLAY
+    ============================================= */
+    .serial-monitor {
+      font-family: monospace;
+      font-size: 10px;
+      background: #0d0d1a;
+      color: #00e5ff;
+      padding: 0.08in 0.12in;
+      border-radius: 8px;
+      margin: 0.06in 0;
+      line-height: 1.7;
+      white-space: pre;
+      border: 2px solid #1e3a5f;
+    }
+
+    .serial-monitor .sm-header {
+      color: #f4c430;
+      font-weight: 700;
+    }
+
+    .serial-monitor .sm-dim  { color: #546e7a; }
+    .serial-monitor .sm-mid  { color: #80cbc4; }
+    .serial-monitor .sm-high { color: #76ff03; }
+
+    /* =============================================
+       FORMULA BOX
+    ============================================= */
+    .formula-box {
+      background: #e8eaf6;
+      border: 2px solid #7986cb;
+      border-radius: 8px;
+      padding: 0.07in 0.12in;
+      margin: 0.06in 0;
+      text-align: center;
+    }
+
+    .formula-text {
+      font-family: monospace;
+      font-size: 13px;
+      font-weight: 900;
+      color: #1a1a2e;
+      letter-spacing: 0.04em;
+    }
+
+    .formula-sub {
+      font-size: 10px;
+      color: #555;
+      margin-top: 3px;
+    }
+
+    /* =============================================
+       PRINT STYLES
+    ============================================= */
+    @media print {
+      body {
+        background: #fff;
+        font-size: 12px;
+      }
+
+      .page {
+        width: 100%;
+        min-height: auto;
+        margin: 0;
+        box-shadow: none;
+        padding: 0.5in;
+      }
+
+      .page-a {
+        page-break-after: always;
+      }
+
+      .header {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .vocab-card,
+      .digana-card,
+      .circuit-box,
+      .circuit-diagram,
+      .code-block,
+      .serial-monitor,
+      .quiz-box,
+      .next-box,
+      .analogy-box,
+      .formula-box {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .vocab-card.voltage  { background: #fff !important; border: 2px solid #ff9800; border-top: 5px solid #ff9800; }
+      .vocab-card.current  { background: #fff !important; border: 2px solid #2196f3; border-top: 5px solid #2196f3; }
+      .vocab-card.resist   { background: #fff !important; border: 2px solid #e91e63; border-top: 5px solid #e91e63; }
+      .vocab-card.circuit  { background: #fff !important; border: 2px solid #43a047; border-top: 5px solid #43a047; }
+
+      .experiment-card,
+      .lemon-box,
+      .trouble-box,
+      .trouble-table thead th {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+
+    @page {
+      size: A4;
+      margin: 12mm;
+    }
+
+    .clearfix::after {
+      content: '';
+      display: table;
+      clear: both;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ======================================================
+       SIDE A (FRONT)
+  ====================================================== -->
+  <div class="page page-a">
+    <div class="page-label">Side A &mdash; Front</div>
+
+    <!-- HEADER -->
+    <div class="header">
+      <div class="header-course">&#9889; Circuit Explorer Academy</div>
+      <div class="header-lesson">Lesson 29: Analog Inputs &mdash; Reading the In-Between</div>
+      <div class="header-module">Module 4: Arduino Microcontroller</div>
+      <div><span class="header-xp">&#11088; 250 XP Available</span></div>
+    </div>
+
+    <div class="spark-row" aria-hidden="true">&#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889;</div>
+
+    <!-- VOCABULARY -->
+    <div class="section-title">
+      <span class="icon">&#128218;</span> Key Words &mdash; Learn These!
+    </div>
+
+    <div class="vocab-grid">
+
+      <div class="vocab-card voltage">
+        <span class="vocab-emoji">&#127908;</span>
+        <span class="vocab-symbol">~</span>
+        <div class="vocab-term">Analog Signal</div>
+        <div class="vocab-def">A signal that can be <strong>any value</strong> in between, not just ON or OFF. Like a volume knob &mdash; it has a thousand levels!</div>
+      </div>
+
+      <div class="vocab-card current">
+        <span class="vocab-emoji">&#128267;</span>
+        <span class="vocab-symbol">01</span>
+        <div class="vocab-term">Digital Signal</div>
+        <div class="vocab-def">A signal that is only <strong>HIGH (1) or LOW (0)</strong> &mdash; nothing in between. Like a regular light switch: fully on or fully off.</div>
+      </div>
+
+      <div class="vocab-card resist">
+        <span class="vocab-emoji">&#128260;</span>
+        <span class="vocab-symbol">A0</span>
+        <div class="vocab-term">analogRead()</div>
+        <div class="vocab-def">The Arduino command that reads an analog pin. Returns a number from <strong>0 to 1023</strong> representing 0V to 5V.</div>
+      </div>
+
+      <div class="vocab-card circuit">
+        <span class="vocab-emoji">&#128259;</span>
+        <span class="vocab-symbol">&#128481;</span>
+        <div class="vocab-term">Potentiometer</div>
+        <div class="vocab-def">A <strong>variable resistor</strong> with a twisty knob and 3 legs. The middle leg gives any voltage between 0V and 5V as you turn it.</div>
+      </div>
+
+    </div>
+
+    <!-- DIGITAL vs ANALOG -->
+    <div class="section-title">
+      <span class="icon">&#9889;</span> Digital vs Analog &mdash; Two Different Worlds!
+    </div>
+
+    <div class="digana-grid">
+
+      <div class="digana-card digital">
+        <div class="digana-title">&#9646; Digital Signal</div>
+        <div class="digana-wave">Voltage
+|  ___     ___     ___
+|     |   |   |   |
+|     |___|   |___|   Time
+| Only HIGH or LOW!</div>
+        <div class="digana-fact">Only <strong>2 values</strong>: HIGH (5V) or LOW (0V). Like a light switch &mdash; fully on or fully off.<br/>
+          <strong>Used with:</strong> digitalRead(), digitalWrite().<br/>
+          Arduino pins 0&ndash;13 are digital.
+        </div>
+        <div class="digana-tag">&#9632; Just 2 levels</div>
+      </div>
+
+      <div class="digana-card analog">
+        <div class="digana-title">&#126; Analog Signal</div>
+        <div class="digana-wave">Voltage
+|        *
+|      *   *
+|    *       *
+|  *           *   Time
+| 1024 in-between levels!</div>
+        <div class="digana-fact"><strong>1024 values</strong>: anywhere from 0 to 1023. Like a dimmer switch &mdash; every tiny step in between!<br/>
+          <strong>Used with:</strong> analogRead().<br/>
+          Arduino pins A0&ndash;A5 are analog.
+        </div>
+        <div class="digana-tag">&#126; 1024 levels</div>
+      </div>
+
+    </div>
+
+    <!-- POTENTIOMETER DIAGRAM -->
+    <div class="section-title">
+      <span class="icon">&#128300;</span> The Potentiometer &mdash; Your Analog Knob!
+    </div>
+
+    <div class="analogy-box">
+      <div class="circuit-diagram">  Arduino Uno               Breadboard
+  +-----------+
+  |  5V  (red)|---[wire]------> Left Leg  (power)
+  |           |
+  |  A0 (yel) |---[wire]------> Middle Leg (wiper) -- gives 0V to 5V
+  |           |
+  |  GND (blk)|---[wire]------> Right Leg (ground)
+  +-----------+
+
+        Potentiometer (top view):
+        +------------------+
+        |   ( knob here )  |
+        |    twist me!     |
+        +----+------+------+
+             |      |      |
+           Left   Middle  Right
+            5V     A0      GND
+         (power) (signal) (ground)
+
+   Knob all left  = 0V  (reads ~0)
+   Knob halfway   = 2.5V (reads ~512)
+   Knob all right = 5V  (reads ~1023)</div>
+      <div class="analogy-caption">The middle leg is the magic one &mdash; it slides between 0V and 5V as you twist the knob!</div>
+    </div>
+
+    <!-- CODE SNIPPET -->
+    <div class="section-title">
+      <span class="icon">&#128187;</span> The Code &mdash; Reading Analog Values
+    </div>
+
+    <div class="analogy-box">
+      <div class="code-label">Arduino sketch &mdash; analogRead()</div>
+<div class="code-block"><span class="c-comment">// Lesson 29: Read a potentiometer on pin A0</span>
+
+<span class="c-keyword">void</span> <span class="c-fn">setup</span>() {
+  Serial.<span class="c-fn">begin</span>(<span class="c-num">9600</span>);                        <span class="c-comment">// open Serial Monitor</span>
+}
+
+<span class="c-keyword">void</span> <span class="c-fn">loop</span>() {
+  <span class="c-keyword">int</span> sensorValue = <span class="c-fn">analogRead</span>(A0);        <span class="c-comment">// 0 to 1023</span>
+  <span class="c-keyword">float</span> voltage = sensorValue * (<span class="c-num">5.0</span> / <span class="c-num">1023.0</span>); <span class="c-comment">// convert to volts</span>
+
+  Serial.<span class="c-fn">print</span>(<span class="c-string">"Raw Value: "</span>);
+  Serial.<span class="c-fn">print</span>(sensorValue);
+  Serial.<span class="c-fn">print</span>(<span class="c-string">"  |  Voltage: "</span>);
+  Serial.<span class="c-fn">println</span>(voltage, <span class="c-num">2</span>);             <span class="c-comment">// 2 decimal places</span>
+
+  <span class="c-fn">delay</span>(<span class="c-num">200</span>);                              <span class="c-comment">// read 5 times per second</span>
+}</div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.08in; margin-top:0.07in;">
+        <div>
+          <div class="code-label">Serial Monitor output (twist the knob!)</div>
+          <div class="serial-monitor"><span class="sm-header">=== Analog Reader Ready! ===</span>
+<span class="sm-dim">Raw Value: 0      |  Voltage: 0.00 V</span>
+<span class="sm-mid">Raw Value: 256    |  Voltage: 1.25 V</span>
+<span class="sm-mid">Raw Value: 512    |  Voltage: 2.50 V</span>
+<span class="sm-mid">Raw Value: 768    |  Voltage: 3.76 V</span>
+<span class="sm-high">Raw Value: 1023   |  Voltage: 5.00 V</span></div>
+        </div>
+        <div>
+          <div class="code-label">The Voltage Formula</div>
+          <div class="formula-box" style="margin-top:0;">
+            <div class="formula-text">voltage = reading &times; (5.0 &divide; 1023.0)</div>
+            <div class="formula-sub">Each step = 0.00489 volts &nbsp;|&nbsp; 1024 total steps</div>
+          </div>
+          <div style="font-size:10px; color:#444; margin-top:6px; line-height:1.5;">
+            <strong>Quick Math:</strong><br/>
+            512 &times; 0.00489 = <strong>2.50 V</strong><br/>
+            200 &times; 0.00489 = <strong>0.98 V</strong><br/>
+            800 &times; 0.00489 = <strong>3.91 V</strong>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div><!-- end page-a -->
+
+
+  <!-- ======================================================
+       SIDE B (BACK)
+  ====================================================== -->
+  <div class="page page-b">
+    <div class="page-label">Side B &mdash; Back</div>
+
+    <!-- SIDE B MINI HEADER -->
+    <div class="side-b-header">
+      <div>
+        <div class="side-b-title">&#9889; Circuit Explorer Academy &mdash; Lesson 29</div>
+        <div class="side-b-sub">Analog Inputs: Reading the In-Between &nbsp;|&nbsp; Module 4: Arduino Microcontroller</div>
+      </div>
+      <div class="side-b-xp">&#11088; 250 XP</div>
+    </div>
+
+    <!-- MY ACTIVITY TODAY -->
+    <div class="section-title">
+      <span class="icon">&#128161;</span> My Activity Today &mdash; Wire It &amp; Code It!
+    </div>
+
+    <div class="circuit-box">
+
+      <div class="circuit-diagram">  WIRING GUIDE
+  [Arduino 5V]  ---red wire---->   Potentiometer LEFT leg
+  [Arduino A0]  ---yellow wire-->  Potentiometer MIDDLE leg (wiper)
+  [Arduino GND] ---black wire--->  Potentiometer RIGHT leg
+
+  BONUS: LED Speed Controller (Step 6)
+  [Arduino Pin 7] ---[330-ohm resistor]--- LED(+) --- LED(-) --- GND</div>
+
+      <ul class="wiring-steps">
+        <li><span class="step-num">1</span> Place the potentiometer on the breadboard &mdash; all 3 legs in different rows.</li>
+        <li><span class="step-num">2</span> Connect the <strong>left leg</strong> to Arduino <strong>5V</strong> with a red wire.</li>
+        <li><span class="step-num">3</span> Connect the <strong>right leg</strong> to Arduino <strong>GND</strong> with a black wire.</li>
+        <li><span class="step-num">4</span> Connect the <strong>middle leg</strong> to Arduino <strong>A0</strong> with a yellow wire.</li>
+        <li><span class="step-num">5</span> Upload the code, open Serial Monitor, and twist the knob slowly!</li>
+      </ul>
+
+      <div class="circuit-note">All three legs must be connected or the readings will jump around. The middle (wiper) leg is the signal &mdash; always connect it to an analog pin (A0&ndash;A5)!</div>
+
+      <div class="checklist-title">&#9989; Components I Used:</div>
+      <ul class="checklist">
+        <li><span class="check-box"></span>Arduino Uno</li>
+        <li><span class="check-box"></span>USB cable</li>
+        <li><span class="check-box"></span>Breadboard</li>
+        <li><span class="check-box"></span>10k&#937; potentiometer</li>
+        <li><span class="check-box"></span>LED</li>
+        <li><span class="check-box"></span>330&#937; resistor</li>
+        <li><span class="check-box"></span>Jumper wires (5)</li>
+        <li><span class="check-box"></span>Multimeter (Wand)</li>
+      </ul>
+
+    </div>
+
+    <!-- QUIZ -->
+    <div class="section-title">
+      <span class="icon">&#129504;</span> Quiz Time! Fill in the blanks.
+    </div>
+
+    <div class="quiz-box">
+
+      <div class="quiz-item">
+        <div class="quiz-q">1. <code>analogRead()</code> returns a number from <strong>0</strong> to ________________, representing 0V to 5V.</div>
+        <span class="quiz-hint">hint: "1023"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item">
+        <div class="quiz-q">2. If <code>analogRead()</code> returns <strong>512</strong>, the voltage is approximately ________________ volts.</div>
+        <span class="quiz-hint">hint: "2.5"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item">
+        <div class="quiz-q">3. The analog input pins on an Arduino Uno are named ________________ through A5.</div>
+        <span class="quiz-hint">hint: "A0"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item bonus" style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed #f9a825;">
+        <div class="quiz-q">&#127381; BONUS: In the LED speed-controller code, what happens to the blink speed when you turn the knob toward GND (reading near 0)?</div>
+        <span class="quiz-hint">hint: "blinks very fast (delay = 0 ms)"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+    </div>
+
+    <!-- EXPERIMENTS -->
+    <div class="section-title">
+      <span class="icon">&#128300;</span> 4 Experiments You Did Today!
+    </div>
+
+    <div class="experiments-grid">
+
+      <div class="experiment-card exp-a">
+        <div class="exp-letter">A</div>
+        <div class="exp-body">
+          <div class="exp-title">Watch the Numbers Change</div>
+          <div class="exp-do">Open Serial Monitor and twist the knob all the way left, then right.</div>
+          <div class="exp-discover">Raw value goes from 0 all the way to 1023 &mdash; that is 1024 steps!</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-b">
+        <div class="exp-letter">B</div>
+        <div class="exp-body">
+          <div class="exp-title">Voltage Math Check</div>
+          <div class="exp-do">Stop the knob at halfway (reading near 512). Calculate: 512 &times; (5 &divide; 1023).</div>
+          <div class="exp-discover">You should get ~2.50V &mdash; the Arduino just did that math for you!</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-c">
+        <div class="exp-letter">C</div>
+        <div class="exp-body">
+          <div class="exp-title">Wand vs Arduino Comparison</div>
+          <div class="exp-do">Set the Wand to DC Voltage. Put the red probe on the middle pot leg. Compare to the Serial Monitor.</div>
+          <div class="exp-discover">Both instruments agree! Small differences (0.05V) are normal &mdash; no instrument is perfectly exact.</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-d">
+        <div class="exp-letter">D</div>
+        <div class="exp-body">
+          <div class="exp-title">LED Speed Controller</div>
+          <div class="exp-do">Upload the bonus code. Connect an LED to pin 7. Twist the knob.</div>
+          <div class="exp-discover">The LED blink speed changes with the knob! You built a real speed controller!</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TRY AT HOME + TROUBLESHOOTING -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.1in; margin-bottom: 0.12in;">
+
+      <div class="lemon-box">
+        <div class="lemon-title">&#127968; Try at Home: Light Sensor!</div>
+        <div class="lemon-body">
+          Swap the potentiometer for a <strong>photoresistor (LDR)</strong>. Wire one leg to 5V through a 10k&#937; resistor, and connect the middle point to A0 with GND on the other leg.<br/><br/>
+          Now cover the sensor with your hand &mdash; watch the numbers in Serial Monitor drop! &#127774;<br/>
+          <em>"Bright light = high reading. Darkness = low reading. Sensors work just like a potentiometer!"</em><br/><br/>
+          In <strong>Lesson 30</strong> you will use PWM to make an LED fade with this same type of reading!
+        </div>
+      </div>
+
+      <div class="trouble-box">
+        <div class="trouble-title">&#128295; Troubleshooting Quick Guide</div>
+        <table class="trouble-table">
+          <thead>
+            <tr><th>Problem</th><th>Quick Fix</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Shows 0 always</td><td>Check middle leg is on A0, not a digital pin</td></tr>
+            <tr><td>Reading jumps wildly</td><td>All 3 pot legs must be connected (5V, A0, GND)</td></tr>
+            <tr><td>Stuck at 1023</td><td>Middle leg may be wired to 5V instead of A0</td></tr>
+            <tr><td>Wand &amp; Arduino differ a lot</td><td>Both probes must measure the same point (middle leg)</td></tr>
+            <tr><td>LED speed won&apos;t change</td><td>Use <code>potValue</code> as the delay in the LED code</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- COMING UP NEXT -->
+    <div class="next-box">
+      <strong>Coming Up Next &rarr; Lesson 30: PWM &mdash; Dimming LEDs and Controlling Speed! &#128161;</strong><br/>
+      You have mastered reading analog IN &mdash; now it is time for analog-like OUTPUT! You will use <code>analogWrite()</code> to make an LED fade smoothly from dark to bright and back. Then you will use the Wand to see something really surprising about how PWM actually works at the wire level!
+    </div>
+
+  </div><!-- end page-b -->
+
+</body>
+</html>

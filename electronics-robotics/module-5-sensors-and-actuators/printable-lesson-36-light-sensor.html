@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 36: Light Sensor — Circuit Explorer Academy</title>
+  <style>
+    /* =============================================
+       BASE RESET & TYPOGRAPHY
+    ============================================= */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, Arial, sans-serif;
+      font-size: 13px;
+      line-height: 1.45;
+      color: #1a1a2e;
+      background: #f0f4ff;
+    }
+
+    /* =============================================
+       PAGE LAYOUT
+    ============================================= */
+    .page {
+      width: 8.5in;
+      min-height: 11in;
+      margin: 0 auto 0.4in auto;
+      padding: 0.5in;
+      background: #fff;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-label {
+      position: absolute;
+      top: 0.18in;
+      right: 0.22in;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #aaa;
+    }
+
+    /* =============================================
+       SIDE A — HEADER
+    ============================================= */
+    .header {
+      text-align: center;
+      border-bottom: 3px solid #f4c430;
+      margin-bottom: 0.16in;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+      border-radius: 10px;
+      color: #fff;
+      padding: 0.22in 0.2in 0.18in 0.2in;
+    }
+
+    .header-course {
+      font-size: 19px;
+      font-weight: 900;
+      letter-spacing: 0.03em;
+      color: #f4c430;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+
+    .header-lesson {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      margin-top: 4px;
+    }
+
+    .header-module {
+      font-size: 11px;
+      color: #a8d8ea;
+      margin-top: 3px;
+      letter-spacing: 0.04em;
+    }
+
+    .header-xp {
+      display: inline-block;
+      margin-top: 8px;
+      background: #f4c430;
+      color: #1a1a2e;
+      font-weight: 900;
+      font-size: 12px;
+      padding: 3px 14px;
+      border-radius: 20px;
+      letter-spacing: 0.06em;
+    }
+
+    .spark-row {
+      text-align: center;
+      font-size: 16px;
+      letter-spacing: 0.25em;
+      margin: 0.1in 0 0.04in 0;
+      color: #f4c430;
+    }
+
+    /* =============================================
+       SECTION HEADINGS
+    ============================================= */
+    .section-title {
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #fff;
+      background: #0f3460;
+      padding: 5px 12px;
+      border-radius: 6px;
+      margin-bottom: 0.1in;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .section-title .icon {
+      font-size: 14px;
+    }
+
+    /* =============================================
+       VOCABULARY CARDS  (2x2 grid)
+    ============================================= */
+    .vocab-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.1in;
+      margin-bottom: 0.14in;
+    }
+
+    .vocab-card {
+      border-radius: 10px;
+      padding: 0.1in 0.12in;
+      border-top: 5px solid transparent;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .vocab-card::before {
+      content: '';
+      position: absolute;
+      top: -18px;
+      right: -18px;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      opacity: 0.13;
+      background: #fff;
+    }
+
+    .vocab-card.voltage  { background: #fff3e0; border-top-color: #ff9800; }
+    .vocab-card.current  { background: #e3f2fd; border-top-color: #2196f3; }
+    .vocab-card.resist   { background: #fce4ec; border-top-color: #e91e63; }
+    .vocab-card.circuit  { background: #e8f5e9; border-top-color: #43a047; }
+
+    .vocab-term {
+      font-size: 13px;
+      font-weight: 900;
+      margin-bottom: 2px;
+    }
+
+    .vocab-card.voltage  .vocab-term { color: #e65100; }
+    .vocab-card.current  .vocab-term { color: #0d47a1; }
+    .vocab-card.resist   .vocab-term { color: #880e4f; }
+    .vocab-card.circuit  .vocab-term { color: #1b5e20; }
+
+    .vocab-symbol {
+      font-size: 18px;
+      font-weight: 900;
+      float: right;
+      margin-top: -2px;
+      opacity: 0.55;
+    }
+
+    .vocab-def {
+      font-size: 11.5px;
+      color: #333;
+      line-height: 1.4;
+      margin-top: 2px;
+    }
+
+    .vocab-emoji {
+      font-size: 20px;
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    /* =============================================
+       CONCEPT / ANALOGY BOXES
+    ============================================= */
+    .analogy-box {
+      background: #e8f4fd;
+      border: 2px solid #90caf9;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.14in;
+    }
+
+    .analogy-caption {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: #0d47a1;
+      margin-top: 4px;
+    }
+
+    /* =============================================
+       CODE / ASCII DIAGRAM BLOCK
+    ============================================= */
+    .circuit-diagram {
+      font-family: monospace;
+      font-size: 10.5px;
+      background: #1a1a2e;
+      color: #76ff03;
+      padding: 0.1in;
+      border-radius: 8px;
+      margin: 0.07in 0;
+      line-height: 1.6;
+      overflow: visible;
+      white-space: pre;
+    }
+
+    .circuit-note {
+      font-size: 11px;
+      color: #33691e;
+      font-style: italic;
+      margin-top: 5px;
+      padding: 4px 8px;
+      background: #dcedc8;
+      border-radius: 5px;
+    }
+
+    /* =============================================
+       SECONDARY CONCEPT BOX  (LDR table card)
+    ============================================= */
+    .acdc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.1in;
+      margin-bottom: 0.06in;
+    }
+
+    .acdc-card {
+      border-radius: 10px;
+      padding: 0.1in 0.12in;
+      border-top: 5px solid transparent;
+    }
+
+    .acdc-card.dc {
+      background: #fff8e1;
+      border-top-color: #ffc107;
+    }
+
+    .acdc-card.ac {
+      background: #f3e5f5;
+      border-top-color: #9c27b0;
+    }
+
+    .acdc-title {
+      font-size: 13px;
+      font-weight: 900;
+      margin-bottom: 4px;
+    }
+
+    .acdc-card.dc .acdc-title { color: #ff6f00; }
+    .acdc-card.ac .acdc-title { color: #6a1b9a; }
+
+    .acdc-wave {
+      font-family: monospace;
+      font-size: 9.5px;
+      line-height: 1.3;
+      padding: 4px 6px;
+      border-radius: 5px;
+      margin: 5px 0;
+      white-space: pre;
+    }
+
+    .acdc-card.dc .acdc-wave {
+      background: #fffde7;
+      color: #f57f17;
+    }
+
+    .acdc-card.ac .acdc-wave {
+      background: #f3e5f5;
+      color: #6a1b9a;
+    }
+
+    .acdc-fact {
+      font-size: 10.5px;
+      color: #444;
+      line-height: 1.4;
+    }
+
+    .acdc-fact strong {
+      color: #333;
+    }
+
+    /* =============================================
+       SIDE B — CIRCUIT BUILD BOX
+    ============================================= */
+    .circuit-box {
+      background: #f1f8e9;
+      border: 2px solid #aed581;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.13in;
+    }
+
+    .checklist-title {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #2e7d32;
+      margin-top: 8px;
+      margin-bottom: 4px;
+    }
+
+    .checklist {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 3px 10px;
+      list-style: none;
+    }
+
+    .checklist li {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: #333;
+    }
+
+    .check-box {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid #43a047;
+      border-radius: 3px;
+      flex-shrink: 0;
+      background: #fff;
+    }
+
+    /* Wiring steps list inside circuit-box */
+    .steps-list {
+      list-style: none;
+      margin: 6px 0 8px 0;
+      padding: 0;
+    }
+
+    .steps-list li {
+      font-size: 11px;
+      color: #1b5e20;
+      padding: 2px 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+    }
+
+    .step-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      background: #43a047;
+      color: #fff;
+      border-radius: 50%;
+      font-size: 9px;
+      font-weight: 900;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* =============================================
+       QUIZ
+    ============================================= */
+    .quiz-box {
+      background: #fff9c4;
+      border: 2px solid #f9a825;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.13in;
+    }
+
+    .quiz-item {
+      margin-bottom: 0.08in;
+    }
+
+    .quiz-q {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 2px;
+    }
+
+    .quiz-blank {
+      display: block;
+      border-bottom: 1.5px solid #999;
+      width: 100%;
+      height: 20px;
+      margin-top: 2px;
+    }
+
+    .quiz-hint {
+      font-size: 9px;
+      color: #aaa;
+      font-style: italic;
+      float: right;
+      margin-top: 1px;
+    }
+
+    .quiz-item.bonus .quiz-q {
+      color: #e65100;
+    }
+
+    .quiz-item.bonus .quiz-blank {
+      border-bottom-color: #ff9800;
+    }
+
+    /* =============================================
+       EXPERIMENTS GRID
+    ============================================= */
+    .experiments-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.08in;
+      margin-bottom: 0.12in;
+    }
+
+    .experiment-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      border-radius: 8px;
+      padding: 0.08in 0.1in;
+      border-left: 5px solid transparent;
+    }
+
+    .experiment-card.exp-a { background: #fff3e0; border-left-color: #ff9800; }
+    .experiment-card.exp-b { background: #e3f2fd; border-left-color: #2196f3; }
+    .experiment-card.exp-c { background: #fce4ec; border-left-color: #e91e63; }
+    .experiment-card.exp-d { background: #e8f5e9; border-left-color: #43a047; }
+
+    .exp-letter {
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1;
+      flex-shrink: 0;
+      width: 24px;
+      text-align: center;
+    }
+
+    .experiment-card.exp-a .exp-letter { color: #e65100; }
+    .experiment-card.exp-b .exp-letter { color: #0d47a1; }
+    .experiment-card.exp-c .exp-letter { color: #880e4f; }
+    .experiment-card.exp-d .exp-letter { color: #1b5e20; }
+
+    .exp-body { flex: 1; }
+
+    .exp-title {
+      font-size: 11.5px;
+      font-weight: 900;
+      margin-bottom: 2px;
+      color: #1a1a2e;
+    }
+
+    .exp-do {
+      font-size: 10.5px;
+      color: #444;
+      margin-bottom: 3px;
+    }
+
+    .exp-do::before {
+      content: "▶ Do: ";
+      font-weight: 700;
+      color: #555;
+    }
+
+    .exp-discover {
+      font-size: 10.5px;
+      color: #333;
+      font-style: italic;
+    }
+
+    /* =============================================
+       TRY AT HOME + TROUBLESHOOTING
+    ============================================= */
+    .lemon-box {
+      background: #f9fbe7;
+      border: 2px solid #c5e1a5;
+      border-radius: 10px;
+      padding: 0.09in 0.11in;
+    }
+
+    .lemon-title {
+      font-size: 12px;
+      font-weight: 900;
+      color: #33691e;
+      margin-bottom: 5px;
+    }
+
+    .lemon-body {
+      font-size: 10.5px;
+      color: #333;
+      line-height: 1.5;
+    }
+
+    .trouble-box {
+      background: #fafafa;
+      border: 2px solid #bdbdbd;
+      border-radius: 10px;
+      padding: 0.09in 0.11in;
+    }
+
+    .trouble-title {
+      font-size: 12px;
+      font-weight: 900;
+      color: #37474f;
+      margin-bottom: 5px;
+    }
+
+    .trouble-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9.5px;
+    }
+
+    .trouble-table thead th {
+      background: #37474f;
+      color: #fff;
+      padding: 3px 6px;
+      text-align: left;
+      font-weight: 700;
+    }
+
+    .trouble-table tbody tr:nth-child(even) {
+      background: #f5f5f5;
+    }
+
+    .trouble-table tbody td {
+      padding: 3px 6px;
+      color: #333;
+      border-bottom: 1px solid #e0e0e0;
+      vertical-align: top;
+    }
+
+    /* =============================================
+       SIDE B HEADER
+    ============================================= */
+    .side-b-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 3px solid #f4c430;
+      margin-bottom: 0.15in;
+      padding-bottom: 0.09in;
+    }
+
+    .side-b-title {
+      font-size: 14px;
+      font-weight: 900;
+      color: #0f3460;
+    }
+
+    .side-b-sub {
+      font-size: 10px;
+      color: #888;
+      margin-top: 1px;
+    }
+
+    .side-b-xp {
+      background: #f4c430;
+      color: #1a1a2e;
+      font-weight: 900;
+      font-size: 11px;
+      padding: 3px 12px;
+      border-radius: 20px;
+    }
+
+    /* =============================================
+       COMING UP NEXT
+    ============================================= */
+    .next-box {
+      background: linear-gradient(90deg, #e3f2fd 0%, #f3e5f5 100%);
+      border-left: 5px solid #7c4dff;
+      border-radius: 0 10px 10px 0;
+      padding: 0.08in 0.14in;
+      font-size: 11.5px;
+      color: #1a1a2e;
+    }
+
+    .next-box strong {
+      color: #6a1b9a;
+    }
+
+    /* =============================================
+       PRINT STYLES
+    ============================================= */
+    @media print {
+      body {
+        background: #fff;
+        font-size: 12px;
+      }
+
+      .page {
+        width: 100%;
+        min-height: auto;
+        margin: 0;
+        box-shadow: none;
+        padding: 0.5in;
+      }
+
+      .page-a {
+        page-break-after: always;
+      }
+
+      .header {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .vocab-card,
+      .acdc-card,
+      .circuit-box,
+      .quiz-box,
+      .next-box,
+      .analogy-box,
+      .circuit-diagram,
+      .experiment-card,
+      .lemon-box,
+      .trouble-box,
+      .trouble-table thead th {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .vocab-card.voltage  { background: #fff !important; border: 2px solid #ff9800; border-top: 5px solid #ff9800; }
+      .vocab-card.current  { background: #fff !important; border: 2px solid #2196f3; border-top: 5px solid #2196f3; }
+      .vocab-card.resist   { background: #fff !important; border: 2px solid #e91e63; border-top: 5px solid #e91e63; }
+      .vocab-card.circuit  { background: #fff !important; border: 2px solid #43a047; border-top: 5px solid #43a047; }
+    }
+
+    @page {
+      size: A4;
+      margin: 12mm;
+    }
+
+    .clearfix::after {
+      content: '';
+      display: table;
+      clear: both;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ======================================================
+       SIDE A (FRONT)
+  ====================================================== -->
+  <div class="page page-a">
+    <div class="page-label">Side A &mdash; Front</div>
+
+    <!-- HEADER -->
+    <div class="header">
+      <div class="header-course">&#9889; Circuit Explorer Academy</div>
+      <div class="header-lesson">Lesson 36: Light Sensor &mdash; The Eye of Your Arduino (LDR)</div>
+      <div class="header-module">Module 5: Sensors and Actuators</div>
+      <div><span class="header-xp">&#11088; 275 XP Available</span></div>
+    </div>
+
+    <div class="spark-row" aria-hidden="true">&#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889;</div>
+
+    <!-- VOCABULARY -->
+    <div class="section-title">
+      <span class="icon">&#128218;</span> Key Words &mdash; Learn These!
+    </div>
+
+    <div class="vocab-grid">
+
+      <div class="vocab-card voltage">
+        <span class="vocab-emoji">&#128269;</span>
+        <span class="vocab-symbol">LDR</span>
+        <div class="vocab-term">LDR (Light Dependent Resistor)</div>
+        <div class="vocab-def">A resistor whose resistance <strong>changes with light</strong>. Bright light = low resistance. Darkness = very high resistance. Also called a photoresistor!</div>
+      </div>
+
+      <div class="vocab-card current">
+        <span class="vocab-emoji">&#9965;</span>
+        <span class="vocab-symbol">&#247;</span>
+        <div class="vocab-term">Voltage Divider</div>
+        <div class="vocab-def">Two resistors in series that <strong>split voltage</strong> so Arduino can read a changing signal. The LDR + 10k&#937; resistor form one together.</div>
+      </div>
+
+      <div class="vocab-card resist">
+        <span class="vocab-emoji">&#128200;</span>
+        <span class="vocab-symbol">A0</span>
+        <div class="vocab-term">Analog Input</div>
+        <div class="vocab-def">Arduino pin A0 reads voltages from <strong>0 to 5V</strong> and converts them to numbers 0&ndash;1023. Higher voltage = bigger number!</div>
+      </div>
+
+      <div class="vocab-card circuit">
+        <span class="vocab-emoji">&#128260;</span>
+        <span class="vocab-symbol">map()</span>
+        <div class="vocab-term">map() Function</div>
+        <div class="vocab-def">A code translator that <strong>rescales numbers</strong> from one range to another. Turns 0&ndash;1023 sensor values into 0&ndash;255 LED brightness &mdash; and can flip the relationship too!</div>
+      </div>
+
+    </div>
+
+    <!-- MAIN CONCEPT: Voltage Divider Circuit -->
+    <div class="section-title">
+      <span class="icon">&#9965;</span> The LDR Voltage Divider Circuit
+    </div>
+
+    <div class="analogy-box">
+      <div style="font-size: 11.5px; color: #0d47a1; font-weight: 700; margin-bottom: 4px;">
+        Think of it like magic sunglasses: bright light = clear lenses (low resistance), darkness = black lenses (high resistance)!
+      </div>
+      <div class="circuit-diagram">  Arduino 5V ----+
+                 |
+               [LDR]   bright = ~200 ohms   dark = ~500,000 ohms
+                 |
+                 +-------&gt; Arduino A0  (reads voltage here)
+                 |
+             [10k ohm]  (fixed resistor - the "partner")
+                 |
+  Arduino GND ---+
+
+  BRIGHT light:  LDR resistance LOW   --&gt;  voltage at A0 HIGH (~5V)  --&gt;  reading ~1023
+  DARK  room:    LDR resistance HIGH  --&gt;  voltage at A0 LOW  (~0V)  --&gt;  reading ~0</div>
+      <div class="circuit-note">The LDR and the 10k&#937; resistor share the 5V between them. When LDR resistance drops (bright), A0 climbs. When LDR resistance rises (dark), A0 falls. Arduino reads this changing voltage as a number!</div>
+    </div>
+
+    <!-- SECONDARY CONCEPT: LDR Resistance Table + map() code -->
+    <div class="section-title">
+      <span class="icon">&#128161;</span> Light Levels &amp; the map() Translator
+    </div>
+
+    <div class="acdc-grid">
+
+      <div class="acdc-card dc">
+        <div class="acdc-title">&#127774; LDR Resistance vs Light</div>
+        <div class="acdc-wave">Bright sun ... ~100-500 ohms   (LOW)
+Room light .. ~1,000-5,000 ohms
+Dim room .... ~10,000-50,000 ohms
+Total dark .. ~200,000-500,000+ ohms (HIGH!)</div>
+        <div class="acdc-fact">
+          <strong>Bright light</strong> knocks electrons loose &rarr; current flows easily &rarr; low resistance.<br/>
+          <strong>Darkness</strong> = very few free electrons &rarr; current blocked &rarr; huge resistance!
+        </div>
+      </div>
+
+      <div class="acdc-card ac">
+        <div class="acdc-title">&#128161; Night Light Code (key lines)</div>
+        <div class="acdc-wave">int lightValue = analogRead(A0);
+
+// map() flips AND rescales:
+// dark (low reading) = bright LED
+// bright (high reading) = LED off
+int ledBrightness =
+  map(lightValue, 0, 1023, 255, 0);
+
+if (lightValue &lt; 300) {
+  analogWrite(9, ledBrightness);
+} else {
+  analogWrite(9, 0);  // LED off
+}</div>
+        <div class="acdc-fact">
+          <strong>map(value, fromLow, fromHigh, toLow, toHigh)</strong><br/>
+          Rescales AND inverts in one line &mdash; dark room means bright LED automatically!
+        </div>
+      </div>
+
+    </div>
+
+  </div><!-- end page-a -->
+
+
+  <!-- ======================================================
+       SIDE B (BACK)
+  ====================================================== -->
+  <div class="page page-b">
+    <div class="page-label">Side B &mdash; Back</div>
+
+    <!-- SIDE B MINI HEADER -->
+    <div class="side-b-header">
+      <div>
+        <div class="side-b-title">&#9889; Circuit Explorer Academy &mdash; Lesson 36</div>
+        <div class="side-b-sub">Light Sensor: The Eye of Your Arduino (LDR) &nbsp;|&nbsp; Module 5: Sensors and Actuators</div>
+      </div>
+      <div class="side-b-xp">&#11088; 275 XP</div>
+    </div>
+
+    <!-- CIRCUIT BUILD -->
+    <div class="section-title">
+      <span class="icon">&#128161;</span> My Activity Today
+    </div>
+
+    <div class="circuit-box">
+
+      <div class="circuit-diagram">Wiring Steps:
+1. LDR leg 1  ---&gt; Arduino 5V  (red wire)
+2. LDR leg 2  ---&gt; breadboard row 10  (junction point)
+3. 10k resistor: row 10  ---&gt; Arduino GND  (black wire)
+4. Jumper wire: row 10  ---&gt; Arduino A0  (yellow wire)
+5. LED (+long leg) via 330 ohm resistor ---&gt; Arduino pin 9
+6. LED (-short leg) ---&gt; Arduino GND
+7. Upload sketch, open Serial Monitor (9600 baud)
+8. Cover LDR with hand --- watch numbers drop!
+9. Shine phone flashlight on LDR --- numbers jump up!</div>
+
+      <div class="circuit-note">Never measure LDR resistance while it is in a powered circuit! Always remove it first, then set your Wand (multimeter) to the Ohms mode.</div>
+
+      <div class="checklist-title">&#9989; Components I Used:</div>
+      <ul class="checklist">
+        <li><span class="check-box"></span>Arduino Uno</li>
+        <li><span class="check-box"></span>LDR sensor</li>
+        <li><span class="check-box"></span>10k&#937; resistor</li>
+        <li><span class="check-box"></span>LED x2</li>
+        <li><span class="check-box"></span>330&#937; resistors x2</li>
+        <li><span class="check-box"></span>Breadboard</li>
+        <li><span class="check-box"></span>Jumper wires x8</li>
+        <li><span class="check-box"></span>USB cable</li>
+        <li><span class="check-box"></span>Multimeter (Wand)</li>
+      </ul>
+
+    </div>
+
+    <!-- QUIZ -->
+    <div class="section-title">
+      <span class="icon">&#129504;</span> Quiz Time! Fill in the blanks.
+    </div>
+
+    <div class="quiz-box">
+
+      <div class="quiz-item">
+        <div class="quiz-q">1. When bright light shines on an LDR, its resistance goes ________________ (higher / lower).</div>
+        <span class="quiz-hint">hint: "lower"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item">
+        <div class="quiz-q">2. We pair the LDR with a 10k&#937; resistor to form a ________________ so Arduino can read a changing voltage.</div>
+        <span class="quiz-hint">hint: "voltage divider"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item">
+        <div class="quiz-q">3. The ________________ function rescales a number from one range to another &mdash; and can flip the relationship too!</div>
+        <span class="quiz-hint">hint: "map()"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item bonus" style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed #f9a825;">
+        <div class="quiz-q">&#127381; BONUS: In total darkness, an LDR measures roughly ________________ ohms resistance.</div>
+        <span class="quiz-hint">hint: "200,000 or more!"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+    </div>
+
+    <!-- EXPERIMENTS -->
+    <div class="section-title">
+      <span class="icon">&#128300;</span> 4 Experiments You Did Today!
+    </div>
+
+    <div class="experiments-grid">
+
+      <div class="experiment-card exp-a">
+        <div class="exp-letter">A</div>
+        <div class="exp-body">
+          <div class="exp-title">Cover the LDR</div>
+          <div class="exp-do">Place your hand over the LDR.</div>
+          <div class="exp-discover">Serial Monitor numbers drop &mdash; less light means higher resistance, lower voltage at A0!</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-b">
+        <div class="exp-letter">B</div>
+        <div class="exp-body">
+          <div class="exp-title">Flashlight Test</div>
+          <div class="exp-do">Shine a phone flashlight directly on the LDR.</div>
+          <div class="exp-discover">Numbers jump close to <strong>1023</strong> &mdash; photons knock electrons loose, resistance crashes!</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-c">
+        <div class="exp-letter">C</div>
+        <div class="exp-body">
+          <div class="exp-title">Automatic Night Light</div>
+          <div class="exp-do">Slowly cover the LDR &mdash; watch the LED.</div>
+          <div class="exp-discover">LED <strong>gradually brightens</strong> as the room darkens &mdash; map() translates low light into high brightness!</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-d">
+        <div class="exp-letter">D</div>
+        <div class="exp-body">
+          <div class="exp-title">Wand Check (4 Conditions)</div>
+          <div class="exp-do">Remove LDR from circuit, probe with multimeter.</div>
+          <div class="exp-discover">Watch resistance change live: flashlight = ~200&#937;, covered = ~50k&#937;, box dark = ~500k&#937; or "OL"!</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TRY AT HOME + TROUBLESHOOTING -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.1in; margin-bottom: 0.12in;">
+
+      <div class="lemon-box">
+        <div class="lemon-title">&#127775; Try at Home: Window Nightlight!</div>
+        <div class="lemon-body">
+          Place your circuit near a window. As the <strong>sun sets</strong>, watch the LED automatically turn on &mdash; just like a real streetlight!<br/><br/>
+          Try adjusting the <strong>threshold value</strong> in your code (line: <code>int threshold = 300;</code>) to make the light turn on earlier or later.<br/><br/>
+          <em>In <strong>Lesson 37</strong> you will add an ultrasonic distance sensor &mdash; your Arduino gets sonar!</em>
+        </div>
+      </div>
+
+      <div class="trouble-box">
+        <div class="trouble-title">&#128295; Troubleshooting Quick Guide</div>
+        <table class="trouble-table">
+          <thead>
+            <tr><th>Problem</th><th>Quick Fix</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Reading stuck at 0 or 1023</td><td>Check voltage divider &mdash; LDR and 10k&#937; must be in series between 5V and GND with A0 in the middle</td></tr>
+            <tr><td>LED doesn&#39;t respond to light</td><td>Make sure LED is on a PWM pin (3, 5, 6, 9, 10, or 11)</td></tr>
+            <tr><td>Readings jump wildly</td><td>Add delay(100) and average 3 readings</td></tr>
+            <tr><td>Wand shows "OL" in dark</td><td>Switch to higher ohms range &mdash; LDR can be very high resistance</td></tr>
+            <tr><td>Night light flickers on/off</td><td>Adjust threshold value in code to match your room&#39;s light level</td></tr>
+            <tr><td>LDR seems unresponsive</td><td>Turn the squiggly side to face the light source &mdash; the back is less sensitive</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- COMING UP NEXT -->
+    <div class="next-box">
+      <strong>Coming Up Next &rarr; Lesson 37: Ultrasonic Distance Sensor &mdash; Your Arduino&#39;s Echolocation (HC-SR04)! &#128264;</strong><br/>
+      You will use sound waves you cannot even hear to measure distance &mdash; then build a parking sensor that beeps faster as objects get closer, just like a real car. Your Wand measures the trigger and echo pin voltages!
+    </div>
+
+  </div><!-- end page-b -->
+
+</body>
+</html>

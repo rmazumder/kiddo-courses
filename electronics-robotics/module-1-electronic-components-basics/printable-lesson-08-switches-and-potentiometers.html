@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 8: Switches and Potentiometers — Circuit Explorer Academy</title>
+  <style>
+    /* =============================================
+       BASE RESET & TYPOGRAPHY
+    ============================================= */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, Arial, sans-serif;
+      font-size: 13px;
+      line-height: 1.45;
+      color: #1a1a2e;
+      background: #f0f4ff;
+    }
+
+    /* =============================================
+       PAGE LAYOUT
+    ============================================= */
+    .page {
+      width: 8.5in;
+      min-height: 11in;
+      margin: 0 auto 0.4in auto;
+      padding: 0.5in;
+      background: #fff;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-label {
+      position: absolute;
+      top: 0.18in;
+      right: 0.22in;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #aaa;
+    }
+
+    /* =============================================
+       SIDE A — HEADER
+    ============================================= */
+    .header {
+      text-align: center;
+      border-bottom: 3px solid #f4c430;
+      margin-bottom: 0.16in;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+      border-radius: 10px;
+      color: #fff;
+      padding: 0.22in 0.2in 0.18in 0.2in;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .header-course {
+      font-size: 19px;
+      font-weight: 900;
+      letter-spacing: 0.03em;
+      color: #f4c430;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+
+    .header-lesson {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      margin-top: 4px;
+    }
+
+    .header-module {
+      font-size: 11px;
+      color: #a8d8ea;
+      margin-top: 3px;
+      letter-spacing: 0.04em;
+    }
+
+    .header-xp {
+      display: inline-block;
+      margin-top: 8px;
+      background: #f4c430;
+      color: #1a1a2e;
+      font-weight: 900;
+      font-size: 12px;
+      padding: 3px 14px;
+      border-radius: 20px;
+      letter-spacing: 0.06em;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .spark-row {
+      text-align: center;
+      font-size: 16px;
+      letter-spacing: 0.25em;
+      margin: 0.1in 0 0.04in 0;
+      color: #f4c430;
+    }
+
+    /* =============================================
+       SECTION HEADINGS
+    ============================================= */
+    .section-title {
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #fff;
+      background: #0f3460;
+      padding: 5px 12px;
+      border-radius: 6px;
+      margin-bottom: 0.1in;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .section-title .icon {
+      font-size: 14px;
+    }
+
+    /* =============================================
+       VOCABULARY CARDS  (2x2 grid)
+    ============================================= */
+    .vocab-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.1in;
+      margin-bottom: 0.14in;
+    }
+
+    .vocab-card {
+      border-radius: 10px;
+      padding: 0.1in 0.12in;
+      border-top: 5px solid transparent;
+      position: relative;
+      overflow: hidden;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .vocab-card::before {
+      content: '';
+      position: absolute;
+      top: -18px;
+      right: -18px;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      opacity: 0.13;
+      background: #fff;
+    }
+
+    /* orange = Switch, blue = Potentiometer, pink = Wiper, green = Momentary */
+    .vocab-card.vc-orange  { background: #fff3e0; border-top-color: #ff9800; }
+    .vocab-card.vc-blue    { background: #e3f2fd; border-top-color: #2196f3; }
+    .vocab-card.vc-pink    { background: #fce4ec; border-top-color: #e91e63; }
+    .vocab-card.vc-green   { background: #e8f5e9; border-top-color: #43a047; }
+
+    .vocab-term {
+      font-size: 13px;
+      font-weight: 900;
+      margin-bottom: 2px;
+    }
+
+    .vocab-card.vc-orange  .vocab-term { color: #e65100; }
+    .vocab-card.vc-blue    .vocab-term { color: #0d47a1; }
+    .vocab-card.vc-pink    .vocab-term { color: #880e4f; }
+    .vocab-card.vc-green   .vocab-term { color: #1b5e20; }
+
+    .vocab-symbol {
+      font-size: 18px;
+      font-weight: 900;
+      float: right;
+      margin-top: -2px;
+      opacity: 0.55;
+    }
+
+    .vocab-def {
+      font-size: 11.5px;
+      color: #333;
+      line-height: 1.4;
+      margin-top: 2px;
+    }
+
+    .vocab-emoji {
+      font-size: 20px;
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    /* =============================================
+       SWITCH TYPES BOX
+    ============================================= */
+    .switch-box {
+      background: #e8f4fd;
+      border: 2px solid #90caf9;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.14in;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .switch-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0.08in;
+      margin: 0.07in 0 0.06in 0;
+    }
+
+    .switch-type-card {
+      border-radius: 8px;
+      padding: 0.08in 0.09in;
+      border-top: 4px solid transparent;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .switch-type-card.push-btn  { background: #fff3e0; border-top-color: #ff9800; }
+    .switch-type-card.toggle-sw { background: #f3e5f5; border-top-color: #9c27b0; }
+    .switch-type-card.rotary-sw { background: #e8f5e9; border-top-color: #43a047; }
+
+    .switch-type-name {
+      font-size: 11px;
+      font-weight: 900;
+      margin-bottom: 2px;
+    }
+
+    .switch-type-card.push-btn  .switch-type-name { color: #e65100; }
+    .switch-type-card.toggle-sw .switch-type-name { color: #6a1b9a; }
+    .switch-type-card.rotary-sw .switch-type-name { color: #1b5e20; }
+
+    .switch-ascii {
+      font-family: monospace;
+      font-size: 8.5px;
+      background: #1a1a2e;
+      color: #76ff03;
+      border-radius: 4px;
+      padding: 3px 5px;
+      margin: 4px 0;
+      white-space: pre;
+      line-height: 1.4;
+    }
+
+    .switch-fact {
+      font-size: 9.5px;
+      color: #444;
+      line-height: 1.35;
+      margin-top: 2px;
+    }
+
+    .switch-caption {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: #0d47a1;
+      margin-top: 4px;
+    }
+
+    /* =============================================
+       POTENTIOMETER BOX
+    ============================================= */
+    .pot-box {
+      background: #f9fbe7;
+      border: 2px solid #c5e1a5;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.06in;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .pot-layout {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.12in;
+    }
+
+    .pot-text { flex: 1; }
+
+    .pot-intro {
+      font-size: 11.5px;
+      color: #333;
+      line-height: 1.45;
+      margin-bottom: 0.06in;
+    }
+
+    .pot-legs {
+      font-family: monospace;
+      font-size: 9.5px;
+      background: #1a1a2e;
+      color: #76ff03;
+      border-radius: 6px;
+      padding: 0.07in 0.09in;
+      line-height: 1.6;
+      white-space: pre;
+    }
+
+    .pot-caption {
+      font-size: 10.5px;
+      color: #33691e;
+      font-style: italic;
+      margin-top: 5px;
+      padding: 3px 7px;
+      background: #dcedc8;
+      border-radius: 5px;
+    }
+
+    /* =============================================
+       LESSON IMAGES
+    ============================================= */
+    .lesson-img {
+      display: block;
+      border-radius: 7px;
+      object-fit: contain;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .img-float-right {
+      float: right;
+      margin: 0 0 6px 12px;
+      max-height: 108px;
+      max-width: 148px;
+    }
+
+    .img-pot-side {
+      max-height: 110px;
+      max-width: 130px;
+      flex-shrink: 0;
+      border-radius: 7px;
+    }
+
+    .img-circuit {
+      max-height: 130px;
+      max-width: 100%;
+      margin: 6px auto 0 auto;
+      display: block;
+    }
+
+    .clearfix::after {
+      content: '';
+      display: table;
+      clear: both;
+    }
+
+    @media print {
+      .lesson-img {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+
+    /* =============================================
+       SIDE B — HEADER
+    ============================================= */
+    .side-b-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 3px solid #f4c430;
+      margin-bottom: 0.15in;
+      padding-bottom: 0.09in;
+    }
+
+    .side-b-title {
+      font-size: 14px;
+      font-weight: 900;
+      color: #0f3460;
+    }
+
+    .side-b-sub {
+      font-size: 10px;
+      color: #888;
+      margin-top: 1px;
+    }
+
+    .side-b-xp {
+      background: #f4c430;
+      color: #1a1a2e;
+      font-weight: 900;
+      font-size: 11px;
+      padding: 3px 12px;
+      border-radius: 20px;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    /* =============================================
+       ACTIVITY / CIRCUIT BUILD
+    ============================================= */
+    .circuit-box {
+      background: #f1f8e9;
+      border: 2px solid #aed581;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.13in;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .circuit-diagram {
+      font-family: monospace;
+      font-size: 10px;
+      background: #1a1a2e;
+      color: #76ff03;
+      padding: 0.09in;
+      border-radius: 8px;
+      margin: 0.07in 0;
+      line-height: 1.6;
+      white-space: pre;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .circuit-note {
+      font-size: 11px;
+      color: #33691e;
+      font-style: italic;
+      margin-top: 5px;
+      padding: 4px 8px;
+      background: #dcedc8;
+      border-radius: 5px;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .checklist-title {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #2e7d32;
+      margin-top: 8px;
+      margin-bottom: 4px;
+    }
+
+    .checklist {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 3px 10px;
+      list-style: none;
+    }
+
+    .checklist li {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: #333;
+    }
+
+    .check-box {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid #43a047;
+      border-radius: 3px;
+      flex-shrink: 0;
+      background: #fff;
+    }
+
+    /* =============================================
+       QUIZ
+    ============================================= */
+    .quiz-box {
+      background: #fff9c4;
+      border: 2px solid #f9a825;
+      border-radius: 10px;
+      padding: 0.1in 0.14in;
+      margin-bottom: 0.13in;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .quiz-item {
+      margin-bottom: 0.08in;
+    }
+
+    .quiz-q {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 2px;
+    }
+
+    .quiz-blank {
+      display: block;
+      border-bottom: 1.5px solid #999;
+      width: 100%;
+      height: 20px;
+      margin-top: 2px;
+    }
+
+    .quiz-hint {
+      font-size: 9px;
+      color: #aaa;
+      font-style: italic;
+      float: right;
+      margin-top: 1px;
+    }
+
+    .quiz-item.bonus .quiz-q {
+      color: #e65100;
+    }
+
+    .quiz-item.bonus .quiz-blank {
+      border-bottom-color: #ff9800;
+    }
+
+    /* =============================================
+       EXPERIMENTS GRID
+    ============================================= */
+    .experiments-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.08in;
+      margin-bottom: 0.12in;
+    }
+
+    .experiment-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      border-radius: 8px;
+      padding: 0.08in 0.1in;
+      border-left: 5px solid transparent;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .experiment-card.exp-a { background: #fff3e0; border-left-color: #ff9800; }
+    .experiment-card.exp-b { background: #e3f2fd; border-left-color: #2196f3; }
+    .experiment-card.exp-c { background: #fce4ec; border-left-color: #e91e63; }
+    .experiment-card.exp-d { background: #e8f5e9; border-left-color: #43a047; }
+
+    .exp-letter {
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1;
+      flex-shrink: 0;
+      width: 24px;
+      text-align: center;
+    }
+
+    .experiment-card.exp-a .exp-letter { color: #e65100; }
+    .experiment-card.exp-b .exp-letter { color: #0d47a1; }
+    .experiment-card.exp-c .exp-letter { color: #880e4f; }
+    .experiment-card.exp-d .exp-letter { color: #1b5e20; }
+
+    .exp-body { flex: 1; }
+
+    .exp-title {
+      font-size: 11.5px;
+      font-weight: 900;
+      margin-bottom: 2px;
+      color: #1a1a2e;
+    }
+
+    .exp-do {
+      font-size: 10.5px;
+      color: #444;
+      margin-bottom: 3px;
+    }
+
+    .exp-do::before {
+      content: "▶ Do: ";
+      font-weight: 700;
+      color: #555;
+    }
+
+    .exp-discover {
+      font-size: 10.5px;
+      color: #333;
+      font-style: italic;
+    }
+
+    /* =============================================
+       TRY AT HOME + TROUBLESHOOTING
+    ============================================= */
+    .home-box {
+      background: #f9fbe7;
+      border: 2px solid #c5e1a5;
+      border-radius: 10px;
+      padding: 0.09in 0.11in;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .home-title {
+      font-size: 12px;
+      font-weight: 900;
+      color: #33691e;
+      margin-bottom: 5px;
+    }
+
+    .home-body {
+      font-size: 10.5px;
+      color: #333;
+      line-height: 1.5;
+    }
+
+    .trouble-box {
+      background: #fafafa;
+      border: 2px solid #bdbdbd;
+      border-radius: 10px;
+      padding: 0.09in 0.11in;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .trouble-title {
+      font-size: 12px;
+      font-weight: 900;
+      color: #37474f;
+      margin-bottom: 5px;
+    }
+
+    .trouble-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9.5px;
+    }
+
+    .trouble-table thead th {
+      background: #37474f;
+      color: #fff;
+      padding: 3px 6px;
+      text-align: left;
+      font-weight: 700;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .trouble-table tbody tr:nth-child(even) {
+      background: #f5f5f5;
+    }
+
+    .trouble-table tbody td {
+      padding: 3px 6px;
+      color: #333;
+      border-bottom: 1px solid #e0e0e0;
+      vertical-align: top;
+    }
+
+    /* =============================================
+       COMING UP NEXT
+    ============================================= */
+    .next-box {
+      background: linear-gradient(90deg, #e3f2fd 0%, #f3e5f5 100%);
+      border-left: 5px solid #7c4dff;
+      border-radius: 0 10px 10px 0;
+      padding: 0.08in 0.14in;
+      font-size: 11.5px;
+      color: #1a1a2e;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .next-box strong {
+      color: #6a1b9a;
+    }
+
+    /* =============================================
+       PRINT STYLES
+    ============================================= */
+    @media print {
+      body {
+        background: #fff;
+        font-size: 12px;
+      }
+
+      .page {
+        width: 100%;
+        min-height: auto;
+        margin: 0;
+        box-shadow: none;
+        padding: 0.5in;
+      }
+
+      .page-a {
+        page-break-after: always;
+      }
+
+      .header,
+      .vocab-card,
+      .switch-box,
+      .switch-type-card,
+      .pot-box,
+      .circuit-box,
+      .circuit-diagram,
+      .quiz-box,
+      .experiment-card,
+      .home-box,
+      .trouble-box,
+      .trouble-table thead th,
+      .next-box,
+      .section-title,
+      .side-b-xp,
+      .header-xp {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      /* B&W fallback borders */
+      .vocab-card.vc-orange { background: #fff !important; border: 2px solid #ff9800; border-top: 5px solid #ff9800; }
+      .vocab-card.vc-blue   { background: #fff !important; border: 2px solid #2196f3; border-top: 5px solid #2196f3; }
+      .vocab-card.vc-pink   { background: #fff !important; border: 2px solid #e91e63; border-top: 5px solid #e91e63; }
+      .vocab-card.vc-green  { background: #fff !important; border: 2px solid #43a047; border-top: 5px solid #43a047; }
+    }
+
+    @page {
+      size: A4;
+      margin: 12mm;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ======================================================
+       SIDE A (FRONT)
+  ====================================================== -->
+  <div class="page page-a">
+    <div class="page-label">Side A — Front</div>
+
+    <!-- HEADER -->
+    <div class="header">
+      <div class="header-course">&#9889; Circuit Explorer Academy</div>
+      <div class="header-lesson">Lesson 8: Switches and Potentiometers — Twist, Click, Control</div>
+      <div class="header-module">Module 1: Electronic Components Basics</div>
+      <div><span class="header-xp">&#11088; 200 XP Available</span></div>
+    </div>
+
+    <div class="spark-row" aria-hidden="true">&#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889; &#10022; &#9889;</div>
+
+    <!-- VOCABULARY -->
+    <div class="section-title">
+      <span class="icon">&#128218;</span> Key Words — Learn These!
+    </div>
+
+    <div class="vocab-grid">
+
+      <div class="vocab-card vc-orange">
+        <span class="vocab-emoji">&#128275;</span>
+        <span class="vocab-symbol">SW</span>
+        <div class="vocab-term">Switch</div>
+        <div class="vocab-def">A component that <strong>opens or closes</strong> a circuit. When a switch is closed, electricity flows. When open, it stops — just like a door for electrons!</div>
+      </div>
+
+      <div class="vocab-card vc-blue">
+        <span class="vocab-emoji">&#127777;</span>
+        <span class="vocab-symbol">POT</span>
+        <div class="vocab-term">Potentiometer</div>
+        <div class="vocab-def">A <strong>variable resistor</strong> with a knob you turn to change resistance smoothly from 0 ohms all the way up to its maximum (e.g. 10k ohms).</div>
+      </div>
+
+      <div class="vocab-card vc-pink">
+        <span class="vocab-emoji">&#128205;</span>
+        <span class="vocab-symbol">W</span>
+        <div class="vocab-term">Wiper</div>
+        <div class="vocab-def">The <strong>middle leg</strong> of a potentiometer. It slides along a resistive strip as you turn the knob — that is what changes the resistance!</div>
+      </div>
+
+      <div class="vocab-card vc-green">
+        <span class="vocab-emoji">&#9728;</span>
+        <span class="vocab-symbol">MOM</span>
+        <div class="vocab-term">Momentary</div>
+        <div class="vocab-def">A switch that is <strong>only ON while you press it</strong> — it springs back off the moment you let go. Like a doorbell or a keyboard key!</div>
+      </div>
+
+    </div>
+
+    <!-- TYPES OF SWITCHES -->
+    <div class="section-title">
+      <span class="icon">&#128275;</span> Three Types of Switches
+    </div>
+
+    <div class="switch-box">
+
+      <div class="switch-grid">
+
+        <div class="switch-type-card push-btn">
+          <div class="switch-type-name">Push Button (Tactile)</div>
+          <div class="switch-ascii">OFF:  --  --  (open)
+ON:   --------  (closed)</div>
+          <div class="switch-fact"><strong>Momentary</strong> — only ON while pressed. Spring-loaded back to OFF.<br/>Used in: doorbells, keyboards, game controllers.</div>
+        </div>
+
+        <div class="switch-type-card toggle-sw">
+          <div class="switch-type-name">Toggle Switch</div>
+          <div class="switch-ascii">DOWN: --------  (ON)
+UP:   --  --    (OFF)</div>
+          <div class="switch-fact"><strong>Latching</strong> — stays in position after you flip it.<br/>Used in: light switches, power switches on old equipment.</div>
+        </div>
+
+        <div class="switch-type-card rotary-sw">
+          <div class="switch-type-name">Rotary Switch</div>
+          <div class="switch-ascii">Turns to connect
+one of several
+different positions.</div>
+          <div class="switch-fact"><strong>Multiple positions</strong> — selects from several options.<br/>Used in: fan speed controls, and your <strong>multimeter dial</strong>!</div>
+        </div>
+
+      </div>
+
+      <div class="switch-caption">Momentary = only ON while pressed. &nbsp;&#8226;&nbsp; Latching = stays ON or OFF.</div>
+    </div>
+
+    <!-- POTENTIOMETER -->
+    <div class="section-title">
+      <span class="icon">&#127777;</span> The Potentiometer — A Variable Resistor
+    </div>
+
+    <div class="pot-box">
+      <div class="pot-layout">
+
+        <div class="pot-text">
+          <div class="pot-intro">A potentiometer has <strong>three legs</strong>. The middle leg is the <strong>wiper</strong> — it slides along a resistive strip as you turn the knob. Turn the knob and the resistance between the middle leg and either end changes!</div>
+          <div class="pot-legs">Left leg  ---- full resistance track
+Middle leg ----  WIPER (moves as you turn)
+Right leg ---- other end of track
+
+Left to Right:  ALWAYS = max (e.g. 10k&#937;)
+Left to Middle: changes 0 &#8594; 10k&#937; as you turn
+Right to Middle: changes 10k&#937; &#8594; 0 as you turn
+(One side goes up, the other goes DOWN!)</div>
+          <div class="pot-caption">Turn the volume knob on a speaker? That IS a potentiometer!</div>
+        </div>
+
+        <img src="images/lesson-08-potentiometer-labeled.png"
+             alt="Labeled potentiometer showing three legs and wiper"
+             class="lesson-img img-pot-side" />
+
+      </div>
+    </div>
+
+  </div><!-- end page-a -->
+
+
+  <!-- ======================================================
+       SIDE B (BACK)
+  ====================================================== -->
+  <div class="page page-b">
+    <div class="page-label">Side B — Back</div>
+
+    <!-- SIDE B MINI HEADER -->
+    <div class="side-b-header">
+      <div>
+        <div class="side-b-title">&#9889; Circuit Explorer Academy — Lesson 8</div>
+        <div class="side-b-sub">Switches and Potentiometers &nbsp;|&nbsp; Module 1: Electronic Components Basics</div>
+      </div>
+      <div class="side-b-xp">&#11088; 200 XP</div>
+    </div>
+
+    <!-- ACTIVITY: LED DIMMER BUILD -->
+    <div class="section-title">
+      <span class="icon">&#128161;</span> My Activity Today — Build an LED Dimmer!
+    </div>
+
+    <div class="circuit-box">
+      <div class="circuit-diagram">9V (+) ----[POT left leg]
+           [POT middle leg]----[100&#937; resistor]----LED (+)----LED (-)----9V (-)
+
+Steps:
+1. Connect 9V (+) to the LEFT leg of the potentiometer
+2. Connect the MIDDLE leg to the 100&#937; resistor
+3. Connect the resistor to the LED long leg (+)
+4. Connect LED short leg (-) to 9V (-)
+5. Turn the knob &#8594; watch the LED smoothly brighten and dim!
+6. BONUS: Add a push button between 9V (+) and the potentiometer to switch it on/off</div>
+
+      <div class="circuit-note">The 100-ohm resistor is a safety guard — when the pot is at 0 ohms, the resistor keeps the LED safe from too much current!</div>
+
+      <div class="checklist-title">&#9989; Components I Used:</div>
+      <ul class="checklist">
+        <li><span class="check-box"></span>10k&#937; potentiometer</li>
+        <li><span class="check-box"></span>Push button</li>
+        <li><span class="check-box"></span>LED (red or yellow)</li>
+        <li><span class="check-box"></span>100&#937; resistor</li>
+        <li><span class="check-box"></span>9V battery + clip</li>
+        <li><span class="check-box"></span>Breadboard + wires</li>
+      </ul>
+    </div>
+
+    <!-- QUIZ -->
+    <div class="section-title">
+      <span class="icon">&#129504;</span> Quiz Time! Fill in the blanks.
+    </div>
+
+    <div class="quiz-box">
+
+      <div class="quiz-item">
+        <div class="quiz-q">1. A potentiometer is a ________________ resistor — you turn a knob to change resistance.</div>
+        <span class="quiz-hint">hint: "variable"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item">
+        <div class="quiz-q">2. A push button is "momentary" — it is only ON while you are ________________ it.</div>
+        <span class="quiz-hint">hint: "pressing"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item">
+        <div class="quiz-q">3. The Wand measures left-to-middle: 3k&#937;. Right-to-middle: 7k&#937;. Together they add up to ________________.</div>
+        <span class="quiz-hint">hint: "10k&#937;"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+      <div class="quiz-item bonus" style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed #f9a825;">
+        <div class="quiz-q">&#127381; BONUS: What part of a potentiometer MOVES when you turn the knob?</div>
+        <span class="quiz-hint">hint: "the wiper (middle leg)"</span>
+        <span class="quiz-blank"></span>
+      </div>
+
+    </div>
+
+    <!-- EXPERIMENTS -->
+    <div class="section-title">
+      <span class="icon">&#128300;</span> Activities / Experiments You Did Today!
+    </div>
+
+    <div class="experiments-grid">
+
+      <div class="experiment-card exp-a">
+        <div class="exp-letter">A</div>
+        <div class="exp-body">
+          <div class="exp-title">Switch Scavenger Hunt</div>
+          <div class="exp-do">Walk around and find at least 6 switches.</div>
+          <div class="exp-discover">Sort them into MOMENTARY (only on while pressed) or LATCHING (stays on). Switches are everywhere!</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-b">
+        <div class="exp-letter">B</div>
+        <div class="exp-body">
+          <div class="exp-title">Wand Check — Watch Resistance Change!</div>
+          <div class="exp-do">Set Wand to resistance mode (&#937;). Touch probes to the middle and one outer leg.</div>
+          <div class="exp-discover">Slowly turn the knob and watch the number change in real time from near 0 to near 10k!</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-c">
+        <div class="exp-letter">C</div>
+        <div class="exp-body">
+          <div class="exp-title">Build the LED Dimmer</div>
+          <div class="exp-do">Wire the potentiometer, 100&#937; resistor, and LED on a breadboard.</div>
+          <div class="exp-discover">Turn the knob — the LED smoothly goes from bright to dim. Just like a real room dimmer switch!</div>
+        </div>
+      </div>
+
+      <div class="experiment-card exp-d">
+        <div class="exp-letter">D</div>
+        <div class="exp-body">
+          <div class="exp-title">Add a Button Switch</div>
+          <div class="exp-do">Put a push button between 9V (+) and the potentiometer left leg.</div>
+          <div class="exp-discover">Now you have TWO controls: button switches it on/off, knob controls the brightness — just like stage lighting!</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TRY AT HOME + TROUBLESHOOTING -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.1in; margin-bottom: 0.12in;">
+
+      <div class="home-box">
+        <div class="home-title">&#127981; Try at Home: Find Real Potentiometers!</div>
+        <div class="home-body">
+          Look around your home for knobs that change something smoothly.<br/><br/>
+          The <strong>volume knob</strong> on a speaker or TV? That is a potentiometer!<br/>
+          A <strong>remote-control car</strong> throttle? Potentiometer!<br/>
+          Old <strong>video game joysticks</strong>? Two potentiometers — one for left/right, one for up/down.<br/><br/>
+          <em>How many can you find?</em>
+        </div>
+      </div>
+
+      <div class="trouble-box">
+        <div class="trouble-title">&#128295; Troubleshooting Quick Guide</div>
+        <table class="trouble-table">
+          <thead>
+            <tr><th>Problem</th><th>Quick Fix</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>LED won&#39;t light at all</td><td>Check LED polarity — flip it around</td></tr>
+            <tr><td>LED always full brightness</td><td>Check pot wiring — use middle leg!</td></tr>
+            <tr><td>LED won&#39;t dim</td><td>Make sure wiper (middle leg) is connected</td></tr>
+            <tr><td>Button does nothing</td><td>Breadboard rows may not be bridged — check position</td></tr>
+            <tr><td>Numbers won&#39;t change on Wand</td><td>Probes must touch middle leg + one outer leg</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- COMING UP NEXT -->
+    <div class="next-box">
+      <strong>Coming Up Next &#8594; Lesson 9: Buzzers and Sound! &#128276;</strong><br/>
+      We add SOUND to our toolkit with buzzers. You will build a door alarm and use your Magic Measurement Wand in continuity mode to explore the difference between connected and disconnected circuits. Get ready to make some noise!
+    </div>
+
+  </div><!-- end page-b -->
+
+</body>
+</html>
