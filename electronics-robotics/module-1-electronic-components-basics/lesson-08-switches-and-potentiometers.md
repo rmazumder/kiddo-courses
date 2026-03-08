@@ -84,6 +84,8 @@ Let the kid count: light switches, TV remote buttons, door handles, phone button
   Use: Fan speed (low/med/high), and... your multimeter dial!
 ```
 
+![Switch Types](images/lesson-08-switch-types.png)
+
 > "Can you find the rotary switch in this room?" (Point to the multimeter dial!)
 
 **Activity -- Switch Scavenger Hunt:**
@@ -111,7 +113,7 @@ Walk around the house for 2 minutes and find as many switches as possible. Categ
   Between right and middle: changes from 10k ohms to 0 as you turn
 ```
 
-![Potentiometer Labeled](images/lesson-08-potentiometer-labeled.png)
+![08 Potentiometer Dimmer](images/lesson-08-potentiometer-dimmer.png)
 
 > "The middle leg is called the **WIPER**. It slides along a resistive strip. Turn the knob, wiper moves, resistance between middle and either end changes."
 

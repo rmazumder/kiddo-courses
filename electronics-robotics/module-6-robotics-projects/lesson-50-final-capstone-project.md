@@ -64,6 +64,8 @@ Materials depend on which project you choose -- see individual project sections 
   +-----------------------------------------------------------+
 ```
 
+![Four Capstone Choices](images/lesson-50-four-capstone-choices.png)
+
 ---
 
 ## Option A: The Maze Solver
@@ -920,6 +922,8 @@ void stopArm() {
 
 ## For ALL Capstone Projects
 
+![lesson-50-design-build-test-cycle](images/lesson-50-design-build-test-cycle.png)
+
 ### Step 1: Plan It (15 min)
 
 Before building, answer these questions:
@@ -1086,6 +1090,8 @@ Your presentation should include:
 ---
 
 ## Lesson 50 Complete!
+
+![Course Completion Celebration](images/lesson-50-course-completion-celebration.png)
 
 ```
   =============================================

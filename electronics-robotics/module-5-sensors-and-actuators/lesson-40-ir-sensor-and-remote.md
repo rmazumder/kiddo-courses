@@ -60,6 +60,8 @@ If they try it, the phone camera will show a faint purple/white flashing light f
 
 ---
 
+![lesson-40-invisible-flashlight-morse-code](images/lesson-40-invisible-flashlight-morse-code.png)
+
 ### Step 2: How IR Remote Control Works (5 min)
 
 **The Flashlight Morse Code Analogy:**
@@ -115,6 +117,8 @@ If they try it, the phone camera will show a faint purple/white flashing light f
 **Award: +5 XP for installing the library!**
 
 ---
+
+![lesson-40-ir-button-code-decoding](images/lesson-40-ir-button-code-decoding.png)
 
 ### Step 4: Decode Your Remote Buttons (10 min)
 

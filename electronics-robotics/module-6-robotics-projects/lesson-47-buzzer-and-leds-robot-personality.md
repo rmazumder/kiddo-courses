@@ -43,6 +43,8 @@ By the end of this lesson, you will be able to:
 
 ## How to Teach This Lesson
 
+![lesson-47-robot-personality-states](images/lesson-47-robot-personality-states.png)
+
 ### Step 1: Hook -- The Talking Robot (5 min)
 
 > "Think about a car. When it backs up, what does it do? BEEP BEEP BEEP! When it turns, what happens? The blinker flashes. When the engine starts, you hear it roar to life. Cars use sounds and lights to COMMUNICATE. Your robot should too!"
@@ -52,6 +54,8 @@ By the end of this lesson, you will be able to:
 **Award: +10 XP for planning your robot's personality!**
 
 ---
+
+![lesson-47-tone-melody-buzzer](images/lesson-47-tone-melody-buzzer.png)
 
 ### Step 2: Wiring the LEDs and Buzzer (10 min)
 

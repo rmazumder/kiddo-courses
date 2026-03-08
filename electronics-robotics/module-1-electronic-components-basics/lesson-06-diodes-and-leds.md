@@ -77,7 +77,7 @@ Ask the kid:
    Anode (+)        Cathode (-)
 ```
 
-![Diode Labeled: Anode and Cathode](images/lesson-06-diode-labeled.png)
+![06 One Way Door](images/lesson-06-one-way-door.png)
 
 > "The stripe on the diode marks the CATHODE -- the exit door for electricity. The other side, with no stripe, is the ANODE -- the entrance."
 
@@ -111,7 +111,7 @@ Ask the kid:
          +---------+
 ```
 
-![LED Legs Labeled](images/lesson-06-led-labeled.png)
+![06 Rainbow Led Circuit](images/lesson-06-rainbow-led-circuit.png)
 
 **LED colors and forward voltage:**
 
@@ -143,7 +143,7 @@ Ask the kid:
            +--[330-ohm]--[WHITE LED]----+
 ```
 
-![Rainbow LED Circuit on Breadboard](images/lesson-06-rainbow-circuit.png)
+![06 Forward Voltage Chart](images/lesson-06-forward-voltage-chart.png)
 
 **Observation questions:**
 

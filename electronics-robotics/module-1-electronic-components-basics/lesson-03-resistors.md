@@ -72,7 +72,7 @@ Draw on paper:
    = lots of current        = less current
 ```
 
-![Hallway Resistance Analogy](images/lesson-03-hallway-resistance.png)
+![03 Hallway Traffic Controller](images/lesson-03-hallway-traffic-controller.png)
 
 > "A resistor is like making a hallway narrower. More resistance = harder for electricity to squeeze through = less current flows."
 
@@ -109,7 +109,7 @@ This is the most fun part. Make it feel like a **spy decoder activity**.
 | Gray   | 8 | **G**ray = **8** -- 8 gray elephants |
 | White  | 9 | **W**hite = **9** -- 9 white clouds |
 
-![Resistor Color Code Chart](images/resistor-color-chart.png)
+![Color Band Chart](images/lesson-03-color-band-chart.png)
 
 **How to read a 4-band resistor:**
 
@@ -124,8 +124,6 @@ Example: Orange - Orange - Red - Gold
            3         3      x100   +/-5%
          = 3,300 ohms = 3.3k ohms
 ```
-
-![How to Read a 4-Band Resistor](images/read4bandresistor.png)
 
 **Step-by-step reading:**
 1. Band 1 = first digit
@@ -167,6 +165,8 @@ Now decode these together:
 **Round 2:** Swap for 330 ohms. Is it brighter or dimmer?
 **Round 3:** Swap for 1k ohm. How about now?
 **Round 4:** Try 10k ohms. Can you even see it glow?
+
+![LED Bodyguard Brightness](images/lesson-03-led-bodyguard-brightness.png)
 
 Fill in this table together:
 

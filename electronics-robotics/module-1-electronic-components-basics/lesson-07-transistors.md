@@ -110,7 +110,9 @@ Draw this:
   C = Collector (electricity enters here -- connects to load/LED)
 ```
 
-![Transistor 2N2222 Labeled](images/lesson-07-transistor-labeled.png)
+![Transistor EBC Labeled](images/lesson-07-transistor-ebc-labeled.png)
+
+![07 Water Faucet Transistor](images/lesson-07-water-faucet-transistor.png)
 
 > "Always check the datasheet for leg order! Different transistors have different leg layouts."
 
@@ -156,6 +158,8 @@ Draw this:
 **Test it:**
 - Without button: LED off
 - Press button: LED on!
+
+![Button Transistor LED](images/lesson-07-button-transistor-led.png)
 
 > "You just controlled electricity with electricity! The tiny current from the button (through 10k ohm) switched on a bigger current through the LED. That is transistor magic."
 

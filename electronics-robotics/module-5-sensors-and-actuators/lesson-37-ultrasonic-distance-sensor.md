@@ -58,6 +58,10 @@ Show them the HC-SR04:
 
 ---
 
+![lesson-37-hc-sr04-two-eyes](images/lesson-37-hc-sr04-two-eyes.png)
+
+![lesson-37-pool-echo-distance](images/lesson-37-pool-echo-distance.png)
+
 ### Step 2: How It Works -- The Science (8 min)
 
 **The Swimming Pool Analogy:**
@@ -177,6 +181,8 @@ void loop() {
 **Award: +20 XP for your first distance reading!**
 
 ---
+
+![lesson-37-parking-sensor-build](images/lesson-37-parking-sensor-build.png)
 
 ### Step 5: Build the Parking Sensor (10 min)
 

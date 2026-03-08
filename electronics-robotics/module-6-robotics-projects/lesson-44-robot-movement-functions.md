@@ -39,6 +39,8 @@ By the end of this lesson, you will be able to:
 
 ## How to Teach This Lesson
 
+![lesson-44-movement-functions-code](images/lesson-44-movement-functions-code.png)
+
 ### Step 1: Hook -- The Lazy Programmer (5 min)
 
 Show the code from Lesson 43's test sketch:
@@ -50,6 +52,8 @@ Show the code from Lesson 43's test sketch:
 **Award: +10 XP for understanding why functions matter!**
 
 ---
+
+![lesson-44-square-path-program](images/lesson-44-square-path-program.png)
 
 ### Step 2: Writing Movement Functions (12 min)
 

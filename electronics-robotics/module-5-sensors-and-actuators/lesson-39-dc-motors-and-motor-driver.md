@@ -44,6 +44,8 @@ By the end of this lesson, you will be able to:
 
 ## How to Teach This Lesson
 
+![lesson-39-garden-hose-vs-fire-hose](images/lesson-39-garden-hose-vs-fire-hose.png)
+
 ### Step 1: Hook -- Why Not Just Connect the Motor to Arduino? (5 min)
 
 > "Let me tell you a story about what happens if you try to spin a DC motor directly from an Arduino pin."
@@ -61,6 +63,8 @@ By the end of this lesson, you will be able to:
 **Award: +10 XP for understanding why we need a motor driver!**
 
 ---
+
+![lesson-39-l298n-module-labeled](images/lesson-39-l298n-module-labeled.png)
 
 ### Step 2: Meet the L298N Motor Driver (8 min)
 
@@ -105,6 +109,8 @@ By the end of this lesson, you will be able to:
 **Award: +15 XP for understanding the L298N!**
 
 ---
+
+![lesson-39-motor-direction-truth-table](images/lesson-39-motor-direction-truth-table.png)
 
 ### Step 3: Wiring Everything (10 min)
 

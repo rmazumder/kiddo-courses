@@ -51,6 +51,8 @@ Show the kid the small built-in LED vs a full-size 5mm LED:
 
 ---
 
+![lesson-26-blink-wiring](images/lesson-26-blink-wiring.png)
+
 ### Step 2: Build the Circuit (10 min)
 
 **Wiring Diagram:**
@@ -86,6 +88,8 @@ Show the kid the small built-in LED vs a full-size 5mm LED:
 **Award: +20 XP for building the circuit correctly!**
 
 ---
+
+![lesson-26-setup-vs-loop](images/lesson-26-setup-vs-loop.png)
 
 ### Step 3: The Anatomy of a Sketch (10 min)
 

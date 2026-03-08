@@ -117,6 +117,8 @@ T = 5.17 seconds (about 5 seconds!)
 
 ---
 
+![Clean labeled breadboard diagram of 555 monostable circuit. 555 IC in center with pins numbered. R (100k-ohm red/orange) between VCC and Pin 6/7. C (47µF blue) between Pin 6/7 and GND with + polarity mark. Push button connecting Pin 2 to GND with 10k pull-up resistor to VCC (red/orange). 330-ohm resistor + LED on Pin 3 glowing yellow OUTPUT. Pin 4 (RESET) to VCC (red/orange). Power +9V red/orange, ground GND green. Cartoon bear holds stopwatch.](images/lesson-19-monostable-circuit.png)
+
 ### Step 3: Build the One-Shot Circuit! (12 min)
 
 > "Let us build this! It looks a lot like the blinker from last lesson, but simpler in some ways."

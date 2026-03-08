@@ -50,6 +50,8 @@ By the end of this lesson, you will be able to:
 
 ---
 
+![lesson-27-variable-boxes](images/lesson-27-variable-boxes.png)
+
 ### Step 2: What Are Variables? (8 min)
 
 **A variable is a labeled box that holds a value.**
@@ -79,6 +81,8 @@ String myName = "Arduino";   // Text (words)
 **Award: +20 XP for learning variable types!**
 
 ---
+
+![lesson-27-serial-monitor](images/lesson-27-serial-monitor.png)
 
 ### Step 3: The Serial Monitor -- Arduino's Voice (8 min)
 
@@ -112,6 +116,8 @@ void loop() {
 **Award: +20 XP for getting your first Serial Monitor message!**
 
 ---
+
+![lesson-27-counter-sketch-flow](images/lesson-27-counter-sketch-flow.png)
 
 ### Step 4: Variables + Serial Monitor Together (10 min)
 

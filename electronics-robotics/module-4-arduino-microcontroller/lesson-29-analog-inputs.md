@@ -8,6 +8,8 @@
 
 ---
 
+![lesson-29-digital-vs-analog](images/lesson-29-digital-vs-analog.png)
+
 ## Your Mission Today
 
 Circuit Explorer, so far the Arduino has only dealt with ON or OFF -- HIGH or LOW -- like a light switch. But the real world is not just black and white! A volume knob does not go from silent to max with nothing in between. Today you will learn how the Arduino reads **analog values** -- numbers from 0 to 1023 that represent anything in between 0V and 5V. You will hook up a potentiometer (that twisty knob from Module 1!) and watch the Arduino read every tiny turn. This is how real sensors work!
@@ -144,6 +146,8 @@ Raw Value: 1023   |  Voltage: 5.00 V
 **Award: +30 XP for reading analog values!**
 
 ---
+
+![lesson-29-potentiometer-reading](images/lesson-29-potentiometer-reading.png)
 
 ### Step 4: The Math Behind It (5 min)
 

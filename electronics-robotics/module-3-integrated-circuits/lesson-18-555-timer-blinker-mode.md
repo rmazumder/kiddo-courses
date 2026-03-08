@@ -49,6 +49,8 @@ By the end of this lesson, you will be able to:
 
 ## How to Teach This Lesson
 
+![Split scene: left shows cartoon kid with hand on chest with red pulsing heart labeled 'Thump...Thump...' Right shows 555 timer with red pulse from Pin 3 to LED that alternates between bright yellow 'ON' and dim gray 'OFF.' Pulse waveform connects both scenes labeled 'Astable = never stops.' Color-coded: red/orange heartbeat/power, yellow LED, blue pulse.](images/lesson-18-heartbeat-pulse.png)
+
 ### Step 1: Hook -- The Heartbeat of Electronics (5 min)
 
 > "Put your hand on your chest. Feel that? Thump... thump... thump. Your heart beats on its own, over and over, without you thinking about it. Today we are going to give the 555 timer chip a heartbeat! It will pulse on and off, on and off, forever -- just like your heart."
@@ -107,6 +109,8 @@ Show the kid the completed blinker circuit (if you built one ahead of time) or d
 **Award: +10 XP for understanding how the 555 oscillates!**
 
 ---
+
+![Clean labeled breadboard wiring diagram of 555 astable blinker circuit. 555 IC in center with all pins numbered. R1 (1k-ohm red/orange), R2 (10k-ohm red/orange), C1 (47µF blue), C2 (0.01µF blue). LED with 330-ohm resistor on Pin 3 glowing yellow labeled OUTPUT. Power rail red/orange +9V, ground rail green GND. Cartoon fox holds screwdriver beside breadboard.](images/lesson-18-astable-circuit-labeled.png)
 
 ### Step 3: Build the Blinker Circuit! (15 min)
 

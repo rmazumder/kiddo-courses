@@ -54,6 +54,8 @@ By the end of this lesson, you will be able to:
 
 ---
 
+![lesson-33-i2c-before-after](images/lesson-33-i2c-before-after.png)
+
 ### Step 2: The I2C Shortcut (5 min)
 
 **The Problem:**
@@ -78,6 +80,8 @@ By the end of this lesson, you will be able to:
 **Award: +10 XP for understanding I2C!**
 
 ---
+
+![lesson-33-lcd-wiring](images/lesson-33-lcd-wiring.png)
 
 ### Step 3: Wire the LCD (5 min)
 
@@ -107,6 +111,8 @@ By the end of this lesson, you will be able to:
 **Award: +20 XP for wiring the LCD!**
 
 ---
+
+![lesson-33-lcd-cursor-positions](images/lesson-33-lcd-cursor-positions.png)
 
 ### Step 4: Install the Library (5 min)
 

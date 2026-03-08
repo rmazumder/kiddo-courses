@@ -82,7 +82,7 @@ Draw this on paper together:
   Pipe narrowness =  Resistance (R)  -- how much the pipe blocks the flow
 ```
 
-![Ohm's Law Water Analogy](images/lesson-04-ohms-law-water.png)
+![04 Water System Ohms Law](images/lesson-04-water-system-ohms-law.png)
 
 Now ask these questions one at a time:
 
@@ -139,7 +139,7 @@ Write this big on paper:
 
 Draw the triangle on paper:
 
-![Ohm's Law Triangle](images/lesson-04-ohms-law-triangle.png)
+![04 Vir Triangle](images/lesson-04-vir-triangle.png)
 
 ```
          /\
@@ -277,7 +277,7 @@ Fill in this table:
 | 10k ohm  |                 |                        |                              |
 ```
 
-![Ohm's Law Experiments](images/lesson-04-ohms-law-experiments.png)
+![04 Parameter Effects Table](images/lesson-04-parameter-effects-table.png)
 
 > "Look at your table! As resistance goes UP, current goes DOWN, and the LED gets DIMMER. Ohm's Law predicted this -- and your Magic Measurement Wand proved it!"
 

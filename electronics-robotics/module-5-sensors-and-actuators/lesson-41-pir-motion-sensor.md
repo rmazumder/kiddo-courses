@@ -58,6 +58,8 @@ Show them the PIR module:
 
 ---
 
+![lesson-41-pir-detection-zones](images/lesson-41-pir-detection-zones.png)
+
 ### Step 2: How PIR Sensors Work (8 min)
 
 **The Laser Grid Analogy:**
@@ -99,6 +101,8 @@ Show them the PIR module:
 **Award: +10 XP for understanding PIR internals!**
 
 ---
+
+![lesson-41-warm-body-detection-burst](images/lesson-41-warm-body-detection-burst.png)
 
 ### Step 3: Wiring the PIR Sensor (5 min)
 

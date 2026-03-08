@@ -62,6 +62,10 @@ Show them the LDR -- it looks like a small disk with a squiggly line pattern on 
 
 ---
 
+![lesson-36-ldr-magic-sunglasses](images/lesson-36-ldr-magic-sunglasses.png)
+
+![lesson-36-ldr-resistance-chart](images/lesson-36-ldr-resistance-chart.png)
+
 ### Step 2: How an LDR Works (5 min)
 
 **The Sunglasses Analogy:**
@@ -87,6 +91,8 @@ Show them the LDR -- it looks like a small disk with a squiggly line pattern on 
 **Award: +10 XP for understanding the LDR!**
 
 ---
+
+![lesson-36-voltage-divider-with-ldr](images/lesson-36-voltage-divider-with-ldr.png)
 
 ### Step 3: Wiring the LDR with a Voltage Divider (8 min)
 

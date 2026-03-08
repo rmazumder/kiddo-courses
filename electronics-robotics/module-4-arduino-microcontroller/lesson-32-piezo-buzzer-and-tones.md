@@ -56,7 +56,11 @@ By the end of this lesson, you will be able to:
 
 ---
 
+![lesson-32-frequency-pitch-chart](images/lesson-32-frequency-pitch-chart.png)
+
 ### Step 2: Wire the Buzzer (5 min)
+
+![lesson-32-buzzer-wiring](images/lesson-32-buzzer-wiring.png)
 
 **Important -- Use a PASSIVE buzzer for tone(), not an active buzzer.**
 

@@ -46,6 +46,8 @@ This project brings together everything from Module 5:
 
 ---
 
+![lesson-42-smart-room-birds-eye](images/lesson-42-smart-room-birds-eye.png)
+
 ## Smart Room System Features
 
 Your Smart Room will have 4 smart features:
@@ -80,6 +82,8 @@ Your Smart Room will have 4 smart features:
 ---
 
 ## How to Build It
+
+![lesson-42-smart-room-pin-map](images/lesson-42-smart-room-pin-map.png)
 
 ### Phase 1: Plan and Wire All Sensors (15 min)
 
@@ -190,6 +194,8 @@ void setup() {
 **Award: +30 XP for building the climate monitor!**
 
 ---
+
+![lesson-42-smart-room-system-flowchart](images/lesson-42-smart-room-system-flowchart.png)
 
 ### Phase 3: Build All Four Features in the Loop (15 min)
 

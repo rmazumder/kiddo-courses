@@ -42,6 +42,8 @@ By the end of this lesson, you will be able to:
 
 ## How to Teach This Lesson
 
+![lesson-45-ir-sensor-how-it-works](images/lesson-45-ir-sensor-how-it-works.png)
+
 ### Step 1: Hook -- How Does a Robot See a Line? (5 min)
 
 Put a strip of black tape on white paper in front of the kid.
@@ -69,6 +71,8 @@ Hold up an IR sensor module:
 **Award: +10 XP for understanding how IR sensors work!**
 
 ---
+
+![lesson-45-line-following-algorithm](images/lesson-45-line-following-algorithm.png)
 
 ### Step 2: Sensor Wiring (8 min)
 

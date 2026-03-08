@@ -63,6 +63,8 @@ By the end of this lesson, you will be able to:
 
 ---
 
+![lesson-30-pwm-signal-patterns](images/lesson-30-pwm-signal-patterns.png)
+
 ### Step 2: PWM Pins on the Arduino (5 min)
 
 Not all Arduino pins can do PWM. Only the ones marked with a **~** (tilde) on the board:
@@ -91,6 +93,8 @@ Not all Arduino pins can do PWM. Only the ones marked with a **~** (tilde) on th
 
 ---
 
+![lesson-30-fade-circuit](images/lesson-30-fade-circuit.png)
+
 ### Step 3: Build the Fade Circuit (5 min)
 
 **Move your LED to a PWM pin!**
@@ -111,6 +115,8 @@ Not all Arduino pins can do PWM. Only the ones marked with a **~** (tilde) on th
 **Award: +10 XP for rewiring to a PWM pin!**
 
 ---
+
+![lesson-30-brightness-dial](images/lesson-30-brightness-dial.png)
 
 ### Step 4: The Fade Code (10 min)
 

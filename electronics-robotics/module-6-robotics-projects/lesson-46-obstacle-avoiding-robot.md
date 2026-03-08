@@ -42,6 +42,8 @@ By the end of this lesson, you will be able to:
 
 ## How to Teach This Lesson
 
+![lesson-46-ultrasonic-bat-analogy](images/lesson-46-ultrasonic-bat-analogy.png)
+
 ### Step 1: Hook -- The Bat Robot (5 min)
 
 > "Close your eyes and try to walk across the room without bumping into anything."
@@ -68,6 +70,8 @@ Hold up the HC-SR04 sensor:
 **Award: +10 XP for understanding echolocation!**
 
 ---
+
+![lesson-46-obstacle-scan-decision](images/lesson-46-obstacle-scan-decision.png)
 
 ### Step 2: Mounting the Sensor and Servo (10 min)
 

@@ -44,6 +44,8 @@ By the end of this lesson, you will be able to:
 
 ## How to Teach This Lesson
 
+![lesson-48-bluetooth-walkie-talkie](images/lesson-48-bluetooth-walkie-talkie.png)
+
 ### Step 1: Hook -- Wireless Magic (5 min)
 
 > "Your robot has been amazing -- following lines, dodging obstacles, flashing lights. But what if you could control it from your PHONE? Like a video game, but the character is REAL and driving around your room?"
@@ -67,6 +69,8 @@ By the end of this lesson, you will be able to:
 **Award: +10 XP for understanding Bluetooth communication!**
 
 ---
+
+![lesson-48-hc05-wiring-diagram](images/lesson-48-hc05-wiring-diagram.png)
 
 ### Step 2: Wiring the HC-05 Module (10 min)
 

@@ -62,6 +62,8 @@ digitalWrite(11, HIGH); delay(100); digitalWrite(11, LOW);
 
 ---
 
+![lesson-31-stair-climbing-loop](images/lesson-31-stair-climbing-loop.png)
+
 ### Step 2: What is a For Loop? (8 min)
 
 **A for loop repeats code a set number of times.**
@@ -113,6 +115,8 @@ void loop() {
 
 ---
 
+![lesson-31-array-boxes](images/lesson-31-array-boxes.png)
+
 ### Step 3: What is an Array? (5 min)
 
 **An array is a list of values stored in one variable.**
@@ -143,6 +147,8 @@ leds[5] = 11
 **Award: +10 XP for understanding arrays!**
 
 ---
+
+![lesson-31-knight-rider-sequence](images/lesson-31-knight-rider-sequence.png)
 
 ### Step 4: Build the 6-LED Circuit (10 min)
 

@@ -70,6 +70,8 @@ A quiz board is a classic electronics project where:
   +---------------------------------------------+
 ```
 
+![Quiz Board Layout](images/lesson-10-quiz-board-layout.png)
+
 ---
 
 ## How to Build It

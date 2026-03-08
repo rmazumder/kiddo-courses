@@ -61,7 +61,7 @@ Let them experiment. They might:
 
 ### Step 2: The Water Analogy (8 min)
 
-![Understanding Electricity](images/understanding-electricity.png)
+![01 Water Pump Loop](images/lesson-01-water-pump-loop.png)
 
 Draw this on paper or a whiteboard together:
 
@@ -81,7 +81,7 @@ Draw this on paper or a whiteboard together:
   Full loop   = Circuit
 ```
 
-![Water Pump Circuit Analogy](images/water-pump.png)
+![01 Water Pump Loop](images/lesson-01-water-pump-loop.png)
 
 **Ask the kids:**
 - "What happens if we cut the pipe?" (Water stops. Circuit is broken. LED goes off.)
@@ -97,7 +97,7 @@ Draw this on paper or a whiteboard together:
 | **Resistance (ohms)** | Something that slows the electricity down |
 | **Circuit** | A complete loop -- electricity must go in a circle |
 
-![Voltage, Current & Resistance Explained](images/voltage-current-resistor-explain.png)
+![01 Breadboard First Circuit](images/lesson-01-breadboard-first-circuit.png)
 
 **Award: +20 XP for answering at least 2 of the 3 questions!**
 
@@ -139,7 +139,7 @@ Circuit diagram:
   4. Wire: row 7 to - rail
 ```
 
-![Breadboard Circuit Diagram](images/lesson-01-breadboard-circuit.png)
+![01 Breadboard First Circuit](images/lesson-01-breadboard-first-circuit.png)
 
 **Go slowly.** Have the kid place each component themselves. Describe what you are doing as you go:
 > "This resistor is like the narrow pipe -- it protects the LED from getting too much electricity."
@@ -173,6 +173,8 @@ Remove one jumper wire.
 **Experiment D -- Touch the wire to complete the circuit**
 Remove one wire and have the kid hold both bare ends together with their fingers.
 > "You ARE part of the circuit right now! Electricity is flowing through you (a tiny, tiny, completely safe amount)."
+
+![Break and Restore Circuit](images/lesson-01-break-restore-circuit.png)
 
 **Award: +30 XP for completing at least 3 of the 4 experiments!**
 

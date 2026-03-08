@@ -44,6 +44,8 @@ By the end of this lesson, you will be able to:
 
 ## How to Teach This Lesson
 
+!['Family reunion' scene showing six cartoon gate characters shaped like logic symbols with friendly faces, arms, legs. AND (red/orange, strong arms) next to NAND (red/orange leather jacket, inversion bubble). OR (blue, wide arms) next to NOR (blue, arms crossed, inversion bubble). NOT (green, holding mirror) next to XOR (yellow, wearing detective sunglasses). Each has name tag and truth table on chest like t-shirt. Cartoon kid stands front taking group photo. Grassy field with banner 'The Gate Family.' Cheerful scene.](images/lesson-21-gate-family-reunion.png)
+
 ### Step 1: Hook -- The Gate Family Reunion (5 min)
 
 > "Last lesson you met the original three gates: AND, OR, and NOT. Think of them as the founding members of the Gate family. Today we meet three more relatives who each have their own personality."

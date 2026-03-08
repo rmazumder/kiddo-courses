@@ -51,7 +51,11 @@ By the end of this lesson, you will be able to:
 
 ---
 
+![lesson-28-pullup-logic](images/lesson-28-pullup-logic.png)
+
 ### Step 2: How Buttons Work with Arduino (5 min)
+
+![lesson-28-button-wiring](images/lesson-28-button-wiring.png)
 
 **The Problem:**
 
@@ -73,6 +77,8 @@ By the end of this lesson, you will be able to:
 **Award: +10 XP for understanding pull-up resistors!**
 
 ---
+
+![lesson-28-if-else-fork](images/lesson-28-if-else-fork.png)
 
 ### Step 3: Build the Button Circuit (8 min)
 

@@ -43,6 +43,8 @@ By the end of this lesson, you will be able to:
 
 ## How to Teach This Lesson
 
+![lesson-43-robot-chassis-assembly](images/lesson-43-robot-chassis-assembly.png)
+
 ### Step 1: Hook -- Your Robot Awakens (5 min)
 
 Show the pile of parts: chassis plate, wheels, motors, wires, batteries, driver board, Arduino.
@@ -56,6 +58,8 @@ Hold up a motor and spin the shaft with your finger:
 **Award: +10 XP for getting excited about robot building!**
 
 ---
+
+![lesson-43-differential-drive-steering](images/lesson-43-differential-drive-steering.png)
 
 ### Step 2: Meet the Parts (8 min)
 
@@ -107,6 +111,8 @@ Go through each major component:
 **Award: +10 XP for identifying all robot parts!**
 
 ---
+
+![lesson-43-l298n-motor-wiring](images/lesson-43-l298n-motor-wiring.png)
 
 ### Step 3: Chassis Assembly (15 min)
 

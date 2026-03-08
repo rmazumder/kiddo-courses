@@ -60,6 +60,8 @@ Show them the DHT11 sensor -- it is a small blue box with holes in it and 3 or 4
 
 ---
 
+![lesson-35-dht11-module-pinout](images/lesson-35-dht11-module-pinout.png)
+
 ### Step 2: What Is a Temperature Sensor? (8 min)
 
 **The Thermometer Analogy:**
@@ -88,6 +90,8 @@ Show them the DHT11 sensor -- it is a small blue box with holes in it and 3 or 4
 **Award: +10 XP for understanding sensors!**
 
 ---
+
+![lesson-35-thermometer-to-arduino-flow](images/lesson-35-thermometer-to-arduino-flow.png)
 
 ### Step 3: Wiring the DHT11 (8 min)
 
@@ -143,6 +147,8 @@ Before writing code, you need to install the DHT library:
 **Award: +10 XP for installing the library!**
 
 ---
+
+![lesson-35-temperature-alert-system](images/lesson-35-temperature-alert-system.png)
 
 ### Step 5: Your First Temperature Reading (10 min)
 

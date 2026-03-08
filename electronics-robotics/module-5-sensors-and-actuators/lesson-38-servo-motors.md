@@ -55,6 +55,10 @@ Let them feel the servo horn and try to turn it manually (with no power) -- they
 
 ---
 
+![lesson-38-servo-position-clock-hand](images/lesson-38-servo-position-clock-hand.png)
+
+![lesson-38-servo-internals](images/lesson-38-servo-internals.png)
+
 ### Step 2: How a Servo Works (8 min)
 
 **The Clock Hand Analogy:**
@@ -94,6 +98,8 @@ Let them feel the servo horn and try to turn it manually (with no power) -- they
 **Award: +10 XP for understanding servo internals!**
 
 ---
+
+![lesson-38-servo-sweep-demo](images/lesson-38-servo-sweep-demo.png)
 
 ### Step 3: Wiring the Servo (5 min)
 

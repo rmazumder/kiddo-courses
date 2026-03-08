@@ -60,6 +60,8 @@ Hand them the buzzer. Let them hold it and press battery terminals to it. They w
 
 > "That is how a buzzer works! Electricity makes a thin metal disc inside vibrate very fast -- and that vibration travels through the air to your ears as sound."
 
+![Vocal Cord Buzzer](images/lesson-09-vocal-cord-buzzer.png)
+
 **Award: +10 XP for feeling the vibration in your fingers!**
 
 ---
@@ -89,6 +91,8 @@ They often look identical! How to tell them apart:
 > "Like a speaker -- you need to give it a rapidly changing signal to make it vibrate at a specific frequency (pitch). Later, when we use Arduino, we will play TUNES on a passive buzzer!"
 
 **For today we use the active buzzer** (simpler, no microcontroller needed).
+
+![Active vs Passive Buzzer](images/lesson-09-active-vs-passive-buzzer.png)
 
 **Award: +10 XP for correctly identifying which buzzer is active!**
 
@@ -176,6 +180,8 @@ Materials:
 > "Wait -- we want it to beep when the door OPENS, not when it is closed! For now, this simple version beeps when the circuit is complete. In later modules, we will learn to flip this around using transistor logic."
 
 **Wand Tip:** Before taping the foil to the door, use continuity mode to make sure each foil strip conducts electricity end-to-end. Some foils have a non-conductive coating!
+
+![Door Alarm Circuit](images/lesson-09-door-alarm-circuit.png)
 
 **Award: +20 XP for building the door alarm concept!**
 

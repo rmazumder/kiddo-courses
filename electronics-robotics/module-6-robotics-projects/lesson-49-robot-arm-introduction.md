@@ -47,6 +47,8 @@ By the end of this lesson, you will be able to:
 
 ## How to Teach This Lesson
 
+![lesson-49-dof-human-arm](images/lesson-49-dof-human-arm.png)
+
 ### Step 1: Hook -- The Claw Machine (5 min)
 
 > "Have you ever played a claw machine at an arcade? You move a joystick, the claw slides over, drops down, grabs a prize (hopefully!), and lifts it up. That claw machine is a ROBOT ARM!"
@@ -70,6 +72,8 @@ Show the three servos:
 **Award: +10 XP for understanding degrees of freedom!**
 
 ---
+
+![lesson-49-potentiometer-servo-control](images/lesson-49-potentiometer-servo-control.png)
 
 ### Step 2: Building the Arm Structure (18 min)
 
@@ -150,6 +154,8 @@ This is the most hands-on part! Build the arm step by step:
 **Award: +40 XP for building the complete arm structure!**
 
 ---
+
+![lesson-49-robot-arm-pickup-sequence](images/lesson-49-robot-arm-pickup-sequence.png)
 
 ### Step 3: Wiring the Arm (8 min)
 

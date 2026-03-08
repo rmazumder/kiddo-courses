@@ -79,7 +79,9 @@ Draw this on paper:
                   (water balloon)
 ```
 
-![Capacitor Charge and Discharge](images/lesson-05-charge-discharge.png)
+![Water Balloon Analogy](images/lesson-05-water-balloon-analogy.png)
+
+![05 Charge Discharge Experiment](images/lesson-05-charge-discharge-experiment.png)
 
 > "A capacitor is like a water balloon. You fill it up (charge it), then it holds the water (charge) until you poke a hole in it -- then all the water squirts out (discharge) at once."
 

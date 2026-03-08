@@ -8,6 +8,8 @@
 
 ---
 
+![lesson-25-hidden-computers](images/lesson-25-hidden-computers.png)
+
 ## Your Mission Today
 
 Welcome to Module 4, Circuit Explorer! You have mastered components, circuits, and ICs. Now it is time to meet the most powerful tool in all of electronics: the **microcontroller**. It is a tiny computer on a single chip, and it is hiding inside almost every gadget you own. Today you will unbox your Arduino, explore its parts, install the software, and upload your very first program. Let us go!
@@ -48,6 +50,8 @@ Most kids say 1 or 2 (laptop, tablet). Then blow their minds:
 
 > "A modern car has about 100 tiny computers inside it. Your microwave has one. Your washing machine has one. Even some toothbrushes have one! These tiny computers are called microcontrollers."
 
+![lesson-25-robot-brain-analogy](images/lesson-25-robot-brain-analogy.png)
+
 **The Big Idea:**
 
 > "A microcontroller is a complete computer squished down to one tiny chip. It has a brain (processor), memory, and pins that can talk to the real world -- like turning on lights, reading buttons, or spinning motors."
@@ -55,6 +59,8 @@ Most kids say 1 or 2 (laptop, tablet). Then blow their minds:
 **Award: +10 XP for guessing how many computers are in the room!**
 
 ---
+
+![lesson-25-arduino-labeled-diagram](images/lesson-25-arduino-labeled-diagram.png)
 
 ### Step 2: Meet the Arduino Uno (10 min)
 

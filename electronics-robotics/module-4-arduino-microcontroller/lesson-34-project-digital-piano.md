@@ -44,6 +44,8 @@ This project brings together everything from Module 4:
 
 ## How to Build It
 
+![lesson-34-piano-layout](images/lesson-34-piano-layout.png)
+
 ### Phase 1: Plan the Piano Layout (5 min)
 
 **The 8 Notes (One Octave of C Major):**
@@ -64,6 +66,8 @@ This project brings together everything from Module 4:
 **Award: +20 XP for planning the piano layout!**
 
 ---
+
+![lesson-34-system-diagram](images/lesson-34-system-diagram.png)
 
 ### Phase 2: Wire the Buttons (15 min)
 
