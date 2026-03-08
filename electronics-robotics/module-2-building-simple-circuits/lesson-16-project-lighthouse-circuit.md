@@ -84,6 +84,8 @@ A lighthouse that:
 
 ### Phase 1: Understand the Blinker Circuit (8 min)
 
+![A four-stage circular diagram showing the blinker (astable multivibrator) cycle, arranged like a clock with arrows flowing clockwise. Stage 1 (top, red/orange): "Capacitor Charging" with a capacitor icon filling up (progress bar increasing), current flowing into it. Stage 2 (right, blue): "Transistor Turns ON" with the transistor gate opening, current flowing through to the LED. Stage 3 (bottom, yellow with glow): "LED Bright!" with a glowing LED at full brightness and the label "Capacitor fully charged." Stage 4 (left, green): "Capacitor Discharging" with the capacitor emptying (progress bar decreasing), transistor turning off, LED going dark. Circular arrows connect all four stages in a continuous loop with a label in the center: "This cycle repeats forever = BLINKING!" A cartoon lighthouse character winks in the center of the cycle. Each stage has a small circuit snapshot showing the state of each component.](images/lesson-16-blinker-cycle.png)
+
 > "The secret to blinking is a CAPACITOR. Remember from Module 1 how a capacitor charges up and then releases its energy? We are going to use that charge-discharge cycle to turn a transistor ON and OFF repeatedly -- and that will blink the LED!"
 
 **How the blinker works (simplified):**
@@ -130,6 +132,8 @@ A lighthouse that:
 ---
 
 ### Phase 2: Build the Blinker Circuit (15 min)
+
+![A circuit schematic where every component is drawn as a friendly cartoon character with arms, legs, and expressive faces. The battery character (red/orange, strong and smiling) pushes energy into the circuit. A switch character (a gate keeper opening and closing a door) sits at the entrance. A resistor character (wearing a crossing-guard vest, labeled with its value) slows down the flow. A capacitor character (a chubby balloon-like figure that inflates and deflates) stores and releases energy. A transistor character (a small figure with one hand on a big valve lever, labeled E-B-C) controls the main flow. An LED character (a glowing lightbulb-headed figure at the top of a lighthouse tower shape) lights up when current arrives. Colored wires connect them: red/orange from battery, blue through the main path, green to ground. Each character has a one-word role label. The overall layout forms the actual circuit topology so students can follow the connections.](images/lesson-16-cartoon-circuit-diagram.png)
 
 **Circuit diagram:**
 
@@ -346,6 +350,8 @@ Replace the 100-microfarad capacitor with the 1000-microfarad capacitor.
 ---
 
 ### Phase 7: Build the Lighthouse Tower (10 min)
+
+![A finished lighthouse project model shown as a 3D illustration. The lighthouse tower is made from a rolled paper tube (decorated with red and white horizontal stripes like a real lighthouse), standing on a sturdy breadboard base. At the top of the paper tube, a bright LED pokes through a small hole, casting a warm yellow-orange glow with light ray lines radiating outward. The breadboard base is visible with the blinker circuit neatly wired: battery pack, switch, resistors, capacitor, and transistor are all identifiable on the board. Wires trail up inside the tube to the LED at the top. A small on/off toggle switch is accessible on the side of the base. The LED is shown mid-blink with a "flash" starburst effect. A cartoon kid stands proudly next to their creation, arms wide, with a speech bubble: "I built this!" The scene has a slightly darkened background to make the lighthouse glow stand out dramatically.](images/lesson-16-finished-lighthouse.png)
 
 > "Now the fun part -- building the lighthouse itself!"
 

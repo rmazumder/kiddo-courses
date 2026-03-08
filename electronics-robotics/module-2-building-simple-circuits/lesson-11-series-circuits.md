@@ -57,6 +57,8 @@ Let the kid guess.
 
 ### Step 2: What Is a Series Circuit? (8 min)
 
+![A single-track train loop analogy for series circuits. A colorful toy train track forms a complete oval loop. A battery locomotive (red/orange, labeled "Battery - the engine") pulls three cargo cars in a line: a resistor car (yellow, labeled "Resistor"), an LED car (bright with a glow, labeled "LED"), and a buzzer car (with sound waves, labeled "Buzzer"). Blue arrows along the track show the direction of flow, and a label reads "Only ONE path - everyone shares the same track!" The train cars are drawn as friendly cartoon characters riding the rails. A single track with no branches or forks is emphasized. A cheerful cartoon kid waves at the passing train from a platform. A callout bubble explains: "Same current flows through ALL components!"](images/lesson-11-train-track-series.png)
+
 **The Train Track Analogy:**
 
 ```
@@ -115,6 +117,8 @@ Let the kid guess.
 ---
 
 ### Step 4: Wand Check -- The Voltage Treasure Hunt! (12 min)
+
+![A treasure trail map styled like a board game path for the voltage treasure hunt. The winding trail starts at a treasure chest labeled "9V Battery (Total Treasure: 9 gold coins)" in red/orange. Along the path are three stops: Stop 1 is a resistor gate that takes 2 gold coins (labeled "Resistor: 2V drop, 7 coins left"), Stop 2 is an LED castle that takes 2 coins (labeled "LED: 2V drop, 5 coins left"), and Stop 3 is a buzzer bridge that takes 5 coins (labeled "Buzzer: 5V drop, 0 coins left"). Gold coin icons are spent at each stop and the count decreases. At the end of the trail, a sign reads "All 9 coins spent! Voltage adds up to total!" A cartoon explorer kid walks the path collecting measurements with a multimeter probe as a walking stick. The path loops back to the battery to start again.](images/lesson-11-voltage-treasure-hunt.png)
 
 > "Now the fun part. We are going hunting for voltage! Your Wand is going to measure how much voltage each resistor 'uses up.' Ready?"
 
@@ -217,6 +221,8 @@ Expected: 3.7 + 5.3 = 9.0V -- the SAME as the battery!
 ---
 
 ### Step 6: The Break Test (5 min)
+
+![A two-panel comparison showing the series circuit break test. Top panel labeled "All Connected": a series circuit with battery, resistor, LED 1, and LED 2 all in a single loop. Both LEDs glow brightly, blue current arrows flow in a complete circle, and a green checkmark with "All lights ON!" appears. Bottom panel labeled "One Removed": the same circuit but LED 1 has been pulled out leaving an empty gap in the track. Both LED 1's socket is empty and LED 2 is also dark (even though it is still in the circuit). Blue arrows stop at the gap with a red X. A dramatic label reads "Remove ONE = ALL go dark!" and "No alternative path!" A cartoon kid holds the removed LED looking surprised, with a thought bubble: "One break stops everything!" The single-path nature of series is emphasized with the broken train track shown beneath.](images/lesson-11-break-test-series.png)
 
 > "Remember the holiday lights? Let us prove it."
 

@@ -72,6 +72,8 @@ By the end of this lesson, you will be able to:
 
 ### Step 2: Rules of Parallel Circuits (8 min)
 
+![A two-panel road analogy comparing series and parallel circuits. Left panel labeled "Series = One Road": a single-lane road with three car characters (representing components) in a line; when one car breaks down and blocks the road (shown with a red X and hazard cones), all cars behind it are stuck with a label "One blockage stops everyone!" Right panel labeled "Parallel = Highway with Lanes": a three-lane highway with one car in each lane; when one car breaks down in one lane (red X), the other two lanes continue flowing with happy car characters, labeled "Blocked lane? Others still flow!" Blue arrow traffic flows through the open lanes. The lanes merge at the start (power source, red/orange) and end (ground, green), showing the common connection points. A cartoon traffic helicopter pilot overhead observes both scenes and says "Parallel keeps things moving!"](images/lesson-12-highway-parallel.png)
+
 **The key rules -- side by side with series:**
 
 | Rule | Series Circuit | Parallel Circuit |
@@ -100,6 +102,8 @@ By the end of this lesson, you will be able to:
 ---
 
 ### Step 3: Build a Parallel LED Circuit (10 min)
+
+![A side-by-side breadboard comparison of series vs parallel LED circuits. Left side labeled "Series: 3 LEDs": three LEDs wired one after another in a single loop, each LED glows dimly (shown with small glow circles), and a label reads "Voltage shared = Dim!" with a bar graph showing each LED getting only one-third of the voltage. Right side labeled "Parallel: 3 LEDs": three LEDs each on their own branch from the power rail, each LED glows brightly (shown with large glow circles), and a label reads "Full voltage each = Bright!" with a bar graph showing each LED getting the full voltage. The battery in both circuits is the same 9V. Blue current arrows are thin in the series circuit and thick (splitting into three branches) in the parallel circuit. A cartoon kid holds a brightness meter comparing the two, looking amazed at the difference.](images/lesson-12-brightness-comparison.png)
 
 **Circuit -- Three LEDs in Parallel:**
 
@@ -162,6 +166,8 @@ Set your Wand to **DC Volts** (20V range).
 ### Step 5: NEW Wand Superpower -- Measuring Current! (12 min)
 
 > "Until now, your Wand has measured voltage (push) and resistance (blocking) and tested continuity (beep). Today you unlock a NEW superpower: measuring **current** -- how much electricity is actually flowing! This is called **ammeter mode**."
+
+![A two-panel analogy showing how to connect an ammeter. Left panel labeled "Doctor's Stethoscope (Voltmeter)": a cartoon doctor places a stethoscope across a patient's chest (touching two points without breaking anything), with a label "Voltmeter: Touch ACROSS the component (parallel), don't break the circuit." Right panel labeled "Pipe Flow Meter (Ammeter)": a cartoon plumber cuts a pipe open and inserts a flow meter inline so all water must pass through it, with a label "Ammeter: Break the circuit and INSERT the meter so current flows THROUGH it (series)." Below both panels, a practical breadboard diagram shows the correct ammeter connection: the circuit wire is disconnected at one point, and the multimeter probes bridge the gap, with blue arrows flowing through the meter. A cartoon kid switches the multimeter dial to the "A" position. Red/orange warning label: "Never connect ammeter in parallel - it can damage the meter!"](images/lesson-12-ammeter-setup.png)
 
 **SAFETY RULES FOR AMMETER MODE (very important!):**
 

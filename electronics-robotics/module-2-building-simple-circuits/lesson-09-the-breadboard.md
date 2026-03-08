@@ -53,6 +53,8 @@ Hold up a breadboard.
 
 **Award: +10 XP for being ready to explore the breadboard hotel!**
 
+![A breadboard shown as a hotel with secret tunnels. Top half shows a normal top-down view with labeled holes. Bottom half is a magical X-ray view revealing the hidden connections: horizontal blue tunnels connect the 5 holes in each row, vertical red/orange tunnels for the + power rail and green for the - ground rail run along the sides. Tiny cartoon electrons ride mine carts through tunnels. A cheerful bellhop robot greets electrons at the entrance. Labels read: "Each row of 5 = secretly connected!" "Power rails run the whole length!" "Center gap = NO connection across!"](images/breadboard-hotel.png)
+
 ---
 
 ### Step 2: The Breadboard Map (10 min)
@@ -191,6 +193,8 @@ Now that the Wand has confirmed everything, have the kid draw the connections on
 
 > "Now that you know how the breadboard works, let us build a circuit using PROPER technique."
 
+![A top-down breadboard diagram showing a clear two-LED circuit. A 9V battery connects via red/orange wire to the positive power rail and green wire to the negative ground rail. Two separate LED circuits branch off the power rail: each has a resistor connected from the power rail to a row, then an LED in the next rows, then a wire back to the ground rail. Blue current-flow arrows trace two separate paths from the positive rail through each resistor-LED pair back to the negative rail. Each component is labeled: "Resistor (protects LED)," "LED 1 (red)," "LED 2 (green)." Both LEDs glow brightly. Row numbers are visible on the breadboard edges. A cartoon kid points to the two separate paths and a label reads "Two circuits, one breadboard!" The power and ground rails are color-highlighted.](images/lesson-09-two-led-breadboard-circuit.png)
+
 **Circuit: Two LEDs, each with a resistor, sharing the same power source.**
 
 ```
@@ -254,6 +258,8 @@ Set Wand to DC Volts. Connect the battery.
 ---
 
 ### Step 7: Common Breadboard Mistakes (3 min)
+
+![A four-panel grid showing common breadboard mistakes, each with a red X and the correct fix shown with a green checkmark. Panel 1 "Gap Error": a component placed across the center gap with legs in the same column but no tunnel connection, fix shows legs in the same row. Panel 2 "Wrong Rows": two components that need to connect are placed in different unconnected rows, fix shows them sharing a row. Panel 3 "Missing Return Path": a circuit with no wire back to the ground rail (dead end), fix shows the green return wire added. Panel 4 "Rail Break": some breadboards have a split in the power rail at the center (shown as a gap in the red/orange line), fix shows a jumper wire bridging the gap. A cartoon detective cat with a magnifying glass appears in the center saying "Find the bug!" Each panel has bold labels and uses blue arrows for current flow (or a red stop symbol where flow is blocked).](images/lesson-09-common-mistakes.png)
 
 Show these mistakes and have the kid identify what is wrong:
 

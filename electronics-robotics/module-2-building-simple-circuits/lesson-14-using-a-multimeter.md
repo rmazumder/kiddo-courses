@@ -91,6 +91,8 @@ Draw (or print) the Four Superpowers Poster together:
 
 ---
 
+![A superhero-style poster divided into four quadrants, each showing one multimeter superpower. Top-left quadrant (red/orange background): "VOLTAGE (V)" with a lightning bolt icon and a multimeter measuring across a battery, labeled "How much push?" Top-right quadrant (blue background): "CURRENT (A)" with a water flow icon and a multimeter inserted in a circuit path, labeled "How much flow?" Bottom-left quadrant (green background): "RESISTANCE (Ohm)" with a shield icon and a multimeter touching a resistor's legs, labeled "How much blocking?" Bottom-right quadrant (yellow background): "CONTINUITY" with a connected chain icon and a multimeter beeping on a wire, labeled "Is the path complete?" A cartoon superhero kid stands in the center where all four quadrants meet, wearing a cape and holding a multimeter like a hero weapon. Each quadrant has the dial position shown as a small inset.](images/lesson-14-four-superpowers-poster.png)
+
 ### Step 2: Superpower 1 Deep Dive -- DC Voltage (8 min)
 
 > "You have measured voltage before. But let us go deeper."
@@ -375,6 +377,8 @@ Lay out a circuit on the breadboard (battery DISCONNECTED):
 ---
 
 ### Step 7: The Multimeter Master Challenge (8 min)
+
+![A step-by-step debugging flowchart drawn as a vertical path with decision diamonds and action boxes. Step 1 (red/orange box): "Check the Battery" with a multimeter icon measuring battery voltage. Decision diamond: "Shows ~9V?" with a green arrow for Yes (continue) and a red arrow for No leading to "Replace Battery!" Step 2 (blue box): "Check the Wires" with a continuity beep test icon. Decision diamond: "Beeps on all wires?" with Yes continuing and No leading to "Replace Wire!" Step 3 (green box): "Check LED Polarity" with an LED showing long leg (+) and short leg (-). Decision diamond: "Long leg toward +?" with Yes continuing and No leading to "Flip the LED!" Final box at the bottom (gold, with stars): "Circuit Fixed!" with a glowing LED icon. A cartoon detective kid follows the path with a magnifying glass. Each step has a small illustration of the action being performed.](images/lesson-14-debugging-flowchart.png)
 
 > "Final challenge! I am going to set up a circuit with THREE problems. You must find ALL of them using your Wand. Ready?"
 

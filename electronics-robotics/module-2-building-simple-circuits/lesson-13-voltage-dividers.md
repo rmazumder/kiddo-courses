@@ -60,6 +60,8 @@ Let the kid think...
 
 ### Step 2: How a Voltage Divider Works (10 min)
 
+![A pizza-sharing analogy for voltage dividers. A large pizza (labeled "9V Battery = Whole Pizza") is being divided between two cartoon kids sitting at a table. The bigger kid on the left (labeled "R1 = Big Resistor = BIG kid") takes a larger portion of slices (labeled "Gets MORE voltage"), while the smaller kid on the right (labeled "R2 = Small Resistor = SMALL kid") gets fewer slices (labeled "Gets LESS voltage"). Below the pizza scene, a simple circuit diagram mirrors the analogy: a 9V battery connects to R1 (large resistor, red/orange) then R2 (small resistor, blue) in series, with the voltage output (Vout) measured between them labeled in green. Arrows and labels connect each part of the analogy to the circuit: "Bigger resistor = more voltage drop." A cartoon cat referee ensures fair sharing and holds a sign: "Voltage splits proportionally!"](images/lesson-13-pizza-sharing.png)
+
 **The circuit:**
 
 ```
@@ -75,6 +77,8 @@ Let the kid think...
 > "Vin is the full battery voltage (9V). The two resistors form a series circuit. The point BETWEEN them is called Vout -- the divided voltage."
 
 **The formula:**
+
+![A clean, large voltage divider formula diagram with color coding. The circuit is drawn vertically: red/orange Vin (9V) enters at the top, flows through R1 (colored red/orange, labeled with value), then through R2 (colored blue, labeled with value), and exits to green ground at the bottom. The output point Vout is marked with a bright green star between R1 and R2 with a green arrow pointing to it. The formula "Vout = Vin x R2 / (R1 + R2)" is displayed in a large banner with each variable matching its color: Vin in red/orange, R1 in red/orange, R2 in blue, Vout in green. A worked example is shown: "Vin = 9V, R1 = 1K ohm, R2 = 2K ohm, Vout = 9 x 2000 / 3000 = 6V" with each step labeled. A cartoon robot teacher points to the formula with a pointer stick.](images/lesson-13-voltage-divider-formula.png)
 
 ```
                       R2
@@ -194,6 +198,8 @@ Let the kid think...
 ### Step 5: The Variable Voltage Divider -- Potentiometer! (8 min)
 
 > "What if you did not want a FIXED output voltage? What if you wanted to TURN A KNOB and smoothly change Vout from 0V all the way to 9V? That is what a potentiometer does -- it is a voltage divider with an adjustable split point!"
+
+![A large cutaway diagram of a potentiometer showing its three pins and internal mechanism. The resistive strip runs between Pin 1 (labeled "Connected to 9V" in red/orange) and Pin 3 (labeled "Connected to Ground" in green). Pin 2 is the wiper/slider (labeled "Wiper = Vout" in blue) that moves along the strip. Three positions of the wiper are shown in a sequence: wiper all the way to Pin 3 side (Vout = "~0V," voltmeter display shows 0.0), wiper in the middle (Vout = "~4.5V," voltmeter shows 4.5), and wiper all the way to Pin 1 side (Vout = "~9V," voltmeter shows 9.0). A knob on top shows the rotation arrow. The resistive strip is color-graded from red/orange (high voltage end) to green (ground end). A cartoon kid turns the knob and watches the voltmeter reading change, with a speech bubble: "I can dial ANY voltage I want!"](images/lesson-13-potentiometer-wiper.png)
 
 **Build the potentiometer voltage divider:**
 

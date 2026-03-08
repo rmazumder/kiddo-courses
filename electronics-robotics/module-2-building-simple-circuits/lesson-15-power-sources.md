@@ -67,6 +67,8 @@ Let the kid guess. They might think the biggest battery has the most voltage -- 
 
 ### Step 2: The Battery Lab -- Measure Everything! (10 min)
 
+![A "Battery Museum" display with four batteries on individual pedestals under spotlights, arranged like exhibits in a museum gallery. Pedestal 1: a 9V battery (tall rectangle with snap connector on top), placard reads "9V - The Powerhouse, great for our projects." Pedestal 2: an AA battery (cylinder), placard reads "AA - 1.5V, the everyday hero." Pedestal 3: an AAA battery (thinner cylinder), placard reads "AAA - 1.5V, slim and light." Pedestal 4: a coin cell battery (small disc), placard reads "CR2032 - 3V, tiny but mighty!" Each battery has a red/orange "+" label on its positive terminal and a green "-" on its negative terminal. Size comparison lines show relative heights. A cartoon museum guide robot holds a pointer and stands beside the exhibits. A velvet rope lines the display. A banner at the top reads "The Battery Museum."](images/lesson-15-battery-museum.png)
+
 > "Set your Wand to DC Volts, 20V range. Let us test every battery in the museum!"
 
 **How to measure any battery:**
@@ -152,6 +154,8 @@ Let the kid guess. They might think the biggest battery has the most voltage -- 
 ---
 
 ### Step 4: Batteries in Series -- Voltage Stacking! (10 min)
+
+![A two-panel comparison of battery wiring configurations. Left panel labeled "Series (End to End)": four AA batteries connected positive-to-negative in a chain (visually stacked end to end like a train), with red/orange and green terminals alternating. A voltmeter at the end reads "6V" and the label explains "1.5V + 1.5V + 1.5V + 1.5V = 6V. More voltage!" The water analogy shows four pumps stacked for higher pressure. Right panel labeled "Parallel (Side by Side)": four AA batteries placed side by side with all positives connected together (red/orange bus bar) and all negatives connected together (green bus bar). A voltmeter reads "1.5V" and the label explains "Still 1.5V but lasts 4x longer! More capacity!" The water analogy shows four tanks combined for more water volume at the same pressure. A cartoon kid scratches their head on the series side ("More push!") and nods on the parallel side ("Lasts longer!"). A summary banner reads: "Series = more voltage. Parallel = more battery life."](images/lesson-15-series-vs-parallel-batteries.png)
 
 > "What if 1.5V is not enough? What if you need MORE voltage? Stack batteries in SERIES -- their voltages ADD UP!"
 
